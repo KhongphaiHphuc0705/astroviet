@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: astroviet
+    ports:
+      # In production, we might not expose the database to the host at all,
+      # but if we do, use 5433
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d astroviet']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - astroviet_net
+
+  backend:
+    build:
+      context: .
+      target: runner
+    # Resource limits removed/commented per technical decisions
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1'
+    #       memory: 512M
+    ports:
+      - '3000:3000'
+    # No bind mounts for source code in production
+    env_file:
+      - .env.production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+    networks:
+      - astroviet_net
+
+networks:
+  astroviet_net:
+    driver: bridge
+
+volumes:
+  postgres_data:

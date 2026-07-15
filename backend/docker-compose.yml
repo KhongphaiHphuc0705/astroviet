@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: astroviet
+    ports:
+      # Port 5433 host mapped to 5432 container to avoid local conflicts
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d astroviet']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - astroviet_net
+
+  backend:
+    build:
+      context: .
+      target: base # Just use base, we will run npm install and dev server via command
+    # We do NOT name the container to allow easier scale and avoid conflicts
+    ports:
+      - '3000:3000'
+    volumes:
+      # Bind mount current directory to /usr/src/app
+      - .:/usr/src/app
+      # Anonymous volume for node_modules to avoid host OS binary conflicts (e.g., bcrypt/prisma binaries)
+      - /usr/src/app/node_modules
+    env_file:
+      - .env.development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npm install && npm run prisma:generate && npm run dev"
+    restart: unless-stopped
+    networks:
+      - astroviet_net
+
+networks:
+  astroviet_net:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Generated OpenAPI spec (regenerate via `npm run generate:openapi`)
+/openapi.json
+/openapi.yaml
+
+# Compiled scripts
+scripts/*.js
+scripts/*.js.map
+
+# Prisma
+prisma/generated/
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Husky generated
+.husky/_/
