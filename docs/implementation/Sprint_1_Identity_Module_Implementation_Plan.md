@@ -1,5 +1,4 @@
 Kế hoạch triển khai Sprint 1: Identity Module
-Dựa trên phản hồi từ báo cáo Review, tôi đã điều chỉnh toàn bộ kế hoạch để tuân thủ tuyệt đối các chuẩn mực kiến trúc đã thống nhất từ Sprint 0.
 
 1. Review Kiến trúc & Cấu trúc Thư mục (Clean Architecture 4-layer)
 Module Identity sẽ được đặt tại src/modules/identity/ và phân bổ chặt chẽ theo 4 layer:

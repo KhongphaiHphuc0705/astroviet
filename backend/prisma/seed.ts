@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
+
 import { seedConfig } from './seed.config';
 
 const prisma = new PrismaClient();
@@ -21,7 +23,7 @@ async function main() {
 
   // Hash password
   const saltRounds = 12;
-  const passwordHash = await bcrypt.hash(SEED_ADMIN_PASSWORD, saltRounds);
+  const passwordHash = await hash(SEED_ADMIN_PASSWORD, saltRounds);
 
   // Insert admin
   const admin = await prisma.user.create({
