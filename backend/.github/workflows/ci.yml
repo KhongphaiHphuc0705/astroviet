@@ -44,6 +44,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup Database
+        run: |
+          npm run prisma:generate
+          npm run prisma:deploy
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
+
       - name: Lint and Format Check
         run: |
           npm run lint
@@ -51,13 +58,6 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
-
-      - name: Setup Database
-        run: |
-          npm run prisma:generate
-          npm run prisma:deploy
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
 
       - name: Run tests with coverage
         run: npm run test:coverage
