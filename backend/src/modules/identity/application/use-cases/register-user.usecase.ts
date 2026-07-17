@@ -44,7 +44,7 @@ export class RegisterUserUseCase {
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
-      version: 0,
+      version: 1,
     };
 
     try {
