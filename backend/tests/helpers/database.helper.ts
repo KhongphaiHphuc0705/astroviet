@@ -25,7 +25,7 @@ export class DatabaseTestHelper {
       if (tablename !== '_prisma_migrations') {
         try {
           await this.prisma.$executeRawUnsafe(
-            `TRUNCATE TABLE "${schemaname}"."${tablename}" CASCADE;`
+            `TRUNCATE TABLE "${schemaname}"."${tablename}" CASCADE;`,
           );
         } catch (error) {
           // eslint-disable-next-line no-console

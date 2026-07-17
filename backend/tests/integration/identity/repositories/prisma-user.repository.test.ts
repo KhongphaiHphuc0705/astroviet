@@ -3,7 +3,10 @@ import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 
 import { User } from '../../../../src/modules/identity/domain/entities/user.entity.js';
 import { PrismaUserRepository } from '../../../../src/modules/identity/infrastructure/repositories/prisma-user.repository.js';
-import { UniqueConstraintError, InfrastructureError } from '../../../../src/shared/errors/app-error.js';
+import {
+  UniqueConstraintError,
+  OptimisticLockError,
+} from '../../../../src/shared/errors/app-error.js';
 import { PrismaTestFactory } from '../../../fixtures/prisma-test.factory.js';
 import { DatabaseTestHelper } from '../../../helpers/database.helper.js';
 
@@ -74,7 +77,7 @@ describe('PrismaUserRepository Integration', () => {
     it('should return user if email exists', async () => {
       const createdUser = await factory.createUser({ email: 'findme@example.com' });
       const user = await repository.findByEmail('findme@example.com');
-      
+
       expect(user).not.toBeNull();
       expect(user?.id).toBe(createdUser.id);
     });
@@ -114,12 +117,12 @@ describe('PrismaUserRepository Integration', () => {
     it('should update user and increment version optimistically', async () => {
       const createdUser = await factory.createUser();
       const domainUser = await repository.findById(createdUser.id);
-      
+
       expect(domainUser).not.toBeNull();
-      
+
       if (domainUser) {
         domainUser.displayName = 'Updated Name';
-        
+
         await repository.update(domainUser);
 
         const savedUser = await prisma.user.findUnique({ where: { id: createdUser.id } });
@@ -128,16 +131,16 @@ describe('PrismaUserRepository Integration', () => {
       }
     });
 
-    it('should throw InfrastructureError on optimistic lock failure', async () => {
+    it('should throw OptimisticLockError on optimistic lock failure', async () => {
       const createdUser = await factory.createUser({ version: 1 });
       const domainUser = await repository.findById(createdUser.id);
-      
+
       if (domainUser) {
         domainUser.displayName = 'Updated Name';
         // Simulate someone else updating the version in the meantime
         domainUser.version = 999;
-        
-        await expect(repository.update(domainUser)).rejects.toThrow(InfrastructureError);
+
+        await expect(repository.update(domainUser)).rejects.toThrow(OptimisticLockError);
       }
     });
   });

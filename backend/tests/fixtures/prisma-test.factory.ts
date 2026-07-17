@@ -28,7 +28,7 @@ export class PrismaTestFactory {
     };
 
     const prismaUser = await this.prisma.user.create({ data });
-    
+
     // We map manually here to avoid depending heavily on production mappers in test factories,
     // or we can import the production mapper. To keep it simple, we return what was inserted.
     return {
@@ -45,7 +45,10 @@ export class PrismaTestFactory {
     };
   }
 
-  async createRefreshToken(userId: string, overrides?: Partial<RefreshToken>): Promise<RefreshToken> {
+  async createRefreshToken(
+    userId: string,
+    overrides?: Partial<RefreshToken>,
+  ): Promise<RefreshToken> {
     const defaultToken = {
       id: generateUuid(),
       user_id: userId,
@@ -78,7 +81,7 @@ export class PrismaTestFactory {
 
   private mapDomainToPersistence(user?: Partial<User>): any {
     if (!user) return {};
-    return {
+    const mapped: any = {
       id: user.id,
       email: user.email,
       password_hash: user.passwordHash,
@@ -90,11 +93,13 @@ export class PrismaTestFactory {
       deleted_at: user.deletedAt,
       version: user.version,
     };
+    // Strip undefined keys to prevent overwriting defaults
+    return Object.fromEntries(Object.entries(mapped).filter(([_, v]) => v !== undefined));
   }
 
   private mapTokenDomainToPersistence(token?: Partial<RefreshToken>): any {
     if (!token) return {};
-    return {
+    const mapped: any = {
       id: token.id,
       user_id: token.userId,
       token_hash: token.tokenHash,
@@ -104,5 +109,7 @@ export class PrismaTestFactory {
       replaced_by_token_id: token.replacedByTokenId,
       created_by_ip: token.createdByIp,
     };
+    // Strip undefined keys
+    return Object.fromEntries(Object.entries(mapped).filter(([_, v]) => v !== undefined));
   }
 }

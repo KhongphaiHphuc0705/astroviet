@@ -37,4 +37,16 @@ export class PrismaUserMapper {
       version: user.version,
     };
   }
+
+  static toUpdatePersistence(user: User): Prisma.UserUpdateInput {
+    return {
+      email: user.email,
+      password_hash: user.passwordHash,
+      display_name: user.displayName,
+      role: user.role,
+      email_verified_at: user.emailVerifiedAt,
+      deleted_at: user.deletedAt,
+      version: user.version,
+    };
+  }
 }

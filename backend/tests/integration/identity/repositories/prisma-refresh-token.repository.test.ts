@@ -55,10 +55,19 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       await factory.createRefreshToken(user.id, { tokenHash: 'revoke-me' });
 
       const revokeTime = new Date();
-      await repository.revoke('revoke-me', revokeTime);
+      const success = await repository.revoke('revoke-me', revokeTime);
 
-      const savedToken = await prisma.refreshToken.findUnique({ where: { token_hash: 'revoke-me' } });
+      expect(success).toBe(true);
+
+      const savedToken = await prisma.refreshToken.findUnique({
+        where: { token_hash: 'revoke-me' },
+      });
       expect(savedToken?.revoked_at).toEqual(revokeTime);
+    });
+
+    it('should return false if token does not exist', async () => {
+      const success = await repository.revoke('non-existent', new Date());
+      expect(success).toBe(false);
     });
   });
 
@@ -72,7 +81,7 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       await repository.revokeAllByUser(user.id);
 
       const tokens = await prisma.refreshToken.findMany({ where: { user_id: user.id } });
-      expect(tokens.every(t => t.revoked_at !== null)).toBe(true);
+      expect(tokens.every((t) => t.revoked_at !== null)).toBe(true);
     });
   });
 
@@ -88,7 +97,7 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       await factory.createRefreshToken(user.id, { tokenHash: 'active', expiresAt: future });
 
       const deletedCount = await repository.deleteExpired(now);
-      
+
       expect(deletedCount).toBe(2);
 
       const remainingTokens = await prisma.refreshToken.findMany({ where: { user_id: user.id } });

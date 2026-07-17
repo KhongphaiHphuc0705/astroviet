@@ -33,17 +33,18 @@ export class PrismaRefreshTokenRepository implements IRefreshTokenRepository {
     }
   }
 
-  async revoke(hash: string, revokedAt: Date): Promise<void> {
+  async revoke(hash: string, revokedAt: Date): Promise<boolean> {
     try {
       await this.prisma.refreshToken.update({
         where: { token_hash: hash },
         data: { revoked_at: revokedAt },
       });
+      return true;
     } catch (error: unknown) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((error as any).code === 'P2025') {
         // Record not found
-        return; 
+        return false;
       }
       throw new InfrastructureError('Failed to revoke token', undefined, error);
     }
@@ -52,7 +53,7 @@ export class PrismaRefreshTokenRepository implements IRefreshTokenRepository {
   async revokeAllByUser(userId: string): Promise<void> {
     try {
       await this.prisma.refreshToken.updateMany({
-        where: { 
+        where: {
           user_id: userId,
           revoked_at: null,
         },

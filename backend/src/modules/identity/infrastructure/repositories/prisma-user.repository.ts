@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
-import { UniqueConstraintError, InfrastructureError } from '../../../../shared/errors/app-error.js';
+import {
+  UniqueConstraintError,
+  InfrastructureError,
+  OptimisticLockError,
+} from '../../../../shared/errors/app-error.js';
 import { User } from '../../domain/entities/user.entity.js';
 import { IUserRepository } from '../../domain/ports/user-repository.port.js';
 import { PrismaUserMapper } from '../mappers/prisma-user.mapper.js';
@@ -27,6 +31,9 @@ export class PrismaUserRepository implements IUserRepository {
       const prismaUser = await this.prisma.user.findUnique({
         where: { id },
       });
+      if (prismaUser && prismaUser.deleted_at !== null) {
+        return null;
+      }
       return prismaUser ? PrismaUserMapper.toDomain(prismaUser) : null;
     } catch (error) {
       throw new InfrastructureError('Failed to find user by id', undefined, error);
@@ -38,10 +45,10 @@ export class PrismaUserRepository implements IUserRepository {
       const prismaUser = await this.prisma.user.findUnique({
         where: { email },
       });
-      // The DB schema uses a partial index WHERE deleted_at IS NULL.
-      // We should manually check deleted_at if needed, or assume deleted users don't count?
-      // Since findUnique on email might return a soft-deleted user if we didn't use Prisma extensions,
-      // we filter it manually here just to be safe.
+      // The DB schema uses a partial index (WHERE deleted_at IS NULL).
+      // Since Prisma does not model partial indexes in schema.prisma, findUnique
+      // doesn't inherently know about the 'deleted_at IS NULL' rule. We must manually
+      // filter out soft-deleted users here to match the DB semantics.
       if (prismaUser && prismaUser.deleted_at !== null) {
         return null;
       }
@@ -54,7 +61,7 @@ export class PrismaUserRepository implements IUserRepository {
   async existsByEmail(email: string): Promise<boolean> {
     try {
       const count = await this.prisma.user.count({
-        where: { 
+        where: {
           email,
           deleted_at: null,
         },
@@ -67,8 +74,8 @@ export class PrismaUserRepository implements IUserRepository {
 
   async update(user: User): Promise<void> {
     try {
-      const data = PrismaUserMapper.toPersistence(user);
-      
+      const data = PrismaUserMapper.toUpdatePersistence(user);
+
       // Optimistic locking: update where id and current version match
       const result = await this.prisma.user.updateMany({
         where: {
@@ -82,7 +89,7 @@ export class PrismaUserRepository implements IUserRepository {
       });
 
       if (result.count === 0) {
-        throw new InfrastructureError('User not found or version mismatch during update');
+        throw new OptimisticLockError('User not found or version mismatch during update');
       }
     } catch (error: unknown) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
