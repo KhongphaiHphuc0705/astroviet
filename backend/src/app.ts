@@ -1,7 +1,7 @@
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { Express, Router } from 'express';
+import express, { Express, Router, json, urlencoded } from 'express';
 import helmet from 'helmet';
 import { pinoHttp } from 'pino-http';
 
@@ -56,8 +56,8 @@ export const createApp = (config: AppConfig, logger: PinoLogger, routers: Router
   );
 
   // 7. Body Parsers
-  app.use(express.json({ limit: '100kb' }));
-  app.use(express.urlencoded({ extended: true, limit: '100kb' }));
+  app.use(json({ limit: '100kb' }));
+  app.use(urlencoded({ extended: true, limit: '100kb' }));
   app.use(cookieParser());
 
   routers.forEach((router) => {

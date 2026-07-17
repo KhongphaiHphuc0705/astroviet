@@ -123,3 +123,23 @@ export class DomainError extends AppError {
     this.errorCode = errorCode;
   }
 }
+
+export class UniqueConstraintError extends InfrastructureError {
+  constructor(
+    message: string = 'Unique constraint violation',
+    details?: ErrorMetadata,
+    cause?: Error | unknown,
+  ) {
+    super(message, details, cause);
+  }
+}
+
+export class OptimisticLockError extends InfrastructureError {
+  constructor(
+    message: string = 'Optimistic lock conflict',
+    details?: ErrorMetadata,
+    cause?: Error | unknown,
+  ) {
+    super(message, details, cause);
+  }
+}

@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { Router } from 'express';
-import swaggerUi from 'swagger-ui-express';
+import { serve, setup } from 'swagger-ui-express';
 
 import { AppConfig, Environment } from '../config/env.config.js';
 
@@ -33,8 +33,8 @@ export function createDocsRoutes(config: AppConfig): Router {
     // Optionally dynamically set the server URL in Swagger UI based on config
     router.use(
       '/docs',
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument, {
+      serve,
+      setup(swaggerDocument, {
         customSiteTitle: 'AstroViet API Docs',
         swaggerOptions: {
           persistAuthorization: true,

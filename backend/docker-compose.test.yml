@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
+    ports:
+      # Port 5432 directly for test config simplicity
+      - '5432:5432'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d test']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - astroviet_test_net
+
+networks:
+  astroviet_test_net:
+    driver: bridge

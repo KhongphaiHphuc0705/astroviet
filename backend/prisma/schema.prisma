@@ -8,3 +8,39 @@ datasource db {
   url      = env("DATABASE_URL")
   schemas  = ["identity", "astrology", "content"]
 }
+
+model User {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email             String    @unique
+  password_hash     String
+  display_name      String?
+  role              String    @default("user")
+  email_verified_at DateTime? @db.Timestamptz
+  created_at        DateTime  @default(now()) @db.Timestamptz
+  updated_at        DateTime  @default(now()) @db.Timestamptz
+  deleted_at        DateTime? @db.Timestamptz
+  version           Int       @default(1)
+
+  tokens RefreshToken[]
+
+  @@map("users")
+  @@schema("identity")
+}
+
+model RefreshToken {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id              String    @db.Uuid
+  token_hash           String    @unique
+  issued_at            DateTime  @default(now()) @db.Timestamptz
+  expires_at           DateTime  @db.Timestamptz
+  revoked_at           DateTime? @db.Timestamptz
+  replaced_by_token_id String?   @db.Uuid
+  created_by_ip        String?
+
+  user         User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  replaced_by  RefreshToken?  @relation("TokenRotation", fields: [replaced_by_token_id], references: [id], onDelete: SetNull)
+  replacements RefreshToken[] @relation("TokenRotation")
+
+  @@map("refresh_tokens")
+  @@schema("identity")
+}
