@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import jwt from 'jsonwebtoken';
+import { sign, decode, type JwtPayload } from 'jsonwebtoken';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { env } from '../../../src/config/env.config.js';
@@ -9,14 +9,20 @@ import { AuthenticationError } from '../../../src/shared/errors/app-error.js';
 import { ErrorCode } from '../../../src/shared/errors/error-codes.js';
 
 describe('JwtTokenAdapter', () => {
-  const adapter = new JwtTokenAdapter();
+  const adapterConfig = {
+    accessSecret: env.JWT_ACCESS_SECRET,
+    refreshSecret: env.JWT_REFRESH_SECRET,
+    accessExpiryMinutes: env.JWT_ACCESS_EXPIRY_MINUTES ?? 15,
+    refreshExpiryDays: env.JWT_REFRESH_EXPIRY_DAYS ?? 30,
+  };
+  const adapter = new JwtTokenAdapter(adapterConfig);
   const validPayload = { sub: 'user-123', role: 'user' as const };
 
   describe('generateAccessToken()', () => {
     it('should generate a decodeable token with correct sub and role', () => {
       const token = adapter.generateAccessToken(validPayload);
-      const decoded = jwt.decode(token) as jwt.JwtPayload;
-      
+      const decoded = decode(token) as JwtPayload;
+
       expect(decoded?.sub).toBe('user-123');
       expect(decoded?.role).toBe('user');
       expect(decoded?.exp).toBeDefined();
@@ -36,17 +42,17 @@ describe('JwtTokenAdapter', () => {
     it('should return payload for a valid token', () => {
       const token = adapter.generateAccessToken(validPayload);
       const payload = adapter.verifyAccessToken(token);
-      
+
       expect(payload.sub).toBe(validPayload.sub);
       expect(payload.role).toBe(validPayload.role);
     });
 
     it('should throw AuthenticationError (TOKEN_EXPIRED) if token is expired', () => {
       const token = adapter.generateAccessToken(validPayload);
-      
+
       // Fast forward past expiration
       vi.advanceTimersByTime((env.JWT_ACCESS_EXPIRY_MINUTES! + 1) * 60 * 1000);
-      
+
       try {
         adapter.verifyAccessToken(token);
         expect.fail('Should have thrown');
@@ -57,8 +63,8 @@ describe('JwtTokenAdapter', () => {
     });
 
     it('should throw AuthenticationError (UNAUTHORIZED) for invalid signature', () => {
-      const token = jwt.sign(validPayload, 'wrong-secret', { algorithm: 'HS256' });
-      
+      const token = sign(validPayload, 'wrong-secret', { algorithm: 'HS256' });
+
       try {
         adapter.verifyAccessToken(token);
         expect.fail('Should have thrown');
@@ -79,8 +85,10 @@ describe('JwtTokenAdapter', () => {
     });
 
     it('should throw AuthenticationError (UNAUTHORIZED) if payload schema is invalid', () => {
-      const invalidPayloadToken = jwt.sign({ sub: 'user-123', role: 'invalid_role' }, env.JWT_ACCESS_SECRET, { algorithm: 'HS256' });
-      
+      const invalidPayloadToken = sign({ sub: 'user-123', role: 'invalid_role' }, env.JWT_ACCESS_SECRET, {
+        algorithm: 'HS256',
+      });
+
       try {
         adapter.verifyAccessToken(invalidPayloadToken);
         expect.fail('Should have thrown');
@@ -95,17 +103,17 @@ describe('JwtTokenAdapter', () => {
   describe('generateRefreshToken()', () => {
     it('should return rawToken, tokenHash, and expiresAt', () => {
       const result = adapter.generateRefreshToken();
-      
+
       expect(result.rawToken).toBeDefined();
       expect(result.tokenHash).toBeDefined();
       expect(result.expiresAt).toBeInstanceOf(Date);
-      
+
       expect(result.rawToken).not.toBe(result.tokenHash);
     });
 
     it('should generate a tokenHash that is the SHA-256 of rawToken', () => {
       const result = adapter.generateRefreshToken();
-      
+
       const expectedHash = crypto.createHash('sha256').update(result.rawToken).digest('hex');
       expect(result.tokenHash).toBe(expectedHash);
     });
@@ -113,7 +121,7 @@ describe('JwtTokenAdapter', () => {
     it('should generate different tokens on subsequent calls', () => {
       const result1 = adapter.generateRefreshToken();
       const result2 = adapter.generateRefreshToken();
-      
+
       expect(result1.rawToken).not.toBe(result2.rawToken);
     });
   });

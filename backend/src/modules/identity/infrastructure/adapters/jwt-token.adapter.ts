@@ -1,9 +1,9 @@
 import crypto from 'node:crypto';
 
-import jwt from 'jsonwebtoken';
+import { sign, verify, TokenExpiredError } from 'jsonwebtoken';
 import { z } from 'zod';
 
-import { env } from '../../../../config/env.config.js';
+
 import { AuthenticationError } from '../../../../shared/errors/app-error.js';
 import { ErrorCode } from '../../../../shared/errors/error-codes.js';
 import { ITokenProvider, TokenPayload } from '../../domain/ports/token-provider.port.js';
@@ -13,10 +13,19 @@ const TokenPayloadSchema = z.object({
   role: z.enum(['user', 'admin']),
 });
 
+export interface JwtTokenAdapterConfig {
+  accessSecret: string;
+  refreshSecret: string;
+  accessExpiryMinutes: number;
+  refreshExpiryDays: number;
+}
+
 export class JwtTokenAdapter implements ITokenProvider {
+  constructor(private readonly config: JwtTokenAdapterConfig) {}
+
   generateAccessToken(payload: TokenPayload): string {
-    return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-      expiresIn: `${env.JWT_ACCESS_EXPIRY_MINUTES}m`,
+    return sign(payload, this.config.accessSecret, {
+      expiresIn: `${this.config.accessExpiryMinutes}m`,
       algorithm: 'HS256',
     });
   }
@@ -24,16 +33,16 @@ export class JwtTokenAdapter implements ITokenProvider {
   generateRefreshToken(): { rawToken: string; tokenHash: string; expiresAt: Date } {
     const rawToken = crypto.randomBytes(32).toString('hex');
     const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
-    
+
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + (env.JWT_REFRESH_EXPIRY_DAYS ?? 30));
+    expiresAt.setDate(expiresAt.getDate() + this.config.refreshExpiryDays);
 
     return { rawToken, tokenHash, expiresAt };
   }
 
   verifyAccessToken(token: string): TokenPayload {
     try {
-      const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET, {
+      const decoded = verify(token, this.config.accessSecret, {
         algorithms: ['HS256'],
       });
 
@@ -44,7 +53,7 @@ export class JwtTokenAdapter implements ITokenProvider {
 
       return parsed.data;
     } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
+      if (error instanceof TokenExpiredError) {
         throw new AuthenticationError(ErrorCode.TOKEN_EXPIRED, 'Access token expired');
       }
       if (error instanceof AuthenticationError) {
