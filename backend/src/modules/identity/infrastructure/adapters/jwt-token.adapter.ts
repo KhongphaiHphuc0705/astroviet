@@ -3,7 +3,6 @@ import crypto from 'node:crypto';
 import { sign, verify, TokenExpiredError } from 'jsonwebtoken';
 import { z } from 'zod';
 
-
 import { AuthenticationError } from '../../../../shared/errors/app-error.js';
 import { ErrorCode } from '../../../../shared/errors/error-codes.js';
 import { ITokenProvider, TokenPayload } from '../../domain/ports/token-provider.port.js';

@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-named-as-default-member
+/* eslint-disable import/no-named-as-default-member */
 import bcrypt from 'bcrypt';
 
 import { InfrastructureError } from '../../../../shared/errors/app-error.js';

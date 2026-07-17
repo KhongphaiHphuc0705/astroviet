@@ -85,9 +85,13 @@ describe('JwtTokenAdapter', () => {
     });
 
     it('should throw AuthenticationError (UNAUTHORIZED) if payload schema is invalid', () => {
-      const invalidPayloadToken = sign({ sub: 'user-123', role: 'invalid_role' }, env.JWT_ACCESS_SECRET, {
-        algorithm: 'HS256',
-      });
+      const invalidPayloadToken = sign(
+        { sub: 'user-123', role: 'invalid_role' },
+        env.JWT_ACCESS_SECRET,
+        {
+          algorithm: 'HS256',
+        },
+      );
 
       try {
         adapter.verifyAccessToken(invalidPayloadToken);
