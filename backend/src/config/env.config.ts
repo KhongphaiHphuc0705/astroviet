@@ -20,6 +20,16 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().url().or(z.string().startsWith('http')),
   DATABASE_URL: z.string().url(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+  JWT_ACCESS_SECRET: z.string().min(32),
+  JWT_REFRESH_SECRET: z.string().min(32),
+  JWT_ACCESS_EXPIRY_MINUTES: z
+    .string()
+    .optional()
+    .transform((val) => parseNumber(val, 15)),
+  JWT_REFRESH_EXPIRY_DAYS: z
+    .string()
+    .optional()
+    .transform((val) => parseNumber(val, 30)),
 });
 
 export type AppConfig = z.infer<typeof envSchema>;

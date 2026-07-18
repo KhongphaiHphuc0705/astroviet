@@ -6,6 +6,8 @@ import yaml from 'yaml';
 
 // Force load all schemas so they get registered
 import '../src/health/health.schema.js';
+import '../src/modules/identity/presentation/openapi/auth.openapi.js';
+
 import { generateOpenApiDocument } from '../src/docs/openapi.js';
 
 const __filename = fileURLToPath(import.meta.url);

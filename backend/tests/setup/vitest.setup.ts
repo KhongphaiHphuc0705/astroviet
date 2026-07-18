@@ -1,5 +1,7 @@
 import { afterAll, beforeAll } from 'vitest';
 
+import '../../src/docs/openapi.js';
+
 // Global beforeAll
 beforeAll(() => {
   // Global mocks or environment initialization if needed

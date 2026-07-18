@@ -30,6 +30,20 @@ export class ValidationError extends AppError {
   }
 }
 
+export class BadRequestError extends AppError {
+  readonly statusCode = 400;
+  readonly errorCode: string;
+
+  constructor(
+    errorCode: string = ErrorCode.MALFORMED_REQUEST,
+    message = 'Bad Request',
+    details?: ErrorMetadata,
+  ) {
+    super(message, details);
+    this.errorCode = errorCode;
+  }
+}
+
 export class AuthenticationError extends AppError {
   readonly statusCode = 401;
   readonly errorCode: string;
