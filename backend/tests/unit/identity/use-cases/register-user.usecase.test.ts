@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, Mocked } from 'vitest';
 
 import { RegisterUserUseCase } from '../../../../src/modules/identity/application/use-cases/register-user.usecase.js';
-import { ILogger } from '../../../../src/shared/logger/logger.interface.js';
-import { IUserRepository } from '../../../../src/modules/identity/domain/ports/user-repository.port.js';
-import { IPasswordHasher } from '../../../../src/modules/identity/domain/ports/password-hasher.port.js';
 import { IEmailVerificationService } from '../../../../src/modules/identity/domain/ports/email-verification.port.js';
+import { IPasswordHasher } from '../../../../src/modules/identity/domain/ports/password-hasher.port.js';
+import { IUserRepository } from '../../../../src/modules/identity/domain/ports/user-repository.port.js';
 import { ConflictError, UniqueConstraintError } from '../../../../src/shared/errors/app-error.js';
 import { ErrorCode } from '../../../../src/shared/errors/error-codes.js';
+import { ILogger } from '../../../../src/shared/logger/logger.interface.js';
 
 describe('RegisterUserUseCase', () => {
   let userRepo: Mocked<IUserRepository>;
@@ -79,10 +79,16 @@ describe('RegisterUserUseCase', () => {
       password: 'password123',
     };
 
-    await expect(useCase.execute(command)).rejects.toThrowError(ConflictError);
-    await expect(useCase.execute(command)).rejects.toMatchObject({
-      errorCode: ErrorCode.EMAIL_ALREADY_EXISTS,
-    });
+    try {
+      await useCase.execute(command);
+      expect.fail('Should have thrown ConflictError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(ConflictError);
+      expect(error).toMatchObject({
+        errorCode: ErrorCode.EMAIL_ALREADY_EXISTS,
+      });
+    }
+
     expect(userRepo.create).not.toHaveBeenCalled();
   });
 
@@ -96,10 +102,15 @@ describe('RegisterUserUseCase', () => {
       password: 'password123',
     };
 
-    await expect(useCase.execute(command)).rejects.toThrowError(ConflictError);
-    await expect(useCase.execute(command)).rejects.toMatchObject({
-      errorCode: ErrorCode.EMAIL_ALREADY_EXISTS,
-    });
+    try {
+      await useCase.execute(command);
+      expect.fail('Should have thrown ConflictError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(ConflictError);
+      expect(error).toMatchObject({
+        errorCode: ErrorCode.EMAIL_ALREADY_EXISTS,
+      });
+    }
   });
 
   it('should continue and log warning if email verification fails', async () => {

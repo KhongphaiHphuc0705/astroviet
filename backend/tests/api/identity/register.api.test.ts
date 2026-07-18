@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { Express } from 'express';
 import request from 'supertest';
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
@@ -53,6 +52,9 @@ describe('POST /api/v1/auth/register API', () => {
     const dbUser = await prisma.user.findUnique({ where: { email: 'newuser@example.com' } });
     expect(dbUser).not.toBeNull();
     expect(dbUser?.id).toBe(user.id);
+    expect(dbUser?.password_hash).toBeDefined();
+    expect(dbUser?.password_hash).not.toBe(payload.password);
+    expect(dbUser?.password_hash.startsWith('$2b$')).toBe(true);
   });
 
   it('should trim and lowercase email before registering', async () => {
