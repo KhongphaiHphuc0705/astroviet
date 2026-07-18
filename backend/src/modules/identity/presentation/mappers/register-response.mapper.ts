@@ -1,16 +1,9 @@
 import { z } from 'zod';
 
+import '../../../../docs/openapi.js';
 import { User } from '../../domain/entities/user.entity.js';
 
-export const userResponseSchema = z
-  .object({
-    id: z.string().uuid(),
-    email: z.string().email(),
-    displayName: z.string().nullable(),
-    role: z.enum(['user', 'admin']),
-    createdAt: z.date(),
-  })
-  .openapi('UserResponse');
+import { userResponseSchema, UserResponseMapper } from './user-response.mapper.js';
 
 export const registerResponseSchema = z
   .object({
@@ -18,19 +11,12 @@ export const registerResponseSchema = z
   })
   .openapi('RegisterResponse');
 
-export type UserResponse = z.infer<typeof userResponseSchema>;
 export type RegisterResponse = z.infer<typeof registerResponseSchema>;
 
 export class RegisterResponseMapper {
   static toResponse(user: User): RegisterResponse {
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        displayName: user.displayName,
-        role: user.role,
-        createdAt: user.createdAt,
-      },
+      user: UserResponseMapper.toResponse(user),
     };
   }
 }
