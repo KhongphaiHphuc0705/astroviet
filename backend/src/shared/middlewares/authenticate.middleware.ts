@@ -9,7 +9,12 @@ export const authenticate = (tokenProvider: ITokenProvider, required: boolean = 
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       if (required) {
-        next(new AuthenticationError(ErrorCode.UNAUTHORIZED, 'Missing or invalid Authorization header'));
+        next(
+          new AuthenticationError(
+            ErrorCode.UNAUTHORIZED,
+            'Missing or invalid Authorization header',
+          ),
+        );
       } else {
         next();
       }
@@ -19,7 +24,9 @@ export const authenticate = (tokenProvider: ITokenProvider, required: boolean = 
     const token = authHeader.split(' ')[1];
     if (!token) {
       if (required) {
-        next(new AuthenticationError(ErrorCode.UNAUTHORIZED, 'Invalid Authorization header format'));
+        next(
+          new AuthenticationError(ErrorCode.UNAUTHORIZED, 'Invalid Authorization header format'),
+        );
       } else {
         next();
       }

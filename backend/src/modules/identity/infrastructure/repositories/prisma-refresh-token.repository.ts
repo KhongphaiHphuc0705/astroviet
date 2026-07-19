@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 import { UniqueConstraintError, InfrastructureError } from '../../../../shared/errors/app-error.js';
 import { RefreshToken } from '../../domain/entities/refresh-token.entity.js';
@@ -35,7 +35,7 @@ export class PrismaRefreshTokenRepository implements IRefreshTokenRepository {
 
   async rotate(oldTokenHash: string, newToken: RefreshToken): Promise<RefreshToken | null> {
     try {
-      return await this.prisma.$transaction(async (tx) => {
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         // Step 1: Create new token first
         const newRecord = await tx.refreshToken.create({
           data: PrismaRefreshTokenMapper.toPersistence(newToken),

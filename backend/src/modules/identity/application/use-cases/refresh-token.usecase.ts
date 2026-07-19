@@ -65,7 +65,10 @@ export class RefreshTokenUseCase {
 
     const rotatedToken = await this.refreshTokenRepo.rotate(tokenHash, newTokenEntity);
     if (!rotatedToken) {
-      throw new AuthenticationError(ErrorCode.UNAUTHORIZED, 'Race condition detected or token already revoked');
+      throw new AuthenticationError(
+        ErrorCode.UNAUTHORIZED,
+        'Race condition detected or token already revoked',
+      );
     }
 
     const accessToken = this.tokenProvider.generateAccessToken({
