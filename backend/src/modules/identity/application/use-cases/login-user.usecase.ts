@@ -1,11 +1,11 @@
+import { AuthenticationError } from '../../../../shared/errors/app-error.js';
+import { ErrorCode } from '../../../../shared/errors/error-codes.js';
 import { RefreshToken } from '../../domain/entities/refresh-token.entity.js';
 import { User } from '../../domain/entities/user.entity.js';
 import { IPasswordHasher } from '../../domain/ports/password-hasher.port.js';
 import { IRefreshTokenRepository } from '../../domain/ports/refresh-token-repository.port.js';
 import { ITokenProvider } from '../../domain/ports/token-provider.port.js';
 import { IUserRepository } from '../../domain/ports/user-repository.port.js';
-import { AuthenticationError } from '../../../../shared/errors/app-error.js';
-import { ErrorCode } from '../../../../shared/errors/error-codes.js';
 
 export interface LoginCommand {
   email: string;
@@ -44,8 +44,8 @@ export class LoginUserUseCase {
     // If user doesn't exist OR password is invalid, return the exact same generic error.
     if (!user || !isPasswordValid) {
       throw new AuthenticationError(
-        'Email hoặc mật khẩu không chính xác.',
         ErrorCode.INVALID_CREDENTIALS,
+        'Email hoặc mật khẩu không chính xác.',
       );
     }
 

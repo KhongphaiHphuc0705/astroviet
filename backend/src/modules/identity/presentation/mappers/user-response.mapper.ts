@@ -8,8 +8,7 @@ export const userResponseSchema = z
     id: z.string().uuid(),
     email: z.string().email(),
     displayName: z.string().nullable(),
-    role: z.string(),
-    emailVerifiedAt: z.date().nullable(),
+    role: z.enum(['user', 'admin']),
     createdAt: z.date(),
   })
   .openapi('UserResponse');
@@ -22,8 +21,7 @@ export class UserResponseMapper {
       id: user.id,
       email: user.email,
       displayName: user.displayName,
-      role: user.role,
-      emailVerifiedAt: user.emailVerifiedAt,
+      role: user.role as 'user' | 'admin',
       createdAt: user.createdAt,
     };
   }
