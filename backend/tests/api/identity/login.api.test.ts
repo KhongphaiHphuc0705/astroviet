@@ -58,7 +58,11 @@ describe('POST /api/v1/auth/login', () => {
 
     // Check cookie
     const setCookieHeader = response.headers['set-cookie'];
-    const cookies = Array.isArray(setCookieHeader) ? setCookieHeader : (setCookieHeader ? [setCookieHeader] : []);
+    const cookies = Array.isArray(setCookieHeader)
+      ? setCookieHeader
+      : setCookieHeader
+        ? [setCookieHeader]
+        : [];
     const refreshTokenCookie = cookies.find((c: string) => c.startsWith('refreshToken='));
     expect(refreshTokenCookie).toBeDefined();
     expect(refreshTokenCookie).toContain('HttpOnly');
@@ -82,7 +86,7 @@ describe('POST /api/v1/auth/login', () => {
     const response = await request(app).post('/api/v1/auth/login').send(payload);
 
     expect(response.status).toBe(400);
-    expect(response.body.title).toBe('Validation Error');
+    expect(response.body.errorCode).toBe('MALFORMED_REQUEST');
   });
 
   it('should return 401 INVALID_CREDENTIALS for wrong password', async () => {
