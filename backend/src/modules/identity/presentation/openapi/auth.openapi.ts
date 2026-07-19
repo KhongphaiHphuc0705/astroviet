@@ -41,7 +41,7 @@ registry.registerPath({
   method: 'post',
   path: '/api/v1/auth/login',
   summary: 'Login user',
-  tags: ['Auth'],
+  tags: ['Authentication'],
   request: {
     body: {
       content: {
