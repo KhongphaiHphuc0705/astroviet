@@ -4,9 +4,12 @@ import { createApp } from './app.js';
 import { env } from './config/env.config.js';
 import { createDocsRoutes } from './docs/docs.routes.js';
 import { HealthController, HealthService, createHealthRoutes } from './health/index.js';
+import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { RegisterUserUseCase } from './modules/identity/application/use-cases/register-user.usecase.js';
 import { BcryptPasswordHasherAdapter } from './modules/identity/infrastructure/adapters/bcrypt-password-hasher.adapter.js';
 import { ConsoleEmailVerificationAdapter } from './modules/identity/infrastructure/adapters/console-email-verification.adapter.js';
+import { JwtTokenAdapter } from './modules/identity/infrastructure/adapters/jwt-token.adapter.js';
+import { PrismaRefreshTokenRepository } from './modules/identity/infrastructure/repositories/prisma-refresh-token.repository.js';
 import { PrismaUserRepository } from './modules/identity/infrastructure/repositories/prisma-user.repository.js';
 import { AuthController } from './modules/identity/presentation/controllers/auth.controller.js';
 import { createAuthRoutes } from './modules/identity/presentation/routes/auth.routes.js';
@@ -25,8 +28,15 @@ export async function bootstrapApplication(): Promise<{ app: Express }> {
 
   // --- Identity Module ---
   const userRepository = new PrismaUserRepository(prisma);
+  const refreshTokenRepository = new PrismaRefreshTokenRepository(prisma);
   const passwordHasher = new BcryptPasswordHasherAdapter();
   const emailVerificationService = new ConsoleEmailVerificationAdapter(logger);
+  const tokenProvider = new JwtTokenAdapter({
+    accessSecret: config.JWT_ACCESS_SECRET,
+    refreshSecret: config.JWT_REFRESH_SECRET,
+    accessExpiryMinutes: config.JWT_ACCESS_EXPIRY_MINUTES,
+    refreshExpiryDays: config.JWT_REFRESH_EXPIRY_DAYS,
+  });
 
   const registerUserUseCase = new RegisterUserUseCase(
     userRepository,
@@ -35,7 +45,15 @@ export async function bootstrapApplication(): Promise<{ app: Express }> {
     logger,
   );
 
-  const authController = new AuthController(registerUserUseCase);
+  const loginUserUseCase = new LoginUserUseCase(
+    userRepository,
+    passwordHasher,
+    tokenProvider,
+    refreshTokenRepository,
+    config.JWT_ACCESS_EXPIRY_MINUTES * 60,
+  );
+
+  const authController = new AuthController(registerUserUseCase, loginUserUseCase, config);
 
   // --- Routers ---
   const routes: Router[] = [
