@@ -56,11 +56,13 @@ describe('LoginUserUseCase', () => {
       generateAccessToken: vi.fn(),
       generateRefreshToken: vi.fn(),
       verifyAccessToken: vi.fn(),
+      hashRefreshToken: vi.fn(),
     };
 
     refreshTokenRepo = {
       create: vi.fn(),
       findByTokenHash: vi.fn(),
+      rotate: vi.fn(),
       revoke: vi.fn(),
       revokeAllByUser: vi.fn(),
       deleteExpired: vi.fn(),

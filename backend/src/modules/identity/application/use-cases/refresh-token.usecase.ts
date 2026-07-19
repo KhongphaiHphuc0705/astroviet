@@ -51,7 +51,7 @@ export class RefreshTokenUseCase {
       throw new AuthenticationError(ErrorCode.UNAUTHORIZED, 'User no longer exists');
     }
 
-    const refreshTokenData = this.tokenProvider.generateRefreshToken();
+    const refreshTokenData = await this.tokenProvider.generateRefreshToken();
     const newTokenEntity: RefreshToken = {
       id: crypto.randomUUID(),
       userId: user.id,
@@ -71,7 +71,7 @@ export class RefreshTokenUseCase {
       );
     }
 
-    const accessToken = this.tokenProvider.generateAccessToken({
+    const accessToken = await this.tokenProvider.generateAccessToken({
       sub: user.id,
       role: user.role, // Always fresh from DB
     });

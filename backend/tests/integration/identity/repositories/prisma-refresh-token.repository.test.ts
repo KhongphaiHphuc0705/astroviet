@@ -105,4 +105,58 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       expect(remainingTokens[0].token_hash).toBe('active');
     });
   });
+
+  describe('rotate()', () => {
+    it('should successfully rotate a token and prevent race conditions', async () => {
+      const user = await factory.createUser();
+      const oldToken = await factory.createRefreshToken(user.id, { tokenHash: 'old-token' });
+
+      const newToken1: RefreshToken = {
+        id: crypto.randomUUID(),
+        userId: user.id,
+        tokenHash: 'new-token-1',
+        issuedAt: new Date(),
+        expiresAt: new Date(Date.now() + 100000),
+        revokedAt: null,
+        replacedByTokenId: null,
+        createdByIp: '127.0.0.1',
+      };
+
+      const newToken2: RefreshToken = {
+        id: crypto.randomUUID(),
+        userId: user.id,
+        tokenHash: 'new-token-2',
+        issuedAt: new Date(),
+        expiresAt: new Date(Date.now() + 100000),
+        revokedAt: null,
+        replacedByTokenId: null,
+        createdByIp: '127.0.0.1',
+      };
+
+      // Run two rotations concurrently simulating a replay attack / race condition
+      const [result1, result2] = await Promise.all([
+        repository.rotate('old-token', newToken1),
+        repository.rotate('old-token', newToken2),
+      ]);
+
+      // Exactly one should succeed, one should return null
+      const successCount = [result1, result2].filter(r => r !== null).length;
+      expect(successCount).toBe(1);
+
+      const failedCount = [result1, result2].filter(r => r === null).length;
+      expect(failedCount).toBe(1);
+
+      // Verify DB state
+      const dbOldToken = await prisma.refreshToken.findUnique({ where: { id: oldToken.id } });
+      expect(dbOldToken?.revoked_at).not.toBeNull();
+      expect(dbOldToken?.replaced_by_token_id).not.toBeNull();
+
+      const newTokens = await prisma.refreshToken.findMany({ 
+        where: { user_id: user.id, token_hash: { in: ['new-token-1', 'new-token-2'] } }
+      });
+      // The transaction that lost might have created the token before rolling back?
+      // No, interactive transaction rolls back the whole thing
+      expect(newTokens.length).toBe(1);
+    });
+  });
 });
