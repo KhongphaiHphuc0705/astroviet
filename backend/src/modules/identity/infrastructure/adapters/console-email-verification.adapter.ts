@@ -9,13 +9,21 @@ export class ConsoleEmailVerificationAdapter implements IEmailVerificationServic
 
   async sendVerification(user: User): Promise<void> {
     const placeholderToken = crypto.randomUUID();
-    this.logger.info(
-      `[PLACEHOLDER] Verification link would be sent with token: ${placeholderToken}`,
-      {
-        module: 'identity',
-        action: 'email_verification_placeholder',
-        userId: user.id,
-      },
-    );
+    const message = [
+      '========================================',
+      'EMAIL VERIFICATION (DEV ONLY)',
+      'User:',
+      user.email,
+      'Verification Token:',
+      placeholderToken,
+      '========================================',
+    ].join('\n');
+
+    this.logger.info(message, {
+      module: 'identity',
+      action: 'email_verification_placeholder',
+      userId: user.id,
+      email: user.email,
+    });
   }
 }
