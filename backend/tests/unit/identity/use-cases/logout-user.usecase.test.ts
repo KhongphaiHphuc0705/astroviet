@@ -52,9 +52,7 @@ describe('LogoutUserUseCase', () => {
     mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
     mockRefreshTokenRepo.revoke.mockResolvedValue(false); // DB says token not found
 
-    await expect(
-      useCase.execute({ rawRefreshToken: 'raw-token' })
-    ).resolves.not.toThrow();
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).resolves.not.toThrow();
 
     expect(mockTokenProvider.hashRefreshToken).toHaveBeenCalledWith('raw-token');
     expect(mockRefreshTokenRepo.revoke).toHaveBeenCalledWith('hashed-token', expect.any(Date));
