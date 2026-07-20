@@ -60,26 +60,21 @@ describe('RefreshTokenUseCase', () => {
       deleteExpired: vi.fn(),
     } as unknown as Mocked<IRefreshTokenRepository>;
 
-    useCase = new RefreshTokenUseCase(
-      mockUserRepo,
-      mockTokenProvider,
-      mockRefreshTokenRepo,
-      900,
-    );
+    useCase = new RefreshTokenUseCase(mockUserRepo, mockTokenProvider, mockRefreshTokenRepo, 900);
   });
 
   it('should successfully refresh a token', async () => {
     mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
     mockRefreshTokenRepo.findByTokenHash.mockResolvedValue(mockTokenEntity);
     mockUserRepo.findById.mockResolvedValue(mockUser);
-    
+
     const newExpiresAt = new Date(Date.now() + 100000);
     mockTokenProvider.generateRefreshToken.mockReturnValue({
       rawToken: 'new-raw-token',
       tokenHash: 'new-hashed-token',
       expiresAt: newExpiresAt,
     });
-    
+
     mockRefreshTokenRepo.rotate.mockResolvedValue({
       id: 'new-token-1',
       userId: 'user-1',
@@ -90,8 +85,8 @@ describe('RefreshTokenUseCase', () => {
       replacedByTokenId: null,
       createdByIp: '127.0.0.1',
     });
-    
-    mockTokenProvider.generateAccessToken.mockResolvedValue('new-access-token');
+
+    mockTokenProvider.generateAccessToken.mockReturnValue('new-access-token');
 
     const result = await useCase.execute({
       rawRefreshToken: 'raw-token',
@@ -102,7 +97,7 @@ describe('RefreshTokenUseCase', () => {
     expect(result.accessToken).toBe('new-access-token');
     expect(result.rawRefreshToken).toBe('new-raw-token');
     expect(result.expiresIn).toBe(900);
-    
+
     expect(mockRefreshTokenRepo.rotate).toHaveBeenCalledWith('hashed-token', expect.any(Object));
   });
 
@@ -110,9 +105,7 @@ describe('RefreshTokenUseCase', () => {
     mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
     mockRefreshTokenRepo.findByTokenHash.mockResolvedValue(null);
 
-    await expect(
-      useCase.execute({ rawRefreshToken: 'raw-token' })
-    ).rejects.toMatchObject({
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).rejects.toMatchObject({
       errorCode: ErrorCode.UNAUTHORIZED,
     });
   });
@@ -124,9 +117,7 @@ describe('RefreshTokenUseCase', () => {
       revokedAt: new Date(),
     });
 
-    await expect(
-      useCase.execute({ rawRefreshToken: 'raw-token' })
-    ).rejects.toMatchObject({
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).rejects.toMatchObject({
       errorCode: ErrorCode.UNAUTHORIZED,
     });
   });
@@ -138,9 +129,7 @@ describe('RefreshTokenUseCase', () => {
       expiresAt: new Date(Date.now() - 10000), // Past
     });
 
-    await expect(
-      useCase.execute({ rawRefreshToken: 'raw-token' })
-    ).rejects.toMatchObject({
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).rejects.toMatchObject({
       errorCode: ErrorCode.TOKEN_EXPIRED,
     });
   });
@@ -149,18 +138,16 @@ describe('RefreshTokenUseCase', () => {
     mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
     mockRefreshTokenRepo.findByTokenHash.mockResolvedValue(mockTokenEntity);
     mockUserRepo.findById.mockResolvedValue(mockUser);
-    
+
     mockTokenProvider.generateRefreshToken.mockReturnValue({
       rawToken: 'new-raw-token',
       tokenHash: 'new-hashed-token',
       expiresAt: new Date(Date.now() + 100000),
     });
-    
+
     mockRefreshTokenRepo.rotate.mockResolvedValue(null); // Simulated race loss
 
-    await expect(
-      useCase.execute({ rawRefreshToken: 'raw-token' })
-    ).rejects.toMatchObject({
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).rejects.toMatchObject({
       errorCode: ErrorCode.UNAUTHORIZED,
     });
   });

@@ -140,10 +140,10 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       ]);
 
       // Exactly one should succeed, one should return null
-      const successCount = [result1, result2].filter(r => r !== null).length;
+      const successCount = [result1, result2].filter((r) => r !== null).length;
       expect(successCount).toBe(1);
 
-      const failedCount = [result1, result2].filter(r => r === null).length;
+      const failedCount = [result1, result2].filter((r) => r === null).length;
       expect(failedCount).toBe(1);
 
       // Verify DB state
@@ -151,8 +151,8 @@ describe('PrismaRefreshTokenRepository Integration', () => {
       expect(dbOldToken?.revoked_at).not.toBeNull();
       expect(dbOldToken?.replaced_by_token_id).not.toBeNull();
 
-      const newTokens = await prisma.refreshToken.findMany({ 
-        where: { user_id: user.id, token_hash: { in: ['new-token-1', 'new-token-2'] } }
+      const newTokens = await prisma.refreshToken.findMany({
+        where: { user_id: user.id, token_hash: { in: ['new-token-1', 'new-token-2'] } },
       });
       // The transaction that lost might have created the token before rolling back?
       // No, interactive transaction rolls back the whole thing

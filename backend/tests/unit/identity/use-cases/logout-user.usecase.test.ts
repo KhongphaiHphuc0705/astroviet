@@ -47,4 +47,16 @@ describe('LogoutUserUseCase', () => {
     expect(mockTokenProvider.hashRefreshToken).not.toHaveBeenCalled();
     expect(mockRefreshTokenRepo.revoke).not.toHaveBeenCalled();
   });
+
+  it('should be idempotent and not throw if token does not exist in DB', async () => {
+    mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
+    mockRefreshTokenRepo.revoke.mockResolvedValue(false); // DB says token not found
+
+    await expect(
+      useCase.execute({ rawRefreshToken: 'raw-token' })
+    ).resolves.not.toThrow();
+
+    expect(mockTokenProvider.hashRefreshToken).toHaveBeenCalledWith('raw-token');
+    expect(mockRefreshTokenRepo.revoke).toHaveBeenCalledWith('hashed-token', expect.any(Date));
+  });
 });

@@ -40,9 +40,7 @@ describe('POST /api/v1/auth/logout', () => {
   });
 
   it('should return 401 if access token is missing', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/logout')
-      .send();
+    const response = await request(app).post('/api/v1/auth/logout').send();
 
     expect(response.status).toBe(401);
   });
@@ -55,7 +53,7 @@ describe('POST /api/v1/auth/logout', () => {
       .send();
 
     expect(response.status).toBe(204);
-    
+
     // Cookie should be cleared
     expect(response.headers['set-cookie']).toBeDefined();
     const clearCookie = response.headers['set-cookie'][0];
@@ -70,5 +68,12 @@ describe('POST /api/v1/auth/logout', () => {
       .send();
 
     expect(response.status).toBe(204);
+  });
+
+  it('should return 401 when trying to refresh with the logged out token', async () => {
+    const response = await request(app).post('/api/v1/auth/refresh').set('Cookie', cookie).send();
+
+    expect(response.status).toBe(401);
+    expect(response.body.errorCode).toBe('UNAUTHORIZED');
   });
 });
