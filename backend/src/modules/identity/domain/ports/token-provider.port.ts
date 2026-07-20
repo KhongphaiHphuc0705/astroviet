@@ -6,5 +6,6 @@ export interface TokenPayload {
 export interface ITokenProvider {
   generateAccessToken(payload: TokenPayload): string;
   generateRefreshToken(): { rawToken: string; tokenHash: string; expiresAt: Date };
+  hashRefreshToken(rawToken: string): string;
   verifyAccessToken(token: string): TokenPayload;
 }

@@ -29,9 +29,13 @@ export class JwtTokenAdapter implements ITokenProvider {
     });
   }
 
+  hashRefreshToken(rawToken: string): string {
+    return crypto.createHash('sha256').update(rawToken).digest('hex');
+  }
+
   generateRefreshToken(): { rawToken: string; tokenHash: string; expiresAt: Date } {
     const rawToken = crypto.randomBytes(32).toString('hex');
-    const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+    const tokenHash = this.hashRefreshToken(rawToken);
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + this.config.refreshExpiryDays);

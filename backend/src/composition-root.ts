@@ -5,6 +5,8 @@ import { env } from './config/env.config.js';
 import { createDocsRoutes } from './docs/docs.routes.js';
 import { HealthController, HealthService, createHealthRoutes } from './health/index.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
+import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
+import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
 import { RegisterUserUseCase } from './modules/identity/application/use-cases/register-user.usecase.js';
 import { BcryptPasswordHasherAdapter } from './modules/identity/infrastructure/adapters/bcrypt-password-hasher.adapter.js';
 import { ConsoleEmailVerificationAdapter } from './modules/identity/infrastructure/adapters/console-email-verification.adapter.js';
@@ -53,12 +55,27 @@ export async function bootstrapApplication(): Promise<{ app: Express }> {
     config.JWT_ACCESS_EXPIRY_MINUTES * 60,
   );
 
-  const authController = new AuthController(registerUserUseCase, loginUserUseCase, config);
+  const refreshTokenUseCase = new RefreshTokenUseCase(
+    userRepository,
+    tokenProvider,
+    refreshTokenRepository,
+    config.JWT_ACCESS_EXPIRY_MINUTES * 60,
+  );
+
+  const logoutUserUseCase = new LogoutUserUseCase(refreshTokenRepository, tokenProvider);
+
+  const authController = new AuthController(
+    registerUserUseCase,
+    loginUserUseCase,
+    refreshTokenUseCase,
+    logoutUserUseCase,
+    config,
+  );
 
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
-    createAuthRoutes(authController),
+    createAuthRoutes(authController, tokenProvider),
     createDocsRoutes(config),
   ];
 
