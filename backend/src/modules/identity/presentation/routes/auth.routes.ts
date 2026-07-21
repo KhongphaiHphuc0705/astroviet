@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
 import { asyncHandler } from '../../../../shared/express/async-handler.js';
-import { authenticate } from '../../../../shared/middlewares/authenticate.middleware.js';
+import { authMiddleware } from '../../../../shared/middlewares/auth.middleware.js';
+import { requireAuth } from '../../../../shared/middlewares/require-auth.middleware.js';
 import { validate } from '../../../../shared/middlewares/validate.middleware.js';
 import { ITokenProvider } from '../../domain/ports/token-provider.port.js';
 import { AuthController } from '../controllers/auth.controller.js';
@@ -28,7 +29,8 @@ export const createAuthRoutes = (
 
   authRouter.post(
     '/logout',
-    authenticate(tokenProvider),
+    authMiddleware(tokenProvider),
+    requireAuth(),
     asyncHandler(authController.logoutHandler),
   );
 
