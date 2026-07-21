@@ -50,7 +50,7 @@ describe('PrismaRefreshTokenRepository', () => {
     it('should throw InfrastructureError when Prisma throws P2003 (Foreign Key Violation)', async () => {
       const error = new Error('Prisma Error');
       (error as any).code = 'P2003';
-      
+
       mockPrisma.refreshToken.create.mockRejectedValue(error);
 
       await expect(repository.create(mockToken)).rejects.toThrow(InfrastructureError);
