@@ -6,7 +6,10 @@ import { ErrorCode } from '../errors/error-codes.js';
 
 export const getCurrentUser = (req: Request): TokenPayload => {
   if (!req.user) {
-    throw new AuthenticationError(ErrorCode.UNAUTHORIZED, 'No authenticated user in request context');
+    throw new AuthenticationError(
+      ErrorCode.UNAUTHORIZED,
+      'No authenticated user in request context',
+    );
   }
   return req.user;
 };
