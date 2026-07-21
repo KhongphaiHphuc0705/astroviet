@@ -3,7 +3,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { User } from '../../../../../src/modules/identity/domain/entities/user.entity.js';
 import { PrismaUserRepository } from '../../../../../src/modules/identity/infrastructure/repositories/prisma-user.repository.js';
-import { InfrastructureError, UniqueConstraintError, OptimisticLockError } from '../../../../../src/shared/errors/app-error.js';
+import {
+  InfrastructureError,
+  UniqueConstraintError,
+  OptimisticLockError,
+} from '../../../../../src/shared/errors/app-error.js';
 
 describe('PrismaUserRepository', () => {
   let mockPrisma: any;
@@ -29,7 +33,7 @@ describe('PrismaUserRepository', () => {
         findUnique: vi.fn(),
         count: vi.fn(),
         updateMany: vi.fn(),
-      }
+      },
     };
     repository = new PrismaUserRepository(mockPrisma as PrismaClient);
   });
@@ -38,7 +42,7 @@ describe('PrismaUserRepository', () => {
     it('should throw UniqueConstraintError when Prisma throws P2002', async () => {
       const error = new Error('Prisma Error');
       (error as any).code = 'P2002';
-      
+
       mockPrisma.user.create.mockRejectedValue(error);
 
       await expect(repository.create(mockUser)).rejects.toThrow(UniqueConstraintError);
@@ -47,7 +51,7 @@ describe('PrismaUserRepository', () => {
     it('should throw InfrastructureError when Prisma throws generic error', async () => {
       const error = new Error('Generic DB Error');
       (error as any).code = 'P5000';
-      
+
       mockPrisma.user.create.mockRejectedValue(error);
 
       await expect(repository.create(mockUser)).rejects.toThrow(InfrastructureError);
@@ -77,7 +81,9 @@ describe('PrismaUserRepository', () => {
       const error = new Error('Generic DB Error');
       mockPrisma.user.count.mockRejectedValue(error);
 
-      await expect(repository.existsByEmail('test@example.com')).rejects.toThrow(InfrastructureError);
+      await expect(repository.existsByEmail('test@example.com')).rejects.toThrow(
+        InfrastructureError,
+      );
     });
   });
 
@@ -85,7 +91,7 @@ describe('PrismaUserRepository', () => {
     it('should throw UniqueConstraintError when Prisma throws P2002', async () => {
       const error = new Error('Prisma Error');
       (error as any).code = 'P2002';
-      
+
       mockPrisma.user.updateMany.mockRejectedValue(error);
 
       await expect(repository.update(mockUser)).rejects.toThrow(UniqueConstraintError);

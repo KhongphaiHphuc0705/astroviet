@@ -141,7 +141,7 @@ describe('RegisterUserUseCase', () => {
   it('should let generic InfrastructureError bubble up', async () => {
     userRepo.existsByEmail.mockResolvedValue(false);
     passwordHasher.hash.mockResolvedValue('hashedPassword');
-    
+
     const dbError = new Error('Connection lost');
     userRepo.create.mockRejectedValue(dbError);
 

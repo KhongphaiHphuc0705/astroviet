@@ -3,7 +3,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { RefreshToken } from '../../../../../src/modules/identity/domain/entities/refresh-token.entity.js';
 import { PrismaRefreshTokenRepository } from '../../../../../src/modules/identity/infrastructure/repositories/prisma-refresh-token.repository.js';
-import { InfrastructureError, UniqueConstraintError } from '../../../../../src/shared/errors/app-error.js';
+import {
+  InfrastructureError,
+  UniqueConstraintError,
+} from '../../../../../src/shared/errors/app-error.js';
 
 describe('PrismaRefreshTokenRepository', () => {
   let mockPrisma: any;
@@ -38,10 +41,19 @@ describe('PrismaRefreshTokenRepository', () => {
     it('should throw UniqueConstraintError when Prisma throws P2002', async () => {
       const error = new Error('Prisma Error');
       (error as any).code = 'P2002';
-      
+
       mockPrisma.refreshToken.create.mockRejectedValue(error);
 
       await expect(repository.create(mockToken)).rejects.toThrow(UniqueConstraintError);
+    });
+
+    it('should throw InfrastructureError when Prisma throws P2003 (Foreign Key Violation)', async () => {
+      const error = new Error('Prisma Error');
+      (error as any).code = 'P2003';
+      
+      mockPrisma.refreshToken.create.mockRejectedValue(error);
+
+      await expect(repository.create(mockToken)).rejects.toThrow(InfrastructureError);
     });
 
     it('should throw InfrastructureError when Prisma throws generic error', async () => {
@@ -74,7 +86,7 @@ describe('PrismaRefreshTokenRepository', () => {
     it('should return false when Prisma throws P2025 (Record not found)', async () => {
       const error = new Error('Prisma Error');
       (error as any).code = 'P2025';
-      
+
       mockPrisma.refreshToken.update.mockRejectedValue(error);
 
       const result = await repository.revoke('hash', new Date());

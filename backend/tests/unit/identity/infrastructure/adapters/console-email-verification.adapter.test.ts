@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import crypto from 'node:crypto';
 
-import { ConsoleEmailVerificationAdapter } from '../../../../../src/modules/identity/infrastructure/adapters/console-email-verification.adapter.js';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { User } from '../../../../../src/modules/identity/domain/entities/user.entity.js';
+import { ConsoleEmailVerificationAdapter } from '../../../../../src/modules/identity/infrastructure/adapters/console-email-verification.adapter.js';
 import { ILogger } from '../../../../../src/shared/logger/logger.interface.js';
 
 describe('ConsoleEmailVerificationAdapter', () => {
@@ -59,7 +60,7 @@ describe('ConsoleEmailVerificationAdapter', () => {
       userId: 'test-user-id',
       email: 'test@example.com',
     });
-    
+
     vi.restoreAllMocks();
   });
 });
