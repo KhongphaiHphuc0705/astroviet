@@ -13,7 +13,7 @@ export interface RefreshCommand {
   ipAddress?: string;
 }
 
-export interface RefreshUserOutput {
+export interface RefreshTokenOutput {
   user: User;
   accessToken: string;
   rawRefreshToken: string;
@@ -28,7 +28,7 @@ export class RefreshTokenUseCase {
     private readonly accessTokenTtlSeconds: number,
   ) {}
 
-  async execute(command: RefreshCommand): Promise<RefreshUserOutput> {
+  async execute(command: RefreshCommand): Promise<RefreshTokenOutput> {
     const { rawRefreshToken } = command;
 
     const tokenHash = this.tokenProvider.hashRefreshToken(rawRefreshToken);

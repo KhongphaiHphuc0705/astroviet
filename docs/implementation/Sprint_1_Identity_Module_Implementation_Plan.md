@@ -12,8 +12,7 @@ src/modules/identity/
 │   │   ├── token-repository.port.ts     # ITokenRepository
 │   │   ├── password-hasher.port.ts      # IPasswordHasher
 │   │   └── token-provider.port.ts       # ITokenProvider
-│   └── errors/
-│       └── auth.errors.ts               # Các error class nghiệp vụ Identity
+
 ├── application/
 │   └── use-cases/
 │       ├── register-user.usecase.ts

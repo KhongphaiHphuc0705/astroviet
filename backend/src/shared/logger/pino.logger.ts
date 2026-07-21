@@ -1,28 +1,60 @@
-import { pino, Logger } from 'pino';
+import { pino, Logger, DestinationStream, LoggerOptions } from 'pino';
 
 import { env, Environment } from '../../config/env.config.js';
 
 import { ILogger } from './logger.interface.js';
 
+export const REDACT_PATHS = [
+  'password',
+  '*.password',
+  '*.*.password',
+  'passwordHash',
+  '*.passwordHash',
+  '*.*.passwordHash',
+  'token',
+  '*.token',
+  '*.*.token',
+  'tokenHash',
+  '*.tokenHash',
+  '*.*.tokenHash',
+  'accessToken',
+  '*.accessToken',
+  '*.*.accessToken',
+  'refreshToken',
+  '*.refreshToken',
+  '*.*.refreshToken',
+  'rawToken',
+  '*.rawToken',
+  '*.*.rawToken',
+];
+
 export class PinoLogger implements ILogger {
   private logger: Logger;
 
-  constructor(name?: string) {
+  constructor(name?: string, customStream?: DestinationStream) {
     const isProd = env.NODE_ENV === Environment.PRODUCTION;
-    this.logger = pino({
+    const options: LoggerOptions = {
       name,
       level: env.LOG_LEVEL,
-      transport: isProd
-        ? undefined
-        : {
-            target: 'pino-pretty',
-            options: {
-              colorize: true,
-              translateTime: 'SYS:standard',
-              ignore: 'pid,hostname',
+      redact: REDACT_PATHS,
+      transport:
+        isProd || customStream
+          ? undefined
+          : {
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+                translateTime: 'SYS:standard',
+                ignore: 'pid,hostname',
+              },
             },
-          },
-    });
+    };
+
+    if (customStream) {
+      this.logger = pino(options, customStream);
+    } else {
+      this.logger = pino(options);
+    }
   }
 
   getPinoLogger(): Logger {

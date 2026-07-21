@@ -155,4 +155,11 @@ describe('LoginUserUseCase', () => {
     expect(tokenProvider.generateAccessToken).not.toHaveBeenCalled();
     expect(refreshTokenRepo.create).not.toHaveBeenCalled();
   });
+
+  it('should let generic InfrastructureError bubble up', async () => {
+    const dbError = new Error('Database connection failed');
+    userRepo.findByEmail.mockRejectedValue(dbError);
+
+    await expect(useCase.execute(command)).rejects.toThrow(dbError);
+  });
 });

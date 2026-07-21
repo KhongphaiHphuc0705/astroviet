@@ -44,6 +44,16 @@ describe('authMiddleware', () => {
     expect(mockTokenProvider.verifyAccessToken).not.toHaveBeenCalled();
   });
 
+  it('should call next() without error if Authorization header is just "Bearer " with no token', () => {
+    req.headers = { authorization: 'Bearer ' };
+    const middleware = authMiddleware(mockTokenProvider);
+    middleware(req as Request, res as Response, next);
+
+    expect(next).toHaveBeenCalledWith();
+    expect(req.user).toBeUndefined();
+    expect(mockTokenProvider.verifyAccessToken).not.toHaveBeenCalled();
+  });
+
   it('should verify token and set req.user if Bearer token is valid', () => {
     req.headers = { authorization: 'Bearer valid-token' };
     const mockPayload = { sub: 'user-1', role: 'user' as const };

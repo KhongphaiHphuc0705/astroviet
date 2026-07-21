@@ -107,4 +107,22 @@ describe('POST /api/v1/auth/register API', () => {
     expect(response.status).toBe(409);
     expect(response.body.errorCode).toBe('EMAIL_ALREADY_EXISTS');
   });
+
+  it('should ignore role field in payload and create user with default role (Privilege Escalation)', async () => {
+    const payload = {
+      email: 'hacker@example.com',
+      password: 'StrongPassword1',
+      displayName: 'Hacker',
+      role: 'admin', // Attempt privilege escalation
+    };
+
+    const response = await request(app).post(ENDPOINT).send(payload);
+
+    expect(response.status).toBe(201);
+    expect(response.body.user.role).toBe('user');
+
+    // Verify in DB
+    const dbUser = await prisma.user.findUnique({ where: { email: 'hacker@example.com' } });
+    expect(dbUser?.role).toBe('user');
+  });
 });

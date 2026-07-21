@@ -6,7 +6,9 @@ export const registerSchema = z
     password: z
       .string()
       .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
-      .regex(/\d/, 'Mật khẩu phải có ít nhất 1 chữ số'),
+      .max(72, 'Mật khẩu quá dài (tối đa 72 ký tự)')
+      .regex(/\d/, 'Mật khẩu phải có ít nhất 1 chữ số')
+      .refine((pw) => Buffer.byteLength(pw, 'utf8') <= 72, 'Mật khẩu quá dài (tối đa 72 byte)'),
     displayName: z.string().min(1).max(100).optional(),
   })
   .openapi('RegisterRequest');
