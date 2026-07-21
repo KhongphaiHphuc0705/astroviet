@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 
-import { PinoLogger } from '../../../src/shared/logger/pino.logger.js';
 import { env } from '../../../src/config/env.config.js';
+import { PinoLogger } from '../../../src/shared/logger/pino.logger.js';
 
 describe('PinoLogger', () => {
   it('should create logger with pino-pretty in non-prod', () => {
@@ -35,11 +35,11 @@ describe('PinoLogger', () => {
 
   it('should redact sensitive fields at top level and nested levels', async () => {
     let output = '';
-    
+
     const stream = {
       write: (msg: string) => {
         output += msg;
-      }
+      },
     };
 
     // Force log level to info to ensure it logs even if env says otherwise during tests
@@ -50,7 +50,7 @@ describe('PinoLogger', () => {
 
     // Log top-level sensitive data
     logger.info('Test top level', { password: 'my-super-secret-password' });
-    
+
     // Log nested sensitive data
     logger.info('Test nested', { user: { passwordHash: 'secret-hash' } });
 
@@ -58,7 +58,7 @@ describe('PinoLogger', () => {
     (env as any).LOG_LEVEL = originalLogLevel;
 
     expect(output).toContain('[Redacted]');
-    
+
     // Ensure the raw secrets are completely missing from the captured log
     expect(output).not.toContain('my-super-secret-password');
     expect(output).not.toContain('secret-hash');
