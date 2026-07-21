@@ -12,6 +12,15 @@ export class PinoLogger implements ILogger {
     this.logger = pino({
       name,
       level: env.LOG_LEVEL,
+      redact: [
+        'password',
+        'passwordHash',
+        'token',
+        'tokenHash',
+        'accessToken',
+        'refreshToken',
+        'rawToken',
+      ],
       transport: isProd
         ? undefined
         : {

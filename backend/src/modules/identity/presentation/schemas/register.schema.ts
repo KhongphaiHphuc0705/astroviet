@@ -6,6 +6,7 @@ export const registerSchema = z
     password: z
       .string()
       .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+      .max(72, 'Mật khẩu quá dài (tối đa 72 ký tự)')
       .regex(/\d/, 'Mật khẩu phải có ít nhất 1 chữ số'),
     displayName: z.string().min(1).max(100).optional(),
   })

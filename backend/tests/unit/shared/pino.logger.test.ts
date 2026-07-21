@@ -1,4 +1,13 @@
+import { pino } from 'pino';
 import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('pino', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('pino')>();
+  return {
+    ...actual,
+    pino: vi.fn().mockImplementation((...args) => actual.pino(...args)),
+  };
+});
 
 import { PinoLogger } from '../../../src/shared/logger/pino.logger.js';
 
@@ -30,5 +39,26 @@ describe('PinoLogger', () => {
     vi.spyOn(pinoLogger, 'debug').mockImplementation(() => {});
     logger.debug('Debug message', { traceId: '123' });
     expect(pinoLogger.debug).toHaveBeenCalledWith({ traceId: '123' }, 'Debug message');
+  });
+
+  it('should configure redact for sensitive fields', () => {
+    // Reset mock to isolate this check
+    vi.mocked(pino).mockClear();
+    
+    new PinoLogger('RedactTestLogger');
+    
+    expect(pino).toHaveBeenCalledWith(
+      expect.objectContaining({
+        redact: expect.arrayContaining([
+          'password',
+          'passwordHash',
+          'token',
+          'tokenHash',
+          'accessToken',
+          'refreshToken',
+          'rawToken',
+        ]),
+      })
+    );
   });
 });
