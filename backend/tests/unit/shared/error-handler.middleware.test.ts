@@ -26,10 +26,10 @@ describe('error-handler middleware', () => {
       debug: vi.fn(),
     };
     req = { id: 'test-request-id', originalUrl: '/test-route' };
-    
+
     mockJson = vi.fn();
     mockStatus = vi.fn().mockReturnValue({ json: mockJson });
-    
+
     res = {
       setHeader: vi.fn(),
       status: mockStatus,
@@ -40,33 +40,37 @@ describe('error-handler middleware', () => {
   it('should log as warn for 4xx AppErrors', () => {
     const error = new AuthenticationError(ErrorCode.UNAUTHORIZED, 'Invalid token');
     const middleware = createErrorHandlerMiddleware(mockLogger as any);
-    
+
     middleware(error, req as Request, res as Response, next);
 
     expect(mockLogger.warn).toHaveBeenCalledTimes(1);
     expect(mockLogger.error).not.toHaveBeenCalled();
-    
+
     expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'application/problem+json');
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(mockJson).toHaveBeenCalledWith(expect.objectContaining({
-      status: 401,
-      errorCode: ErrorCode.UNAUTHORIZED,
-      requestId: 'test-request-id'
-    }));
+    expect(mockJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: 401,
+        errorCode: ErrorCode.UNAUTHORIZED,
+        requestId: 'test-request-id',
+      }),
+    );
   });
 
   it('should log as error for 500 Infrastructure Errors and hide the original message', () => {
-    const error = new Error('Database connection failed with sensitive DB credentials: user=root pw=secret');
+    const error = new Error(
+      'Database connection failed with sensitive DB credentials: user=root pw=secret',
+    );
     const middleware = createErrorHandlerMiddleware(mockLogger as any);
-    
+
     middleware(error, req as Request, res as Response, next);
 
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
     expect(mockLogger.warn).not.toHaveBeenCalled();
-    
+
     // It should map generic Errors to 500
     expect(res.status).toHaveBeenCalledWith(500);
-    
+
     // The response must NOT contain the sensitive original error message
     const responseBody = mockJson.mock.calls[0][0];
     expect(responseBody.detail).toBe('An unexpected error occurred');
@@ -76,7 +80,7 @@ describe('error-handler middleware', () => {
   it('should include the original error in the log context for 5xx', () => {
     const error = new Error('Unknown crash');
     const middleware = createErrorHandlerMiddleware(mockLogger as any);
-    
+
     middleware(error, req as Request, res as Response, next);
 
     expect(mockLogger.error).toHaveBeenCalledWith(
@@ -84,8 +88,8 @@ describe('error-handler middleware', () => {
       expect.objectContaining({
         err: error,
         requestId: 'test-request-id',
-        errorCode: 'INTERNAL_SERVER_ERROR'
-      })
+        errorCode: 'INTERNAL_SERVER_ERROR',
+      }),
     );
   });
 });

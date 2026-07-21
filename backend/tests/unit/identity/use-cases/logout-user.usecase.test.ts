@@ -57,4 +57,12 @@ describe('LogoutUserUseCase', () => {
     expect(mockTokenProvider.hashRefreshToken).toHaveBeenCalledWith('raw-token');
     expect(mockRefreshTokenRepo.revoke).toHaveBeenCalledWith('hashed-token', expect.any(Date));
   });
+
+  it('should let generic InfrastructureError bubble up', async () => {
+    mockTokenProvider.hashRefreshToken.mockReturnValue('hashed-token');
+    const dbError = new Error('Database connection failed');
+    mockRefreshTokenRepo.revoke.mockRejectedValue(dbError);
+
+    await expect(useCase.execute({ rawRefreshToken: 'raw-token' })).rejects.toThrow(dbError);
+  });
 });

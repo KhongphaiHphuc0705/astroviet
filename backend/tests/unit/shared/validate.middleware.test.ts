@@ -25,7 +25,7 @@ describe('validate middleware', () => {
   it('should call next() without error if payload is valid', () => {
     req.body = { email: 'test@example.com', password: 'ValidPassword123' };
     const middleware = validate(testSchema);
-    
+
     middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledWith();
@@ -36,15 +36,15 @@ describe('validate middleware', () => {
   it('should call next(BadRequestError) with multiple Zod errors if multiple fields are invalid', () => {
     req.body = { email: 'invalid-email', password: 'short' };
     const middleware = validate(testSchema);
-    
+
     middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledWith(expect.any(BadRequestError));
     const errorArg = next.mock.calls[0][0] as BadRequestError;
-    
+
     expect(errorArg.errorCode).toBe(ErrorCode.MALFORMED_REQUEST);
     expect(errorArg.details).toBeDefined();
-    
+
     // Zod's flatten() returns { fieldErrors: { field: [string] }, formErrors: [] }
     const details = errorArg.details as any;
     expect(details.fieldErrors).toHaveProperty('email');
@@ -54,7 +54,7 @@ describe('validate middleware', () => {
   it('should strip unknown fields according to default zod behavior', () => {
     req.body = { email: 'test@example.com', password: 'ValidPassword123', unknownField: 'hacker' };
     const middleware = validate(testSchema);
-    
+
     middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledWith();
