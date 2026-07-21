@@ -49,6 +49,20 @@ describe('Register Schema Validation', () => {
     }
   });
 
+  it('should fail if password is 72 chars but > 72 bytes (UTF-8)', () => {
+    // 71 tiếng Việt characters + 1 digit. Each 'á' is 2 bytes. Total > 140 bytes.
+    const payload = {
+      email: 'test@example.com',
+      password: 'á'.repeat(71) + '1', // 72 chars length, > 72 bytes
+      displayName: 'Test',
+    };
+    const result = registerSchema.safeParse(payload);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe('Mật khẩu quá dài (tối đa 72 byte)');
+    }
+  });
+
   it('should fail with empty string fields', () => {
     const payload = {
       email: '',

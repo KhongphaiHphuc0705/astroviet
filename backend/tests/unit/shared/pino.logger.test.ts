@@ -1,15 +1,7 @@
-import { pino } from 'pino';
 import { describe, it, expect, vi } from 'vitest';
 
-vi.mock('pino', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('pino')>();
-  return {
-    ...actual,
-    pino: vi.fn().mockImplementation((...args) => actual.pino(...args)),
-  };
-});
-
 import { PinoLogger } from '../../../src/shared/logger/pino.logger.js';
+import { env } from '../../../src/config/env.config.js';
 
 describe('PinoLogger', () => {
   it('should create logger with pino-pretty in non-prod', () => {
@@ -41,24 +33,34 @@ describe('PinoLogger', () => {
     expect(pinoLogger.debug).toHaveBeenCalledWith({ traceId: '123' }, 'Debug message');
   });
 
-  it('should configure redact for sensitive fields', () => {
-    // Reset mock to isolate this check
-    vi.mocked(pino).mockClear();
+  it('should redact sensitive fields at top level and nested levels', async () => {
+    let output = '';
     
-    new PinoLogger('RedactTestLogger');
+    const stream = {
+      write: (msg: string) => {
+        output += msg;
+      }
+    };
+
+    // Force log level to info to ensure it logs even if env says otherwise during tests
+    const originalLogLevel = env.LOG_LEVEL;
+    (env as any).LOG_LEVEL = 'info';
+
+    const logger = new PinoLogger('RedactTestLogger', stream as any);
+
+    // Log top-level sensitive data
+    logger.info('Test top level', { password: 'my-super-secret-password' });
     
-    expect(pino).toHaveBeenCalledWith(
-      expect.objectContaining({
-        redact: expect.arrayContaining([
-          'password',
-          'passwordHash',
-          'token',
-          'tokenHash',
-          'accessToken',
-          'refreshToken',
-          'rawToken',
-        ]),
-      })
-    );
+    // Log nested sensitive data
+    logger.info('Test nested', { user: { passwordHash: 'secret-hash' } });
+
+    // Restore log level
+    (env as any).LOG_LEVEL = originalLogLevel;
+
+    expect(output).toContain('[Redacted]');
+    
+    // Ensure the raw secrets are completely missing from the captured log
+    expect(output).not.toContain('my-super-secret-password');
+    expect(output).not.toContain('secret-hash');
   });
 });
