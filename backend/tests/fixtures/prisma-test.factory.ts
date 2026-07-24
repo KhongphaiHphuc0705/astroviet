@@ -112,4 +112,35 @@ export class PrismaTestFactory {
     // Strip undefined keys
     return Object.fromEntries(Object.entries(mapped).filter(([_, v]) => v !== undefined));
   }
+
+  async createBirthProfile(
+    userId: string,
+    overrides?: Partial<any>, // using any here for simplicity in test factory, or we can just use Prisma type
+  ): Promise<any> {
+    const defaultProfile = {
+      id: generateUuid(),
+      user_id: userId,
+      label: `Profile ${Date.now()}`,
+      full_name: 'Test Profile',
+      birth_date: new Date('1990-01-01T00:00:00Z'),
+      birth_time: new Date('1970-01-01T14:30:00Z'),
+      is_birth_time_known: true,
+      place_name: 'Ho Chi Minh City',
+      latitude: 10.8231,
+      longitude: 106.6297,
+      historical_timezone_id: 'Asia/Ho_Chi_Minh',
+      created_at: new Date(),
+      updated_at: new Date(),
+      deleted_at: null,
+      version: 1,
+    };
+
+    const data = {
+      ...defaultProfile,
+      ...overrides,
+    };
+
+    const prismaProfile = await this.prisma.birthProfile.create({ data });
+    return prismaProfile;
+  }
 }
