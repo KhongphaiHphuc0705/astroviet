@@ -45,6 +45,15 @@ export class BirthDate {
     return new BirthDate(normalizedDate);
   }
 
+  public static reconstitute(value: Date | string): BirthDate {
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+      throw new InvalidBirthDateError('Invalid date format');
+    }
+    const inputDateUtc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    return new BirthDate(new Date(inputDateUtc));
+  }
+
   public get value(): Date {
     // Return a new Date instance to prevent mutation
     return new Date(this._value.getTime());

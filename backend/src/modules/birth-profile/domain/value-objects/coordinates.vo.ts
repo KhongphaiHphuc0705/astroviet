@@ -30,6 +30,14 @@ export class Coordinates {
     return new Coordinates(latitude, longitude);
   }
 
+  public static reconstitute(latitude: number, longitude: number): Coordinates {
+    // Only basic type checks to prevent runtime crash
+    if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+      throw new InvalidCoordinatesError('Coordinates must be numbers');
+    }
+    return new Coordinates(latitude, longitude);
+  }
+
   public get latitude(): number {
     return this._latitude;
   }

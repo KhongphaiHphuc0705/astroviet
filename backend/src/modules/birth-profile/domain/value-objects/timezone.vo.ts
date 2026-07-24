@@ -29,6 +29,10 @@ export class Timezone {
     return new Timezone(trimmedValue);
   }
 
+  public static reconstitute(value: string): Timezone {
+    return new Timezone(value);
+  }
+
   public get value(): string {
     return this._value;
   }
