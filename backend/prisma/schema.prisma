@@ -21,7 +21,8 @@ model User {
   deleted_at        DateTime? @db.Timestamptz
   version           Int       @default(1)
 
-  tokens RefreshToken[]
+  tokens         RefreshToken[]
+  birth_profiles BirthProfile[]
 
   @@map("users")
   @@schema("identity")
@@ -43,4 +44,28 @@ model RefreshToken {
 
   @@map("refresh_tokens")
   @@schema("identity")
+}
+
+model BirthProfile {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                String    @db.Uuid
+  label                  String
+  full_name              String?
+  birth_date             DateTime  @db.Date
+  birth_time             DateTime? @db.Time
+  is_birth_time_known    Boolean   @default(true)
+  place_name             String
+  latitude               Decimal   @db.Decimal(9, 6)
+  longitude              Decimal   @db.Decimal(9, 6)
+  historical_timezone_id String
+  created_at             DateTime  @default(now()) @db.Timestamptz
+  updated_at             DateTime  @default(now()) @db.Timestamptz
+  deleted_at             DateTime? @db.Timestamptz
+  version                Int       @default(1)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("birth_profiles")
+  @@schema("astrology")
 }
