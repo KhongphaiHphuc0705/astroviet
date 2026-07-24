@@ -24,14 +24,6 @@ export class BirthLocation {
     return new BirthLocation(trimmedPlaceName, coordinates, timezone);
   }
 
-  public static reconstitute(
-    placeName: string,
-    coordinates: Coordinates,
-    timezone: Timezone,
-  ): BirthLocation {
-    return new BirthLocation(placeName, coordinates, timezone);
-  }
-
   public get placeName(): string {
     return this._placeName;
   }

@@ -7,12 +7,12 @@ import { BirthTime } from '../../domain/value-objects/birth-time.vo.js';
 import { Coordinates } from '../../domain/value-objects/coordinates.vo.js';
 import { Timezone } from '../../domain/value-objects/timezone.vo.js';
 
-type PrismaBirthProfile = Prisma.BirthProfileGetPayload<{}>;
+type PrismaBirthProfile = Prisma.BirthProfileGetPayload<Record<string, never>>;
 
 export class PrismaBirthProfileMapper {
   static toDomain(record: PrismaBirthProfile): BirthProfile {
     // birthDate mapping
-    const birthDate = BirthDate.reconstitute(record.birth_date);
+    const birthDate = BirthDate.create(record.birth_date);
 
     // birthTime mapping
     let birthTime: BirthTime | null = null;
@@ -21,16 +21,13 @@ export class PrismaBirthProfileMapper {
       const hour = record.birth_time.getUTCHours().toString().padStart(2, '0');
       const minute = record.birth_time.getUTCMinutes().toString().padStart(2, '0');
       const second = record.birth_time.getUTCSeconds().toString().padStart(2, '0');
-      birthTime = BirthTime.reconstitute(`${hour}:${minute}:${second}`);
+      birthTime = BirthTime.create(`${hour}:${minute}:${second}`);
     }
 
     // birthLocation mapping
-    const coordinates = Coordinates.reconstitute(
-      record.latitude.toNumber(),
-      record.longitude.toNumber(),
-    );
-    const timezone = Timezone.reconstitute(record.historical_timezone_id);
-    const birthLocation = BirthLocation.reconstitute(record.place_name, coordinates, timezone);
+    const coordinates = Coordinates.create(record.latitude.toNumber(), record.longitude.toNumber());
+    const timezone = Timezone.create(record.historical_timezone_id);
+    const birthLocation = BirthLocation.create(record.place_name, coordinates, timezone);
 
     return BirthProfile.reconstitute({
       id: record.id,

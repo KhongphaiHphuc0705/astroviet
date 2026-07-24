@@ -89,7 +89,6 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
         where: {
           id: profile.id,
           version: profile.version,
-          deleted_at: null, // As per OQ-F: Do not update if soft deleted
         },
         data,
       });

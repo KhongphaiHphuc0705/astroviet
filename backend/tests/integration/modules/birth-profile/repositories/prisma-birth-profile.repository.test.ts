@@ -210,7 +210,7 @@ describe('PrismaBirthProfileRepository Integration', () => {
       }
     });
 
-    it('should throw OptimisticLockError if trying to update a soft-deleted profile', async () => {
+    it('should successfully update a soft-deleted profile (as per OQ-F, Repository does not impose business rules)', async () => {
       const user = await factory.createUser();
       const createdProfile = await factory.createBirthProfile(user.id, { version: 1 });
 
@@ -226,7 +226,12 @@ describe('PrismaBirthProfileRepository Integration', () => {
           data: { deleted_at: new Date() },
         });
 
-        await expect(repository.update(domainProfile)).rejects.toThrow(OptimisticLockError);
+        // Update should succeed despite being soft-deleted
+        await repository.update(domainProfile);
+
+        const saved = await prisma.birthProfile.findUnique({ where: { id: createdProfile.id } });
+        expect(saved?.label).toBe('Updated Label');
+        expect(saved?.version).toBe(2);
       }
     });
   });

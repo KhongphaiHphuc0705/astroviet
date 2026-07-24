@@ -35,18 +35,6 @@ export class BirthTime {
     return new BirthTime(hour, minute, second);
   }
 
-  public static reconstitute(value: string): BirthTime {
-    const regex = /^(\d{2}):(\d{2}):(\d{2})$/;
-    const match = value.match(regex);
-    if (!match) {
-      throw new InvalidBirthTimeError('Invalid birth time format. Expected HH:mm:ss');
-    }
-    const hour = parseInt(match[1]!, 10);
-    const minute = parseInt(match[2]!, 10);
-    const second = parseInt(match[3]!, 10);
-    return new BirthTime(hour, minute, second);
-  }
-
   public get hour(): number {
     return this._hour;
   }

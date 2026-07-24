@@ -14,6 +14,12 @@ export interface IBirthProfileRepository {
     userId: string,
     options: ListOptions,
   ): Promise<{ items: BirthProfile[]; total: number }>;
+  /**
+   * Updates an existing profile.
+   * Note: This method DOES NOT check if the profile is soft-deleted.
+   * It is the responsibility of the Use Case to prevent updating soft-deleted profiles if needed.
+   * Throws OptimisticLockError if the version does not match.
+   */
   update(profile: BirthProfile): Promise<void>;
   softDelete(id: string, userId: string): Promise<boolean>;
 }

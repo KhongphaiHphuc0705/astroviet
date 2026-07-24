@@ -7,7 +7,7 @@ import { PrismaBirthProfileMapper } from '../../../../../../src/modules/birth-pr
 describe('PrismaBirthProfileMapper', () => {
   it('1. should correctly map persistence record to domain entity and back', () => {
     // 1. Arrange - create a persistence record
-    const persistenceRecord: Prisma.BirthProfileGetPayload<{}> = {
+    const persistenceRecord: Prisma.BirthProfileGetPayload<Record<string, never>> = {
       id: '123e4567-e89b-12d3-a456-426614174000',
       user_id: '987fcdeb-51a2-43d7-9012-345678901234',
       label: 'My Profile',
@@ -52,8 +52,12 @@ describe('PrismaBirthProfileMapper', () => {
     expect(backToPersistence.user_id).toBe(persistenceRecord.user_id);
     expect(backToPersistence.label).toBe(persistenceRecord.label);
     expect(backToPersistence.full_name).toBe(persistenceRecord.full_name);
-    expect(new Date(backToPersistence.birth_date).getTime()).toBe(persistenceRecord.birth_date.getTime());
-    expect(backToPersistence.birth_time ? new Date(backToPersistence.birth_time).getTime() : undefined).toBe(persistenceRecord.birth_time?.getTime());
+    expect(new Date(backToPersistence.birth_date).getTime()).toBe(
+      persistenceRecord.birth_date.getTime(),
+    );
+    expect(
+      backToPersistence.birth_time ? new Date(backToPersistence.birth_time).getTime() : undefined,
+    ).toBe(persistenceRecord.birth_time?.getTime());
     expect(backToPersistence.is_birth_time_known).toBe(persistenceRecord.is_birth_time_known);
     expect(backToPersistence.place_name).toBe(persistenceRecord.place_name);
     expect(backToPersistence.latitude).toBe(10.8231);
@@ -63,7 +67,7 @@ describe('PrismaBirthProfileMapper', () => {
   });
 
   it('2. should map correctly when birth_time is null', () => {
-    const persistenceRecord: Prisma.BirthProfileGetPayload<{}> = {
+    const persistenceRecord: Prisma.BirthProfileGetPayload<Record<string, never>> = {
       id: '123e4567-e89b-12d3-a456-426614174000',
       user_id: '987fcdeb-51a2-43d7-9012-345678901234',
       label: 'My Profile',
@@ -91,7 +95,7 @@ describe('PrismaBirthProfileMapper', () => {
   });
 
   it('3. toUpdatePersistence should not include unchangeable fields', () => {
-    const persistenceRecord: Prisma.BirthProfileGetPayload<{}> = {
+    const persistenceRecord: Prisma.BirthProfileGetPayload<Record<string, never>> = {
       id: '123e4567-e89b-12d3-a456-426614174000',
       user_id: '987fcdeb-51a2-43d7-9012-345678901234',
       label: 'My Profile',
