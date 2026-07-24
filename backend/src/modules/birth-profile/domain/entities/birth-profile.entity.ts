@@ -1,4 +1,8 @@
-import { InvalidBirthTimeStateError, InvalidLabelError } from '../errors/birth-profile.errors.js';
+import {
+  InvalidBirthTimeStateError,
+  InvalidLabelError,
+  InvalidVersionError,
+} from '../errors/birth-profile.errors.js';
 import { BirthDate } from '../value-objects/birth-date.vo.js';
 import { BirthLocation } from '../value-objects/birth-location.vo.js';
 import { BirthTime } from '../value-objects/birth-time.vo.js';
@@ -39,7 +43,7 @@ export class BirthProfile {
 
     // INV-BP3: version >= 1
     if (props.version < 1) {
-      throw new Error('Version must be >= 1');
+      throw new InvalidVersionError('Version must be >= 1');
     }
 
     return new BirthProfile({ ...props });
@@ -69,7 +73,7 @@ export class BirthProfile {
     }
 
     if (updatedProps.version < 1) {
-      throw new Error('Version must be >= 1');
+      throw new InvalidVersionError('Version must be >= 1');
     }
 
     return new BirthProfile(updatedProps);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { InvalidCoordinatesError } from '../../../../../../src/modules/birth-profile/domain/errors/birth-profile.errors.js';
 import { Coordinates } from '../../../../../../src/modules/birth-profile/domain/value-objects/coordinates.vo.js';
 

@@ -1,8 +1,13 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { BirthProfile, BirthProfileProps } from '../../../../../../src/modules/birth-profile/domain/entities/birth-profile.entity.js';
+
+import {
+  BirthProfile,
+  BirthProfileProps,
+} from '../../../../../../src/modules/birth-profile/domain/entities/birth-profile.entity.js';
 import {
   InvalidBirthTimeStateError,
   InvalidLabelError,
+  InvalidVersionError,
 } from '../../../../../../src/modules/birth-profile/domain/errors/birth-profile.errors.js';
 import { BirthDate } from '../../../../../../src/modules/birth-profile/domain/value-objects/birth-date.vo.js';
 import { BirthLocation } from '../../../../../../src/modules/birth-profile/domain/value-objects/birth-location.vo.js';
@@ -103,7 +108,7 @@ describe('BirthProfile Entity', () => {
   it('8. should reject version < 1', () => {
     const props = getValidProps();
     props.version = 0;
-    expect(() => BirthProfile.create(props)).toThrow('Version must be >= 1');
+    expect(() => BirthProfile.create(props)).toThrow(InvalidVersionError);
   });
 
   it('9. update() should return a new instance (immutability)', () => {
@@ -120,10 +125,25 @@ describe('BirthProfile Entity', () => {
     expect(() => profile.update({ label: '' })).toThrow(InvalidLabelError);
   });
 
-  it('11. update() should re-validate invariants (reject invalid time state)', () => {
+  it('11. update() should re-validate invariants (reject invalid time state false-notnull)', () => {
     const profile = BirthProfile.create(getValidProps()); // known time
     // Attempting to set unknown time without clearing birthTime should fail
     expect(() => profile.update({ isBirthTimeKnown: false })).toThrow(InvalidBirthTimeStateError);
+  });
+
+  it('11b. update() should re-validate invariants (reject invalid time state true-null)', () => {
+    const profile = BirthProfile.create({
+      ...getValidProps(),
+      isBirthTimeKnown: false,
+      birthTime: null,
+    }); // unknown time
+    // Attempting to set known time without providing birthTime should fail
+    expect(() => profile.update({ isBirthTimeKnown: true })).toThrow(InvalidBirthTimeStateError);
+  });
+
+  it('11c. update() should re-validate invariants (reject version < 1)', () => {
+    const profile = BirthProfile.create(getValidProps());
+    expect(() => profile.update({ version: 0 })).toThrow(InvalidVersionError);
   });
 
   it('12. reconstitute() should skip full validation', () => {

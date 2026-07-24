@@ -1,4 +1,5 @@
 import { InvalidBirthLocationError } from '../errors/birth-profile.errors.js';
+
 import { Coordinates } from './coordinates.vo.js';
 import { Timezone } from './timezone.vo.js';
 

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest';
+
 import { InvalidBirthDateError } from '../../../../../../src/modules/birth-profile/domain/errors/birth-profile.errors.js';
 import { BirthDate } from '../../../../../../src/modules/birth-profile/domain/value-objects/birth-date.vo.js';
 

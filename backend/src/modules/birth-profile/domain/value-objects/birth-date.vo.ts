@@ -17,8 +17,12 @@ export class BirthDate {
         const year = parseInt(parts[0]!, 10);
         const month = parseInt(parts[1]!, 10) - 1; // 0-indexed
         const day = parseInt(parts[2]!, 10);
-        
-        if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month || date.getUTCDate() !== day) {
+
+        if (
+          date.getUTCFullYear() !== year ||
+          date.getUTCMonth() !== month ||
+          date.getUTCDate() !== day
+        ) {
           throw new InvalidBirthDateError('Invalid calendar date');
         }
       }

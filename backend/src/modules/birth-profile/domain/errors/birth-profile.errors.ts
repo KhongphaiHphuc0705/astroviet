@@ -46,3 +46,10 @@ export class InvalidLabelError extends Error {
     this.name = 'InvalidLabelError';
   }
 }
+
+export class InvalidVersionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidVersionError';
+  }
+}

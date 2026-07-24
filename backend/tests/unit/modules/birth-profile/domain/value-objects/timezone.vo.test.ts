@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { InvalidTimezoneError } from '../../../../../../src/modules/birth-profile/domain/errors/birth-profile.errors.js';
 import { Timezone } from '../../../../../../src/modules/birth-profile/domain/value-objects/timezone.vo.js';
 

@@ -17,16 +17,12 @@ export class Timezone {
       );
     }
 
-    // However, to keep it simple and strict as per plan, we will strictly enforce against supportedValuesOf
-    // Wait, the plan says: "Dùng Intl.supportedValuesOf('timeZone') để kiểm tra chuỗi có tồn tại thật trong IANA tzdb hay không"
-    // So we use it. If it throws RangeError when creating Intl.DateTimeFormat, it's invalid.
-
     try {
-      // Intl.DateTimeFormat is a robust way to check if a timezone string is valid in the current JS environment
-      // It will throw a RangeError if the timezone is invalid.
-      // We will check using this to allow valid ICU aliases that might not be in supportedValuesOf.
+      // We use Intl.DateTimeFormat instead of Intl.supportedValuesOf('timeZone')
+      // because supportedValuesOf strictly returns canonical names and rejects
+      // valid aliases like 'Asia/Ho_Chi_Minh' or 'UTC' in some Node.js versions.
       new Intl.DateTimeFormat('en-US', { timeZone: trimmedValue });
-    } catch (e) {
+    } catch {
       throw new InvalidTimezoneError(`Invalid IANA timezone identifier: ${trimmedValue}`);
     }
 

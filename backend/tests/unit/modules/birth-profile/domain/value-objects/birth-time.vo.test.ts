@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { InvalidBirthTimeError } from '../../../../../../src/modules/birth-profile/domain/errors/birth-profile.errors.js';
 import { BirthTime } from '../../../../../../src/modules/birth-profile/domain/value-objects/birth-time.vo.js';
 
