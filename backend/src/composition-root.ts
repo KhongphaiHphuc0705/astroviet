@@ -1,9 +1,12 @@
-import { Express, Router } from 'express';
+import { Router } from 'express';
 
 import { createApp } from './app.js';
 import { env } from './config/env.config.js';
 import { createDocsRoutes } from './docs/docs.routes.js';
 import { HealthController, HealthService, createHealthRoutes } from './health/index.js';
+import { CreateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/create-birth-profile.usecase.js';
+import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-cases/get-birth-profile.usecase.js';
+import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
 import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
@@ -18,7 +21,7 @@ import { createAuthRoutes } from './modules/identity/presentation/routes/auth.ro
 import { defaultLogger } from './shared/logger/pino.logger.js';
 import { prisma } from './shared/prisma/prisma-client.js';
 
-export async function bootstrapApplication(): Promise<{ app: Express }> {
+export async function bootstrapApplication() {
   const config = env;
   const logger = defaultLogger;
 
@@ -72,6 +75,11 @@ export async function bootstrapApplication(): Promise<{ app: Express }> {
     config,
   );
 
+  // --- Birth Profile Module ---
+  const birthProfileRepository = new PrismaBirthProfileRepository(prisma);
+  const createBirthProfileUseCase = new CreateBirthProfileUseCase(birthProfileRepository);
+  const getBirthProfileUseCase = new GetBirthProfileUseCase(birthProfileRepository);
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
@@ -82,5 +90,11 @@ export async function bootstrapApplication(): Promise<{ app: Express }> {
   // --- App ---
   const app = createApp(config, logger, routes);
 
-  return { app };
+  return {
+    app,
+    useCases: {
+      createBirthProfileUseCase,
+      getBirthProfileUseCase,
+    },
+  };
 }
