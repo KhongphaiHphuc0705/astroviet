@@ -4,9 +4,9 @@ import { z } from 'zod';
 
 import { BadRequestError } from '../../../src/shared/errors/app-error.js';
 import { ErrorCode } from '../../../src/shared/errors/error-codes.js';
-import { validate } from '../../../src/shared/middlewares/validate.middleware.js';
+import { validateBody } from '../../../src/shared/middlewares/validate-body.middleware.js';
 
-describe('validate middleware', () => {
+describe('validateBody middleware', () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: ReturnType<typeof vi.fn>;
@@ -24,7 +24,7 @@ describe('validate middleware', () => {
 
   it('should call next() without error if payload is valid', () => {
     req.body = { email: 'test@example.com', password: 'ValidPassword123' };
-    const middleware = validate(testSchema);
+    const middleware = validateBody(testSchema);
 
     middleware(req as Request, res as Response, next);
 
@@ -35,7 +35,7 @@ describe('validate middleware', () => {
 
   it('should call next(BadRequestError) with multiple Zod errors if multiple fields are invalid', () => {
     req.body = { email: 'invalid-email', password: 'short' };
-    const middleware = validate(testSchema);
+    const middleware = validateBody(testSchema);
 
     middleware(req as Request, res as Response, next);
 
@@ -53,7 +53,7 @@ describe('validate middleware', () => {
 
   it('should strip unknown fields according to default zod behavior', () => {
     req.body = { email: 'test@example.com', password: 'ValidPassword123', unknownField: 'hacker' };
-    const middleware = validate(testSchema);
+    const middleware = validateBody(testSchema);
 
     middleware(req as Request, res as Response, next);
 
