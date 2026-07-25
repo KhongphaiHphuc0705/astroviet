@@ -24,7 +24,7 @@ export interface CreateBirthProfileCommand {
 
 export interface CreateBirthProfileResult {
   profile: BirthProfile;
-  warnings: unknown[]; // To be typed properly later if needed, but [] for now
+  warnings: never[]; // To be typed properly later if needed, but [] for now
 }
 
 export class CreateBirthProfileUseCase {
@@ -36,8 +36,7 @@ export class CreateBirthProfileUseCase {
     let profile: BirthProfile;
     try {
       const birthDate = BirthDate.create(command.birthDate);
-      const birthTime =
-        command.isBirthTimeKnown && command.birthTime ? BirthTime.create(command.birthTime) : null;
+      const birthTime = command.birthTime ? BirthTime.create(command.birthTime) : null;
 
       const coordinates = Coordinates.create(
         command.birthLocation.latitude,

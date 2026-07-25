@@ -5,6 +5,7 @@ import {
   CreateBirthProfileCommand,
 } from '../../../../../../src/modules/birth-profile/application/use-cases/create-birth-profile.usecase.js';
 import { IBirthProfileRepository } from '../../../../../../src/modules/birth-profile/domain/ports/birth-profile-repository.port.js';
+import { BirthDate } from '../../../../../../src/modules/birth-profile/domain/value-objects/birth-date.vo.js';
 import { DomainError, InfrastructureError } from '../../../../../../src/shared/errors/app-error.js';
 import { ErrorCode } from '../../../../../../src/shared/errors/error-codes.js';
 
@@ -133,13 +134,7 @@ describe('CreateBirthProfileUseCase', () => {
     });
 
     it('3.7 should throw INVALID_BIRTH_TIME_STATE', async () => {
-      // isBirthTimeKnown is false but birthTime is provided -> Entity validation should fail?
-      // Wait, in CreateBirthProfileUseCase we do:
-      // const birthTime = command.isBirthTimeKnown && command.birthTime ? BirthTime.create(...) : null;
-      // Wait, if isBirthTimeKnown is false, birthTime will be null, which is valid.
-      // But if isBirthTimeKnown is true and birthTime is missing, the Entity will throw INVALID_BIRTH_TIME_STATE.
-      // So we test that.
-      const command = { ...validCommand, isBirthTimeKnown: true, birthTime: null };
+      const command = { ...validCommand, isBirthTimeKnown: false, birthTime: '12:00:00' };
       await expect(useCase.execute(command)).rejects.toThrow(DomainError);
       await expect(useCase.execute(command)).rejects.toHaveProperty(
         'errorCode',
@@ -160,16 +155,15 @@ describe('CreateBirthProfileUseCase', () => {
   });
 
   it('4. should not map unexpected errors', async () => {
-    // We can simulate this by mocking crypto.randomUUID to throw
-    vi.stubGlobal('crypto', {
-      randomUUID: () => {
-        throw new Error('Unexpected');
-      },
+    // Mocking a VO to throw an unexpected error inside the try block
+    // to ensure mapDomainErrorToAppError correctly re-throws non-Domain errors.
+    vi.spyOn(BirthDate, 'create').mockImplementationOnce(() => {
+      throw new Error('Unexpected');
     });
 
     await expect(useCase.execute(validCommand)).rejects.toThrow('Unexpected');
     expect(repository.create).not.toHaveBeenCalled();
 
-    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 });
