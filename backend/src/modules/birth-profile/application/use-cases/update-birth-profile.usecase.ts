@@ -18,10 +18,10 @@ export interface UpdateBirthProfileCommand {
   birthTime?: string | null;
   isBirthTimeKnown?: boolean;
   birthLocation?: {
-    city: string;
+    placeName: string;
     latitude: number;
     longitude: number;
-    timezone: string;
+    historicalTimezoneId: string;
   };
 }
 
@@ -72,9 +72,9 @@ export class UpdateBirthProfileUseCase {
 
       if (command.birthLocation !== undefined) {
         changes.birthLocation = BirthLocation.create(
-          command.birthLocation.city,
+          command.birthLocation.placeName,
           Coordinates.create(command.birthLocation.latitude, command.birthLocation.longitude),
-          Timezone.create(command.birthLocation.timezone),
+          Timezone.create(command.birthLocation.historicalTimezoneId),
         );
       }
 

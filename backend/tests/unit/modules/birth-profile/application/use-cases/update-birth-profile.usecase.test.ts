@@ -12,7 +12,6 @@ import { BirthTime } from '../../../../../../src/modules/birth-profile/domain/va
 import { Coordinates } from '../../../../../../src/modules/birth-profile/domain/value-objects/coordinates.vo.js';
 import { Timezone } from '../../../../../../src/modules/birth-profile/domain/value-objects/timezone.vo.js';
 import {
-  AuthorizationError,
   DomainError,
   InfrastructureError,
   NotFoundError,
@@ -215,5 +214,60 @@ describe('UpdateBirthProfileUseCase', () => {
       errorCode: ErrorCode.INVALID_BIRTH_TIME_STATE,
     });
     expect(repository.update).not.toHaveBeenCalled();
+  });
+
+  it('10. should successfully update birthLocation', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      birthLocation: {
+        placeName: 'Hanoi',
+        latitude: 21.0285,
+        longitude: 105.8542,
+        historicalTimezoneId: 'Asia/Ho_Chi_Minh',
+      },
+    };
+
+    const result = await useCase.execute(command);
+    
+    expect(result.profile.birthLocation.placeName).toBe('Hanoi');
+    expect(result.profile.birthLocation.coordinates.latitude).toBe(21.0285);
+    expect(repository.update).toHaveBeenCalledTimes(1);
+  });
+
+  it('11. should allow explicitly setting birthTime to null when isBirthTimeKnown is false', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      isBirthTimeKnown: false,
+      birthTime: null,
+    };
+
+    const result = await useCase.execute(command);
+    
+    expect(result.profile.isBirthTimeKnown).toBe(false);
+    expect(result.profile.birthTime).toBeNull();
+    expect(repository.update).toHaveBeenCalledTimes(1);
+  });
+
+  it('12. should pass non-Error objects straight through catch block', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+    
+    // Using vi.spyOn to force the domain entity to throw a non-Error primitive
+    vi.spyOn(mockProfile, 'update').mockImplementationOnce(() => {
+      throw 'A primitive string error';
+    });
+
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      label: 'New Label',
+    };
+
+    await expect(useCase.execute(command)).rejects.toThrow('A primitive string error');
   });
 });
