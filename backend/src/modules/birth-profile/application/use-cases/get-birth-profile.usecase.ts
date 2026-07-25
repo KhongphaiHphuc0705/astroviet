@@ -1,4 +1,5 @@
 import { AuthorizationError, NotFoundError } from '../../../../shared/errors/app-error.js';
+import { ErrorCode } from '../../../../shared/errors/error-codes.js';
 import { BirthProfile } from '../../domain/entities/birth-profile.entity.js';
 import { IBirthProfileRepository } from '../../domain/ports/birth-profile-repository.port.js';
 
@@ -22,7 +23,10 @@ export class GetBirthProfileUseCase {
     }
 
     if (profile.userId !== command.userId) {
-      throw new AuthorizationError('You do not have permission to access this birth profile');
+      throw new AuthorizationError(
+        ErrorCode.FORBIDDEN,
+        'You do not have permission to access this birth profile',
+      );
     }
 
     return { profile };

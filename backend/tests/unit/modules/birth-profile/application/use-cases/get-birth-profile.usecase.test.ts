@@ -13,8 +13,10 @@ import { Coordinates } from '../../../../../../src/modules/birth-profile/domain/
 import { Timezone } from '../../../../../../src/modules/birth-profile/domain/value-objects/timezone.vo.js';
 import {
   AuthorizationError,
+  InfrastructureError,
   NotFoundError,
 } from '../../../../../../src/shared/errors/app-error.js';
+import { ErrorCode } from '../../../../../../src/shared/errors/error-codes.js';
 
 describe('GetBirthProfileUseCase', () => {
   let repository: Mocked<IBirthProfileRepository>;
@@ -79,7 +81,29 @@ describe('GetBirthProfileUseCase', () => {
     const command: GetBirthProfileCommand = { id: 'profile-123', userId: 'other-user' };
 
     await expect(useCase.execute(command)).rejects.toThrow(AuthorizationError);
+    await expect(useCase.execute(command)).rejects.toMatchObject({
+      errorCode: ErrorCode.FORBIDDEN,
+    });
+    expect(repository.findById).toHaveBeenCalledTimes(2); // Since we call it twice in expect
+  });
+
+  it('4. should not catch InfrastructureError from repository', async () => {
+    const error = new InfrastructureError('DB error');
+    repository.findById.mockRejectedValue(error);
+
+    const command: GetBirthProfileCommand = { id: 'profile-123', userId: 'user-123' };
+
+    await expect(useCase.execute(command)).rejects.toThrow(InfrastructureError);
     expect(repository.findById).toHaveBeenCalledTimes(1);
-    expect(repository.findById).toHaveBeenCalledWith('profile-123');
+  });
+
+  it('5. should not map unexpected errors', async () => {
+    const error = new Error('Unexpected DB Exception');
+    repository.findById.mockRejectedValue(error);
+
+    const command: GetBirthProfileCommand = { id: 'profile-123', userId: 'user-123' };
+
+    await expect(useCase.execute(command)).rejects.toThrow('Unexpected DB Exception');
+    expect(repository.findById).toHaveBeenCalledTimes(1);
   });
 });
