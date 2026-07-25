@@ -5,7 +5,10 @@ import { env } from './config/env.config.js';
 import { createDocsRoutes } from './docs/docs.routes.js';
 import { HealthController, HealthService, createHealthRoutes } from './health/index.js';
 import { CreateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/create-birth-profile.usecase.js';
+import { DeleteBirthProfileUseCase } from './modules/birth-profile/application/use-cases/delete-birth-profile.usecase.js';
 import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-cases/get-birth-profile.usecase.js';
+import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
+import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
@@ -79,6 +82,9 @@ export async function bootstrapApplication() {
   const birthProfileRepository = new PrismaBirthProfileRepository(prisma);
   const createBirthProfileUseCase = new CreateBirthProfileUseCase(birthProfileRepository);
   const getBirthProfileUseCase = new GetBirthProfileUseCase(birthProfileRepository);
+  const updateBirthProfileUseCase = new UpdateBirthProfileUseCase(birthProfileRepository);
+  const deleteBirthProfileUseCase = new DeleteBirthProfileUseCase(birthProfileRepository);
+  const listBirthProfilesUseCase = new ListBirthProfilesUseCase(birthProfileRepository);
 
   // --- Routers ---
   const routes: Router[] = [
@@ -95,6 +101,9 @@ export async function bootstrapApplication() {
     useCases: {
       createBirthProfileUseCase,
       getBirthProfileUseCase,
+      updateBirthProfileUseCase,
+      deleteBirthProfileUseCase,
+      listBirthProfilesUseCase,
     },
   };
 }
