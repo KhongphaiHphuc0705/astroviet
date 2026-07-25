@@ -231,7 +231,7 @@ describe('UpdateBirthProfileUseCase', () => {
     };
 
     const result = await useCase.execute(command);
-    
+
     expect(result.profile.birthLocation.placeName).toBe('Hanoi');
     expect(result.profile.birthLocation.coordinates.latitude).toBe(21.0285);
     expect(repository.update).toHaveBeenCalledTimes(1);
@@ -248,7 +248,7 @@ describe('UpdateBirthProfileUseCase', () => {
     };
 
     const result = await useCase.execute(command);
-    
+
     expect(result.profile.isBirthTimeKnown).toBe(false);
     expect(result.profile.birthTime).toBeNull();
     expect(repository.update).toHaveBeenCalledTimes(1);
@@ -256,7 +256,7 @@ describe('UpdateBirthProfileUseCase', () => {
 
   it('12. should pass non-Error objects straight through catch block', async () => {
     repository.findById.mockResolvedValue(mockProfile);
-    
+
     // Using vi.spyOn to force the domain entity to throw a non-Error primitive
     vi.spyOn(mockProfile, 'update').mockImplementationOnce(() => {
       throw 'A primitive string error';
