@@ -12,10 +12,17 @@ export class InvalidBirthTimeError extends Error {
   }
 }
 
-export class InvalidCoordinatesError extends Error {
+export class LatitudeOutOfRangeError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'InvalidCoordinatesError';
+    this.name = 'LatitudeOutOfRangeError';
+  }
+}
+
+export class LongitudeOutOfRangeError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'LongitudeOutOfRangeError';
   }
 }
 

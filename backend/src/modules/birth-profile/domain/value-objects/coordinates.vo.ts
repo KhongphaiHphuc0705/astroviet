@@ -1,4 +1,7 @@
-import { InvalidCoordinatesError } from '../errors/birth-profile.errors.js';
+import {
+  LatitudeOutOfRangeError,
+  LongitudeOutOfRangeError,
+} from '../errors/birth-profile.errors.js';
 
 export class Coordinates {
   private constructor(
@@ -7,24 +10,20 @@ export class Coordinates {
   ) {}
 
   public static create(latitude: number, longitude: number): Coordinates {
-    if (typeof latitude !== 'number' || typeof longitude !== 'number') {
-      throw new InvalidCoordinatesError('Coordinates must be numbers');
-    }
-
-    if (Number.isNaN(latitude) || !Number.isFinite(latitude)) {
-      throw new InvalidCoordinatesError('Latitude must be a valid number');
-    }
-
-    if (Number.isNaN(longitude) || !Number.isFinite(longitude)) {
-      throw new InvalidCoordinatesError('Longitude must be a valid number');
+    if (typeof latitude !== 'number' || Number.isNaN(latitude) || !Number.isFinite(latitude)) {
+      throw new LatitudeOutOfRangeError('Latitude must be a valid number');
     }
 
     if (latitude < -90 || latitude > 90) {
-      throw new InvalidCoordinatesError('Latitude must be between -90 and 90');
+      throw new LatitudeOutOfRangeError('Latitude must be between -90 and 90');
+    }
+
+    if (typeof longitude !== 'number' || Number.isNaN(longitude) || !Number.isFinite(longitude)) {
+      throw new LongitudeOutOfRangeError('Longitude must be a valid number');
     }
 
     if (longitude < -180 || longitude > 180) {
-      throw new InvalidCoordinatesError('Longitude must be between -180 and 180');
+      throw new LongitudeOutOfRangeError('Longitude must be between -180 and 180');
     }
 
     return new Coordinates(latitude, longitude);
