@@ -25,7 +25,11 @@ export const createAuthRoutes = (
 
   authRouter.post('/login', validateBody(loginSchema), asyncHandler(authController.loginHandler));
 
-  authRouter.post('/refresh', validateBody(refreshSchema), asyncHandler(authController.refreshHandler));
+  authRouter.post(
+    '/refresh',
+    validateBody(refreshSchema),
+    asyncHandler(authController.refreshHandler),
+  );
 
   authRouter.post(
     '/logout',
