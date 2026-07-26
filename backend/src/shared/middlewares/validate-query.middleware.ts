@@ -4,18 +4,18 @@ import { ZodSchema } from 'zod';
 import { BadRequestError } from '../errors/app-error.js';
 import { ErrorCode } from '../errors/error-codes.js';
 
-export const validate = (schema: ZodSchema) => {
+export const validateQuery = (schema: ZodSchema) => {
   return (req: Request, _res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req.query);
 
     if (!result.success) {
       const errorDetails = result.error.flatten();
       return next(
-        new BadRequestError(ErrorCode.MALFORMED_REQUEST, 'Invalid request body', errorDetails),
+        new BadRequestError(ErrorCode.MALFORMED_REQUEST, 'Invalid request query', errorDetails),
       );
     }
 
-    req.body = result.data;
+    req.query = result.data;
     next();
   };
 };

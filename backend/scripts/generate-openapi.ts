@@ -1,12 +1,14 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+/// <reference types="node" />
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import yaml from 'yaml';
 
 // Force load all schemas so they get registered
 import '../src/health/health.schema.js';
 import '../src/modules/identity/presentation/openapi/auth.openapi.js';
+import '../src/modules/birth-profile/presentation/openapi/birth-profile.openapi.js';
 
 import { generateOpenApiDocument } from '../src/docs/openapi.js';
 

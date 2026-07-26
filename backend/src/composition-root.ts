@@ -10,6 +10,10 @@ import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-
 import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
 import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
+import {
+  BirthProfileController,
+  createBirthProfileRoutes,
+} from './modules/birth-profile/presentation/index.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
 import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
@@ -86,10 +90,19 @@ export async function bootstrapApplication() {
   const deleteBirthProfileUseCase = new DeleteBirthProfileUseCase(birthProfileRepository);
   const listBirthProfilesUseCase = new ListBirthProfilesUseCase(birthProfileRepository);
 
+  const birthProfileController = new BirthProfileController(
+    createBirthProfileUseCase,
+    getBirthProfileUseCase,
+    listBirthProfilesUseCase,
+    updateBirthProfileUseCase,
+    deleteBirthProfileUseCase,
+  );
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
     createAuthRoutes(authController, tokenProvider),
+    createBirthProfileRoutes(birthProfileController, tokenProvider),
     createDocsRoutes(config),
   ];
 

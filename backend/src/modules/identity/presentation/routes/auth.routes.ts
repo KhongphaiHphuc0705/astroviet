@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { asyncHandler } from '../../../../shared/express/async-handler.js';
 import { authMiddleware } from '../../../../shared/middlewares/auth.middleware.js';
 import { requireAuth } from '../../../../shared/middlewares/require-auth.middleware.js';
-import { validate } from '../../../../shared/middlewares/validate.middleware.js';
+import { validateBody } from '../../../../shared/middlewares/validate-body.middleware.js';
 import { ITokenProvider } from '../../domain/ports/token-provider.port.js';
 import { AuthController } from '../controllers/auth.controller.js';
 import { loginSchema } from '../schemas/login.schema.js';
@@ -19,13 +19,17 @@ export const createAuthRoutes = (
 
   authRouter.post(
     '/register',
-    validate(registerSchema),
+    validateBody(registerSchema),
     asyncHandler(authController.registerHandler),
   );
 
-  authRouter.post('/login', validate(loginSchema), asyncHandler(authController.loginHandler));
+  authRouter.post('/login', validateBody(loginSchema), asyncHandler(authController.loginHandler));
 
-  authRouter.post('/refresh', validate(refreshSchema), asyncHandler(authController.refreshHandler));
+  authRouter.post(
+    '/refresh',
+    validateBody(refreshSchema),
+    asyncHandler(authController.refreshHandler),
+  );
 
   authRouter.post(
     '/logout',
