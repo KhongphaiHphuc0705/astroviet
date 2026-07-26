@@ -1,13 +1,11 @@
 import { registry } from '../../../../docs/openapi.js';
 import { paginatedResponseSchema } from '../../../../shared/http/paginated-response.mapper.js';
-
 import { problemDetailsSchema } from '../../../../shared/http/problem-details.js';
 import { birthProfileResponseSchema } from '../mappers/birth-profile-response.mapper.js';
 import { birthProfileIdSchema } from '../schemas/birth-profile-id.schema.js';
 import { createBirthProfileSchema } from '../schemas/create-birth-profile.schema.js';
 import { listBirthProfilesQuerySchema } from '../schemas/list-birth-profiles-query.schema.js';
 import { updateBirthProfileSchema } from '../schemas/update-birth-profile.schema.js';
-
 
 const security = [{ bearerAuth: [] }];
 const tags = ['Birth Profile'];

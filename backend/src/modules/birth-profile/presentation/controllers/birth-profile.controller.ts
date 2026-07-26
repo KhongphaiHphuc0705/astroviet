@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-
 import { getCurrentUser } from '../../../../shared/context/current-user.js';
 import { CreateBirthProfileUseCase } from '../../application/use-cases/create-birth-profile.usecase.js';
 import { DeleteBirthProfileUseCase } from '../../application/use-cases/delete-birth-profile.usecase.js';
