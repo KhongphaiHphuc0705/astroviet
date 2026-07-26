@@ -67,6 +67,7 @@ describe('GeoNamesLocationSearchAdapter', () => {
 
     expect(globalFetchMock).toHaveBeenCalledTimes(1);
     const requestUrl = globalFetchMock.mock.calls[0][0];
+    expect(requestUrl).toContain('https://secure.geonames.org');
     expect(requestUrl).toContain('q=Hanoi');
     expect(requestUrl).toContain('username=testuser');
     expect(requestUrl).toContain('maxRows=10');
@@ -150,5 +151,39 @@ describe('GeoNamesLocationSearchAdapter', () => {
     expect(error).toBeInstanceOf(ExternalServiceError);
     expect(error.errorCode).toBe(ErrorCode.GEOCODING_PROVIDER_ERROR);
     expect(error.message).toBe('Invalid response format from GeoNames');
+  });
+
+  it('should skip items that have invalid coordinates or fail timezone resolution and continue with valid items', async () => {
+    const mockResponse = {
+      geonames: [
+        {
+          name: 'Invalid Place',
+          lat: 'NaN',
+          lng: '105.8542',
+        },
+        {
+          name: 'Valid Place',
+          lat: '21.0285',
+          lng: '105.8542',
+        },
+      ],
+    };
+
+    globalFetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: vi.fn().mockResolvedValue(mockResponse),
+    });
+
+    mockTimezoneProvider.resolveHistorical.mockResolvedValue('Asia/Ho_Chi_Minh');
+
+    const result = await adapter.search('Place', mockDate);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].placeName).toBe('Valid Place');
+
+    expect(defaultLogger.warn).toHaveBeenCalledWith(
+      'Skipping location suggestion due to invalid coordinates or timezone resolution failure',
+      expect.objectContaining({ placeName: 'Invalid Place' }),
+    );
   });
 });

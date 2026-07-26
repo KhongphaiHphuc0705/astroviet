@@ -41,7 +41,7 @@ export class GeoNamesLocationSearchAdapter implements ILocationSearchProvider {
     dateContext: Date,
     retriesLeft: number,
   ): Promise<LocationSuggestion[]> {
-    const url = new URL('http://api.geonames.org/searchJSON');
+    const url = new URL('https://secure.geonames.org/searchJSON');
     url.searchParams.append('q', query);
     url.searchParams.append('maxRows', '10');
     url.searchParams.append('username', this.config.username);
@@ -50,14 +50,17 @@ export class GeoNamesLocationSearchAdapter implements ILocationSearchProvider {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      const response = await fetch(url.toString(), {
-        signal: controller.signal,
-        headers: {
-          'User-Agent': 'Astroviet/1.0',
-        },
-      });
-
-      clearTimeout(timeoutId);
+      let response: Response;
+      try {
+        response = await fetch(url.toString(), {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Astroviet/1.0',
+          },
+        });
+      } finally {
+        clearTimeout(timeoutId);
+      }
 
       if (!response.ok) {
         if (response.status >= 500 && retriesLeft > 0) {
@@ -88,11 +91,19 @@ export class GeoNamesLocationSearchAdapter implements ILocationSearchProvider {
         const longitude = parseFloat(item.lng);
 
         let historicalTimezoneId = '';
-        const coordinates = Coordinates.create(latitude, longitude);
-        historicalTimezoneId = await this.timezoneProvider.resolveHistorical(
-          coordinates,
-          dateContext,
-        );
+        try {
+          const coordinates = Coordinates.create(latitude, longitude);
+          historicalTimezoneId = await this.timezoneProvider.resolveHistorical(
+            coordinates,
+            dateContext,
+          );
+        } catch (err) {
+          defaultLogger.warn(
+            'Skipping location suggestion due to invalid coordinates or timezone resolution failure',
+            { err, placeName: item.name },
+          );
+          continue;
+        }
 
         const placeParts = [item.name, item.adminName1, item.countryName].filter(Boolean);
 
@@ -110,12 +121,14 @@ export class GeoNamesLocationSearchAdapter implements ILocationSearchProvider {
         throw err;
       }
 
-      const error = err as any;
+      const error = err instanceof Error ? err : new Error(String(err));
+      const cause = error.cause as Record<string, unknown> | undefined;
+      const errorObj = error as unknown as Record<string, unknown>;
 
       if (
         error.name === 'AbortError' ||
-        error.cause?.code === 'ECONNREFUSED' ||
-        error.type === 'system'
+        cause?.code === 'ECONNREFUSED' ||
+        errorObj.type === 'system'
       ) {
         if (retriesLeft > 0) {
           defaultLogger.warn('Network error communicating with GeoNames, retrying', {
