@@ -4,6 +4,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 
 import { bootstrapApplication } from '../../../src/composition-root.js';
 import { env } from '../../../src/config/env.config.js';
+import { generateOpenApiDocument } from '../../../src/docs/openapi.js';
 import { JwtTokenAdapter } from '../../../src/modules/identity/infrastructure/adapters/jwt-token.adapter.js';
 import { prisma } from '../../../src/shared/prisma/prisma-client.js';
 import { PrismaTestFactory } from '../../fixtures/prisma-test.factory.js';
@@ -146,6 +147,24 @@ describe('Birth Profile API Endpoints', () => {
       expect(response.body.items).toHaveLength(2);
       expect(response.body.page).toBe(1);
     });
+
+    it('should return 400 Validation Error if query params are invalid', async () => {
+      const response = await request(app)
+        .get('/api/v1/birth-profiles?pageSize=abc')
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errorCode).toBe('MALFORMED_REQUEST');
+    });
+
+    it('should clamp pageSize to 100 if requested pageSize > 100', async () => {
+      const response = await request(app)
+        .get('/api/v1/birth-profiles?pageSize=999')
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.pageSize).toBe(100);
+    });
   });
 
   describe('GET /api/v1/birth-profiles/:id', () => {
@@ -156,6 +175,15 @@ describe('Birth Profile API Endpoints', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       expect(response.status).toBe(404);
+    });
+
+    it('should return 400 Validation Error if path param :id is not a valid UUID', async () => {
+      const response = await request(app)
+        .get('/api/v1/birth-profiles/not-a-uuid')
+        .set('Authorization', `Bearer ${accessToken}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errorCode).toBe('MALFORMED_REQUEST');
     });
 
     it('should return the correct profile when it exists', async () => {
@@ -318,6 +346,20 @@ describe('Birth Profile API Endpoints', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       expect(getRes.status).toBe(404);
+    });
+  });
+  describe('OpenAPI Generation', () => {
+    it('should include birth-profile endpoints in the generated OpenAPI document', () => {
+      const document = generateOpenApiDocument();
+
+      const paths = document.paths;
+      expect(paths).toBeDefined();
+      expect(paths?.['/api/v1/birth-profiles']).toBeDefined();
+      expect(paths?.['/api/v1/birth-profiles/{id}']).toBeDefined();
+
+      const listEndpoint = paths?.['/api/v1/birth-profiles']?.get;
+      expect(listEndpoint).toBeDefined();
+      expect(listEndpoint?.tags).toContain('Birth Profile');
     });
   });
 });
