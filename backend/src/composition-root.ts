@@ -10,6 +10,10 @@ import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-
 import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
 import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
+import {
+  BirthProfileController,
+  createBirthProfileRoutes,
+} from './modules/birth-profile/presentation/index.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
 import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
@@ -21,10 +25,6 @@ import { PrismaRefreshTokenRepository } from './modules/identity/infrastructure/
 import { PrismaUserRepository } from './modules/identity/infrastructure/repositories/prisma-user.repository.js';
 import { AuthController } from './modules/identity/presentation/controllers/auth.controller.js';
 import { createAuthRoutes } from './modules/identity/presentation/routes/auth.routes.js';
-import {
-  BirthProfileController,
-  createBirthProfileRoutes,
-} from './modules/birth-profile/presentation/index.js';
 import { defaultLogger } from './shared/logger/pino.logger.js';
 import { prisma } from './shared/prisma/prisma-client.js';
 

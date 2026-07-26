@@ -1,4 +1,5 @@
-import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import { registry } from '../../../../docs/openapi.js';
+import { paginatedResponseSchema } from '../../../../shared/http/paginated-response.mapper.js';
 
 import { problemDetailsSchema } from '../../../../shared/http/problem-details.js';
 import { birthProfileResponseSchema } from '../mappers/birth-profile-response.mapper.js';
@@ -7,21 +8,12 @@ import { createBirthProfileSchema } from '../schemas/create-birth-profile.schema
 import { listBirthProfilesQuerySchema } from '../schemas/list-birth-profiles-query.schema.js';
 import { updateBirthProfileSchema } from '../schemas/update-birth-profile.schema.js';
 
-export const birthProfileRegistry = new OpenAPIRegistry();
-
-const bearerAuth: any = {
-  type: 'http',
-  scheme: 'bearer',
-  bearerFormat: 'JWT',
-};
-
-birthProfileRegistry.registerComponent('securitySchemes', 'bearerAuth', bearerAuth);
 
 const security = [{ bearerAuth: [] }];
 const tags = ['Birth Profile'];
 
 // GET /api/v1/birth-profiles
-birthProfileRegistry.registerPath({
+registry.registerPath({
   method: 'get',
   path: '/api/v1/birth-profiles',
   tags,
@@ -34,24 +26,9 @@ birthProfileRegistry.registerPath({
   responses: {
     200: {
       description: 'A paginated list of birth profiles.',
-      // Paginated schema shouldn't be fully typed in Zod unless we inline it here,
-      // but let's provide a generic JSON structure for the doc.
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              items: {
-                type: 'array',
-                items: {
-                  $ref: '#/components/schemas/BirthProfileResponse',
-                },
-              },
-              total: { type: 'number' },
-              page: { type: 'number' },
-              pageSize: { type: 'number' },
-            },
-          },
+          schema: paginatedResponseSchema(birthProfileResponseSchema),
         },
       },
     },
@@ -67,7 +44,7 @@ birthProfileRegistry.registerPath({
 });
 
 // POST /api/v1/birth-profiles
-birthProfileRegistry.registerPath({
+registry.registerPath({
   method: 'post',
   path: '/api/v1/birth-profiles',
   tags,
@@ -100,11 +77,15 @@ birthProfileRegistry.registerPath({
       description: 'Unauthorized',
       content: { 'application/json': { schema: problemDetailsSchema } },
     },
+    422: {
+      description: 'Unprocessable Entity',
+      content: { 'application/json': { schema: problemDetailsSchema } },
+    },
   },
 });
 
 // GET /api/v1/birth-profiles/{id}
-birthProfileRegistry.registerPath({
+registry.registerPath({
   method: 'get',
   path: '/api/v1/birth-profiles/{id}',
   tags,
@@ -139,7 +120,7 @@ birthProfileRegistry.registerPath({
 });
 
 // PATCH /api/v1/birth-profiles/{id}
-birthProfileRegistry.registerPath({
+registry.registerPath({
   method: 'patch',
   path: '/api/v1/birth-profiles/{id}',
   tags,
@@ -181,15 +162,15 @@ birthProfileRegistry.registerPath({
       description: 'Not Found',
       content: { 'application/json': { schema: problemDetailsSchema } },
     },
-    409: {
-      description: 'Conflict (Optimistic Locking Error)',
+    422: {
+      description: 'Unprocessable Entity',
       content: { 'application/json': { schema: problemDetailsSchema } },
     },
   },
 });
 
 // DELETE /api/v1/birth-profiles/{id}
-birthProfileRegistry.registerPath({
+registry.registerPath({
   method: 'delete',
   path: '/api/v1/birth-profiles/{id}',
   tags,

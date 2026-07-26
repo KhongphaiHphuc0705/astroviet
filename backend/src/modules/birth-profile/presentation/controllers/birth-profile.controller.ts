@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import { BirthProfileIdParams } from '../schemas/birth-profile-id.schema.js';
 
 import { getCurrentUser } from '../../../../shared/context/current-user.js';
 import { CreateBirthProfileUseCase } from '../../application/use-cases/create-birth-profile.usecase.js';
@@ -9,6 +8,7 @@ import { GetBirthProfileUseCase } from '../../application/use-cases/get-birth-pr
 import { ListBirthProfilesUseCase } from '../../application/use-cases/list-birth-profiles.usecase.js';
 import { UpdateBirthProfileUseCase } from '../../application/use-cases/update-birth-profile.usecase.js';
 import { BirthProfileResponseMapper } from '../mappers/birth-profile-response.mapper.js';
+import { BirthProfileIdParams } from '../schemas/birth-profile-id.schema.js';
 import { CreateBirthProfileRequest } from '../schemas/create-birth-profile.schema.js';
 import { ListBirthProfilesQueryRequest } from '../schemas/list-birth-profiles-query.schema.js';
 import { UpdateBirthProfileRequest } from '../schemas/update-birth-profile.schema.js';
