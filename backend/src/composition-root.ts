@@ -21,6 +21,10 @@ import { PrismaRefreshTokenRepository } from './modules/identity/infrastructure/
 import { PrismaUserRepository } from './modules/identity/infrastructure/repositories/prisma-user.repository.js';
 import { AuthController } from './modules/identity/presentation/controllers/auth.controller.js';
 import { createAuthRoutes } from './modules/identity/presentation/routes/auth.routes.js';
+import {
+  BirthProfileController,
+  createBirthProfileRoutes,
+} from './modules/birth-profile/presentation/index.js';
 import { defaultLogger } from './shared/logger/pino.logger.js';
 import { prisma } from './shared/prisma/prisma-client.js';
 
@@ -86,10 +90,19 @@ export async function bootstrapApplication() {
   const deleteBirthProfileUseCase = new DeleteBirthProfileUseCase(birthProfileRepository);
   const listBirthProfilesUseCase = new ListBirthProfilesUseCase(birthProfileRepository);
 
+  const birthProfileController = new BirthProfileController(
+    createBirthProfileUseCase,
+    getBirthProfileUseCase,
+    listBirthProfilesUseCase,
+    updateBirthProfileUseCase,
+    deleteBirthProfileUseCase,
+  );
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
     createAuthRoutes(authController, tokenProvider),
+    createBirthProfileRoutes(birthProfileController, tokenProvider),
     createDocsRoutes(config),
   ];
 

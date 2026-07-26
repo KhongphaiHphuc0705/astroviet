@@ -1,5 +1,25 @@
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { z } from 'zod';
+
 import { ErrorMetadata } from '../errors/error-metadata.js';
 import { AppError, ErrorCode, InfrastructureError } from '../errors/index.js';
+
+extendZodWithOpenApi(z);
+
+export const problemDetailsSchema = z
+  .object({
+    type: z.string(),
+    title: z.string(),
+    status: z.number(),
+    detail: z.string(),
+    instance: z.string(),
+    errorCode: z.string(),
+    requestId: z.string().optional(),
+    timestamp: z.string().datetime(),
+    errors: z.any().optional(),
+    metadata: z.record(z.any()).optional(),
+  })
+  .openapi('ProblemDetails');
 
 export interface ProblemDetails {
   type: string;
