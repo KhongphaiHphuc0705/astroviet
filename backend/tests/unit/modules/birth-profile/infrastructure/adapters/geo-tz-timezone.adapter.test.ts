@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
 import * as geoTz from 'geo-tz';
+import { describe, it, expect, vi } from 'vitest';
 
-import { GeoTzTimezoneAdapter } from '../../../../../../src/modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
 import { Coordinates } from '../../../../../../src/modules/birth-profile/domain/value-objects/coordinates.vo.js';
+import { GeoTzTimezoneAdapter } from '../../../../../../src/modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
+import { ExternalServiceError } from '../../../../../../src/shared/errors/app-error.js';
+import { ErrorCode } from '../../../../../../src/shared/errors/error-codes.js';
 import { defaultLogger } from '../../../../../../src/shared/logger/pino.logger.js';
 
 vi.mock('geo-tz', () => ({
@@ -29,13 +31,19 @@ describe('GeoTzTimezoneAdapter', () => {
     expect(geoTz.find).toHaveBeenCalledWith(coordinates.latitude, coordinates.longitude);
   });
 
-  it('should throw an error if no timezone is found', async () => {
+  it('should throw an ExternalServiceError if no timezone is found', async () => {
     vi.mocked(geoTz.find).mockReturnValue([]);
     const coordinates = Coordinates.create(0, 0);
 
-    await expect(adapter.resolveHistorical(coordinates, mockDate)).rejects.toThrow(
-      'Could not resolve timezone for the given coordinates',
-    );
+    let error: any;
+    try {
+      await adapter.resolveHistorical(coordinates, mockDate);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeInstanceOf(ExternalServiceError);
+    expect(error.errorCode).toBe(ErrorCode.GEOCODING_PROVIDER_ERROR);
   });
 
   it('should log a warning and return the first timezone if multiple are found', async () => {
@@ -47,7 +55,10 @@ describe('GeoTzTimezoneAdapter', () => {
     expect(result).toBe('Europe/Paris');
     expect(defaultLogger.warn).toHaveBeenCalledWith(
       'Multiple timezones found for coordinates, using the first one',
-      { coordinates: { latitude: coordinates.latitude, longitude: coordinates.longitude }, timezones: ['Europe/Paris', 'Europe/Berlin'] }
+      {
+        coordinates: { latitude: coordinates.latitude, longitude: coordinates.longitude },
+        timezones: ['Europe/Paris', 'Europe/Berlin'],
+      },
     );
   });
 });
