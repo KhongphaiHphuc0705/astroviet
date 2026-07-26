@@ -1,6 +1,7 @@
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 
+import { warningSchema } from '../../../../shared/http/warning.schema.js';
 import { BirthProfile } from '../../domain/entities/birth-profile.entity.js';
 
 extendZodWithOpenApi(z);
@@ -8,6 +9,7 @@ extendZodWithOpenApi(z);
 export const birthProfileResponseSchema = z
   .object({
     id: z.string().uuid(),
+    userId: z.string().uuid(),
     label: z.string(),
     fullName: z.string().nullable(),
     birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -20,7 +22,7 @@ export const birthProfileResponseSchema = z
     latitude: z.number(),
     longitude: z.number(),
     historicalTimezoneId: z.string(),
-    warnings: z.array(z.string()),
+    warnings: z.array(warningSchema),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
   })
@@ -40,6 +42,7 @@ export class BirthProfileResponseMapper {
 
     return {
       id: profile.id,
+      userId: profile.userId,
       label: profile.label,
       fullName: profile.fullName,
       birthDate: profile.birthDate.value.toISOString().substring(0, 10),
