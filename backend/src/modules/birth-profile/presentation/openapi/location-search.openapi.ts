@@ -37,7 +37,7 @@ registry.registerPath({
     400: {
       description: 'Validation error.',
     },
-    502: {
+    500: {
       description: 'External geocoding service error.',
     },
   },

@@ -12,7 +12,7 @@ export class LocationSearchController {
     res: Response,
   ): Promise<void> {
     const { q, date } = req.query;
-    
+
     // Parse the date from query param as the context date for timezone resolution
     const dateContext = new Date(date);
 

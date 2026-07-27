@@ -8,11 +8,11 @@ import { CreateBirthProfileUseCase } from './modules/birth-profile/application/u
 import { DeleteBirthProfileUseCase } from './modules/birth-profile/application/use-cases/delete-birth-profile.usecase.js';
 import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-cases/get-birth-profile.usecase.js';
 import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
-import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
-import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
 import { SearchBirthLocationsUseCase } from './modules/birth-profile/application/use-cases/search-birth-locations.usecase.js';
+import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { GeoTzTimezoneAdapter } from './modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
 import { GeoNamesLocationSearchAdapter } from './modules/birth-profile/infrastructure/adapters/geonames-location-search.adapter.js';
+import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
 import {
   BirthProfileController,
   LocationSearchController,

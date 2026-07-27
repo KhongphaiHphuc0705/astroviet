@@ -22,5 +22,8 @@ export function createLocationRoutes(controller: LocationSearchController): Rout
     ),
   );
 
-  return router;
+  const apiRouter = Router();
+  apiRouter.use('/api/v1/locations', router);
+
+  return apiRouter;
 }

@@ -4,6 +4,8 @@ import '../../src/docs/openapi.js';
 
 // Global beforeAll
 beforeAll(() => {
+  // Set required test env vars
+  process.env.GEONAMES_USERNAME = 'test_user';
   // Global mocks or environment initialization if needed
   // Note: We don't mock business modules here.
 });
