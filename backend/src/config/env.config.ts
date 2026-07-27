@@ -30,6 +30,7 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((val) => parseNumber(val, 30)),
+  GEONAMES_USERNAME: z.string().min(1),
 });
 
 export type AppConfig = z.infer<typeof envSchema>;
