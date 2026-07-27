@@ -308,7 +308,7 @@ Theo đúng phạm vi MVP đã chốt ở PRD Mục 3.1 (In-scope) và 8.3 (MoSC
 | **Auth** | User, Admin |
 | **Query Params** | `page`, `pageSize`, `sortBy` (`createdAt`\|`fullName`), `order` (`asc`\|`desc`) — xem Mục 8 |
 | **Success Response** | `200 OK` — `PaginatedResponse<BirthProfileResponse>` |
-| **Error Response** | `401` |
+| **Error Response** | `400` (nếu query params không hợp lệ), `401` |
 
 #### `GET /api/v1/birth-profiles/{id}`
 
