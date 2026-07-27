@@ -90,6 +90,7 @@ Tạo file `.env` dựa trên `.env.example`. Dưới đây là giải thích c�
 | `JWT_REFRESH_SECRET`        |    Có    | -             | Khóa bí mật ký Refresh Token (khác với Access Secret).       |
 | `JWT_ACCESS_EXPIRY_MINUTES` |  Không   | `15`          | Thời gian sống của Access Token (phút).                      |
 | `JWT_REFRESH_EXPIRY_DAYS`   |  Không   | `30`          | Thời gian sống của Refresh Token (ngày).                     |
+| `GEONAMES_USERNAME`         |    Có    | -             | Tên đăng nhập GeoNames API dùng cho tính năng tìm toạ độ.    |
 | `SEED_ADMIN_*`              |  Không   | -             | Email/Password dùng cho `prisma:seed` để tạo Admin đầu tiên. |
 
 ## Authentication Flow
