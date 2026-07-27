@@ -10,6 +10,7 @@ import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-
 import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
 import { SearchBirthLocationsUseCase } from './modules/birth-profile/application/use-cases/search-birth-locations.usecase.js';
 import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
+import { ILocationSearchProvider } from './modules/birth-profile/domain/ports/location-search-provider.port.js';
 import { GeoTzTimezoneAdapter } from './modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
 import { GeoNamesLocationSearchAdapter } from './modules/birth-profile/infrastructure/adapters/geonames-location-search.adapter.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
@@ -33,7 +34,11 @@ import { createAuthRoutes } from './modules/identity/presentation/routes/auth.ro
 import { defaultLogger } from './shared/logger/pino.logger.js';
 import { prisma } from './shared/prisma/prisma-client.js';
 
-export async function bootstrapApplication() {
+export interface AppOverrides {
+  locationSearchProvider?: ILocationSearchProvider;
+}
+
+export async function bootstrapApplication(overrides?: AppOverrides) {
   const config = env;
   const logger = defaultLogger;
 
@@ -104,11 +109,11 @@ export async function bootstrapApplication() {
   );
 
   const geoTzTimezoneAdapter = new GeoTzTimezoneAdapter();
-  const geonamesSearchAdapter = new GeoNamesLocationSearchAdapter(
-    { username: config.GEONAMES_USERNAME },
-    geoTzTimezoneAdapter,
-  );
-  const searchBirthLocationsUseCase = new SearchBirthLocationsUseCase(geonamesSearchAdapter);
+  const locationSearchProvider =
+    overrides?.locationSearchProvider ??
+    new GeoNamesLocationSearchAdapter({ username: config.GEONAMES_USERNAME }, geoTzTimezoneAdapter);
+
+  const searchBirthLocationsUseCase = new SearchBirthLocationsUseCase(locationSearchProvider);
   const locationSearchController = new LocationSearchController(searchBirthLocationsUseCase);
 
   // --- Routers ---

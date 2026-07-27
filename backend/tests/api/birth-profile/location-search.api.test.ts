@@ -1,19 +1,25 @@
 import { Express } from 'express';
-
 import request from 'supertest';
 import { describe, it, expect, beforeAll, afterAll, vi, afterEach } from 'vitest';
 
 import { bootstrapApplication } from '../../../src/composition-root.js';
-import { GeoNamesLocationSearchAdapter } from '../../../src/modules/birth-profile/infrastructure/adapters/geonames-location-search.adapter.js';
+import { ILocationSearchProvider } from '../../../src/modules/birth-profile/domain/ports/location-search-provider.port.js';
 import { ExternalServiceError } from '../../../src/shared/errors/app-error.js';
 import { ErrorCode } from '../../../src/shared/errors/error-codes.js';
 
 describe('Location Search API (E2E)', () => {
   let app: Express;
+  const mockSearch = vi.fn();
+
+  class FakeLocationSearchProvider implements ILocationSearchProvider {
+    search = mockSearch;
+  }
 
   beforeAll(async () => {
-    const { app: expressApp } = await bootstrapApplication();
-    app = expressApp; 
+    const { app: expressApp } = await bootstrapApplication({
+      locationSearchProvider: new FakeLocationSearchProvider(),
+    });
+    app = expressApp;
   });
 
   afterAll(() => {
@@ -26,17 +32,14 @@ describe('Location Search API (E2E)', () => {
 
   describe('GET /api/v1/locations/search', () => {
     it('should return 200 OK with location suggestions for a valid query', async () => {
-      // Mock the GeoNames fetch so we don't hit the real API in tests
-      const mockSearch = vi
-        .spyOn(GeoNamesLocationSearchAdapter.prototype, 'search')
-        .mockResolvedValue([
-          {
-            placeName: 'Hanoi, Vietnam',
-            latitude: 21.0285,
-            longitude: 105.8542,
-            historicalTimezoneId: 'Asia/Ho_Chi_Minh',
-          },
-        ]);
+      mockSearch.mockResolvedValue([
+        {
+          placeName: 'Hanoi, Vietnam',
+          latitude: 21.0285,
+          longitude: 105.8542,
+          historicalTimezoneId: 'Asia/Ho_Chi_Minh',
+        },
+      ]);
 
       const response = await request(app)
         .get('/api/v1/locations/search')
@@ -91,8 +94,7 @@ describe('Location Search API (E2E)', () => {
     });
 
     it('should return 500 Internal Server Error when external service throws ExternalServiceError', async () => {
-      // Mock the adapter to throw an ExternalServiceError
-      vi.spyOn(GeoNamesLocationSearchAdapter.prototype, 'search').mockRejectedValue(
+      mockSearch.mockRejectedValue(
         new ExternalServiceError(ErrorCode.EXTERNAL_SERVICE_ERROR, 'Geonames API is down'),
       );
 
