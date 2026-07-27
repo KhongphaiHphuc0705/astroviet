@@ -11,10 +11,10 @@ export class LocationSearchController {
     req: Request<unknown, unknown, unknown, SearchLocationsQuery>,
     res: Response,
   ): Promise<void> {
-    const { q } = req.query;
-    // We use the current date as context since autocomplete typically applies to now.
-    // If the system later needs historical changes of timezones, a date parameter could be added.
-    const dateContext = new Date();
+    const { q, date } = req.query;
+    
+    // Parse the date from query param as the context date for timezone resolution
+    const dateContext = new Date(date);
 
     const suggestions = await this.searchLocationsUseCase.execute(q, dateContext);
     const responseBody = toLocationSearchResponse(suggestions);

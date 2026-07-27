@@ -6,6 +6,7 @@ export const searchLocationsQuerySchema = z
       .string()
       .min(2, 'Query must be at least 2 characters long')
       .max(100, 'Query must not exceed 100 characters'),
+    date: z.string().date('Date must be in YYYY-MM-DD format'),
   })
   .openapi('SearchLocationsQuery');
 

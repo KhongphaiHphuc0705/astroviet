@@ -18,7 +18,7 @@ export const searchLocationsResponseSchema = z
 
 registry.registerPath({
   method: 'get',
-  path: '/locations/search',
+  path: '/api/v1/locations/search',
   tags: ['Locations'],
   summary: 'Search birth locations',
   description: 'Autocompletes location search and resolves historical timezones.',

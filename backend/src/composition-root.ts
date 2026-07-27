@@ -10,9 +10,14 @@ import { GetBirthProfileUseCase } from './modules/birth-profile/application/use-
 import { ListBirthProfilesUseCase } from './modules/birth-profile/application/use-cases/list-birth-profiles.usecase.js';
 import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
+import { SearchBirthLocationsUseCase } from './modules/birth-profile/application/use-cases/search-birth-locations.usecase.js';
+import { GeoTzTimezoneAdapter } from './modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
+import { GeoNamesLocationSearchAdapter } from './modules/birth-profile/infrastructure/adapters/geonames-location-search.adapter.js';
 import {
   BirthProfileController,
+  LocationSearchController,
   createBirthProfileRoutes,
+  createLocationRoutes,
 } from './modules/birth-profile/presentation/index.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
@@ -98,11 +103,20 @@ export async function bootstrapApplication() {
     deleteBirthProfileUseCase,
   );
 
+  const geoTzTimezoneAdapter = new GeoTzTimezoneAdapter();
+  const geonamesSearchAdapter = new GeoNamesLocationSearchAdapter(
+    { username: config.GEONAMES_USERNAME },
+    geoTzTimezoneAdapter,
+  );
+  const searchBirthLocationsUseCase = new SearchBirthLocationsUseCase(geonamesSearchAdapter);
+  const locationSearchController = new LocationSearchController(searchBirthLocationsUseCase);
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
     createAuthRoutes(authController, tokenProvider),
     createBirthProfileRoutes(birthProfileController, tokenProvider),
+    createLocationRoutes(locationSearchController),
     createDocsRoutes(config),
   ];
 
@@ -117,6 +131,7 @@ export async function bootstrapApplication() {
       updateBirthProfileUseCase,
       deleteBirthProfileUseCase,
       listBirthProfilesUseCase,
+      searchBirthLocationsUseCase,
     },
   };
 }

@@ -18,7 +18,7 @@ describe('LocationSearchController', () => {
     controller = new LocationSearchController(mockUseCase);
 
     mockReq = {
-      query: { q: 'Hanoi' },
+      query: { q: 'Hanoi', date: '2000-01-01' },
     };
 
     mockRes = {
@@ -41,6 +41,9 @@ describe('LocationSearchController', () => {
     await controller.search(mockReq as Request<any, any, any, any>, mockRes as Response);
 
     expect(mockUseCase.execute).toHaveBeenCalledWith('Hanoi', expect.any(Date));
+    // Verify it parses the correct date
+    const calledDate = mockUseCase.execute.mock.calls[0][1];
+    expect(calledDate.toISOString().startsWith('2000-01-01')).toBe(true);
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith(suggestions);
   });
