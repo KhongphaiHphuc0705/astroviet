@@ -282,7 +282,7 @@ describe('UpdateBirthProfileUseCase', () => {
     };
 
     const result = await useCase.execute(command);
-    
+
     expect(result.profile.isBirthTimeKnown).toBe(false);
     expect(result.profile.birthTime).toBeNull();
     expect(repository.update).toHaveBeenCalledTimes(1);
@@ -322,5 +322,41 @@ describe('UpdateBirthProfileUseCase', () => {
     expect(result.profile.label).toBe('New Label');
     expect(repository.update).toHaveBeenCalledTimes(1);
     expect(repository.update).toHaveBeenCalledWith(result.profile);
+  });
+
+  it('15. should handle explicit birthTime: null in command (MP1 Ternary Branch)', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+
+    // Explicitly sending birthTime: null
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      isBirthTimeKnown: false,
+      birthTime: null,
+    };
+
+    const result = await useCase.execute(command);
+
+    expect(result.profile.isBirthTimeKnown).toBe(false);
+    expect(result.profile.birthTime).toBeNull();
+    expect(repository.update).toHaveBeenCalledTimes(1);
+    expect(repository.update).toHaveBeenCalledWith(result.profile);
+  });
+
+  it('16. should update birthTime with valid string (MP1 Ternary Truthy Branch)', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+
+    // Explicitly sending a valid birthTime string
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      birthTime: '18:45:00',
+    };
+
+    const result = await useCase.execute(command);
+
+    expect(result.profile.birthTime?.hour).toBe(18);
+    expect(result.profile.birthTime?.minute).toBe(45);
+    expect(repository.update).toHaveBeenCalledTimes(1);
   });
 });
