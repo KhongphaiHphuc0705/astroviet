@@ -270,4 +270,57 @@ describe('UpdateBirthProfileUseCase', () => {
 
     await expect(useCase.execute(command)).rejects.toThrow('A primitive string error');
   });
+
+  it('13. should handle isBirthTimeKnown=false without birthTime field in command (MP1)', async () => {
+    repository.findById.mockResolvedValue(mockProfile);
+
+    // Explicitly omitting birthTime field completely, not just setting to undefined
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-123',
+      userId: 'user-123',
+      isBirthTimeKnown: false,
+    };
+
+    const result = await useCase.execute(command);
+    
+    expect(result.profile.isBirthTimeKnown).toBe(false);
+    expect(result.profile.birthTime).toBeNull();
+    expect(repository.update).toHaveBeenCalledTimes(1);
+    expect(repository.update).toHaveBeenCalledWith(result.profile);
+  });
+
+  it('14. should allow update on soft-deleted profile (Soft Delete Update) (MP2)', async () => {
+    const now = new Date();
+    const deletedProfile = BirthProfile.create({
+      id: 'profile-deleted',
+      userId: 'user-123',
+      label: 'Deleted Profile',
+      fullName: 'John Doe',
+      birthDate: BirthDate.create('1990-01-01'),
+      birthTime: BirthTime.create('12:00:00'),
+      isBirthTimeKnown: true,
+      birthLocation: BirthLocation.create(
+        'Ho Chi Minh',
+        Coordinates.create(10.8231, 106.6297),
+        Timezone.create('Asia/Ho_Chi_Minh'),
+      ),
+      createdAt: now,
+      updatedAt: now,
+      deletedAt: now,
+      version: 1,
+    });
+
+    repository.findById.mockResolvedValue(deletedProfile);
+
+    const command: UpdateBirthProfileCommand = {
+      id: 'profile-deleted',
+      userId: 'user-123',
+      label: 'New Label',
+    };
+
+    const result = await useCase.execute(command);
+    expect(result.profile.label).toBe('New Label');
+    expect(repository.update).toHaveBeenCalledTimes(1);
+    expect(repository.update).toHaveBeenCalledWith(result.profile);
+  });
 });

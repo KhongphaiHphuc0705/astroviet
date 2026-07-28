@@ -2,7 +2,7 @@
 
 Backend cho nền tảng AstroViet — Western Astrology cho người Việt.
 
-> **Trạng thái:** Hoàn thành Sprint 2 (Birth Profile Module). Hệ thống cung cấp đầy đủ quản lý hồ sơ sinh (Birth Profile) tích hợp tìm kiếm toạ độ và múi giờ lịch sử, cùng với hệ thống Register/Login/Refresh/Logout an toàn (Identity Module).
+> **Trạng thái:** Hoàn thành Sprint 2 (Birth Profile Module), sẵn sàng release. Hệ thống cung cấp đầy đủ quản lý hồ sơ sinh (Birth Profile) tích hợp tìm kiếm toạ độ và múi giờ lịch sử, cùng với hệ thống Register/Login/Refresh/Logout an toàn (Identity Module).
 
 ## Architecture
 
