@@ -1,0 +1,11 @@
+
+
+if [ -d "backend" ]; then
+  echo "Running backend pre-commit..."
+  (cd backend && npx lint-staged)
+fi
+
+if [ -d "frontend" ]; then
+  echo "Running frontend pre-commit..."
+  (cd frontend && npx lint-staged)
+fi
