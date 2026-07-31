@@ -1,7 +1,7 @@
 {
   "name": "astroviet-backend",
-  "version": "0.1.0",
-  "description": "AstroViet Platform — Backend (Sprint 0: Project Bootstrap)",
+  "version": "0.2.0",
+  "description": "AstroViet Platform — Backend (Sprint 2: Birth Profile Module)",
   "private": true,
   "type": "module",
   "engines": {

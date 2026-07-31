@@ -2,7 +2,7 @@
 
 Backend cho nền tảng AstroViet — Western Astrology cho người Việt.
 
-> **Trạng thái:** Hoàn thành Sprint 1 (Identity Module). Hệ thống cung cấp đầy đủ Register/Login/Refresh/Logout an toàn với JWT và Refresh Token.
+> **Trạng thái:** Hoàn thành Sprint 2 (Birth Profile Module), sẵn sàng release. Hệ thống cung cấp đầy đủ quản lý hồ sơ sinh (Birth Profile) tích hợp tìm kiếm toạ độ và múi giờ lịch sử, cùng với hệ thống Register/Login/Refresh/Logout an toàn (Identity Module).
 
 ## Architecture
 
@@ -34,7 +34,12 @@ src/
 ├── docs/                # Code sinh OpenAPI và cấu hình Swagger UI
 ├── health/              # Module Health Check cơ bản
 ├── modules/
-│   └── identity/        # 🔐 Identity Module (Nghiệp vụ cốt lõi hiện tại)
+│   ├── birth-profile/   # 👤 Birth Profile Module (Quản lý hồ sơ sinh, toạ độ, timezone)
+│   │   ├── domain/        # Entities, Value Objects (Coordinates, Timezone), Ports
+│   │   ├── application/   # Use Cases (CRUD, Search Locations)
+│   │   ├── infrastructure/# Prisma Repositories, GeoNames & GeoTz Adapters
+│   │   └── presentation/  # Controllers, Routes, Zod Schemas, OpenAPI
+│   └── identity/        # 🔐 Identity Module (Xác thực người dùng)
 │       ├── domain/        # Entities, Ports
 │       ├── application/   # Use Cases (Register, Login, Refresh, Logout)
 │       ├── infrastructure/# Prisma Repositories, JWT Adapter, Bcrypt Adapter
@@ -85,6 +90,7 @@ Tạo file `.env` dựa trên `.env.example`. Dưới đây là giải thích c�
 | `JWT_REFRESH_SECRET`        |    Có    | -             | Khóa bí mật ký Refresh Token (khác với Access Secret).       |
 | `JWT_ACCESS_EXPIRY_MINUTES` |  Không   | `15`          | Thời gian sống của Access Token (phút).                      |
 | `JWT_REFRESH_EXPIRY_DAYS`   |  Không   | `30`          | Thời gian sống của Refresh Token (ngày).                     |
+| `GEONAMES_USERNAME`         |    Có    | -             | Tên đăng nhập GeoNames API dùng cho tính năng tìm toạ độ.    |
 | `SEED_ADMIN_*`              |  Không   | -             | Email/Password dùng cho `prisma:seed` để tạo Admin đầu tiên. |
 
 ## Authentication Flow
@@ -95,6 +101,14 @@ Hệ thống sử dụng cơ chế Access/Refresh token bảo mật:
 2. **Access API:** Các request yêu cầu xác thực (`requireAuth`) cần truyền `Authorization: Bearer <accessToken>`.
 3. **Refresh Token:** Khi Access Token hết hạn, Client gọi `POST /api/v1/auth/refresh` (cookie sẽ tự được gửi kèm) để nhận bộ Token mới (Refresh Token Rotation).
 4. **Logout:** Gọi `POST /api/v1/auth/logout`. Server thu hồi token trong DB và xóa cookie ở Client.
+
+## Birth Profile Flow
+
+Module Birth Profile quản lý các hồ sơ cá nhân với dữ liệu sinh phục vụ cho lá số chiêm tinh:
+
+1. **Quản lý Hồ sơ:** Hỗ trợ đầy đủ các thao tác CRUD (tạo, đọc, cập nhật, xóa) bảo mật, đảm bảo người dùng chỉ được can thiệp vào hồ sơ của chính mình (Ownership Isolation).
+2. **External Service Abstraction:** Quá trình tìm kiếm địa điểm kết hợp gọi API của **GeoNames** (geocoding) và **geo-tz** (historical timezone resolution) để tự động hóa việc tính toán thông tin toạ độ, múi giờ chính xác tại thời điểm sinh ra.
+3. **Validation Chặt chẽ:** 100% dữ liệu đầu vào (từ query params như pagination, đến body JSON) đều đi qua bộ lọc Zod schema và chuyển hóa lỗi chuẩn mực thành RFC7807 Problem Details.
 
 ## Running Test
 
@@ -169,7 +183,8 @@ _(Xem chi tiết tại `docs/development/Coding_Standards_And_Conventions.md`)_
 ## Project Roadmap
 
 - **Sprint 1:** Identity Module (Hoàn thành) ✅
-- **Sprint 2:** Birth Profile Module (Sắp tới) 🔜
+- **Sprint 2:** Birth Profile Module (Hoàn thành) ✅
+- **Sprint 3:** Natal Chart Module (Sắp tới) 🔜
 
 ---
 
