@@ -1,51 +1,58 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+import importPlugin from "eslint-plugin-import";
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'coverage', '.husky', '.github'] },
+  { ignores: ["dist", "node_modules", "coverage", ".husky", ".github"] },
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-    ],
-    files: ['**/*.{ts,tsx}'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2023,
-      sourceType: 'module',
+      sourceType: "module",
       parserOptions: {
         ecmaFeatures: { jsx: true },
       },
     },
     plugins: {
       react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
-      'jsx-a11y': jsxA11yPlugin,
+      "react-hooks": reactHooksPlugin,
+      "jsx-a11y": jsxA11yPlugin,
       import: importPlugin,
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
-      ...reactPlugin.configs['jsx-runtime'].rules,
+      ...reactPlugin.configs["jsx-runtime"].rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...jsxA11yPlugin.configs.recommended.rules,
-      'no-console': ['error', { allow: ['warn', 'error'] }],
-      'react-hooks/exhaustive-deps': 'error',
-      'import/order': ['error', {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
-      }],
-      'react/prop-types': 'off', // TypeScript handles this
+      "no-console": ["error", { allow: ["warn", "error"] }],
+      "react-hooks/exhaustive-deps": "error",
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+          ],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
+      "react/prop-types": "off", // TypeScript handles this
     },
     settings: {
-      react: { version: 'detect' },
-      'import/resolver': {
+      react: { version: "detect" },
+      "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: './tsconfig.app.json',
+          project: "./tsconfig.app.json",
         },
       },
     },
