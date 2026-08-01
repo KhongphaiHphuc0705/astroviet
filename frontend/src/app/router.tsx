@@ -3,10 +3,16 @@ import { createBrowserRouter } from "react-router-dom";
 
 const NotFoundPage = lazy(() => import("@pages/errors/not-found-page"));
 
+const HomePage = lazy(() => import("@pages/home/page"));
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>AstroViet — Coming soon</div>,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <HomePage />
+      </Suspense>
+    ),
   },
   // TODO: Add ProtectedRoute for /app/* in M8
   {

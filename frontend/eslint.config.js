@@ -4,6 +4,7 @@ import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 import importPlugin from "eslint-plugin-import";
+import boundariesPlugin from "eslint-plugin-boundaries";
 
 export default tseslint.config(
   { ignores: ["dist", "node_modules", "coverage", ".husky", ".github"] },
@@ -22,6 +23,7 @@ export default tseslint.config(
       "react-hooks": reactHooksPlugin,
       "jsx-a11y": jsxA11yPlugin,
       import: importPlugin,
+      boundaries: boundariesPlugin,
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
@@ -46,6 +48,7 @@ export default tseslint.config(
         },
       ],
       "react/prop-types": "off", // TypeScript handles this
+      "boundaries/element-types": "off", // TODO: Configure strict FSD boundaries in M2
     },
     settings: {
       react: { version: "detect" },
