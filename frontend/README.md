@@ -12,6 +12,7 @@ This is the frontend application for AstroViet, initialized as part of Sprint F1
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm run dev
 ```
 

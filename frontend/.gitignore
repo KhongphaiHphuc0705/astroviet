@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testing artifacts
+coverage
+playwright-report
+test-results
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Husky generated
+.husky/_/
