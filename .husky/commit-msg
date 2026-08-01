@@ -1,0 +1,5 @@
+
+
+if [ -d "frontend" ]; then
+  (cd frontend && npx --no -- commitlint --edit "${1}")
+fi
