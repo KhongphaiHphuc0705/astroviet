@@ -5,8 +5,8 @@
     <script>
       (function () {
         // Phải khớp key trong shared/config/constants.ts — đổi 1 nơi phải đổi cả 2
-        var storageKey = 'astroviet-theme-preference';
-        var preference = 'system';
+        var storageKey = "astroviet-theme-preference";
+        var preference = "system";
         try {
           var persisted = localStorage.getItem(storageKey);
           if (persisted) {
@@ -19,18 +19,24 @@
         } catch (e) {}
 
         var resolvedTheme = preference;
-        if (preference !== 'light' && preference !== 'dark') {
+        if (preference !== "light" && preference !== "dark") {
           try {
-            var mql = window.matchMedia('(prefers-color-scheme: dark)');
-            resolvedTheme = mql.matches ? 'dark' : 'light';
+            var mql = window.matchMedia("(prefers-color-scheme: dark)");
+            resolvedTheme = mql.matches ? "dark" : "light";
           } catch (e) {
-            resolvedTheme = 'light';
+            resolvedTheme = "light";
           }
         }
-        document.documentElement.setAttribute('data-theme', resolvedTheme);
+        document.documentElement.setAttribute("data-theme", resolvedTheme);
       })();
     </script>
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter/inter-regular.woff2" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/fonts/inter/inter-regular.woff2"
+    />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
