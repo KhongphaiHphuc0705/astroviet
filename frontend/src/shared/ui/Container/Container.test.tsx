@@ -8,7 +8,7 @@ describe("Container", () => {
   it("renders default correctly", () => {
     const { container } = render(<Container>Test</Container>);
     const el = container.firstChild as HTMLElement;
-    expect(el.className).toContain("max-w-[1200px]");
+    expect(el.className).toContain("max-w-container-default");
     expect(el.className).toContain("px-4");
     expect(el.className).toContain("md:px-8");
     expect(el.tagName).toBe("DIV");
@@ -17,7 +17,7 @@ describe("Container", () => {
   it("renders different sizes", () => {
     const { container } = render(<Container size="narrow">Test</Container>);
     const el = container.firstChild as HTMLElement;
-    expect(el.className).toContain("max-w-[768px]");
+    expect(el.className).toContain("max-w-container-narrow");
   });
 
   it("respects paddingX=false", () => {

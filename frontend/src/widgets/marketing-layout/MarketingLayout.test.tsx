@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
 import { MarketingLayout } from "./index";
@@ -21,5 +21,17 @@ describe("MarketingLayout", () => {
     // Check footer
     const footer = screen.getByRole("contentinfo");
     expect(footer).toBeInTheDocument();
+  });
+
+  it("can toggle mobile drawer", () => {
+    render(<MarketingLayout>Test</MarketingLayout>);
+
+    const menuBtn = screen.getByLabelText("Menu");
+    fireEvent.click(menuBtn);
+
+    const closeBtn = screen.getByLabelText("Đóng menu");
+    expect(closeBtn).toBeInTheDocument();
+
+    fireEvent.click(closeBtn);
   });
 });

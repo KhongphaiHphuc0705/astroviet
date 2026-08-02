@@ -93,9 +93,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         >
           {/* Overlay */}
           <div
-            className="bg-midnight-900/50 absolute inset-0"
+            className="bg-overlay/50 absolute inset-0"
             onClick={() => setMobileDrawerOpen(false)}
             aria-hidden="true"
+            data-testid="drawer-overlay"
           />
 
           {/* Drawer Content */}

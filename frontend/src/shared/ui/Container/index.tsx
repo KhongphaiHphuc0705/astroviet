@@ -8,10 +8,10 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
 }
 
-const SIZE_CLASSES = {
-  default: "max-w-[1200px]",
-  wide: "max-w-[1440px]",
-  narrow: "max-w-[768px]",
+const SIZE_MAPPING = {
+  default: "max-w-container-default",
+  narrow: "max-w-container-narrow",
+  wide: "max-w-container-wide",
   full: "max-w-full",
 };
 
@@ -27,7 +27,7 @@ export function Container({
     <Component
       className={cn(
         "mx-auto w-full",
-        SIZE_CLASSES[size],
+        SIZE_MAPPING[size],
         paddingX && "px-4 md:px-8",
         className,
       )}

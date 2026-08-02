@@ -13,7 +13,7 @@ describe("Section", () => {
 
     const innerContainer = el.firstChild as HTMLElement;
     expect(innerContainer.tagName).toBe("DIV");
-    expect(innerContainer.className).toContain("max-w-[1200px]"); // default container size
+    expect(innerContainer.className).toContain("max-w-container-default"); // default container size
   });
 
   it("renders compact spacing and custom container size", () => {
@@ -26,7 +26,7 @@ describe("Section", () => {
     expect(el.className).toContain("py-12");
 
     const innerContainer = el.firstChild as HTMLElement;
-    expect(innerContainer.className).toContain("max-w-[768px]");
+    expect(innerContainer.className).toContain("max-w-container-narrow");
   });
 
   it("renders custom polymorphic element and ARIA labels", () => {
