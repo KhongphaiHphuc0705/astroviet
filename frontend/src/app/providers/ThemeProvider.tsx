@@ -7,7 +7,11 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const { preference, resolvedTheme, _setResolvedTheme } = usePreferenceStore();
+  const preference = usePreferenceStore((state) => state.preference);
+  const resolvedTheme = usePreferenceStore((state) => state.resolvedTheme);
+  const _setResolvedTheme = usePreferenceStore(
+    (state) => state._setResolvedTheme,
+  );
 
   // 1. Sync preference to resolvedTheme and listen to OS changes
   useEffect(() => {
@@ -23,18 +27,18 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
       mql.addEventListener("change", listener);
 
-      if (resolvedTheme !== expectedTheme) {
+      if (usePreferenceStore.getState().resolvedTheme !== expectedTheme) {
         _setResolvedTheme(expectedTheme);
       }
 
       return () => mql.removeEventListener("change", listener);
     } else {
       expectedTheme = preference as "light" | "dark";
-      if (resolvedTheme !== expectedTheme) {
+      if (usePreferenceStore.getState().resolvedTheme !== expectedTheme) {
         _setResolvedTheme(expectedTheme);
       }
     }
-  }, [preference, resolvedTheme, _setResolvedTheme]);
+  }, [preference, _setResolvedTheme]);
 
   // 2. Sync resolvedTheme to DOM attribute
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import React from "react";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
@@ -59,6 +59,43 @@ describe("ThemeProvider", () => {
         <div>Content</div>
       </ThemeProvider>,
     );
+    expect(usePreferenceStore.getState().resolvedTheme).toBe("dark");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+  });
+
+  it("reacts to system theme changes when preference is system", () => {
+    usePreferenceStore.setState({
+      preference: "system",
+      resolvedTheme: "light",
+    });
+
+    // Intercept event listener registration to trigger it manually
+    let changeListener: ((e: MediaQueryListEvent) => void) | null = null;
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false, // initial OS theme is light
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn((event, callback) => {
+        if (event === "change") changeListener = callback;
+      }),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    render(
+      <ThemeProvider>
+        <div>Content</div>
+      </ThemeProvider>,
+    );
+    expect(usePreferenceStore.getState().resolvedTheme).toBe("light"); // should remain light
+
+    // Simulate OS theme changing to dark
+    if (changeListener) {
+      act(() => {
+        changeListener!({ matches: true } as MediaQueryListEvent);
+      });
+    }
+
     expect(usePreferenceStore.getState().resolvedTheme).toBe("dark");
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });

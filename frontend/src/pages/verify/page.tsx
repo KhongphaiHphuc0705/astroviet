@@ -4,7 +4,9 @@ import React from "react";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 
 export default function VerifyPage() {
-  const { preference, resolvedTheme, setPreference } = usePreferenceStore();
+  const preference = usePreferenceStore((state) => state.preference);
+  const resolvedTheme = usePreferenceStore((state) => state.resolvedTheme);
+  const setPreference = usePreferenceStore((state) => state.setPreference);
 
   return (
     <div className="min-h-screen bg-canvas p-8 font-ui text-primary">
