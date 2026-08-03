@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
+import { axe } from "vitest-axe";
 
 import { Checkbox } from "./index";
 
@@ -52,6 +53,12 @@ describe("Checkbox", () => {
 
     // Check hit area classes
     const checkbox = screen.getByLabelText("Ghi nhớ");
-    expect(checkbox).toHaveClass("h-[44px]", "w-[44px]");
+    expect(checkbox).toHaveClass("h-hit-area", "w-hit-area");
+  });
+
+  it("passes accessibility check", async () => {
+    const { container } = render(<Checkbox label="Ghi nhớ" />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });

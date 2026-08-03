@@ -57,7 +57,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     const isSm = size === "sm";
-    const boxSize = isSm ? "h-4 w-4" : "h-[18px] w-[18px]";
+    const boxSize = isSm
+      ? "h-control-sm w-control-sm"
+      : "h-control-md w-control-md";
     const iconSize = isSm ? 12 : 14;
 
     const showCheckedIcon = checked && !indeterminate;
@@ -78,12 +80,12 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             ref={setRefs}
             checked={checked}
             disabled={disabled}
-            className="z-10 peer absolute left-1/2 top-1/2 h-[44px] w-[44px] -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-not-allowed"
+            className="z-10 peer absolute left-1/2 top-1/2 h-hit-area w-hit-area -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-not-allowed"
             {...props}
           />
           <div
             className={cn(
-              "pointer-events-none flex items-center justify-center rounded-sm border transition-colors",
+              "pointer-events-none flex items-center justify-center rounded-sm border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
               boxSize,
               checked || indeterminate
                 ? "border-accent-secondary bg-accent-secondary text-canvas"

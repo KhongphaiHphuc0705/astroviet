@@ -110,6 +110,11 @@
     --space-24: 96px;
     --space-32: 128px;
 
+    /* Component Sizes */
+    --hit-area-min: 44px;
+    --control-box-sm: 16px;
+    --control-box-md: 18px;
+
     /* Radius */
     --radius-none: 0px;
     --radius-sm: 4px;

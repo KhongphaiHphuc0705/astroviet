@@ -36,7 +36,7 @@ export function Label({
         </span>
       )}
       {optional && (
-        <span className="text-body-sm lowercase normal-case tracking-normal text-muted">
+        <span className="text-body-sm normal-case tracking-normal text-muted">
           (Tùy chọn)
         </span>
       )}

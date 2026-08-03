@@ -72,6 +72,9 @@ export default {
       20: "var(--space-20)",
       24: "var(--space-24)",
       32: "var(--space-32)",
+      "hit-area": "var(--hit-area-min)",
+      "control-sm": "var(--control-box-sm)",
+      "control-md": "var(--control-box-md)",
     },
     borderRadius: {
       none: "var(--radius-none)",

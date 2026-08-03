@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
+import { axe } from "vitest-axe";
 
 import { Label } from "./index";
 
@@ -34,5 +35,16 @@ describe("Label", () => {
     const optionalText = screen.getByText("(Tùy chọn)");
     expect(optionalText).toBeInTheDocument();
     expect(optionalText).toHaveClass("text-muted");
+  });
+
+  it("passes accessibility check", async () => {
+    const { container } = render(
+      <div>
+        <Label htmlFor="test-input">Test Label</Label>
+        <input id="test-input" type="text" />
+      </div>,
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });
