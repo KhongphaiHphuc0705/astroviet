@@ -23,6 +23,7 @@ export default {
       danger: "var(--color-danger)",
       info: "var(--color-info)",
       focus: "var(--color-focus-ring)",
+      overlay: "var(--color-overlay)",
     },
     fontFamily: {
       display: "var(--font-display)",
@@ -113,7 +114,13 @@ export default {
       xl: "1280px",
       "2xl": "1536px",
     },
-    extend: {},
+    extend: {
+      maxWidth: {
+        "container-narrow": "768px",
+        "container-default": "1200px",
+        "container-wide": "1440px",
+      },
+    },
   },
   plugins: [],
 } satisfies Config;

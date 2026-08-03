@@ -2,6 +2,41 @@
 <html lang="en">
   <head>
     <!-- THEME_SCRIPT_INJECTION_POINT -->
+    <script>
+      (function () {
+        // Phải khớp key trong shared/config/constants.ts — đổi 1 nơi phải đổi cả 2
+        var storageKey = "astroviet-theme-preference";
+        var preference = "system";
+        try {
+          var persisted = localStorage.getItem(storageKey);
+          if (persisted) {
+            // Zustand's persist middleware format: { state: { preference: 'dark' }, version: 0 }
+            var parsed = JSON.parse(persisted);
+            if (parsed && parsed.state && parsed.state.preference) {
+              preference = parsed.state.preference;
+            }
+          }
+        } catch (e) {}
+
+        var resolvedTheme = preference;
+        if (preference !== "light" && preference !== "dark") {
+          try {
+            var mql = window.matchMedia("(prefers-color-scheme: dark)");
+            resolvedTheme = mql.matches ? "dark" : "light";
+          } catch (e) {
+            resolvedTheme = "light";
+          }
+        }
+        document.documentElement.setAttribute("data-theme", resolvedTheme);
+      })();
+    </script>
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/fonts/inter/inter-regular.woff2"
+    />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

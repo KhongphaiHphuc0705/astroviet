@@ -385,7 +385,7 @@ Ba primitive dùng để dựng mọi layout mà **không** viết CSS Flexbox/G
 #### Grid
 
 - **Purpose**: Bố cục dạng lưới cho danh sách card đồng đều (ví dụ danh sách Chart đã lưu, danh sách bài viết Knowledge Base).
-- **Props**: `columns` (số hoặc object responsive, ví dụ `{ xs: 1, sm: 2, lg: 3 }`), `gap` (token `space-*`), `rowGap`/`columnGap` (override riêng nếu cần).
+- **Props**: `columns` (số, object responsive ví dụ `{ xs: 1, sm: 2, lg: 3 }`, hoặc `"auto-fit"` đi kèm `minItemWidth`), `minItemWidth` (chuỗi kích thước, ví dụ `"200px"`, bắt buộc khi `columns="auto-fit"`), `gap` (token `space-*`), `rowGap`/`columnGap` (override riêng nếu cần).
 - **Variants**: không có variant riêng, cấu hình hoàn toàn qua `columns`.
 - **Sizes**: qua `gap`.
 - **States**: không áp dụng.
