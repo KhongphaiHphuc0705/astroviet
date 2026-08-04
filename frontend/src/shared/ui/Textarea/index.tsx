@@ -22,7 +22,6 @@ export interface TextareaProps extends Omit<
   success?: boolean;
   helperText?: ReactNode;
   variant?: "default" | "filled";
-  size?: "sm" | "md" | "lg";
   autoResize?: boolean;
 }
 
@@ -35,7 +34,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       success,
       helperText,
       variant = "default",
-      size = "md",
       autoResize,
       id,
       disabled,
@@ -169,12 +167,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             value={value}
             defaultValue={defaultValue}
             className={cn(
-              "w-full resize-y bg-transparent text-primary outline-none placeholder:text-muted disabled:cursor-not-allowed",
+              "w-full resize-y bg-transparent p-2 text-body-md text-primary outline-none placeholder:text-muted disabled:cursor-not-allowed",
               effectiveAutoResize && "resize-none overflow-hidden",
-              // Size padding and text
-              size === "sm" && "min-h-[72px] p-3 text-body-sm",
-              size === "md" && "min-h-[96px] p-4 text-body-md",
-              size === "lg" && "min-h-[120px] p-4 text-body-lg",
             )}
             {...props}
           />

@@ -104,11 +104,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={hasError}
             aria-describedby={showDescription ? descriptionId : undefined}
             className={cn(
-              "flex h-full w-full bg-transparent text-primary outline-none placeholder:text-muted disabled:cursor-not-allowed",
+              "fle h-full w-full bg-transparent text-primary outline-none placeholder:text-muted disabled:cursor-not-allowed",
               // Size padding and text
-              size === "sm" && "px-3 text-body-sm",
-              size === "md" && "px-4 text-body-md",
-              size === "lg" && "px-4 text-body-lg",
+              size === "sm" && "px-3 py-2 text-body-sm",
+              size === "md" && "px-4 py-2 text-body-md",
+              size === "lg" && "px-4 py-2 text-body-lg",
               leftAdornment && "pl-2",
               rightAdornment && "pr-2",
             )}

@@ -1,21 +1,31 @@
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import {
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type AnchorHTMLAttributes,
+  type ReactNode,
+} from "react";
 
 import { cn } from "@shared/lib/cn";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
-  size?: "sm" | "md" | "lg" | "icon";
-  isLoading?: boolean;
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
-}
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  AnchorHTMLAttributes<HTMLAnchorElement> & {
+    as?: React.ElementType;
+    variant?: "primary" | "secondary" | "ghost" | "danger" | "link";
+    size?: "sm" | "md" | "lg";
+    iconOnly?: boolean;
+    isLoading?: boolean;
+    leftIcon?: ReactNode;
+    rightIcon?: ReactNode;
+  };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = forwardRef<HTMLElement, ButtonProps>(
   (
     {
+      as,
       className,
       variant = "primary",
       size = "md",
+      iconOnly = false,
       isLoading = false,
       leftIcon,
       rightIcon,
@@ -25,27 +35,36 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
+    const Component = as || (props.href ? "a" : "button");
+
     return (
-      <button
+      <Component
         ref={ref}
         disabled={disabled || isLoading}
+        aria-busy={isLoading ? "true" : undefined}
         className={cn(
-          "relative inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-not-allowed disabled:opacity-50",
+          "relative inline-flex items-center justify-center font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-not-allowed disabled:opacity-50",
+          // Active state (Micro Spec §1.5)
+          "active:scale-[0.98]",
           // Size
-          size === "sm" && "h-9 rounded-md px-3 text-body-sm",
-          size === "md" && "h-11 rounded-md px-4 text-body-md", // h-11 = 44px (hit-area)
-          size === "lg" && "h-14 rounded-lg px-6 text-body-lg",
-          size === "icon" && "h-11 w-11 rounded-md", // hit-area 44x44
+          !iconOnly && size === "sm" && "h-9 rounded-md px-3 text-body-sm",
+          !iconOnly && size === "md" && "h-11 rounded-md px-4 text-body-md", // h-11 = 44px
+          !iconOnly && size === "lg" && "h-14 rounded-lg px-6 text-body-lg",
+          // IconOnly sizing
+          iconOnly && size === "sm" && "h-9 w-9 rounded-md",
+          iconOnly && size === "md" && "h-11 w-11 rounded-md",
+          iconOnly && size === "lg" && "h-14 w-14 rounded-lg",
           // Variant
           variant === "primary" &&
-            "bg-accent-primary text-[var(--color-text-on-accent)] hover:opacity-90",
+            "bg-accent-primary text-on-accent hover:opacity-90 active:opacity-80",
           variant === "secondary" &&
             "border border-strong bg-surface text-primary hover:bg-surface-raised",
-          variant === "outline" &&
-            "border border-strong bg-transparent text-primary hover:bg-surface",
           variant === "ghost" &&
             "bg-transparent text-primary hover:bg-surface-raised",
-          variant === "danger" && "text-white bg-danger hover:opacity-90",
+          variant === "danger" &&
+            "bg-danger text-on-accent hover:opacity-90 active:opacity-80",
+          variant === "link" &&
+            "bg-transparent text-accent-primary underline-offset-4 hover:underline",
           className,
         )}
         {...props}
@@ -85,7 +104,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </span>
         )}
-      </button>
+      </Component>
     );
   },
 );

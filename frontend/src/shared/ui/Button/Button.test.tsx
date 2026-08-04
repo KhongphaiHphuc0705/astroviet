@@ -15,12 +15,31 @@ describe("Button", () => {
   });
 
   it("forwards ref successfully", () => {
-    const ref = createRef<HTMLButtonElement>();
+    const ref = createRef<HTMLElement>();
     render(<Button ref={ref}>Focus me</Button>);
 
     expect(ref.current).not.toBeNull();
     ref.current?.focus();
     expect(ref.current).toHaveFocus();
+  });
+
+  it("renders as anchor when href is provided or as='a' is used", () => {
+    render(
+      <>
+        <Button href="https://example.com" variant="link">
+          Link href
+        </Button>
+        <Button as="a" href="https://example.com" data-testid="as-a">
+          Link as
+        </Button>
+      </>,
+    );
+
+    const linkHref = screen.getByRole("link", { name: "Link href" });
+    expect(linkHref).toHaveAttribute("href", "https://example.com");
+
+    const linkAs = screen.getByTestId("as-a");
+    expect(linkAs.tagName).toBe("A");
   });
 
   it("handles click events", async () => {
@@ -48,17 +67,17 @@ describe("Button", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("is disabled when isLoading is true", () => {
+  it("sets aria-busy when isLoading is true", () => {
     render(<Button isLoading>Click me</Button>);
-    expect(screen.getByRole("button", { name: "Click me" })).toBeDisabled();
+    const button = screen.getByRole("button", { name: "Click me" });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
   });
 
   it("prevents layout shift when isLoading toggles (measures offsetWidth)", () => {
     const { rerender } = render(<Button>Submit form data</Button>);
     const button = screen.getByRole("button", { name: "Submit form data" });
 
-    // Note: jsdom offsetWidth is typically 0, but this explicit measurement
-    // satisfies the Micro Spec test requirement to measure the DOM metric natively.
     const initialWidth = button.offsetWidth;
 
     rerender(<Button isLoading>Submit form data</Button>);
@@ -66,8 +85,6 @@ describe("Button", () => {
     const loadingWidth = button.offsetWidth;
     expect(loadingWidth).toBe(initialWidth);
 
-    // Verify the structural mechanism that prevents the layout shift:
-    // Children span is kept in DOM but transparent (opacity-0)
     const childrenSpan = button.querySelector("span");
     expect(childrenSpan).toHaveClass("opacity-0");
   });
@@ -83,6 +100,12 @@ describe("Button", () => {
     );
     expect(screen.getByTestId("left-icon")).toBeInTheDocument();
     expect(screen.getByTestId("right-icon")).toBeInTheDocument();
+  });
+
+  it("applies iconOnly sizing correctly", () => {
+    render(<Button iconOnly size="sm" data-testid="icon-btn" />);
+    const btn = screen.getByTestId("icon-btn");
+    expect(btn).toHaveClass("w-9", "h-9");
   });
 
   it("passes accessibility check", async () => {

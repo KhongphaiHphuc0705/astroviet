@@ -9,10 +9,15 @@ import {
 import React, { useState } from "react";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
+import { Button } from "@shared/ui/Button";
+import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
 import { Grid } from "@shared/ui/Grid";
+import { Input } from "@shared/ui/Input";
 import { Section } from "@shared/ui/Section";
 import { Stack } from "@shared/ui/Stack";
+import { Switch } from "@shared/ui/Switch";
+import { Textarea } from "@shared/ui/Textarea";
 import { AppLayout } from "@widgets/app-layout";
 import { AuthLayout } from "@widgets/auth-layout";
 import { MarketingLayout } from "@widgets/marketing-layout";
@@ -316,6 +321,92 @@ export default function VerifyPage() {
               <div className="h-16 w-16 rounded-lg bg-subtle"></div>
               <div className="h-20 w-20 rounded-full bg-subtle"></div>
             </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="border-b border-subtle pb-2 text-heading-lg font-semibold">
+            6. Form Controls (M5)
+          </h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <Stack gap="4" className="rounded-lg bg-surface p-6 shadow-level-2">
+              <h3 className="font-display text-heading-md font-bold text-accent-primary">
+                Text Inputs
+              </h3>
+              <Input
+                label="Email Address"
+                placeholder="Enter your email"
+                type="email"
+              />
+              <Input
+                label="Password"
+                placeholder="Enter password"
+                type="password"
+                error="Password too short"
+              />
+              <Input
+                label="Username (Success)"
+                placeholder="username"
+                success
+                helperText="Available!"
+              />
+              <Input
+                label="Disabled Input"
+                placeholder="Cannot type here"
+                disabled
+              />
+              <Input
+                label="Read-only Input"
+                placeholder="Cannot edit this"
+                readOnly
+                value="Read only text"
+              />
+              <Input
+                label="Filled Variant"
+                variant="filled"
+                placeholder="Filled input..."
+              />
+              <Textarea
+                label="Bio (AutoResize)"
+                placeholder="Type a long text..."
+                autoResize
+                maxLength={200}
+              />
+            </Stack>
+
+            <Stack gap="4" className="rounded-lg bg-surface p-6 shadow-level-2">
+              <h3 className="font-display text-heading-md font-bold text-accent-secondary">
+                Toggles & Buttons
+              </h3>
+              <div className="flex gap-4">
+                <Checkbox label="Accept Terms" />
+                <Checkbox label="Disabled" disabled />
+              </div>
+              <div className="flex gap-4">
+                <Switch label="Email Notifications" />
+                <Switch label="SMS (Disabled)" disabled />
+              </div>
+              <Stack gap="3" className="mt-4">
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="primary">Primary</Button>
+                  <Button variant="secondary">Secondary</Button>
+                  <Button variant="ghost">Ghost</Button>
+                  <Button variant="danger">Danger</Button>
+                  <Button variant="link" href="#">
+                    Link as Anchor
+                  </Button>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button size="sm">Small</Button>
+                  <Button size="md">Medium</Button>
+                  <Button size="lg">Large</Button>
+                  <Button isLoading>Loading</Button>
+                  <Button iconOnly aria-label="Icon">
+                    🌟
+                  </Button>
+                </div>
+              </Stack>
+            </Stack>
           </div>
         </section>
       </div>
