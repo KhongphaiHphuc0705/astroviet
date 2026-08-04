@@ -115,7 +115,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                     "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
                 )}
               >
-                <div className="relative flex min-h-[44px] items-center justify-center">
+                <div className="relative flex min-h-hit-area items-center justify-center">
                   <input
                     type="radio"
                     id={optionId}
@@ -135,7 +135,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                   />
                   <div
                     className={cn(
-                      "flex h-[18px] w-[18px] items-center justify-center rounded-full border bg-canvas transition-colors",
+                      "flex h-control-md w-control-md items-center justify-center rounded-full border bg-canvas transition-colors",
                       hasError
                         ? "peer-focus-visible:ring-danger/20 border-danger"
                         : "border-strong peer-focus-visible:border-accent-secondary peer-focus-visible:ring-focus",
@@ -147,7 +147,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                   </div>
                 </div>
 
-                <div className="flex min-h-[44px] flex-col justify-center py-1">
+                <div className="flex min-h-hit-area flex-col justify-center py-1">
                   <span className="text-body-md font-medium text-primary">
                     {option.label}
                   </span>

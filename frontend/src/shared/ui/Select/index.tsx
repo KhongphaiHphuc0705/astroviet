@@ -62,6 +62,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const showDescription = !!errorMessage || !!helperText;
 
     const [isOpen, setIsOpen] = useState(false);
+    const [highlightedValue, setHighlightedValue] = useState<string | null>(
+      null,
+    );
     const triggerRef = useRef<HTMLButtonElement>(null);
     const listboxRef = useRef<HTMLUListElement>(null);
 
@@ -83,14 +86,63 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
     const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        setIsOpen((prev) => !prev);
-      } else if (e.key === "Escape") {
-        setIsOpen(false);
+      const enabledOptions = options.filter((o) => !o.disabled);
+
+      switch (e.key) {
+        case "ArrowDown":
+        case "ArrowUp": {
+          e.preventDefault();
+          if (!isOpen) {
+            setIsOpen(true);
+            return;
+          }
+          const currentIndex = enabledOptions.findIndex(
+            (o) => o.value === highlightedValue,
+          );
+          let nextIndex = 0;
+          if (e.key === "ArrowDown") {
+            nextIndex =
+              currentIndex < enabledOptions.length - 1 ? currentIndex + 1 : 0;
+          } else {
+            nextIndex =
+              currentIndex > 0 ? currentIndex - 1 : enabledOptions.length - 1;
+          }
+          setHighlightedValue(enabledOptions[nextIndex]?.value || null);
+          break;
+        }
+        case "Enter":
+        case " ": {
+          e.preventDefault();
+          if (isOpen) {
+            if (highlightedValue) handleSelect(highlightedValue);
+          } else {
+            setIsOpen(true);
+          }
+          break;
+        }
+        case "Escape": {
+          setIsOpen(false);
+          break;
+        }
+        case "Home":
+        case "End": {
+          if (isOpen) {
+            e.preventDefault();
+            const nextIndex = e.key === "Home" ? 0 : enabledOptions.length - 1;
+            setHighlightedValue(enabledOptions[nextIndex]?.value || null);
+          }
+          break;
+        }
       }
-      // TODO(M6): Full arrow key navigation logic
     };
+
+    useEffect(() => {
+      if (isOpen) {
+        setHighlightedValue(
+          value || options.find((o) => !o.disabled)?.value || null,
+        );
+      }
+    }, [isOpen, value, options]);
 
     // Close on click outside
     useEffect(() => {
@@ -187,8 +239,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
               isOpen &&
                 !hasError &&
                 "border-accent-secondary ring-2 ring-focus",
-              disabled &&
-                "bg-black/5 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/5 cursor-not-allowed opacity-50",
+              disabled && "cursor-not-allowed opacity-50",
               !selectedOption && "text-muted",
               "text-primary",
             )}
@@ -221,7 +272,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                   role="listbox"
                   data-testid="combobox-listbox"
                   aria-activedescendant={
-                    value ? `${selectId}-opt-${value}` : undefined
+                    highlightedValue
+                      ? `${selectId}-opt-${highlightedValue}`
+                      : undefined
                   }
                   tabIndex={-1}
                   // Hide entirely on mobile viewport, native select handles UI
@@ -241,8 +294,10 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         }}
                         onKeyDown={() => {}}
                         className={cn(
-                          "hover:bg-surface-hover relative flex cursor-pointer select-none items-center py-2 pl-10 pr-4 text-body-md text-primary transition-colors",
-                          isSelected && "bg-surface-hover font-medium",
+                          "relative flex cursor-pointer select-none items-center py-2 pl-10 pr-4 text-body-md text-primary transition-colors hover:bg-surface-hover",
+                          (isSelected || highlightedValue === opt.value) &&
+                            "bg-surface-hover",
+                          isSelected && "font-medium",
                           opt.disabled &&
                             "cursor-not-allowed opacity-50 hover:bg-transparent",
                         )}

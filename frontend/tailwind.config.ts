@@ -11,6 +11,7 @@ export default {
       canvas: "var(--color-bg-canvas)",
       surface: "var(--color-bg-surface)",
       "surface-raised": "var(--color-bg-surface-raised)",
+      "surface-hover": "var(--color-bg-surface-hover)",
       primary: "var(--color-text-primary)",
       secondary: "var(--color-text-secondary)",
       muted: "var(--color-text-muted)",
