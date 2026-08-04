@@ -14,7 +14,9 @@ import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
+import { RadioGroup } from "@shared/ui/Radio";
 import { Section } from "@shared/ui/Section";
+import { Select } from "@shared/ui/Select";
 import { Stack } from "@shared/ui/Stack";
 import { Switch } from "@shared/ui/Switch";
 import { Textarea } from "@shared/ui/Textarea";
@@ -366,6 +368,18 @@ export default function VerifyPage() {
                 variant="filled"
                 placeholder="Filled input..."
               />
+              <div className="select-country-demo">
+                <Select
+                  label="Country Selection (Select)"
+                  placeholder="Choose a country"
+                  options={[
+                    { label: "Vietnam", value: "vn" },
+                    { label: "United States", value: "us" },
+                    { label: "Japan", value: "jp" },
+                    { label: "Unavailable Region", value: "x", disabled: true },
+                  ]}
+                />
+              </div>
               <Textarea
                 label="Bio (AutoResize)"
                 placeholder="Type a long text..."
@@ -386,6 +400,33 @@ export default function VerifyPage() {
                 <Switch label="Email Notifications" />
                 <Switch label="SMS (Disabled)" disabled />
               </div>
+
+              <div className="mt-2 border-t border-subtle pt-4">
+                <RadioGroup
+                  label="Notification Frequency"
+                  orientation="horizontal"
+                  options={[
+                    { label: "Daily", value: "daily" },
+                    { label: "Weekly", value: "weekly" },
+                  ]}
+                />
+              </div>
+              <div className="mt-2 border-t border-subtle pt-4">
+                <RadioGroup
+                  label="Subscription Plan (Card Variant)"
+                  variant="card"
+                  defaultValue="pro"
+                  options={[
+                    {
+                      label: "Free",
+                      value: "free",
+                      description: "Basic features",
+                    },
+                    { label: "Pro", value: "pro", description: "$10/mo" },
+                  ]}
+                />
+              </div>
+
               <Stack gap="3" className="mt-4">
                 <div className="flex flex-wrap gap-2">
                   <Button variant="primary">Primary</Button>
