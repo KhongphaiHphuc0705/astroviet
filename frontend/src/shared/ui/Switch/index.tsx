@@ -42,6 +42,14 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       ? "peer-checked:translate-x-4"
       : "peer-checked:translate-x-5";
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.currentTarget.click();
+      }
+      props.onKeyDown?.(e);
+    };
+
     return (
       <div
         className={cn(
@@ -58,6 +66,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             ref={ref}
             checked={checked}
             disabled={disabled}
+            onKeyDown={handleKeyDown}
             className="z-10 peer absolute left-1/2 top-1/2 h-hit-area w-hit-area -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-not-allowed"
             {...props}
           />

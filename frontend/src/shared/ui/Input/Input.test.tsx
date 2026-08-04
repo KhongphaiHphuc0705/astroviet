@@ -28,7 +28,8 @@ describe("Input", () => {
     const inputEl = screen.getByLabelText("Username");
 
     expect(inputEl).toHaveAttribute("aria-invalid", "true");
-    expect(inputEl).toHaveClass("border-danger");
+    const wrapper = inputEl.parentElement;
+    expect(wrapper).toHaveClass("border-danger");
 
     const errorText = screen.getByText("Invalid username");
     expect(errorText).toBeInTheDocument();
@@ -38,7 +39,32 @@ describe("Input", () => {
   it("renders success state", () => {
     render(<Input label="Username" success />);
     const inputEl = screen.getByLabelText("Username");
-    expect(inputEl).toHaveClass("border-success");
+    const wrapper = inputEl.parentElement;
+    expect(wrapper).toHaveClass("border-success");
+  });
+
+  it("renders sizes and variants correctly", () => {
+    const { rerender } = render(
+      <Input label="Input" size="sm" variant="filled" />,
+    );
+    let wrapper = screen.getByLabelText("Input").parentElement;
+    expect(wrapper).toHaveClass("h-9", "bg-canvas");
+
+    rerender(<Input label="Input" size="lg" variant="default" />);
+    wrapper = screen.getByLabelText("Input").parentElement;
+    expect(wrapper).toHaveClass("h-14", "bg-surface");
+  });
+
+  it("renders adornments", () => {
+    render(
+      <Input
+        label="Money"
+        leftAdornment={<span>$</span>}
+        rightAdornment={<span>.00</span>}
+      />,
+    );
+    expect(screen.getByText("$")).toBeInTheDocument();
+    expect(screen.getByText(".00")).toBeInTheDocument();
   });
 
   it("distinguishes disabled and readOnly", async () => {

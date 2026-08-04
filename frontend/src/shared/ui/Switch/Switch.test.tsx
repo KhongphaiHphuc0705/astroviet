@@ -30,6 +30,26 @@ describe("Switch", () => {
     await user.keyboard("[Space]");
     expect(onChange).toHaveBeenCalledTimes(2);
     expect(switchEl).not.toBeChecked();
+
+    // Enter
+    await user.keyboard("[Enter]");
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(switchEl).toBeChecked();
+  });
+
+  it("renders size sm and description correctly", () => {
+    render(
+      <Switch
+        label="Size test"
+        size="sm"
+        description="This is a small switch"
+      />,
+    );
+    expect(screen.getByText("This is a small switch")).toBeInTheDocument();
+    const switchEl = screen.getByLabelText("Size test");
+    // Verify track size classes for sm
+    const track = switchEl.nextElementSibling;
+    expect(track).toHaveClass("h-5", "w-9");
   });
 
   it("is disabled when disabled prop is true", async () => {
