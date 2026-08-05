@@ -70,7 +70,8 @@ describe("Button", () => {
   it("sets aria-busy when isLoading is true", () => {
     render(<Button isLoading>Click me</Button>);
     const button = screen.getByRole("button", { name: "Click me" });
-    expect(button).toBeDisabled();
+    expect(button).not.toBeDisabled(); // Native disabled is not used for isLoading
+    expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).toHaveAttribute("aria-busy", "true");
   });
 

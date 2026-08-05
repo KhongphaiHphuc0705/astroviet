@@ -1,8 +1,10 @@
+import { Eye, EyeOff } from "lucide-react";
 import {
   forwardRef,
   type InputHTMLAttributes,
   type ReactNode,
   useId,
+  useState,
 } from "react";
 
 import { cn } from "@shared/lib/cn";
@@ -38,6 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       disabled,
       readOnly,
       required,
+      type,
       ...props
     },
     ref,
@@ -49,6 +52,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const hasError = !!error;
     const errorMessage = typeof error === "string" ? error : undefined;
     const showDescription = !!errorMessage || !!helperText;
+
+    const isPassword = type === "password";
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
     return (
       <div className="gap-1.5 flex w-full flex-col">
@@ -96,11 +104,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
           <input
+            {...props}
             id={inputId}
             ref={ref}
             disabled={disabled}
             readOnly={readOnly}
             required={required}
+            type={isPassword && showPassword ? "text" : type}
             aria-invalid={hasError}
             aria-describedby={showDescription ? descriptionId : undefined}
             className={cn(
@@ -112,13 +122,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               leftAdornment && "pl-2",
               rightAdornment && "pr-2",
             )}
-            {...props}
           />
-          {rightAdornment && (
+          {isPassword ? (
+            <button
+              type="button"
+              onClick={handleTogglePassword}
+              disabled={disabled}
+              className="flex items-center pr-3 text-muted hover:text-primary focus-visible:text-primary focus-visible:outline-none disabled:cursor-not-allowed"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          ) : rightAdornment ? (
             <div className="flex items-center pr-3 text-muted">
               {rightAdornment}
             </div>
-          )}
+          ) : null}
         </div>
         {showDescription && (
           <div

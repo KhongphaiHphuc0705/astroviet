@@ -47,9 +47,8 @@ describe("Switch", () => {
     );
     expect(screen.getByText("This is a small switch")).toBeInTheDocument();
     const switchEl = screen.getByLabelText("Size test");
-    // Verify track size classes for sm
     const track = switchEl.nextElementSibling;
-    expect(track).toHaveClass("h-5", "w-9");
+    expect(track).toHaveClass("h-5", "w-10");
   });
 
   it("is disabled when disabled prop is true", async () => {

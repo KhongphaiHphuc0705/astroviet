@@ -3,6 +3,7 @@ import {
   type InputHTMLAttributes,
   type ReactNode,
   useId,
+  useState,
 } from "react";
 
 import { cn } from "@shared/lib/cn";
@@ -25,7 +26,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       label,
       description,
       disabled,
-      checked,
+      checked: controlledChecked,
+      defaultChecked,
+      onChange,
       id,
       ...props
     },
@@ -34,13 +37,22 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     const internalId = useId();
     const switchId = id || internalId;
 
+    const [internalChecked, setInternalChecked] = useState(!!defaultChecked);
+    const isControlled = controlledChecked !== undefined;
+    const checked = isControlled ? controlledChecked : internalChecked;
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setInternalChecked(e.target.checked);
+      }
+      onChange?.(e);
+    };
+
     const isSm = size === "sm";
 
-    const trackSize = isSm ? "h-5 w-9" : "h-6 w-11";
+    const trackSize = isSm ? "h-5 w-10" : "h-6 w-hit-area";
     const thumbSize = isSm ? "h-4 w-4" : "h-5 w-5";
-    const thumbTranslate = isSm
-      ? "peer-checked:translate-x-4"
-      : "peer-checked:translate-x-5";
+    const thumbTranslate = checked ? "translate-x-5" : "translate-x-0";
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
@@ -65,6 +77,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             id={switchId}
             ref={ref}
             checked={checked}
+            onChange={handleChange}
             disabled={disabled}
             onKeyDown={handleKeyDown}
             className="z-10 peer absolute left-1/2 top-1/2 h-hit-area w-hit-area -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-not-allowed"
@@ -72,14 +85,14 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           />
           <div
             className={cn(
-              "pointer-events-none flex items-center rounded-full p-[2px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
+              "pointer-events-none flex shrink-0 items-center rounded-full p-[2px] transition-colors duration-fast ease-standard peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
               trackSize,
-              "bg-strong peer-checked:bg-accent-secondary",
+              checked ? "bg-accent-secondary" : "bg-strong",
             )}
           >
             <div
               className={cn(
-                "shadow-sm rounded-full bg-surface transition-transform",
+                "shadow-sm rounded-full bg-surface transition-transform duration-fast ease-standard",
                 thumbSize,
                 thumbTranslate,
               )}

@@ -40,16 +40,28 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
     return (
       <Component
         ref={ref}
-        disabled={disabled || isLoading}
+        disabled={disabled}
+        aria-disabled={disabled || isLoading ? "true" : undefined}
         aria-busy={isLoading ? "true" : undefined}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          if (disabled || isLoading) {
+            e.preventDefault();
+            return;
+          }
+          props.onClick?.(e);
+        }}
         className={cn(
           "relative inline-flex items-center justify-center font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-not-allowed disabled:opacity-50",
           // Active state (Micro Spec §1.5)
           "active:scale-[0.98]",
           // Size
-          !iconOnly && size === "sm" && "h-9 rounded-md px-3 text-body-sm",
-          !iconOnly && size === "md" && "h-11 rounded-md px-4 text-body-md", // h-11 = 44px
-          !iconOnly && size === "lg" && "h-14 rounded-lg px-6 text-body-lg",
+          !iconOnly && size === "sm" && "h-9 rounded-md px-3 py-2 text-body-sm",
+          !iconOnly &&
+            size === "md" &&
+            "h-11 rounded-md px-4 py-2 text-body-md",
+          !iconOnly &&
+            size === "lg" &&
+            "h-14 rounded-lg px-6 py-2 text-body-lg",
           // IconOnly sizing
           iconOnly && size === "sm" && "h-9 w-9 rounded-md",
           iconOnly && size === "md" && "h-11 w-11 rounded-md",

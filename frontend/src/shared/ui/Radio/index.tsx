@@ -1,4 +1,10 @@
-import { forwardRef, type ReactNode, useId, type ChangeEvent } from "react";
+import {
+  forwardRef,
+  type ReactNode,
+  useId,
+  useState,
+  type ChangeEvent,
+} from "react";
 
 import { cn } from "@shared/lib/cn";
 import { Label } from "@shared/ui/Label";
@@ -57,7 +63,14 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const errorMessage = typeof error === "string" ? error : undefined;
     const showDescription = !!errorMessage || !!helperText;
 
+    const [internalValue, setInternalValue] = useState(defaultValue);
+    const isControlled = value !== undefined;
+    const currentValue = isControlled ? value : internalValue;
+
     const handleOptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setInternalValue(e.target.value);
+      }
       onChange?.(e.target.value);
     };
 
@@ -109,9 +122,9 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                     ? "cursor-not-allowed opacity-50"
                     : "cursor-pointer",
                   variant === "card" &&
-                    "flex-1 rounded-lg border border-subtle p-4 shadow-level-1 transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:bg-surface-raised",
+                    "flex-1 rounded-lg border border-subtle px-4 py-2 shadow-level-1 transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:bg-surface-raised",
                   variant === "card" &&
-                    value === option.value &&
+                    currentValue === option.value &&
                     "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
                 )}
               >
@@ -121,21 +134,14 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                     id={optionId}
                     name={radioName}
                     value={option.value}
-                    checked={
-                      value !== undefined ? value === option.value : undefined
-                    }
-                    defaultChecked={
-                      defaultValue !== undefined
-                        ? defaultValue === option.value
-                        : undefined
-                    }
+                    checked={currentValue === option.value}
                     onChange={handleOptionChange}
                     disabled={optionDisabled}
                     className="peer sr-only"
                   />
                   <div
                     className={cn(
-                      "flex h-control-md w-control-md items-center justify-center rounded-full border bg-canvas transition-colors",
+                      "flex h-control-md w-control-md items-center justify-center rounded-full border bg-canvas transition-colors duration-fast",
                       hasError
                         ? "peer-focus-visible:ring-danger/20 border-danger"
                         : "border-strong peer-focus-visible:border-accent-secondary peer-focus-visible:ring-focus",
@@ -143,7 +149,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                       "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-canvas",
                     )}
                   >
-                    <div className="h-2 w-2 scale-0 rounded-full bg-on-accent transition-transform peer-checked:scale-100" />
+                    <div className="h-2 w-2 scale-0 rounded-full bg-on-accent transition-transform duration-fast peer-checked:scale-100" />
                   </div>
                 </div>
 

@@ -6,6 +6,7 @@ import {
   useEffect,
   useId,
   useRef,
+  useState,
 } from "react";
 
 import { cn } from "@shared/lib/cn";
@@ -30,7 +31,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       description,
       indeterminate = false,
       disabled,
-      checked,
+      checked: controlledChecked,
+      defaultChecked,
+      onChange,
       id,
       ...props
     },
@@ -38,6 +41,17 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ) => {
     const internalId = useId();
     const checkboxId = id || internalId;
+
+    const [internalChecked, setInternalChecked] = useState(!!defaultChecked);
+    const isControlled = controlledChecked !== undefined;
+    const checked = isControlled ? controlledChecked : internalChecked;
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setInternalChecked(e.target.checked);
+      }
+      onChange?.(e);
+    };
 
     const innerRef = useRef<HTMLInputElement | null>(null);
 
@@ -79,13 +93,14 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             id={checkboxId}
             ref={setRefs}
             checked={checked}
+            onChange={handleChange}
             disabled={disabled}
             className="z-10 peer absolute left-1/2 top-1/2 h-hit-area w-hit-area -translate-x-1/2 -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-not-allowed"
             {...props}
           />
           <div
             className={cn(
-              "pointer-events-none flex items-center justify-center rounded-sm border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
+              "pointer-events-none flex items-center justify-center rounded-sm border transition-colors duration-fast peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
               boxSize,
               checked || indeterminate
                 ? "border-accent-secondary bg-accent-secondary text-canvas"
