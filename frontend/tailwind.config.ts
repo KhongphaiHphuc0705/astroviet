@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: ["class", '[data-theme="dark"]'],
   theme: {
     // Override Tailwind's default theme completely for the specified properties
     colors: {
@@ -10,6 +11,7 @@ export default {
       canvas: "var(--color-bg-canvas)",
       surface: "var(--color-bg-surface)",
       "surface-raised": "var(--color-bg-surface-raised)",
+      "surface-hover": "var(--color-bg-surface-hover)",
       primary: "var(--color-text-primary)",
       secondary: "var(--color-text-secondary)",
       muted: "var(--color-text-muted)",
@@ -72,6 +74,9 @@ export default {
       20: "var(--space-20)",
       24: "var(--space-24)",
       32: "var(--space-32)",
+      "hit-area": "var(--hit-area-min)",
+      "control-sm": "var(--control-box-sm)",
+      "control-md": "var(--control-box-md)",
     },
     borderRadius: {
       none: "var(--radius-none)",
