@@ -6,12 +6,14 @@ import {
   LayoutPanelLeft,
   UserCircle,
 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
+import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
 import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
+import { Divider } from "@shared/ui/Divider";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
 import { RadioGroup } from "@shared/ui/Radio";
@@ -448,6 +450,89 @@ export default function VerifyPage() {
                 </div>
               </Stack>
             </Stack>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="border-b border-subtle pb-2 text-heading-lg font-semibold">
+            7. Display, Feedback & Overlay (M6)
+          </h2>
+          <div className="space-y-8 rounded-lg bg-surface p-6 shadow-level-2">
+            <div>
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Divider
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Horizontal Solid:
+                  </p>
+                  <Divider />
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Horizontal Dashed with Label:
+                  </p>
+                  <Divider variant="dashed" label="OR" />
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Signature Ring Variant:
+                  </p>
+                  <Divider variant="ring" />
+                </div>
+                <div className="flex h-32 gap-6">
+                  <div className="rounded flex-1 bg-surface-raised p-4">
+                    Left
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className="rounded flex-1 bg-surface-raised p-4">
+                    Right
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Badge
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Variants (md):
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="neutral">Neutral</Badge>
+                    <Badge variant="accent">Accent</Badge>
+                    <Badge variant="secondary">Secondary</Badge>
+                    <Badge variant="success">Success</Badge>
+                    <Badge variant="warning">Warning</Badge>
+                    <Badge variant="danger">Danger</Badge>
+                    <Badge variant="outline">Outline</Badge>
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    With Dot / Size (sm):
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="success" dot>
+                      Active
+                    </Badge>
+                    <Badge variant="danger" dot size="sm">
+                      Failed (sm)
+                    </Badge>
+                    <Badge variant="neutral" dot>
+                      Neutral
+                    </Badge>
+                    <Badge variant="outline" dot size="sm">
+                      Draft (sm)
+                    </Badge>
+                  </div>
+                </div>
+              </Stack>
+            </div>
           </div>
         </section>
       </div>
