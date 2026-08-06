@@ -33,9 +33,9 @@ describe("Badge", () => {
   });
 
   it("strips onClick and tabIndex props to enforce non-interactive rule", () => {
-    // @ts-expect-error - We intentionally pass forbidden props to test runtime protection
+    const forbiddenProps = { onClick: () => {}, tabIndex: 0 };
     render(
-      <Badge onClick={() => {}} tabIndex={0} data-testid="badge">
+      <Badge {...forbiddenProps} data-testid="badge">
         Non-interactive
       </Badge>,
     );

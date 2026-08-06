@@ -41,6 +41,7 @@ export default {
       "body-lg": ["var(--text-body-lg)", "var(--line-height-body-lg)"],
       "body-md": ["var(--text-body-md)", "var(--line-height-body-md)"],
       "body-sm": ["var(--text-body-sm)", "var(--line-height-body-sm)"],
+      "body-xs": ["var(--text-body-xs)", "var(--line-height-body-xs)"],
       label: [
         "var(--text-label)",
         {
@@ -62,7 +63,9 @@ export default {
     spacing: {
       0: "var(--space-0)",
       1: "var(--space-1)",
+      "1.5": "var(--space-1\\.5)",
       2: "var(--space-2)",
+      "2.5": "var(--space-2\\.5)",
       3: "var(--space-3)",
       4: "var(--space-4)",
       5: "var(--space-5)",

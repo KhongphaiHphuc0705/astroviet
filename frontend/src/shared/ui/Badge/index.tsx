@@ -45,7 +45,9 @@ export const Badge = ({
       className={cn(
         "inline-flex items-center justify-center font-medium transition-colors",
         // Sizes
-        isSm ? "h-5 gap-1 px-2 text-[10px]" : "px-2.5 gap-1.5 h-6 text-body-sm",
+        isSm
+          ? "h-5 gap-1 px-2 text-body-xs"
+          : "h-6 gap-1.5 px-2.5 text-body-sm",
         "rounded-full",
         // Variants
         variant === "neutral" &&
@@ -65,7 +67,7 @@ export const Badge = ({
         <span
           className={cn(
             "shrink-0 rounded-full",
-            isSm ? "h-1 w-1" : "w-1.5 h-1.5",
+            isSm ? "h-1 w-1" : "h-1.5 w-1.5",
             variant === "outline" || variant === "neutral"
               ? "bg-current"
               : "bg-on-accent",
