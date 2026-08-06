@@ -19,6 +19,8 @@ import { Input } from "@shared/ui/Input";
 import { RadioGroup } from "@shared/ui/Radio";
 import { Section } from "@shared/ui/Section";
 import { Select } from "@shared/ui/Select";
+import { Skeleton } from "@shared/ui/Skeleton";
+import { Spinner } from "@shared/ui/Spinner";
 import { Stack } from "@shared/ui/Stack";
 import { Switch } from "@shared/ui/Switch";
 import { Textarea } from "@shared/ui/Textarea";
@@ -115,7 +117,7 @@ export default function VerifyPage() {
           <div className="flex items-center gap-2 rounded-md bg-surface-raised p-1 shadow-level-1">
             <button
               onClick={() => setPreference("light")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "light"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -125,7 +127,7 @@ export default function VerifyPage() {
             </button>
             <button
               onClick={() => setPreference("dark")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "dark"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -135,7 +137,7 @@ export default function VerifyPage() {
             </button>
             <button
               onClick={() => setPreference("system")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "system"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -529,6 +531,53 @@ export default function VerifyPage() {
                     <Badge variant="outline" dot size="sm">
                       Draft (sm)
                     </Badge>
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Spinner
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">Sizes:</p>
+                  <div className="flex items-center gap-8">
+                    <Spinner size="xs" />
+                    <Spinner size="sm" />
+                    <Spinner size="md" />
+                    <Spinner size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Inherits color (text-accent-primary):
+                  </p>
+                  <div className="flex items-center gap-8 text-accent-primary">
+                    <Spinner size="md" />
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Skeleton
+              </h3>
+              <Stack gap="6">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Skeleton className="rounded-xl h-32 w-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
                   </div>
                 </div>
               </Stack>
