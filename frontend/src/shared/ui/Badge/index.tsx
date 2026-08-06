@@ -81,7 +81,7 @@ export const Badge = ({
           {icon}
         </span>
       )}
-      {children && <span>{children}</span>}
+      {children}
     </span>
   );
 };
