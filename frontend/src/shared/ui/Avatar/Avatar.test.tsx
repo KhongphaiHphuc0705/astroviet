@@ -58,10 +58,17 @@ describe("Avatar", () => {
     expect(skeleton).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("applies size classes correctly", () => {
-    render(<Avatar name="Size Test" size="lg" data-testid="avatar-size" />);
-    const avatar = screen.getByTestId("avatar-size");
-    expect(avatar).toHaveClass("h-12 w-12 text-body-md");
+  it("applies correct size classes", () => {
+    const { rerender } = render(
+      <Avatar name="Test User" size="xs" data-testid="avatar" />,
+    );
+    expect(screen.getByTestId("avatar")).toHaveClass("h-6", "w-6");
+
+    rerender(<Avatar name="Test User" size="sm" data-testid="avatar" />);
+    expect(screen.getByTestId("avatar")).toHaveClass("h-8", "w-8");
+
+    rerender(<Avatar name="Test User" size="lg" data-testid="avatar" />);
+    expect(screen.getByTestId("avatar")).toHaveClass("h-14", "w-14");
   });
 
   it("passes accessibility check", async () => {

@@ -6,7 +6,7 @@ import { Skeleton } from "@shared/ui/Skeleton";
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   src?: string;
   name: string; // Required for a11y and initials
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   isLoading?: boolean;
 }
 
@@ -35,9 +35,10 @@ export const Avatar = ({
   const [hasError, setHasError] = useState(false);
 
   const sizeClasses = {
-    sm: "h-8 w-8 text-body-xs", // 32px
-    md: "h-10 w-10 text-body-sm", // 40px
-    lg: "h-12 w-12 text-body-md", // 48px
+    xs: "h-6 w-6 text-body-sm",
+    sm: "h-8 w-8 text-label",
+    md: "h-10 w-10 text-body-lg font-medium",
+    lg: "h-14 w-14 text-heading-md font-medium",
   };
 
   if (isLoading) {

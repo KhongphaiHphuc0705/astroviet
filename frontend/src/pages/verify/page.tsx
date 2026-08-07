@@ -12,14 +12,7 @@ import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { Avatar } from "@shared/ui/Avatar";
 import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@shared/ui/Card";
+import { Card } from "@shared/ui/Card";
 import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
 import { Divider } from "@shared/ui/Divider";
@@ -603,6 +596,7 @@ export default function VerifyPage() {
                     Sizes & Initials:
                   </p>
                   <div className="flex items-center gap-6">
+                    <Avatar name="Extra Small Avatar" size="xs" />
                     <Avatar name="Small Avatar" size="sm" />
                     <Avatar name="Medium Avatar" size="md" />
                     <Avatar name="Large Avatar" size="lg" />
@@ -632,26 +626,50 @@ export default function VerifyPage() {
                 Card
               </h3>
               <Stack gap="6">
-                <Card className="w-[350px]">
-                  <CardHeader>
-                    <CardTitle>Create project</CardTitle>
-                    <CardDescription>
-                      Deploy your new project in one-click.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                <div className="flex w-[350px] flex-col gap-6">
+                  <Card
+                    padding="md"
+                    variant="default"
+                    className="flex flex-col gap-6"
+                  >
+                    <div className="flex flex-col gap-1.5">
+                      <h3 className="font-display text-heading-md font-semibold leading-none tracking-tight">
+                        Create project
+                      </h3>
+                      <p className="text-body-sm text-secondary">
+                        Deploy your new project in one-click.
+                      </p>
+                    </div>
+
                     <div className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1.5">
                         <Label htmlFor="name">Name</Label>
                         <Input id="name" placeholder="Name of your project" />
                       </div>
                     </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
-                    <Button variant="secondary">Cancel</Button>
-                    <Button>Deploy</Button>
-                  </CardFooter>
-                </Card>
+
+                    <div className="flex justify-between pt-2">
+                      <Button variant="secondary">Cancel</Button>
+                      <Button>Deploy</Button>
+                    </div>
+                  </Card>
+
+                  <Card
+                    padding="md"
+                    variant="raised"
+                    interactive
+                    className="flex items-center justify-between"
+                  >
+                    <div>
+                      <h3 className="font-display text-heading-md font-semibold">
+                        Interactive Card
+                      </h3>
+                      <p className="text-body-sm text-secondary">
+                        Click me to see hover effects.
+                      </p>
+                    </div>
+                  </Card>
+                </div>
               </Stack>
             </div>
           </div>

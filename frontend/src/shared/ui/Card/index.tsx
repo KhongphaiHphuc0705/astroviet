@@ -1,78 +1,53 @@
-import { forwardRef, type HTMLAttributes } from "react";
+import { forwardRef, type ElementType, type HTMLAttributes } from "react";
 
 import { cn } from "@shared/lib/cn";
 
-export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "rounded-xl border border-subtle bg-surface text-primary shadow-level-1",
-        className,
-      )}
-      {...props}
-    />
-  ),
-);
-Card.displayName = "Card";
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "raised" | "outline-accent";
+  padding?: "none" | "sm" | "md" | "lg";
+  interactive?: boolean;
+  as?: ElementType;
+  htmlFor?: string; // allow htmlFor when used as label
+}
 
-export const CardHeader = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-));
-CardHeader.displayName = "CardHeader";
-
-export const CardTitle = forwardRef<
-  HTMLParagraphElement,
-  HTMLAttributes<HTMLHeadingElement>
->(({ className, children, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "font-display text-heading-md font-semibold leading-none tracking-tight",
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  (
+    {
       className,
-    )}
-    {...props}
-  >
-    {children}
-  </h3>
-));
-CardTitle.displayName = "CardTitle";
+      variant = "default",
+      padding = "md",
+      interactive = false,
+      as: Component = "div",
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <Component
+        ref={ref}
+        className={cn(
+          "overflow-hidden rounded-md text-primary",
+          // Padding
+          padding === "none" && "p-0",
+          padding === "sm" && "p-4",
+          padding === "md" && "p-6",
+          padding === "lg" && "p-8",
+          // Variants
+          variant === "default" &&
+            "border border-subtle bg-surface shadow-level-1",
+          variant === "raised" &&
+            "border border-strong bg-surface-raised shadow-level-2",
+          variant === "outline-accent" &&
+            "border border-accent-secondary bg-surface shadow-level-1",
+          // Interactive
+          interactive &&
+            "cursor-pointer transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:border-accent-primary hover:bg-surface-raised",
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 
-export const CardDescription = forwardRef<
-  HTMLParagraphElement,
-  HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-body-sm text-secondary", className)}
-    {...props}
-  />
-));
-CardDescription.displayName = "CardDescription";
-
-export const CardContent = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-));
-CardContent.displayName = "CardContent";
-
-export const CardFooter = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-));
-CardFooter.displayName = "CardFooter";
+Card.displayName = "Card";

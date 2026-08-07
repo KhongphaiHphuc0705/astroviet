@@ -40,8 +40,7 @@ export default {
       "heading-sm": ["var(--text-heading-sm)", "var(--line-height-heading-sm)"],
       "body-lg": ["var(--text-body-lg)", "var(--line-height-body-lg)"],
       "body-md": ["var(--text-body-md)", "var(--line-height-body-md)"],
-      "body-sm": ["var(--text-body-sm)", "var(--line-height-body-sm)"],
-      "body-xs": ["var(--text-body-xs)", "var(--line-height-body-xs)"],
+      "body-sm": ["var(--font-size-body-sm)", "var(--line-height-body-sm)"],
       label: [
         "var(--text-label)",
         {
@@ -73,6 +72,7 @@ export default {
       8: "var(--space-8)",
       10: "var(--space-10)",
       12: "var(--space-12)",
+      14: "var(--space-14)",
       16: "var(--space-16)",
       20: "var(--space-20)",
       24: "var(--space-24)",

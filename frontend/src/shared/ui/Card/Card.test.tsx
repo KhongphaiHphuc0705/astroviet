@@ -2,74 +2,88 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { axe } from "vitest-axe";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "./index";
+import { Card } from "./index";
 
-describe("Card", () => {
-  it("renders Card and its subcomponents correctly", () => {
-    render(
-      <Card data-testid="card">
-        <CardHeader data-testid="card-header">
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent data-testid="card-content">
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter data-testid="card-footer">
-          <button>Card Footer Button</button>
-        </CardFooter>
-      </Card>,
-    );
-
+describe("Card (Flat API)", () => {
+  it("renders with default props", () => {
+    render(<Card data-testid="card">Content</Card>);
     const card = screen.getByTestId("card");
     expect(card).toBeInTheDocument();
-    expect(card).toHaveClass(
-      "rounded-xl border border-subtle bg-surface text-primary shadow-level-1",
-    );
-
-    expect(screen.getByTestId("card-header")).toBeInTheDocument();
-    expect(screen.getByText("Card Title")).toBeInTheDocument();
-    expect(screen.getByText("Card Title")).toHaveClass(
-      "font-display text-heading-md font-semibold",
-    );
-
-    expect(screen.getByText("Card Description")).toBeInTheDocument();
-    expect(screen.getByText("Card Description")).toHaveClass(
-      "text-body-sm text-secondary",
-    );
-
-    expect(screen.getByTestId("card-content")).toBeInTheDocument();
-    expect(screen.getByText("Card Content")).toBeInTheDocument();
-
-    expect(screen.getByTestId("card-footer")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Card Footer Button" }),
-    ).toBeInTheDocument();
+    expect(card).toHaveClass("p-6"); // default padding md
+    expect(card).toHaveClass("border-subtle bg-surface shadow-level-1"); // default variant
+    expect(card).toHaveClass("rounded-md"); // spec compliant radius
   });
 
-  it("merges custom classNames correctly", () => {
-    render(<Card data-testid="card" className="custom-class bg-subtle" />);
+  it("applies padding variants correctly", () => {
+    const { rerender } = render(
+      <Card padding="none" data-testid="card">
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId("card")).toHaveClass("p-0");
+
+    rerender(
+      <Card padding="sm" data-testid="card">
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId("card")).toHaveClass("p-4");
+
+    rerender(
+      <Card padding="lg" data-testid="card">
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId("card")).toHaveClass("p-8");
+  });
+
+  it("applies stylistic variants correctly", () => {
+    const { rerender } = render(
+      <Card variant="raised" data-testid="card">
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId("card")).toHaveClass(
+      "bg-surface-raised shadow-level-2",
+    );
+
+    rerender(
+      <Card variant="outline-accent" data-testid="card">
+        Content
+      </Card>,
+    );
+    expect(screen.getByTestId("card")).toHaveClass("border-accent-secondary");
+  });
+
+  it("applies interactive styles", () => {
+    render(
+      <Card interactive data-testid="card">
+        Content
+      </Card>,
+    );
     const card = screen.getByTestId("card");
-    expect(card).toHaveClass("custom-class");
-    expect(card).toHaveClass("bg-subtle");
-    expect(card).toHaveClass("rounded-xl"); // maintains base classes
+    expect(card).toHaveClass(
+      "cursor-pointer",
+      "hover:bg-surface-raised",
+      "focus-within:ring-2",
+    );
+  });
+
+  it("supports polymorphic as prop", () => {
+    render(
+      <Card as="label" data-testid="card">
+        Content
+      </Card>,
+    );
+    const card = screen.getByTestId("card");
+    expect(card.tagName).toBe("LABEL");
   });
 
   it("passes accessibility check", async () => {
     const { container } = render(
-      <Card>
-        <CardHeader>
-          <CardTitle>Accessible Card</CardTitle>
-          <CardDescription>Description</CardDescription>
-        </CardHeader>
-        <CardContent>Content</CardContent>
+      <Card as="article" variant="default" padding="md">
+        <h2>Accessible Card</h2>
+        <p>Content</p>
       </Card>,
     );
     const results = await axe(container);

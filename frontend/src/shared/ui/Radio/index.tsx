@@ -156,28 +156,21 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
             if (variant === "card") {
               return (
-                <label
+                <Card
+                  as="label"
                   key={option.value}
                   htmlFor={optionId}
+                  interactive={!optionDisabled}
+                  padding="none"
                   className={cn(
-                    "relative flex flex-1",
-                    optionDisabled
-                      ? "cursor-not-allowed opacity-50"
-                      : "cursor-pointer",
+                    "relative flex flex-1 items-start gap-3 px-4 py-2",
+                    optionDisabled && "cursor-not-allowed opacity-50",
+                    isChecked &&
+                      "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
                   )}
                 >
-                  <Card
-                    className={cn(
-                      "flex flex-1 items-start gap-3 px-4 py-2 transition-colors",
-                      !optionDisabled &&
-                        "focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:bg-surface-raised",
-                      isChecked &&
-                        "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
-                    )}
-                  >
-                    {innerContent}
-                  </Card>
-                </label>
+                  {innerContent}
+                </Card>
               );
             }
 
