@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { cn } from "@shared/lib/cn";
+import { Card } from "@shared/ui/Card";
 import { Label } from "@shared/ui/Label";
 
 export interface RadioOption {
@@ -111,30 +112,17 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           {options.map((option, index) => {
             const optionId = `${groupId}-opt-${index}`;
             const optionDisabled = disabled || option.disabled;
+            const isChecked = currentValue === option.value;
 
-            return (
-              <label
-                key={option.value}
-                htmlFor={optionId}
-                className={cn(
-                  "relative flex items-start gap-3",
-                  optionDisabled
-                    ? "cursor-not-allowed opacity-50"
-                    : "cursor-pointer",
-                  variant === "card" &&
-                    "flex-1 rounded-lg border border-subtle px-4 py-2 shadow-level-1 transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:bg-surface-raised",
-                  variant === "card" &&
-                    currentValue === option.value &&
-                    "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
-                )}
-              >
+            const innerContent = (
+              <>
                 <div className="relative flex min-h-hit-area items-center justify-center">
                   <input
                     type="radio"
                     id={optionId}
                     name={radioName}
                     value={option.value}
-                    checked={currentValue === option.value}
+                    checked={isChecked}
                     onChange={handleOptionChange}
                     disabled={optionDisabled}
                     className="peer sr-only"
@@ -163,6 +151,48 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                     </span>
                   )}
                 </div>
+              </>
+            );
+
+            if (variant === "card") {
+              return (
+                <label
+                  key={option.value}
+                  htmlFor={optionId}
+                  className={cn(
+                    "relative flex flex-1",
+                    optionDisabled
+                      ? "cursor-not-allowed opacity-50"
+                      : "cursor-pointer",
+                  )}
+                >
+                  <Card
+                    className={cn(
+                      "flex flex-1 items-start gap-3 px-4 py-2 transition-colors",
+                      !optionDisabled &&
+                        "focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:bg-surface-raised",
+                      isChecked &&
+                        "border-accent-primary bg-surface-raised ring-1 ring-accent-primary",
+                    )}
+                  >
+                    {innerContent}
+                  </Card>
+                </label>
+              );
+            }
+
+            return (
+              <label
+                key={option.value}
+                htmlFor={optionId}
+                className={cn(
+                  "relative flex items-start gap-3",
+                  optionDisabled
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer",
+                )}
+              >
+                {innerContent}
               </label>
             );
           })}

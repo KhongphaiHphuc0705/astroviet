@@ -9,13 +9,23 @@ import {
 import { useState } from "react";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
+import { Avatar } from "@shared/ui/Avatar";
 import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@shared/ui/Card";
 import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
 import { Divider } from "@shared/ui/Divider";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
+import { Label } from "@shared/ui/Label";
 import { RadioGroup } from "@shared/ui/Radio";
 import { Section } from "@shared/ui/Section";
 import { Select } from "@shared/ui/Select";
@@ -580,6 +590,68 @@ export default function VerifyPage() {
                     <Skeleton className="h-4 w-4/5" />
                   </div>
                 </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Avatar
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Sizes & Initials:
+                  </p>
+                  <div className="flex items-center gap-6">
+                    <Avatar name="Small Avatar" size="sm" />
+                    <Avatar name="Medium Avatar" size="md" />
+                    <Avatar name="Large Avatar" size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Image & Loading:
+                  </p>
+                  <div className="flex items-center gap-6">
+                    <Avatar
+                      name="Huu Phuc"
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                    />
+                    <Avatar name="Loading State" isLoading />
+                    <Avatar
+                      name="Broken Link"
+                      src="https://broken-link.com/img.jpg"
+                    />
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Card
+              </h3>
+              <Stack gap="6">
+                <Card className="w-[350px]">
+                  <CardHeader>
+                    <CardTitle>Create project</CardTitle>
+                    <CardDescription>
+                      Deploy your new project in one-click.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" placeholder="Name of your project" />
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <Button variant="secondary">Cancel</Button>
+                    <Button>Deploy</Button>
+                  </CardFooter>
+                </Card>
               </Stack>
             </div>
           </div>
