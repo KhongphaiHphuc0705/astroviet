@@ -66,26 +66,25 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       >
         <div className="pt-0.5 shrink-0">{icon || defaultIcons[variant]}</div>
 
-        <div className="flex flex-1 flex-col gap-1">
+        <div className="flex w-full flex-col gap-1">
           {title && (
-            <h5 className="text-body-md font-semibold leading-none tracking-tight">
+            <div className="text-body-md font-semibold leading-none tracking-tight">
               {title}
-            </h5>
+            </div>
           )}
           {description && (
             <div className="text-body-sm opacity-90">{description}</div>
           )}
           {actions && (
-            <div className="mt-2 flex items-center gap-2">{actions}</div>
+            <div className="mt-2 flex items-center gap-3">{actions}</div>
           )}
         </div>
-
         {onDismiss && (
           <button
             type="button"
             onClick={onDismiss}
-            aria-label="Dismiss"
-            className="absolute right-2 top-2 rounded-sm p-1 opacity-70 ring-offset-canvas transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2"
+            aria-label="Đóng"
+            className="absolute right-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>

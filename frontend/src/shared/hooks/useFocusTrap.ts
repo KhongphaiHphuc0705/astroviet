@@ -16,12 +16,19 @@ export function useFocusTrap({
 }: UseFocusTrapOptions) {
   const containerRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const onEscapeRef = useRef(onEscape);
+
+  useEffect(() => {
+    onEscapeRef.current = onEscape;
+  }, [onEscape]);
 
   useEffect(() => {
     if (!active) return;
 
-    // Save previous focus
-    previousFocusRef.current = document.activeElement as HTMLElement;
+    // Save previous focus ONLY when first activated
+    if (!previousFocusRef.current) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+    }
 
     const container = containerRef.current;
     if (!container) return;
@@ -43,14 +50,14 @@ export function useFocusTrap({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onEscape?.();
+        onEscapeRef.current?.();
         return;
       }
 
       if (e.key === "Tab") {
         const focusableElements = Array.from(
           container.querySelectorAll<HTMLElement>(FOCUSABLE_ELEMENTS),
-        ).filter((el) => el.offsetParent !== null); // check visibility
+        );
 
         if (focusableElements.length === 0) {
           e.preventDefault();
@@ -83,14 +90,16 @@ export function useFocusTrap({
       clearTimeout(focusTimeout);
       document.removeEventListener("keydown", handleKeyDown);
       // Restore focus
-      if (previousFocusRef.current) {
+      const elToFocus = previousFocusRef.current;
+      previousFocusRef.current = null;
+      if (elToFocus) {
         // another slight delay so focus isn't lost during react unmount batching
         setTimeout(() => {
-          previousFocusRef.current?.focus();
+          elToFocus.focus();
         }, 10);
       }
     };
-  }, [active, onEscape, initialFocusRef]);
+  }, [active, initialFocusRef]);
 
   return containerRef;
 }

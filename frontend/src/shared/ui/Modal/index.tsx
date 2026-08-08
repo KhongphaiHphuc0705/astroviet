@@ -19,9 +19,9 @@ export interface ModalProps {
 }
 
 const sizeClasses = {
-  sm: "w-full max-w-[400px]",
-  md: "w-full max-w-[560px] max-sm:w-full max-sm:max-w-none max-sm:h-[100dvh] max-sm:rounded-none max-sm:border-none",
-  lg: "w-full max-w-[720px] max-sm:w-full max-sm:max-w-none max-sm:h-[100dvh] max-sm:rounded-none max-sm:border-none",
+  sm: "w-full max-w-modal-sm",
+  md: "w-full max-w-modal-md max-sm:w-full max-sm:max-w-none max-sm:h-[100dvh] max-sm:rounded-none max-sm:border-none",
+  lg: "w-full max-w-modal-lg max-sm:w-full max-sm:max-w-none max-sm:h-[100dvh] max-sm:rounded-none max-sm:border-none",
   fullscreen: "w-full max-w-none h-[100dvh] rounded-none border-none",
 };
 
@@ -49,7 +49,7 @@ export function Modal({
   };
 
   const trapRef = useFocusTrap({
-    active: animationState !== "closed",
+    active: mounted && animationState !== "closed",
     onEscape: handleEscape,
   });
 
@@ -90,7 +90,7 @@ export function Modal({
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
         className={cn(
-          "relative flex max-h-[100dvh] flex-col overflow-hidden rounded-md border border-subtle bg-surface shadow-level-3 transition-all duration-slow",
+          "relative z-modal flex max-h-[100dvh] flex-col overflow-hidden rounded-md border border-subtle bg-surface shadow-level-3 transition-all duration-slow",
           sizeClasses[size],
           isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100",
         )}
@@ -117,7 +117,7 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label="Đóng"
             className="absolute right-4 top-4 rounded-sm p-1 text-secondary opacity-70 ring-offset-surface transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2"
             data-testid="modal-close-btn"
           >
