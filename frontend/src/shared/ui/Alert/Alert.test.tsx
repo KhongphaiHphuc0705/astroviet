@@ -50,7 +50,7 @@ describe("Alert", () => {
   it("calls onDismiss when dismiss button is clicked", () => {
     const handleDismiss = vi.fn();
     render(<Alert title="Dismissible" onDismiss={handleDismiss} />);
-    const dismissBtn = screen.getByLabelText("Dismiss");
+    const dismissBtn = screen.getByLabelText("Đóng");
     expect(dismissBtn).toBeInTheDocument();
     fireEvent.click(dismissBtn);
     expect(handleDismiss).toHaveBeenCalledTimes(1);
