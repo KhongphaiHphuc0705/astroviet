@@ -40,7 +40,7 @@ export default {
       "heading-sm": ["var(--text-heading-sm)", "var(--line-height-heading-sm)"],
       "body-lg": ["var(--text-body-lg)", "var(--line-height-body-lg)"],
       "body-md": ["var(--text-body-md)", "var(--line-height-body-md)"],
-      "body-sm": ["var(--text-body-sm)", "var(--line-height-body-sm)"],
+      "body-sm": ["var(--font-size-body-sm)", "var(--line-height-body-sm)"],
       label: [
         "var(--text-label)",
         {
@@ -62,7 +62,9 @@ export default {
     spacing: {
       0: "var(--space-0)",
       1: "var(--space-1)",
+      "1.5": "var(--space-1\\.5)",
       2: "var(--space-2)",
+      "2.5": "var(--space-2\\.5)",
       3: "var(--space-3)",
       4: "var(--space-4)",
       5: "var(--space-5)",
@@ -70,6 +72,7 @@ export default {
       8: "var(--space-8)",
       10: "var(--space-10)",
       12: "var(--space-12)",
+      14: "var(--space-14)",
       16: "var(--space-16)",
       20: "var(--space-20)",
       24: "var(--space-24)",
@@ -124,6 +127,9 @@ export default {
         "container-narrow": "768px",
         "container-default": "1200px",
         "container-wide": "1440px",
+        "modal-sm": "400px",
+        "modal-md": "560px",
+        "modal-lg": "720px",
       },
     },
   },

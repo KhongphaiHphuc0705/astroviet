@@ -207,7 +207,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const displayValue = selectedOption ? selectedOption.label : placeholder;
 
     return (
-      <div className="gap-1.5 flex w-full flex-col">
+      <div className="flex w-full flex-col gap-1.5">
         {label && (
           <Label
             id={labelId}

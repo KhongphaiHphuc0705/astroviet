@@ -6,17 +6,26 @@ import {
   LayoutPanelLeft,
   UserCircle,
 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
+import { Alert } from "@shared/ui/Alert";
+import { Avatar } from "@shared/ui/Avatar";
+import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
+import { Card } from "@shared/ui/Card";
 import { Checkbox } from "@shared/ui/Checkbox";
 import { Container } from "@shared/ui/Container";
+import { Divider } from "@shared/ui/Divider";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
+import { Label } from "@shared/ui/Label";
+import { Modal } from "@shared/ui/Modal";
 import { RadioGroup } from "@shared/ui/Radio";
 import { Section } from "@shared/ui/Section";
 import { Select } from "@shared/ui/Select";
+import { Skeleton } from "@shared/ui/Skeleton";
+import { Spinner } from "@shared/ui/Spinner";
 import { Stack } from "@shared/ui/Stack";
 import { Switch } from "@shared/ui/Switch";
 import { Textarea } from "@shared/ui/Textarea";
@@ -25,6 +34,7 @@ import { AuthLayout } from "@widgets/auth-layout";
 import { MarketingLayout } from "@widgets/marketing-layout";
 
 export default function VerifyPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [view, setView] = useState<"theme" | "app" | "marketing" | "auth">(
     "theme",
   );
@@ -113,7 +123,7 @@ export default function VerifyPage() {
           <div className="flex items-center gap-2 rounded-md bg-surface-raised p-1 shadow-level-1">
             <button
               onClick={() => setPreference("light")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "light"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -123,7 +133,7 @@ export default function VerifyPage() {
             </button>
             <button
               onClick={() => setPreference("dark")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "dark"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -133,7 +143,7 @@ export default function VerifyPage() {
             </button>
             <button
               onClick={() => setPreference("system")}
-              className={`py-1.5 flex items-center gap-2 rounded-md px-3 transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors ${
                 preference === "system"
                   ? "bg-accent-primary text-on-accent"
                   : "text-secondary hover:text-primary"
@@ -450,7 +460,301 @@ export default function VerifyPage() {
             </Stack>
           </div>
         </section>
+
+        <section className="space-y-4">
+          <h2 className="border-b border-subtle pb-2 text-heading-lg font-semibold">
+            7. Display, Feedback & Overlay (M6)
+          </h2>
+          <div className="space-y-8 rounded-lg bg-surface p-6 shadow-level-2">
+            <div>
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Divider
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Horizontal Solid:
+                  </p>
+                  <Divider />
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Horizontal Dashed with Label:
+                  </p>
+                  <Divider variant="dashed" label="OR" />
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Signature Ring Variant:
+                  </p>
+                  <Divider variant="ring" />
+                </div>
+                <div className="flex h-32 gap-6">
+                  <div className="rounded flex-1 bg-surface-raised p-4">
+                    Left
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className="rounded flex-1 bg-surface-raised p-4">
+                    Right
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Badge
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Variants (md):
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="neutral">Neutral</Badge>
+                    <Badge variant="accent">Accent</Badge>
+                    <Badge variant="secondary">Secondary</Badge>
+                    <Badge variant="success">Success</Badge>
+                    <Badge variant="warning">Warning</Badge>
+                    <Badge variant="danger">Danger</Badge>
+                    <Badge variant="outline">Outline</Badge>
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    With Dot / Size (sm):
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="success" dot>
+                      Active
+                    </Badge>
+                    <Badge variant="danger" dot size="sm">
+                      Failed (sm)
+                    </Badge>
+                    <Badge variant="neutral" dot>
+                      Neutral
+                    </Badge>
+                    <Badge variant="outline" dot size="sm">
+                      Draft (sm)
+                    </Badge>
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Spinner
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">Sizes:</p>
+                  <div className="flex items-center gap-8">
+                    <Spinner size="xs" />
+                    <Spinner size="sm" />
+                    <Spinner size="md" />
+                    <Spinner size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Inherits color (text-accent-primary):
+                  </p>
+                  <div className="flex items-center gap-8 text-accent-primary">
+                    <Spinner size="md" />
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Skeleton
+              </h3>
+              <Stack gap="6">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Skeleton className="rounded-xl h-32 w-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Avatar
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Sizes & Initials:
+                  </p>
+                  <div className="flex items-center gap-6">
+                    <Avatar name="Extra Small Avatar" size="xs" />
+                    <Avatar name="Small Avatar" size="sm" />
+                    <Avatar name="Medium Avatar" size="md" />
+                    <Avatar name="Large Avatar" size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-body-sm text-secondary">
+                    Image & Loading:
+                  </p>
+                  <div className="flex items-center gap-6">
+                    <Avatar
+                      name="Huu Phuc"
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                    />
+                    <Avatar name="Loading State" isLoading />
+                    <Avatar
+                      name="Broken Link"
+                      src="https://broken-link.com/img.jpg"
+                    />
+                  </div>
+                </div>
+              </Stack>
+            </div>
+
+            <div className="border-t border-subtle pt-6">
+              <h3 className="mb-4 text-heading-md font-bold text-primary">
+                Card
+              </h3>
+              <Stack gap="6">
+                <div className="flex w-[350px] flex-col gap-6">
+                  <Card
+                    padding="md"
+                    variant="default"
+                    className="flex flex-col gap-6"
+                  >
+                    <div className="flex flex-col gap-1.5">
+                      <h3 className="font-display text-heading-md font-semibold leading-none tracking-tight">
+                        Create project
+                      </h3>
+                      <p className="text-body-sm text-secondary">
+                        Deploy your new project in one-click.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" placeholder="Name of your project" />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between pt-2">
+                      <Button variant="secondary">Cancel</Button>
+                      <Button>Deploy</Button>
+                    </div>
+                  </Card>
+
+                  <Card
+                    padding="md"
+                    variant="raised"
+                    interactive
+                    className="flex items-center justify-between"
+                  >
+                    <div>
+                      <h3 className="font-display text-heading-md font-semibold">
+                        Interactive Card
+                      </h3>
+                      <p className="text-body-sm text-secondary">
+                        Click me to see hover effects.
+                      </p>
+                    </div>
+                  </Card>
+                </div>
+              </Stack>
+            </div>
+
+            {/* Alert Section */}
+            <div className="flex flex-col gap-6 border-t border-subtle pt-10">
+              <h3 className="font-display text-heading-lg font-semibold text-primary">
+                Alert
+              </h3>
+              <Stack gap="6">
+                <div className="flex max-w-[600px] flex-col gap-4">
+                  <Alert
+                    variant="info"
+                    title="Information"
+                    description="This is an informational alert with role='status'."
+                  />
+                  <Alert
+                    variant="success"
+                    title="Success"
+                    description="Your changes have been saved successfully!"
+                    onDismiss={() => {}}
+                  />
+                  <Alert
+                    variant="warning"
+                    title="Warning: Data might be incomplete"
+                    description="Birth time is missing, Ascendant might be inaccurate. (role='alert')"
+                  />
+                  <Alert
+                    variant="danger"
+                    title="Authentication Error"
+                    description="Incorrect email or password. Please try again."
+                    actions={
+                      <Button variant="secondary" size="sm">
+                        Try Again
+                      </Button>
+                    }
+                  />
+                </div>
+              </Stack>
+            </div>
+            {/* Modal Section */}
+            <div className="flex flex-col gap-6 border-t border-subtle pt-10">
+              <h3 className="font-display text-heading-lg font-semibold text-primary">
+                Modal
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <Button onClick={() => setIsModalOpen(true)}>
+                    Open Modal
+                  </Button>
+                </div>
+              </Stack>
+            </div>
+          </div>
+        </section>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Confirm Deletion"
+        description="Are you sure you want to delete this chart? This action cannot be undone."
+        variant="danger"
+        size="sm"
+        closeOnOverlayClick={false}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={() => setIsModalOpen(false)}>
+              Delete Chart
+            </Button>
+          </>
+        }
+      >
+        <p className="text-body-md text-primary">
+          This is a demonstration of the <strong>Modal</strong> component with{" "}
+          <code>role=&quot;dialog&quot;</code>, a complete focus trap, and
+          responsive fullscreen behavior on mobile devices (except for{" "}
+          <code>size=&quot;sm&quot;</code>).
+        </p>
+      </Modal>
     </div>
   );
 }

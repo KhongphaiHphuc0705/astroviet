@@ -59,7 +59,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
     return (
-      <div className="gap-1.5 flex w-full flex-col">
+      <div className="flex w-full flex-col gap-1.5">
         {label && (
           <Label
             htmlFor={inputId}
