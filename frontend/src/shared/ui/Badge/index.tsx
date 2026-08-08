@@ -46,7 +46,7 @@ export const Badge = ({
         "inline-flex items-center justify-center font-medium transition-colors",
         // Sizes
         isSm
-          ? "h-5 gap-1 px-2 text-body-xs"
+          ? "text-body-xs h-5 gap-1 px-2"
           : "h-6 gap-1.5 px-2.5 text-body-sm",
         "rounded-full",
         // Variants
