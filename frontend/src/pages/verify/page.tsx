@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
+import { Alert } from "@shared/ui/Alert";
 import { Avatar } from "@shared/ui/Avatar";
 import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
@@ -19,6 +20,7 @@ import { Divider } from "@shared/ui/Divider";
 import { Grid } from "@shared/ui/Grid";
 import { Input } from "@shared/ui/Input";
 import { Label } from "@shared/ui/Label";
+import { Modal } from "@shared/ui/Modal";
 import { RadioGroup } from "@shared/ui/Radio";
 import { Section } from "@shared/ui/Section";
 import { Select } from "@shared/ui/Select";
@@ -32,6 +34,7 @@ import { AuthLayout } from "@widgets/auth-layout";
 import { MarketingLayout } from "@widgets/marketing-layout";
 
 export default function VerifyPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [view, setView] = useState<"theme" | "app" | "marketing" | "auth">(
     "theme",
   );
@@ -672,9 +675,86 @@ export default function VerifyPage() {
                 </div>
               </Stack>
             </div>
+
+            {/* Alert Section */}
+            <div className="flex flex-col gap-6 border-t border-subtle pt-10">
+              <h3 className="font-display text-heading-lg font-semibold text-primary">
+                Alert
+              </h3>
+              <Stack gap="6">
+                <div className="flex max-w-[600px] flex-col gap-4">
+                  <Alert
+                    variant="info"
+                    title="Information"
+                    description="This is an informational alert with role='status'."
+                  />
+                  <Alert
+                    variant="success"
+                    title="Success"
+                    description="Your changes have been saved successfully!"
+                    onDismiss={() => {}}
+                  />
+                  <Alert
+                    variant="warning"
+                    title="Warning: Data might be incomplete"
+                    description="Birth time is missing, Ascendant might be inaccurate. (role='alert')"
+                  />
+                  <Alert
+                    variant="danger"
+                    title="Authentication Error"
+                    description="Incorrect email or password. Please try again."
+                    actions={
+                      <Button variant="secondary" size="sm">
+                        Try Again
+                      </Button>
+                    }
+                  />
+                </div>
+              </Stack>
+            </div>
+            {/* Modal Section */}
+            <div className="flex flex-col gap-6 border-t border-subtle pt-10">
+              <h3 className="font-display text-heading-lg font-semibold text-primary">
+                Modal
+              </h3>
+              <Stack gap="6">
+                <div>
+                  <Button onClick={() => setIsModalOpen(true)}>
+                    Open Modal
+                  </Button>
+                </div>
+              </Stack>
+            </div>
           </div>
         </section>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Confirm Deletion"
+        description="Are you sure you want to delete this chart? This action cannot be undone."
+        variant="danger"
+        size="sm"
+        closeOnOverlayClick={false}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={() => setIsModalOpen(false)}>
+              Delete Chart
+            </Button>
+          </>
+        }
+      >
+        <p className="text-body-md text-primary">
+          This is a demonstration of the <strong>Modal</strong> component with{" "}
+          <code>role=&quot;dialog&quot;</code>, a complete focus trap, and
+          responsive fullscreen behavior on mobile devices (except for{" "}
+          <code>size=&quot;sm&quot;</code>).
+        </p>
+      </Modal>
     </div>
   );
 }
