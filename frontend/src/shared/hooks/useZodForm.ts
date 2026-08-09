@@ -7,9 +7,7 @@ export function useZodForm<TFieldValues extends FieldValues>(
   options?: Omit<UseFormProps<TFieldValues>, "resolver">,
 ) {
   return useForm<TFieldValues>({
-    resolver: zodResolver(
-      schema as unknown as ZodType<TFieldValues, FieldValues>,
-    ) as UseFormProps<TFieldValues>["resolver"],
+    resolver: zodResolver(schema),
     mode: "onBlur",
     reValidateMode: "onChange",
     ...options,
