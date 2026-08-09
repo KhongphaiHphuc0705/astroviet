@@ -22,10 +22,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.85.0",
     "react-router-dom": "^7.18.2",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3",
