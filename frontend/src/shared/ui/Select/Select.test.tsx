@@ -104,6 +104,38 @@ describe("Select", () => {
     expect(ref.current?.tagName).toBe("BUTTON");
   });
 
+  it("calls onBlur when the trigger button loses focus (dropdown closed)", async () => {
+    const user = userEvent.setup();
+    const onBlur = vi.fn();
+    render(
+      <div>
+        <Select options={MOCK_OPTIONS} onBlur={onBlur} />
+        <button data-testid="other">Other</button>
+      </div>,
+    );
+
+    const trigger = screen.getByTestId("combobox-trigger");
+    trigger.focus();
+    // Tab away → focus leaves Select entirely
+    await user.tab();
+
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
+  it("does NOT call onBlur while dropdown is open (focus inside popup is not a real blur)", async () => {
+    const user = userEvent.setup();
+    const onBlur = vi.fn();
+    render(<Select options={MOCK_OPTIONS} onBlur={onBlur} />);
+
+    const trigger = screen.getByTestId("combobox-trigger");
+    await user.click(trigger); // opens dropdown
+
+    // isOpen is true → blur event on trigger should be suppressed
+    fireEvent.blur(trigger);
+
+    expect(onBlur).not.toHaveBeenCalled();
+  });
+
   it("passes accessibility check in closed state", async () => {
     const { container } = render(
       <Select label="Accessible Select" options={MOCK_OPTIONS} />,
