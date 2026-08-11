@@ -26,6 +26,8 @@ const demoSchema = z.object({
   agreeToTerms: z.literal(true, {
     error: "Bạn phải đồng ý với điều khoản để tiếp tục",
   }),
+  referenceCode: z.string().optional(),
+  dateOfBirth: z.string().optional(),
 });
 
 type DemoFormValues = z.infer<typeof demoSchema>;
@@ -37,6 +39,8 @@ const FIELD_ORDER = [
   "contactEmail",
   "country",
   "agreeToTerms",
+  "referenceCode",
+  "dateOfBirth",
 ] as const satisfies ReadonlyArray<keyof DemoFormValues>;
 
 const COUNTRY_OPTIONS = [
@@ -58,6 +62,8 @@ export function FormFoundationDemo() {
       displayName: "",
       contactEmail: "",
       country: "",
+      referenceCode: "REF-2024-001",
+      dateOfBirth: "DD/MM/YYYY",
     },
   });
 
@@ -172,19 +178,17 @@ export function FormFoundationDemo() {
             <strong>vẫn xuất hiện trong payload</strong> (nếu được register).
           </p>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {/* disabled — not registered with RHF → absent from onValid data */}
+            {/* disabled — registered with RHF but automatically excluded from payload */}
             <Input
               label="Mã tham chiếu (disabled)"
-              defaultValue="REF-2024-001"
               disabled
+              {...getInputFieldProps<DemoFormValues>("referenceCode", form)}
             />
-            {/* readOnly — registered above as contactEmail for demo purposes;
-                value is fixed visually. In a real form, register a dedicated
-                field to see it in the submit payload. */}
+            {/* readOnly — registered with RHF and included in payload */}
             <Input
               label="Định dạng ngày (readOnly)"
-              defaultValue="DD/MM/YYYY"
               readOnly
+              {...getInputFieldProps<DemoFormValues>("dateOfBirth", form)}
             />
           </div>
         </div>

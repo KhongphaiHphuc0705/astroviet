@@ -733,7 +733,7 @@ export default function VerifyPage() {
 
       {/* ── M7: Forms Foundation Demo ─────────────────────────────────────── */}
       <div className="mx-auto max-w-4xl space-y-8 pb-16">
-        <section className="rounded-2xl border border-subtle bg-surface p-8">
+        <section className="rounded-lg border border-subtle bg-surface p-8">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-1">
               <h2 className="font-display text-heading-md font-semibold text-primary">
