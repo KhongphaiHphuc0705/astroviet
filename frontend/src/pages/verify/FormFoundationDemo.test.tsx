@@ -12,11 +12,18 @@
  *  §9.8  agreeToTerms (Checkbox) — lỗi render thủ công qua role='alert'
  *  §9.9  Submit không hợp lệ — onValid không được gọi, lỗi hiển thị
  *  §9.10 Submit hợp lệ — onValid được gọi, submit-result xuất hiện
- *  §9.11 disabled field vắng mặt trong payload submit
+ *  §9.11 disabled field — giá trị đóng băng ở defaultValue (Phương án A: RHF register
+ *        giữ field trong payload nhưng user không thể thay đổi — khác HTML native submission
+ *        vốn loại disabled hoàn toàn; sự khác biệt này được ghi nhận có chủ đích vào AC4)
  *  §9.12 readOnly field có mặt trong payload submit
  *  §9.13 Focus-first-error — con trỏ nhảy về field lỗi đầu tiên theo FIELD_ORDER
  *        (lỗi được bố trí ở field KHÔNG phải đầu tiên để xác nhận thứ tự đúng)
- *  §9.14 Accessibility — vitest-axe sạch trong trạng thái ban đầu
+ *  §9.14 Accessibility — vitest-axe sạch trong trạng thái ban đầu (sạch)
+ *  §9.15 Accessibility — vitest-axe sạch SAU KHI lỗi validation hiển thị
+ *        (aria-invalid/aria-describedby/role='alert' đang active — lỗi a11y thực tế
+ *        thường chỉ lộ ra ở trạng thái có lỗi, không phải trạng thái sạch)
+ *  §9.16 Keyboard-only navigation — Tab qua toàn bộ form + Enter submit thành công
+ *        (AC5: navigate và submit hoàn toàn bằng bàn phím, không cần chuột)
  */
 
 import { render, screen, waitFor } from "@testing-library/react";
@@ -302,9 +309,98 @@ describe("FormFoundationDemo", () => {
   });
 
   // §9.14 — Accessibility: vitest-axe sạch trong trạng thái ban đầu
-  it("§9.14 passes accessibility check (axe) in initial state", async () => {
+  it("§9.14 passes accessibility check (axe) in initial (clean) state", async () => {
     const { container } = render(<FormFoundationDemo />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  // §9.15 — Accessibility: vitest-axe sạch SAU KHI lỗi validation hiển thị
+  // Lý do test riêng: aria-invalid, aria-describedby, và role='alert' chỉ xuất hiện ở
+  // trạng thái lỗi — một số vi phạm a11y (id trùng, describedby trỏ tới element không tồn tại)
+  // chỉ lộ ra sau khi error markup được inject vào DOM.
+  it("§9.15 passes accessibility check (axe) AFTER validation errors are displayed", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<FormFoundationDemo />);
+
+    // Kích hoạt toàn bộ lỗi validation bằng cách submit form trống
+    await user.click(screen.getByRole("button", { name: /gửi biểu mẫu/i }));
+
+    await waitFor(() => {
+      // Đợi lỗi đầu tiên xuất hiện — đảm bảo aria-invalid/describedby đã được inject
+      expect(screen.getByText(/tối thiểu 2 ký tự/i)).toBeInTheDocument();
+    });
+
+    // Chạy axe với toàn bộ error markup đang active
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  // §9.16 — Keyboard-only navigation: Tab qua toàn bộ form + Enter submit
+  it("§9.16 keyboard-only — can navigate through all fields and submit form without mouse", async () => {
+    const user = userEvent.setup();
+    render(<FormFoundationDemo />);
+
+    // Bước 1: Focus vào displayName → gõ → Tab
+    const displayNameInput = screen.getByRole("textbox", {
+      name: /tên hiển thị/i,
+    });
+    displayNameInput.focus();
+    await user.keyboard("Nguyen An");
+    await user.tab();
+
+    // Bước 2: contactEmail nhận focus → gõ email hợp lệ → Tab
+    expect(document.activeElement).toBe(
+      screen.getByRole("textbox", { name: /email liên hệ/i }),
+    );
+    await user.keyboard("test@example.com");
+    await user.tab();
+
+    // Bước 3: native <select> nhận focus (jsdom không ẩn opacity-0/sm:hidden)
+    // → selectOptions để đảm bảo onChange được fire (ArrowDown trong jsdom không fire onChange)
+    const nativeSelect = screen.getByTestId("native-select");
+    expect(document.activeElement).toBe(nativeSelect);
+    await user.selectOptions(nativeSelect, "VN"); // chọn "Việt Nam" qua keyboard-equivalent API
+    await user.tab(); // Tab → combobox-trigger button
+
+    // Bước 3b: Tab qua combobox-trigger (button trong Tab order, không cần tương tác)
+    await user.tab(); // Tab → checkbox
+
+    // Bước 4: Checkbox nhận focus → Space để tick → Tab
+    const checkbox = screen.getByRole("checkbox", {
+      name: /đồng ý với điều khoản/i,
+    });
+    expect(document.activeElement).toBe(checkbox);
+    await user.keyboard(" "); // Space ticks checkbox
+    expect(checkbox).toBeChecked();
+    await user.tab();
+
+    // Bước 5: Tab qua combobox-trigger (visible button, focusable on desktop)
+    // rồi qua readOnly field (dateOfBirth — focusable nhưng không sửa được)
+    // Số Tab cần thiết phụ thuộc vào Tab order thực tế sau checkbox
+    // → dùng vòng lặp Tab tối đa để tìm Submit button
+    let attempts = 0;
+    while (
+      document.activeElement !==
+        screen.getByRole("button", { name: /gửi biểu mẫu/i }) &&
+      attempts < 5
+    ) {
+      await user.tab();
+      attempts++;
+    }
+
+    // Bước 6: Submit button đang được focus → Enter để submit
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: /gửi biểu mẫu/i }),
+    );
+    await user.keyboard("[Enter]");
+
+    // Xác nhận: submit thành công → submit-result hiển thị
+    await waitFor(() => {
+      expect(screen.getByTestId("submit-result")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("submit-result")).toHaveTextContent(
+      /gửi thành công/i,
+    );
   });
 });
