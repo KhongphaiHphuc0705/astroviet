@@ -165,11 +165,11 @@ export function FormFoundationDemo() {
         <div className="border-t border-subtle pt-5">
           <p className="mb-4 text-body-sm text-secondary">
             Các trường bên dưới minh họa trạng thái{" "}
-            <code className="rounded py-0.5 bg-canvas px-1 text-body-sm">
+            <code className="rounded bg-canvas px-1 py-1 text-body-sm">
               disabled
             </code>{" "}
             và{" "}
-            <code className="rounded py-0.5 bg-canvas px-1 text-body-sm">
+            <code className="rounded bg-canvas px-1 py-1 text-body-sm">
               readOnly
             </code>
             . Trường <strong>disabled</strong> không tương tác được và{" "}

@@ -2,10 +2,10 @@
 
 if [ -d "backend" ]; then
   echo "Running backend pre-commit..."
-  (cd backend && npx lint-staged)
+  (cd backend && npx lint-staged --no-stash)
 fi
 
 if [ -d "frontend" ]; then
   echo "Running frontend pre-commit..."
-  (cd frontend && npx lint-staged)
+  (cd frontend && npx lint-staged --no-stash)
 fi
