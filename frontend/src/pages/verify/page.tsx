@@ -33,6 +33,8 @@ import { AppLayout } from "@widgets/app-layout";
 import { AuthLayout } from "@widgets/auth-layout";
 import { MarketingLayout } from "@widgets/marketing-layout";
 
+import { FormFoundationDemo } from "./FormFoundationDemo";
+
 export default function VerifyPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [view, setView] = useState<"theme" | "app" | "marketing" | "auth">(
@@ -725,6 +727,26 @@ export default function VerifyPage() {
                 </div>
               </Stack>
             </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ── M7: Forms Foundation Demo ─────────────────────────────────────── */}
+      <div className="mx-auto max-w-4xl space-y-8 pb-16">
+        <section className="rounded-lg border border-subtle bg-surface p-8">
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-1">
+              <h2 className="font-display text-heading-md font-semibold text-primary">
+                Forms Foundation
+              </h2>
+              <p className="text-body-md text-secondary">
+                Minh họa pattern React Hook Form + Zod (<code>useZodForm</code>,{" "}
+                <code>getInputFieldProps</code>, <code>useSelectField</code>,{" "}
+                <code>getCheckboxFieldProps</code>). Validation: onBlur lần đầu
+                → onChange sau khi đã có lỗi.
+              </p>
+            </div>
+            <FormFoundationDemo />
           </div>
         </section>
       </div>

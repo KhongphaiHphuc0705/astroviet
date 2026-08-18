@@ -25,6 +25,7 @@ export interface SelectProps {
   options: SelectOption[];
   value?: string;
   onChange?: (value: string) => void;
+  onBlur?: () => void;
   placeholder?: string;
   label?: string;
   error?: string | boolean;
@@ -42,6 +43,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       options,
       value,
       onChange,
+      onBlur,
       placeholder = "Select an option...",
       label,
       error,
@@ -228,6 +230,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             required={required}
             value={value || ""}
             onChange={(e) => onChange?.(e.target.value)}
+            onBlur={onBlur}
             aria-invalid={hasError}
             aria-describedby={showDescription ? descriptionId : undefined}
             data-testid="native-select"
@@ -261,6 +264,13 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             data-testid="combobox-trigger"
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
+            onBlur={() => {
+              // Only notify RHF that the field was blurred when focus truly leaves
+              // the Select. While the dropdown popup is open, focus may move to the
+              // listbox/search input — that is NOT a real blur from the user's
+              // perspective, so we skip the callback in that case.
+              if (!isOpen) onBlur?.();
+            }}
             className={cn(
               "h-11 flex w-full items-center justify-between rounded-md border bg-surface px-4 py-2 text-body-md transition-colors focus-visible:outline-none focus-visible:ring-2",
               hasError
