@@ -43,7 +43,7 @@ const RootErrorBoundary = () => {
   );
 };
 
-export const router = createBrowserRouter([
+export const routesConfig = [
   {
     path: "/",
     errorElement: <RootErrorBoundary />,
@@ -130,4 +130,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routesConfig);
