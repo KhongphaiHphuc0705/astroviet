@@ -70,7 +70,6 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
             <X size={24} />
           </button>
         </Stack>
-        {/* TODO(M6): thay bằng Drawer component thật, thêm focus trap */}
         <nav
           aria-label="Điều hướng chính (Mobile)"
           className="flex flex-col gap-4"
