@@ -1,7 +1,7 @@
 import { act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
-import { useAuthStore } from "./authStore";
+import { useAuthStore, bootstrapAuthResolution } from "./authStore";
 
 describe("authStore", () => {
   beforeEach(() => {
@@ -28,17 +28,16 @@ describe("authStore", () => {
     expect(typeof state.logout).toBe("function");
   });
 
-  it("transitions to unauthenticated automatically after a short delay", async () => {
-    vi.resetModules();
-    const { useAuthStore: localUseAuthStore } = await import("./authStore");
+  it("transitions to unauthenticated automatically after a short delay", () => {
+    bootstrapAuthResolution();
 
-    expect(localUseAuthStore.getState().status).toBe("resolving");
+    expect(useAuthStore.getState().status).toBe("resolving");
 
     act(() => {
       vi.advanceTimersByTime(150);
     });
 
-    expect(localUseAuthStore.getState().status).toBe("unauthenticated");
+    expect(useAuthStore.getState().status).toBe("unauthenticated");
   });
 
   it("can explicitly set state to authenticated", () => {
