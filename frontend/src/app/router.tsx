@@ -62,14 +62,6 @@ export const routesConfig = [
             index: true,
             element: <HomePage />,
           },
-          ...(import.meta.env.DEV
-            ? [
-                {
-                  path: "dev/style-guide",
-                  element: <VerifyPage />,
-                },
-              ]
-            : []),
         ],
       },
       // 2. Auth Layout (Guest Only)
@@ -119,6 +111,19 @@ export const routesConfig = [
           },
         ],
       },
+      // 3.5 Dev-only Style Guide
+      ...(import.meta.env.DEV
+        ? [
+            {
+              path: "dev/style-guide",
+              element: (
+                <Suspense fallback={<SuspenseFallback />}>
+                  <VerifyPage />
+                </Suspense>
+              ),
+            },
+          ]
+        : []),
       // 4. Catch-all (Not Found)
       {
         path: "*",

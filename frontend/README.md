@@ -43,8 +43,8 @@ The project follows a Feature-Sliced Design (FSD) approach:
 - `src/app`: Application entry point, router configuration, global styles, and providers.
 - `src/pages`: Route-level components.
 - `src/widgets`: Standalone UI blocks used across pages.
-- `src/features`: Business logic modules.
-- `src/entities`: Business entities.
+- `src/features`: Business logic modules (chưa có module nào tính đến M8).
+- `src/entities`: Business entities (chưa có module nào tính đến M8).
 - `src/shared`: Reusable utilities, UI primitives, config, and API clients.
 
 For detailed architecture rules, refer to the `Frontend Architecture Specification`.
