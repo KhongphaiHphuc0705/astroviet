@@ -1,35 +1,133 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet, useRouteError } from "react-router-dom";
 
+import { GuestRoute } from "@app/routing/GuestRoute";
+import { ProtectedRoute } from "@app/routing/ProtectedRoute";
+import { Spinner } from "@shared/ui/Spinner";
+import { AppLayout } from "@widgets/app-layout";
+import { AuthLayout } from "@widgets/auth-layout";
+import { MarketingLayout } from "@widgets/marketing-layout";
+
+// Error Pages
 const NotFoundPage = lazy(() => import("@pages/errors/not-found-page"));
 
+// Public Pages
 const HomePage = lazy(() => import("@pages/home/page"));
 const VerifyPage = lazy(() => import("@pages/verify/page"));
+
+// Auth Pages
+const LoginPage = lazy(() => import("@pages/auth/login/page"));
+const RegisterPage = lazy(() => import("@pages/auth/register/page"));
+
+// App Pages
+const AppPage = lazy(() => import("@pages/app/page"));
+
+const SuspenseFallback = () => (
+  <div className="flex min-h-[50vh] items-center justify-center">
+    <Spinner size="lg" aria-label="Đang tải trang..." />
+  </div>
+);
+
+const RootErrorBoundary = () => {
+  const error = useRouteError();
+  console.error("Router error:", error);
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-surface p-8 text-center">
+      <h1 className="text-display-sm font-semibold text-danger">
+        Đã có lỗi xảy ra
+      </h1>
+      <p className="text-body-base mt-4 text-subtle">
+        Không thể hiển thị trang này do lỗi nội bộ. Vui lòng thử lại sau.
+      </p>
+    </div>
+  );
+};
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <HomePage />
-      </Suspense>
-    ),
-  },
-  // TODO: Add ProtectedRoute for /app/* in M8
-  {
-    path: "/dev/verify",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <VerifyPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: "*",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <NotFoundPage />
-      </Suspense>
-    ),
+    errorElement: <RootErrorBoundary />,
+    children: [
+      // 1. Marketing Layout (Public)
+      {
+        element: (
+          <MarketingLayout>
+            <Suspense fallback={<SuspenseFallback />}>
+              <Outlet />
+            </Suspense>
+          </MarketingLayout>
+        ),
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+          ...(import.meta.env.DEV
+            ? [
+                {
+                  path: "dev/style-guide",
+                  element: <VerifyPage />,
+                },
+              ]
+            : []),
+        ],
+      },
+      // 2. Auth Layout (Guest Only)
+      {
+        element: <GuestRoute />,
+        children: [
+          {
+            element: (
+              <AuthLayout>
+                <Suspense fallback={<SuspenseFallback />}>
+                  <Outlet />
+                </Suspense>
+              </AuthLayout>
+            ),
+            children: [
+              {
+                path: "login",
+                element: <LoginPage />,
+              },
+              {
+                path: "register",
+                element: <RegisterPage />,
+              },
+            ],
+          },
+        ],
+      },
+      // 3. App Layout (Protected)
+      {
+        path: "app",
+        element: <ProtectedRoute />,
+        children: [
+          {
+            element: (
+              <AppLayout>
+                <Suspense fallback={<SuspenseFallback />}>
+                  <Outlet />
+                </Suspense>
+              </AppLayout>
+            ),
+            children: [
+              {
+                index: true,
+                element: <AppPage />,
+              },
+            ],
+          },
+        ],
+      },
+      // 4. Catch-all (Not Found)
+      {
+        path: "*",
+        element: (
+          <Suspense fallback={<SuspenseFallback />}>
+            <NotFoundPage />
+          </Suspense>
+        ),
+      },
+    ],
   },
 ]);
