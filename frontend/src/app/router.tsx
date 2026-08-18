@@ -24,7 +24,7 @@ const AppPage = lazy(() => import("@pages/app/page"));
 
 const SuspenseFallback = () => (
   <div className="flex min-h-[50vh] items-center justify-center">
-    <Spinner size="lg" aria-label="Đang tải trang..." />
+    <Spinner size="lg" label="Đang tải trang..." />
   </div>
 );
 
