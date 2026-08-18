@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Select Component Breakpoints", () => {
   test.beforeEach(async ({ page }) => {
     // Navigating to the page where all form controls are rendered
-    await page.goto("/dev/verify");
+    await page.goto("/dev/style-guide");
     await page.waitForSelector(".select-country-demo");
   });
 

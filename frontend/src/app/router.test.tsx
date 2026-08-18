@@ -18,23 +18,24 @@ describe("Router Integration Tests", () => {
       accessToken: null,
       user: null,
     });
-
-    // Inject a fake error route for testing RootErrorBoundary
-    const rootRoute = routesConfig[0];
-    if (rootRoute?.children) {
-      // Remove any previously injected test routes
-      rootRoute.children = rootRoute.children.filter(
-        (route) => route.path !== "test-error",
-      );
-      rootRoute.children.push({
-        path: "test-error",
-        element: <FakeErrorComponent />,
-      });
-    }
   });
 
   const renderRouter = (initialPath: string) => {
-    const router = createMemoryRouter(routesConfig, {
+    // Inject a fake error route for testing RootErrorBoundary by composing a new array
+    const testRoutesConfig = [
+      {
+        ...routesConfig[0],
+        children: [
+          ...(routesConfig[0]?.children || []),
+          {
+            path: "test-error",
+            element: <FakeErrorComponent />,
+          },
+        ],
+      },
+    ];
+
+    const router = createMemoryRouter(testRoutesConfig, {
       initialEntries: [initialPath],
     });
     return render(<RouterProvider router={router} />);
