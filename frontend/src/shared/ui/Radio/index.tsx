@@ -27,7 +27,7 @@ export interface RadioGroupProps {
   error?: string | boolean;
   helperText?: ReactNode;
   orientation?: "horizontal" | "vertical";
-  variant?: "default" | "card"; // TODO(M6): Refine card variant styles with proper icons/layout
+  variant?: "default" | "card";
   required?: boolean;
   disabled?: boolean;
   className?: string;
