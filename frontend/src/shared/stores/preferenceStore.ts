@@ -9,8 +9,12 @@ type ResolvedTheme = "light" | "dark";
 interface PreferenceState {
   preference: ThemePreference;
   resolvedTheme: ResolvedTheme;
+  locale: "vi" | "en";
+  densityMode: "comfortable" | "compact";
   setPreference: (preference: ThemePreference) => void;
   _setResolvedTheme: (resolvedTheme: ResolvedTheme) => void;
+  setLocale: (locale: "vi" | "en") => void;
+  setDensityMode: (mode: "comfortable" | "compact") => void;
 }
 
 // Read the initial resolved theme from DOM (set by index.html inline script)
@@ -29,13 +33,21 @@ export const usePreferenceStore = create<PreferenceState>()(
     (set) => ({
       preference: "system",
       resolvedTheme: getInitialResolvedTheme(),
+      locale: "vi",
+      densityMode: "comfortable",
       setPreference: (preference) => set({ preference }),
       _setResolvedTheme: (resolvedTheme) => set({ resolvedTheme }),
+      setLocale: (locale) => set({ locale }),
+      setDensityMode: (densityMode) => set({ densityMode }),
     }),
     {
       name: THEME_STORAGE_KEY,
-      // Only persist `preference`. `resolvedTheme` is a computed value.
-      partialize: (state) => ({ preference: state.preference }),
+      // Persist preference, locale, and densityMode
+      partialize: (state) => ({
+        preference: state.preference,
+        locale: state.locale,
+        densityMode: state.densityMode,
+      }),
     },
   ),
 );
