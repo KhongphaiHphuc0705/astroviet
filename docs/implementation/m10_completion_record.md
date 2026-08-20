@@ -28,7 +28,7 @@ Các công việc chính đã thực hiện:
 Với việc đóng M10, Sprint F1 đã hoàn thành toàn bộ trách nhiệm. Hệ thống đã đủ vững chắc để Sprint F2 tiếp nhận:
 - Có sẵn `client.ts` để gọi API.
 - Cấu trúc `features/auth` và `entities/user` đã được tạo chỗ trống (scaffolded).
-- Routing cơ bản và UI Components (Input, Button, Modal) đã vượt qua kiểm thử chặt chẽ (100% Coverage).
+- Routing cơ bản và UI Components (Input, Button, Modal) đã vượt qua kiểm thử chặt chẽ (Đạt mức Coverage tổng thể ~88.76%, đúng định hướng không ép ngưỡng cứng từ M9).
 - Ghi chú: F2 cần dựa vào `Known Gaps Registry` (Mục 17 README) để tích hợp `QueryClientProvider`, `I18nextProvider` và thay thế Mobile Drawer menu.
 
 ---
