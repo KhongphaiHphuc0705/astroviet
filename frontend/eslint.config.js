@@ -48,7 +48,7 @@ export default tseslint.config(
         },
       ],
       "react/prop-types": "off", // TypeScript handles this
-      "boundaries/element-types": "off", // TODO: Configure strict FSD boundaries in M2
+      "boundaries/element-types": "off", // TODO(Core): Kích hoạt eslint-plugin-boundaries cho kiến trúc FSD khi codebase đủ lớn
     },
     settings: {
       react: { version: "detect" },

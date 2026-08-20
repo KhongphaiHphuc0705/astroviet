@@ -15,6 +15,7 @@ export function renderWithProviders(
   const AllProviders = ({ children }: { children: React.ReactNode }) => {
     return (
       <ThemeProvider>
+        {/* TODO(Core): Bọc QueryClientProvider và I18nextProvider khi thực sự cài đặt (Architecture Spec §14.3) */}
         <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
       </ThemeProvider>
     );

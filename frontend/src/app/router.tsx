@@ -47,6 +47,8 @@ export const routesConfig = [
   {
     path: "/",
     errorElement: <RootErrorBoundary />,
+    // TODO(Core): Bổ sung khả năng cập nhật <title> động theo route (OQ-M8-1)
+    // TODO(Core): Bổ sung focus management chủ động sau khi điều hướng (OQ-M8-2)
     children: [
       // 1. Marketing Layout (Public)
       {
@@ -92,6 +94,7 @@ export const routesConfig = [
       // 3. App Layout (Protected)
       {
         path: "app",
+        // TODO(Core): Ánh xạ đầy đủ các route của Phase 1/2/3 theo UI Spec (chart/new, app/charts, v.v.)
         element: <ProtectedRoute />,
         children: [
           {

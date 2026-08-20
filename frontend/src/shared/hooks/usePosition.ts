@@ -20,6 +20,7 @@ export function usePosition(
     const updatePosition = () => {
       if (!triggerRef.current) return;
       const rect = triggerRef.current.getBoundingClientRect();
+      // TODO(Core): Bổ sung logic flip/collision detection để tránh bị che khuất khi ở mép màn hình
       setStyles({
         top: rect.bottom + window.scrollY + 4, // 4px gap below trigger
         left: rect.left + window.scrollX,

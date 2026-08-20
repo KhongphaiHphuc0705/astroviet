@@ -88,6 +88,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </aside>
 
         {/* Mobile Drawer */}
+        {/* TODO(Core): Thay thế bằng component Drawer thật có focus trap (Backlog M4) */}
         <div
           className={`fixed inset-0 z-drawer lg:hidden ${mobileDrawerOpen ? "flex" : "hidden"}`}
         >
