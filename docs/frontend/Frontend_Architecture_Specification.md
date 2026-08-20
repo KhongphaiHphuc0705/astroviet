@@ -687,7 +687,7 @@ Vì kiến trúc Composite (`entities/`) **không tự fetch data** (mục 9.2),
 
 ### 14.3. Test Utility dùng chung (`src/test/`)
 
-`src/test/render.tsx` export 1 hàm `renderWithProviders()` bọc sẵn `QueryClientProvider` (với `QueryClient` mới mỗi test, tránh cache rò rỉ giữa test case), `ThemeProvider`, `I18nextProvider`, `MemoryRouter` — mọi Component/Integration Test dùng hàm này thay vì `@testing-library/react` `render()` trực tiếp, để không phải lặp lại setup Provider ở mỗi file test.
+`src/test/render.tsx` export 1 hàm `renderWithProviders()` bọc các Provider đang thực sự tồn tại (tính đến hết Sprint F1: `ThemeProvider` + `MemoryRouter`) — mọi Component/Integration Test dùng hàm này thay vì `@testing-library/react` `render()` trực tiếp, để không phải lặp lại setup Provider ở mỗi file test. (Các Provider khác như `QueryClientProvider`, `I18nextProvider` sẽ được bổ sung khi thực sự cài đặt).
 
 ### 14.4. Mock Strategy — MSW làm trung tâm
 

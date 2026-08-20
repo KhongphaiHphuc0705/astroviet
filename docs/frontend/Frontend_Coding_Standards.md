@@ -363,6 +363,8 @@ Toàn bộ mock network qua **MSW**, đặt trong `features/*/api/mocks/handlers
 
 Co-located theo Architecture Spec §14.1 — test nằm cạnh code nó kiểm tra, ngoại lệ duy nhất là E2E (`e2e/` cấp root). Không tạo `__tests__/` song song bất kỳ đâu trong `src/`.
 
+> **Chính sách coverage cụ thể**: xem UI Specification §23.3.
+
 ---
 
 ## 14. Import Rules
