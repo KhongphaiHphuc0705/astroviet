@@ -1,20 +1,29 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
-
-interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-  _retry?: boolean;
-}
+import axios, { type AxiosError } from "axios";
 
 import { env } from "@shared/config/env";
 import { useAuthStore } from "@shared/stores/authStore";
 
 export class ApiError extends Error {
   public status: number;
-  public data: unknown;
+  public errorCode: string;
+  public title: string;
+  public detail?: string;
+  public fieldErrors?: Record<string, string[]>;
 
-  constructor(message: string, status: number, data: unknown = null) {
+  constructor(
+    message: string,
+    status: number,
+    errorCode: string,
+    title: string,
+    detail?: string,
+    fieldErrors?: Record<string, string[]>,
+  ) {
     super(message);
     this.status = status;
-    this.data = data;
+    this.errorCode = errorCode;
+    this.title = title;
+    this.detail = detail;
+    this.fieldErrors = fieldErrors;
     this.name = "ApiError";
   }
 }
@@ -40,38 +49,28 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const status = error.response?.status || 500;
-    const data = error.response?.data;
-    const message =
-      (data as { message?: string })?.message ||
-      error.message ||
-      "An unexpected error occurred";
+    const data = (error.response?.data || {}) as Record<string, unknown>;
 
-    const apiError = new ApiError(message, status, data);
+    const errorCode = (data.errorCode as string) || "UNKNOWN_ERROR";
+    const title =
+      (data.title as string) || error.message || "An unexpected error occurred";
+    const detail = data.detail as string | undefined;
+    const fieldErrors = data.fieldErrors as
+      Record<string, string[]> | undefined;
+
+    const apiError = new ApiError(
+      title,
+      status,
+      errorCode,
+      title,
+      detail,
+      fieldErrors,
+    );
 
     if (status === 401) {
-      const originalRequest = error.config;
-
-      if (
-        originalRequest &&
-        !(originalRequest as CustomAxiosRequestConfig)._retry
-      ) {
-        (originalRequest as CustomAxiosRequestConfig)._retry = true;
-
-        try {
-          // Placeholder for refresh token logic:
-          // const newToken = await refreshAuthToken();
-          // useAuthStore.getState().setAccessToken(newToken);
-          // originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          // return apiClient(originalRequest);
-
-          // Currently, auth feature doesn't exist, just logout
-          useAuthStore.getState().logout();
-        } catch {
-          useAuthStore.getState().logout();
-        }
-      } else {
-        useAuthStore.getState().logout();
-      }
+      // TODO: Implement refresh token logic when features/auth is available
+      // It should check and set a _retry flag on error.config to prevent infinite loops.
+      useAuthStore.getState().logout();
     }
 
     return Promise.reject(apiError);

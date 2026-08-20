@@ -40,7 +40,15 @@ describe("apiClient", () => {
 
     server.use(
       http.get("http://localhost:5173/api/unauthorized", () => {
-        return HttpResponse.json({ message: "Invalid token" }, { status: 401 });
+        return HttpResponse.json(
+          {
+            errorCode: "AUTH_001",
+            title: "Invalid token",
+            detail: "Token expired",
+            fieldErrors: { token: ["Invalid"] },
+          },
+          { status: 401 },
+        );
       }),
     );
 
@@ -52,7 +60,10 @@ describe("apiClient", () => {
     } catch (error) {
       expect(error).toBeInstanceOf(ApiError);
       expect((error as ApiError).status).toBe(401);
-      expect((error as ApiError).message).toBe("Invalid token");
+      expect((error as ApiError).errorCode).toBe("AUTH_001");
+      expect((error as ApiError).title).toBe("Invalid token");
+      expect((error as ApiError).detail).toBe("Token expired");
+      expect((error as ApiError).fieldErrors).toEqual({ token: ["Invalid"] });
     }
 
     expect(logoutSpy).toHaveBeenCalled();
