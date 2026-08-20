@@ -42,7 +42,7 @@ apiClient.interceptors.response.use(
     const status = error.response?.status || 500;
     const data = error.response?.data;
     const message =
-      (data as Record<string, unknown>)?.message ||
+      (data as { message?: string })?.message ||
       error.message ||
       "An unexpected error occurred";
 

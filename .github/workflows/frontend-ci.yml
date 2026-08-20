@@ -40,11 +40,11 @@ jobs:
     - name: Test
       run: npm run test:coverage
       
+    - name: Build
+      run: npm run build
+      
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
       
     - name: Run E2E Tests
       run: npm run test:e2e
-      
-    - name: Build
-      run: npm run build
