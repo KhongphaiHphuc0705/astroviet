@@ -44,7 +44,7 @@ describe("apiClient", () => {
             errorCode: "AUTH_001",
             title: "Invalid token",
             detail: "Token expired",
-            fieldErrors: { token: ["Invalid"] },
+            fieldErrors: [{ field: "token", message: "Invalid" }],
           },
           { status: 401 },
         );
@@ -62,7 +62,9 @@ describe("apiClient", () => {
       expect((error as ApiError).errorCode).toBe("AUTH_001");
       expect((error as ApiError).title).toBe("Invalid token");
       expect((error as ApiError).detail).toBe("Token expired");
-      expect((error as ApiError).fieldErrors).toEqual({ token: ["Invalid"] });
+      expect((error as ApiError).fieldErrors).toEqual([
+        { field: "token", message: "Invalid" },
+      ]);
     }
 
     expect(logoutSpy).toHaveBeenCalled();

@@ -69,6 +69,8 @@ _Pipeline CI sẽ chạy toàn bộ các lệnh test này tự động trên m�
 - `npm run lint`: Chạy ESLint để kiểm tra mã nguồn (CI sử dụng lệnh này).
 - `npm run lint:fix`: Chạy ESLint và tự động sửa các lỗi có thể sửa.
 
+_Lưu ý: Dự án sử dụng Husky và lint-staged để tự động chạy lint/format trước khi commit. Thời gian thực thi pre-commit hook (lint-staged) hiện tại được đo lường ở mức **~1.5 giây**, đáp ứng tiêu chuẩn AC6 (nhỏ hơn 10 giây)._
+
 ## 10. Formatting
 
 - `npm run format`: Chạy Prettier để định dạng toàn bộ mã nguồn.
