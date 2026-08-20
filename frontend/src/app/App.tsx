@@ -8,6 +8,7 @@ export default function App() {
   return (
     <StrictMode>
       <ThemeProvider>
+        {/* TODO(Core): Bọc QueryClientProvider và I18nextProvider khi thực sự cài đặt (Architecture Spec §14.3) */}
         <RouterProvider router={router} />
       </ThemeProvider>
     </StrictMode>

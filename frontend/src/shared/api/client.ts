@@ -67,9 +67,12 @@ apiClient.interceptors.response.use(
       fieldErrors,
     );
 
-    if (status === 401) {
-      // TODO: Implement refresh token logic when features/auth is available
-      // It should check and set a _retry flag on error.config to prevent infinite loops.
+    type ExtendedRequestConfig = typeof error.config & { _retry?: boolean };
+    const originalRequest = error.config as ExtendedRequestConfig | undefined;
+
+    if (status === 401 && originalRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+      // TODO(Core): Implement refresh token logic (call refresh endpoint, then retry originalRequest) khi features/auth sẵn sàng
       useAuthStore.getState().logout();
     }
 

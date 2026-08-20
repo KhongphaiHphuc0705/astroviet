@@ -162,6 +162,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
                   htmlFor={optionId}
                   interactive={!optionDisabled}
                   padding="none"
+                  // TODO(Core): Hoàn thiện icon và layout chuẩn cho Radio variant card (Backlog M5/M6)
                   className={cn(
                     "relative flex flex-1 items-start gap-3 px-4 py-2",
                     optionDisabled && "cursor-not-allowed opacity-50",

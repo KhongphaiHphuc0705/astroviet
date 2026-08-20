@@ -45,7 +45,7 @@ cp .env.example .env
 
 Biến quan trọng cần lưu ý:
 
-- `VITE_API_BASE_URL`: Địa chỉ URL gốc của backend REST API (mặc định `/api` khi chạy qua proxy Vite hoặc `http://localhost:5173/api` cho MSW). Bắt buộc phải cấu hình đúng để gọi API.
+- `VITE_API_BASE_URL`: Địa chỉ URL gốc của backend REST API (mặc định `http://localhost:3000`). Bắt buộc phải cấu hình đúng để gọi API.
 
 ## 7. Development
 
@@ -77,6 +77,7 @@ _Pipeline CI sẽ chạy toàn bộ các lệnh test này tự động trên m�
 ## 11. Production Build
 
 - `npm run build`: Thực hiện Type-check (`tsc --noEmit`) sau đó build ra gói sản xuất.
+- `npm run typecheck`: Thực hiện kiểm tra lỗi TypeScript độc lập mà không xuất file build.
 - `npm run preview`: Chạy local server để kiểm tra gói build sản xuất.
 
 ## 12. Project Structure
@@ -111,8 +112,8 @@ Quy ước đặt tên, kiểu dữ liệu Props (Interface), tách Component Co
 Trong các Sprint tới, đặc biệt chú ý:
 
 - Thực hiện nghiêm ngặt ranh giới (Boundaries) giữa các layer qua ESLint.
-- Mọi logic giao tiếp Backend phải thông qua custom hooks (`useQuery`, `useMutation`), không dùng fetch trong component.
-- API Error handling chỉ được xử lý qua `ApiError` format (RFC7807) chuẩn hóa, không parse response thô.
+- Mọi logic giao tiếp Backend phải thông qua custom hooks (`useQuery`, `useMutation`), không dùng fetch trực tiếp trong component.
+- API Error handling sẽ được chuẩn hóa 100% theo định dạng `ApiError` (RFC7807), hạn chế việc parse response thô ở tầng UI.
 
 ## 17. Known Limitations / Known Gaps Registry
 
@@ -123,3 +124,10 @@ Dưới đây là danh sách các khiếm khuyết được ghi nhận, có ch�
 3. `uiStore.ts` chưa chứa trạng thái `activeModalId` như dự kiến tại Kiến trúc §7.3.
 4. Cây định tuyến `router.tsx` hiện tại chỉ làm nền tảng, chưa ánh xạ các route của Phase 1/2/3 theo Frontend UI Specification.
 5. Chưa kích hoạt `eslint-plugin-boundaries` vì quy mô codebase hiện tại quá nhỏ, đang phải dùng manual review.
+6. AppLayout/MarketingLayout mobile menu chưa thay bằng Drawer thật + focus trap (Từ Backlog cũ M4).
+7. `Radio` variant card chưa hoàn thiện icon/layout (Từ Backlog cũ M5/M6).
+8. `<title>` động theo route chưa được hỗ trợ (OQ-M8-1, DEFERRED).
+9. Focus management chủ động sau khi điều hướng navigate (OQ-M8-2, DEFERRED).
+10. `Breadcrumb`, `PageHeader`, `ContentContainer`, `Toast` đã đặc tả nhưng chưa gán Milestone thực hiện.
+11. `usePosition` chưa hỗ trợ flip/collision detection.
+12. Sprint F2 (Authentication UI) chưa được xác nhận chính thức gần đây.

@@ -20,6 +20,7 @@ export interface CheckboxProps extends Omit<
   label?: string;
   description?: ReactNode;
   indeterminate?: boolean;
+  // TODO(Core): Thêm error/helperText prop cho Checkbox khi có >= 2 form thật cần dùng
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(

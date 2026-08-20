@@ -50,6 +50,7 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
       </Stack>
 
       {/* Mobile Drawer (Placeholder) */}
+      {/* TODO(Core): Thay thế bằng component Drawer thật có focus trap (Backlog M4) */}
       <div
         className={`fixed inset-0 z-drawer flex-col bg-surface p-4 lg:hidden ${mobileDrawerOpen ? "flex" : "hidden"}`}
       >
