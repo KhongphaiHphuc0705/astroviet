@@ -61,9 +61,16 @@ describe('POST /api/v1/auth/refresh', () => {
   });
 
   it('should successfully refresh token using body fallback', async () => {
+    // Login again to get a fresh token, since the first test consumed the one from beforeAll
+    const resLogin = await request(app).post('/api/v1/auth/login').send({
+      email: 'refresh@example.com',
+      password: 'StrongPassword123!',
+    });
+    const freshCookie = (resLogin.headers['set-cookie'] as unknown as string[]) || [];
+
     // We need the raw string from the cookie to send in body
-    const cookieString = cookie[0];
-    const match = cookieString.match(/refreshToken=([^;]+)/);
+    const cookieString = freshCookie[0];
+    const match = cookieString?.match(/refreshToken=([^;]+)/);
     const rawToken = match ? match[1] : '';
 
     const response = await request(app)

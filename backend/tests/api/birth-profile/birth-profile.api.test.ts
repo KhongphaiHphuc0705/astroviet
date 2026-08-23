@@ -81,7 +81,7 @@ describe('Birth Profile API Endpoints', () => {
       expect(response.body.birthDate).toBe(payload.birthDate);
       expect(response.body.birthTime).toBe(payload.birthTime);
       expect(response.body.isBirthTimeKnown).toBe(true);
-      expect(response.body.birthLocation.placeName).toBe('Hanoi');
+      expect(response.body.placeName).toBe('Hanoi');
     });
 
     it('should return 400 for missing required fields', async () => {
@@ -157,13 +157,13 @@ describe('Birth Profile API Endpoints', () => {
       expect(response.body.errorCode).toBe('MALFORMED_REQUEST');
     });
 
-    it('should clamp pageSize to 100 if requested pageSize > 100', async () => {
+    it('should return 400 Validation Error if requested pageSize > 100', async () => {
       const response = await request(app)
         .get('/api/v1/birth-profiles?pageSize=999')
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(response.status).toBe(200);
-      expect(response.body.pageSize).toBe(100);
+      expect(response.status).toBe(400);
+      expect(response.body.errorCode).toBe('MALFORMED_REQUEST');
     });
   });
 
