@@ -23,9 +23,9 @@ describe('EngineInput VO', () => {
     };
 
     const chartOptions: EngineInputChartOptions = {
-      houseSystem: HouseSystem.PLACIDUS,
-      includeOptionalPoints: [PlanetName.CHIRON],
-      chartType: ChartType.NATAL,
+      houseSystem: HouseSystem.Placidus,
+      includeOptionalPoints: [PlanetName.Chiron],
+      chartType: ChartType.Natal,
     };
 
     const input = EngineInput.create(birthData, chartOptions);
@@ -34,8 +34,8 @@ describe('EngineInput VO', () => {
     expect(input.birthData.birthTime).toEqual({ hour: 12, minute: 30, second: 0 });
     expect(input.birthData.latitude).toBe(10);
 
-    expect(input.chartOptions.houseSystem).toBe(HouseSystem.PLACIDUS);
-    expect(input.chartOptions.includeOptionalPoints).toEqual([PlanetName.CHIRON]);
+    expect(input.chartOptions.houseSystem).toBe(HouseSystem.Placidus);
+    expect(input.chartOptions.includeOptionalPoints).toEqual([PlanetName.Chiron]);
 
     // Test immutability (copies were made)
     expect(input.birthData.birthDate).not.toBe(birthData.birthDate);
@@ -56,9 +56,9 @@ describe('EngineInput VO', () => {
     };
 
     const chartOptions: EngineInputChartOptions = {
-      houseSystem: HouseSystem.PLACIDUS,
+      houseSystem: HouseSystem.Placidus,
       includeOptionalPoints: [],
-      chartType: ChartType.NATAL,
+      chartType: ChartType.Natal,
     };
 
     const input = EngineInput.create(birthData, chartOptions);
