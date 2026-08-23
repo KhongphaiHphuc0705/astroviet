@@ -9,6 +9,7 @@ process.env.DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/test';
 process.env.LOG_LEVEL = 'silent';
 process.env.JWT_ACCESS_SECRET = 'test-access-secret-key-must-be-32-chars';
 process.env.JWT_REFRESH_SECRET = 'test-refresh-secret-key-must-be-32-chars';
+process.env.GEONAMES_USERNAME = 'test_user';
 
 export default defineConfig({
   test: {
