@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 
 import { PrismaBirthProfileMapper } from '../../../../../src/modules/birth-profile/infrastructure/mappers/prisma-birth-profile.mapper.js';
@@ -44,8 +44,8 @@ describe('PrismaBirthProfileRepository Integration', () => {
         birth_time: new Date('1970-01-01T14:30:00Z'),
         is_birth_time_known: true,
         place_name: 'Ho Chi Minh',
-        latitude: 10.8231,
-        longitude: 106.6297,
+        latitude: new Prisma.Decimal(10.8231),
+        longitude: new Prisma.Decimal(106.6297),
         historical_timezone_id: 'Asia/Ho_Chi_Minh',
         created_at: new Date(),
         updated_at: new Date(),
@@ -76,8 +76,8 @@ describe('PrismaBirthProfileRepository Integration', () => {
         birth_time: new Date('1970-01-01T14:30:00Z'),
         is_birth_time_known: true,
         place_name: 'Ho Chi Minh',
-        latitude: 10.8231,
-        longitude: 106.6297,
+        latitude: new Prisma.Decimal(10.8231),
+        longitude: new Prisma.Decimal(106.6297),
         historical_timezone_id: 'Asia/Ho_Chi_Minh',
         created_at: new Date(),
         updated_at: new Date(),
@@ -178,11 +178,11 @@ describe('PrismaBirthProfileRepository Integration', () => {
       expect(domainProfile).not.toBeNull();
 
       if (domainProfile) {
-        domainProfile.update({
+        const updatedProfile = domainProfile.update({
           label: 'Updated Label',
         });
 
-        await repository.update(domainProfile);
+        await repository.update(updatedProfile);
 
         const saved = await prisma.birthProfile.findUnique({ where: { id: createdProfile.id } });
         expect(saved?.label).toBe('Updated Label');
@@ -218,7 +218,7 @@ describe('PrismaBirthProfileRepository Integration', () => {
       expect(domainProfile).not.toBeNull();
 
       if (domainProfile) {
-        domainProfile.update({ label: 'Updated Label' });
+        const updatedProfile = domainProfile.update({ label: 'Updated Label' });
 
         // Simulate soft delete in DB before update
         await prisma.birthProfile.update({
@@ -227,7 +227,7 @@ describe('PrismaBirthProfileRepository Integration', () => {
         });
 
         // Update should succeed despite being soft-deleted
-        await repository.update(domainProfile);
+        await repository.update(updatedProfile);
 
         const saved = await prisma.birthProfile.findUnique({ where: { id: createdProfile.id } });
         expect(saved?.label).toBe('Updated Label');
