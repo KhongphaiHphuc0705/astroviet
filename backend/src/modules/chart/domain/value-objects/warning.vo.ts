@@ -17,7 +17,12 @@ export class Warning {
     private readonly _severity: WarningSeverity,
     private readonly _field?: string,
     private readonly _details?: Record<string, unknown>,
-  ) {}
+  ) {
+    Object.freeze(this);
+    if (this._details) {
+      Object.freeze(this._details);
+    }
+  }
 
   public get code(): string {
     return this._code;

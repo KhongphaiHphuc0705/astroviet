@@ -23,14 +23,26 @@ export class EngineInput {
   private constructor(
     private readonly _birthData: EngineInputBirthData,
     private readonly _chartOptions: EngineInputChartOptions,
-  ) {}
+  ) {
+    Object.freeze(this);
+    Object.freeze(this._birthData);
+    Object.freeze(this._chartOptions);
+    Object.freeze(this._chartOptions.includeOptionalPoints);
+  }
 
   public get birthData(): EngineInputBirthData {
-    return this._birthData;
+    return {
+      ...this._birthData,
+      birthDate: new Date(this._birthData.birthDate.getTime()),
+      birthTime: this._birthData.birthTime ? { ...this._birthData.birthTime } : null,
+    };
   }
 
   public get chartOptions(): EngineInputChartOptions {
-    return this._chartOptions;
+    return {
+      ...this._chartOptions,
+      includeOptionalPoints: [...this._chartOptions.includeOptionalPoints],
+    };
   }
 
   public static create(

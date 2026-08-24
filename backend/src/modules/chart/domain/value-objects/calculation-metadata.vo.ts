@@ -9,10 +9,12 @@ export class ChartCalculationMetadata {
   private constructor(
     private readonly _calculatedAt: Date,
     private readonly _engineVersion: string,
-  ) {}
+  ) {
+    Object.freeze(this);
+  }
 
   public get calculatedAt(): Date {
-    return this._calculatedAt;
+    return new Date(this._calculatedAt.getTime());
   }
 
   public get engineVersion(): string {

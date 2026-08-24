@@ -86,10 +86,10 @@ export class Chart {
     return this.props.warnings;
   }
   get createdAt(): Date {
-    return this.props.createdAt;
+    return new Date(this.props.createdAt.getTime());
   }
   get deletedAt(): Date | null {
-    return this.props.deletedAt;
+    return this.props.deletedAt ? new Date(this.props.deletedAt.getTime()) : null;
   }
 
   public static create(props: ChartProps): Chart {
@@ -169,7 +169,7 @@ export class Chart {
     // Defensive copying for properties that are objects/arrays
     return new Chart({
       ...props,
-      engineInput: EngineInput.create(props.engineInput.birthData, props.engineInput.chartOptions), // Deep copy not needed if EngineInput itself is immutable, but we return the same instance since it's frozen
+      engineInput: props.engineInput,
       planets: [...props.planets],
       houses: [...props.houses],
       angles: [...props.angles],
