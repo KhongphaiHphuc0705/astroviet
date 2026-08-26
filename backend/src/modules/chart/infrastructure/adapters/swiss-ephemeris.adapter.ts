@@ -35,6 +35,18 @@ class Mutex {
   }
 }
 
+/**
+ * Swiss Ephemeris Adapter.
+ *
+ * **Compliance Note (Technical Spike Section 7.2):**
+ * The underlying `swisseph-wasm` wrapper is licensed under GPL-3.0-or-later (not AGPL).
+ * The core Swiss Ephemeris C code requires a commercial license from Astrodienst AG for commercial use,
+ * or it remains free under GPL for non-commercial use. See `docs/legal/swisseph-license-record.md` for details.
+ *
+ * **Implementation Note (Technical Spike Section 7.1):**
+ * `swisseph-wasm` does not explicitly signal a non-convergence for house calculations at extreme latitudes.
+ * Therefore, `calculateHouses` proactively checks the latitude using `isAboveConvergenceLatitude` (66.5° threshold).
+ */
 export class SwissEphemerisAdapter implements IEphemerisProvider {
   private readonly mutex = new Mutex();
   private readonly SEFLG_SWIEPH = 2;
