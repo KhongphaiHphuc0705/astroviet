@@ -16,7 +16,7 @@ process.on('unhandledRejection', (reason) => {
 });
 
 async function bootstrap() {
-  const { app } = await bootstrapApplication();
+  const { app, shutdown } = await bootstrapApplication();
 
   // Need to import env directly for the port
   const { env } = await import('./config/env.config.js');
@@ -32,6 +32,12 @@ async function bootstrap() {
     server.close(() => {
       void (async () => {
         defaultLogger.info('HTTP server closed.');
+
+        // Cleanup Composition Root dependencies
+        if (shutdown) {
+          await shutdown();
+          defaultLogger.info('Composition Root dependencies closed.');
+        }
 
         // Disconnect Prisma
         const { prisma } = await import('./shared/prisma/prisma-client.js');
