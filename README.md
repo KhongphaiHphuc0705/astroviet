@@ -299,6 +299,13 @@ Planned features
 
 ---
 
+## Known Issues & Notes
+
+- **House Calculation**: The house calculation explicitly uses a pre-check latitude threshold of 66.5° instead of reading a library signal, as extreme latitudes degenerate silently in `swisseph-wasm`. See code comments in `high-latitude-policy.ts`.
+- **Swiss Ephemeris License**: The underlying `swisseph-wasm` wrapper is `GPL-3.0-or-later`. Commercial vs. Non-commercial usage requires careful evaluation during the M10 Audit. See `docs/legal/swisseph-license-record.md` for full details.
+
+---
+
 ## License
 
 This project is licensed under the **MIT License**.
