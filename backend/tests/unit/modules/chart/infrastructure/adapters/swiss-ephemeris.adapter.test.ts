@@ -107,6 +107,31 @@ describe('SwissEphemerisAdapter Integration', () => {
       }
     });
 
+    it('should calculate Placidus houses correctly for specific reference coordinates (Technical Spike data)', async () => {
+      // Reference data from Technical Spike:
+      // Date: 2000-06-21T12:00:00Z
+      // Lat: 60, Lng: 0
+      // Expected cusps[0..2] (Houses 1-3): 179.99, 201.69, 231.00
+      // This test ensures we sliced index 1-12 correctly and avoided the off-by-one bug.
+      const request = {
+        utcDateTime: new Date('2000-06-21T12:00:00Z'),
+        coordinates: { latitude: 60, longitude: 0 },
+        houseSystem: HouseSystem.Placidus,
+      };
+
+      const result = await adapter.calculateHouses(request);
+
+      expect(result.status).toBe('success');
+      if (result.status === 'success') {
+        expect(result.data.cusps).toHaveLength(12);
+
+        // Match specific values to prevent silent slice offset errors
+        expect(result.data.cusps[0]).toBeCloseTo(179.99, 1);
+        expect(result.data.cusps[1]).toBeCloseTo(201.69, 1);
+        expect(result.data.cusps[2]).toBeCloseTo(231.0, 1);
+      }
+    });
+
     it('should calculate Whole Sign houses correctly (separated by exactly 30 degrees)', async () => {
       const request = {
         utcDateTime: new Date('2000-06-21T00:00:00Z'),

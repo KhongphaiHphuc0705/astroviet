@@ -121,6 +121,9 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   // --- Chart Module (Ephemeris) ---
   const swissEph = new SwissEph();
   await swissEph.initSwissEph();
+  logger.info('Ephemeris Provider (Swiss Ephemeris WASM) initialized successfully', {
+    module: 'chart',
+  });
   const ephemerisProvider = new SwissEphemerisAdapter(swissEph);
 
   // --- Routers ---
