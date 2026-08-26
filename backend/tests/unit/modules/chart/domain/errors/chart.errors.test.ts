@@ -7,6 +7,8 @@ import {
   InvalidCoordinateError,
   InvalidDateTimeError,
   DataIntegrityError,
+  UnresolvableTimezoneError,
+  ChartCalculationFailed,
 } from '../../../../../../src/modules/chart/domain/errors/chart.errors.js';
 
 describe('Chart Domain Errors', () => {
@@ -50,5 +52,21 @@ describe('Chart Domain Errors', () => {
     expect(error).toBeInstanceOf(Error);
     expect(error.name).toBe('DataIntegrityError');
     expect(error.message).toBe('Test message');
+  });
+
+  it('UnresolvableTimezoneError should have correct name and message', () => {
+    const error = new UnresolvableTimezoneError('Test message');
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe('UnresolvableTimezoneError');
+    expect(error.message).toBe('Test message');
+  });
+
+  it('ChartCalculationFailed should have correct name, message, and originalError', () => {
+    const originalError = new Error('Original error');
+    const error = new ChartCalculationFailed('Test message', originalError);
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe('ChartCalculationFailed');
+    expect(error.message).toBe('Test message');
+    expect(error.originalError).toBe(originalError);
   });
 });

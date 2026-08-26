@@ -4,7 +4,10 @@ import {
   ANCHOR_TIME_FOR_UNKNOWN_BIRTH_TIME,
   convertLocalTimeToUtc,
 } from '../../../../../../src/modules/chart/domain/engine/time-conversion.js';
-import { UnresolvableTimezoneError } from '../../../../../../src/modules/chart/domain/errors/chart.errors.js';
+import {
+  InvalidDateTimeError,
+  UnresolvableTimezoneError,
+} from '../../../../../../src/modules/chart/domain/errors/chart.errors.js';
 
 describe('time-conversion', () => {
   describe('convertLocalTimeToUtc', () => {
@@ -94,7 +97,7 @@ describe('time-conversion', () => {
 
         expect(() =>
           convertLocalTimeToUtc(localDate, localTime, true, 'America/New_York'),
-        ).toThrowError(/Invalid or ambiguous local time/);
+        ).toThrowError(InvalidDateTimeError);
       });
     });
   });

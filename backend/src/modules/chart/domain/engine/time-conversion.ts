@@ -1,4 +1,4 @@
-import { UnresolvableTimezoneError } from '../errors/chart.errors.js';
+import { InvalidDateTimeError, UnresolvableTimezoneError } from '../errors/chart.errors.js';
 
 export const ANCHOR_TIME_FOR_UNKNOWN_BIRTH_TIME = {
   hour: 12,
@@ -103,5 +103,7 @@ export function convertLocalTimeToUtc(
 
   // If it still doesn't match, it means the local time provided falls into a "skipped" hour
   // during a DST spring-forward transition, making it an invalid local time.
-  throw new Error(`Invalid or ambiguous local time due to DST gap/overlap.`);
+  throw new InvalidDateTimeError(
+    `Giờ sinh không tồn tại do rơi vào khoảng chuyển múi giờ (DST gap).`,
+  );
 }

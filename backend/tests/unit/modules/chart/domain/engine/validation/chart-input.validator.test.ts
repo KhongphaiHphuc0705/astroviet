@@ -98,6 +98,22 @@ describe('ChartInputValidator', () => {
     expect(() => ChartInputValidator.validate(input)).not.toThrow();
   });
 
+  it('should throw InvalidDateTimeError if isBirthTimeKnown is true but birthTime is null', () => {
+    const input = EngineInput.create(
+      { ...validBirthData, birthTime: null, isBirthTimeKnown: true },
+      validChartOptions,
+    );
+    expect(() => ChartInputValidator.validate(input)).toThrowError(InvalidDateTimeError);
+  });
+
+  it('should throw InvalidDateTimeError if isBirthTimeKnown is false but birthTime is not null', () => {
+    const input = EngineInput.create(
+      { ...validBirthData, birthTime: { hour: 12, minute: 0, second: 0 }, isBirthTimeKnown: false },
+      validChartOptions,
+    );
+    expect(() => ChartInputValidator.validate(input)).toThrowError(InvalidDateTimeError);
+  });
+
   it('should throw UnsupportedHouseSystemError for unsupported house system', () => {
     const input = EngineInput.create(validBirthData, {
       ...validChartOptions,

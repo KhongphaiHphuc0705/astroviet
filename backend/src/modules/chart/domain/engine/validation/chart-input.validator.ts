@@ -39,6 +39,14 @@ export class ChartInputValidator {
       throw new InvalidDateTimeError('Ngày sinh không hợp lệ.');
     }
 
+    if (birthData.isBirthTimeKnown && birthData.birthTime === null) {
+      throw new InvalidDateTimeError('isBirthTimeKnown=true nhưng birthTime bị thiếu.');
+    }
+
+    if (!birthData.isBirthTimeKnown && birthData.birthTime !== null) {
+      throw new InvalidDateTimeError('isBirthTimeKnown=false nhưng birthTime lại có giá trị.');
+    }
+
     if (birthData.birthTime !== null) {
       const { hour, minute, second } = birthData.birthTime;
       if (hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59) {
