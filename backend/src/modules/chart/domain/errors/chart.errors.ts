@@ -39,3 +39,20 @@ export class DataIntegrityError extends Error {
     this.name = 'DataIntegrityError';
   }
 }
+
+export class UnresolvableTimezoneError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnresolvableTimezoneError';
+  }
+}
+
+export class ChartCalculationFailed extends Error {
+  constructor(
+    message: string,
+    public readonly originalError?: unknown,
+  ) {
+    super(message);
+    this.name = 'ChartCalculationFailed';
+  }
+}
