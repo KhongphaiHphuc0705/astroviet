@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { Planet, PlanetProps } from '../../entities/planet.entity.js';
+import { DataIntegrityError } from '../../errors/chart.errors.js';
 import { RawEphemerisData } from '../../ports/ephemeris-provider.port.js';
 import { PlanetCategory, PlanetName } from '../../types/chart.types.js';
 import { ZodiacPosition } from '../../value-objects/zodiac-position.vo.js';
@@ -87,7 +88,7 @@ export class PlanetCalculator {
         return PlanetCategory.Outer;
 
       default:
-        throw new Error(`Unknown planet name: ${name}`);
+        throw new DataIntegrityError(`Unknown planet name: ${name}`);
     }
   }
 }

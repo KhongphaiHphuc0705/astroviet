@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { House, HouseProps } from '../../entities/house.entity.js';
+import { DataIntegrityError } from '../../errors/chart.errors.js';
 import { HouseCalculationResult } from '../../ports/ephemeris-provider.port.js';
 import { HouseSystem } from '../../types/chart.types.js';
 
@@ -30,7 +31,7 @@ export class HouseCalculator {
       // We use 'ascendant' directly to avoid floating point discrepancies from 'cusps[0]'
       let cuspDegree = houseNumber === 1 ? ascendant : cusps[i];
       if (cuspDegree === undefined) {
-        throw new Error(`Missing cusp data for house ${houseNumber}`);
+        throw new DataIntegrityError(`Missing cusp data for house ${houseNumber}`);
       }
 
       // Safe normalization just in case, only apply if outside [0, 360) to prevent precision loss
