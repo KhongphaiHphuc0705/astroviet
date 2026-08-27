@@ -57,9 +57,9 @@ export function convertLocalTimeToUtc(
   isBirthTimeKnown: boolean,
   timezoneId: string,
 ): Date {
-  const year = birthDate.getFullYear();
-  const month = birthDate.getMonth();
-  const day = birthDate.getDate();
+  const year = birthDate.getUTCFullYear();
+  const month = birthDate.getUTCMonth();
+  const day = birthDate.getUTCDate();
 
   let hour = 0;
   let minute = 0;

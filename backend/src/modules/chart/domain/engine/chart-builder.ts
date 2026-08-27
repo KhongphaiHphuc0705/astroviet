@@ -1,7 +1,16 @@
 import { Chart } from '../entities/chart.entity.js';
 import { House } from '../entities/house.entity.js';
 import { Planet } from '../entities/planet.entity.js';
-import { ChartCalculationFailed } from '../errors/chart.errors.js';
+import {
+  ChartCalculationFailed,
+  DataIntegrityError,
+  InvalidCoordinateError,
+  InvalidDateTimeError,
+  UnresolvableTimezoneError,
+  UnsupportedCelestialBodyError,
+  UnsupportedChartTypeError,
+  UnsupportedHouseSystemError,
+} from '../errors/chart.errors.js';
 import { IEphemerisProvider } from '../ports/ephemeris-provider.port.js';
 import { ChartCalculationMetadata } from '../value-objects/calculation-metadata.vo.js';
 import { EngineInput } from '../value-objects/engine-input.vo.js';
@@ -38,7 +47,11 @@ export class ChartBuilder {
       const utcDate = convertLocalTimeToUtc(
         birthData.birthDate,
         birthData.birthTime
-          ? { hour: birthData.birthTime.hour, minute: birthData.birthTime.minute, second: 0 }
+          ? {
+              hour: birthData.birthTime.hour,
+              minute: birthData.birthTime.minute,
+              second: birthData.birthTime.second,
+            }
           : null,
         birthData.isBirthTimeKnown,
         birthData.timezoneId,
@@ -65,7 +78,7 @@ export class ChartBuilder {
         if (houseResult.status === 'not_convergent') {
           warnings.push(
             Warning.create({
-              code: 'NON_CONVERGENT_HOUSE_SYSTEM',
+              code: 'HOUSE_SYSTEM_NOT_CONVERGING',
               message:
                 'The house system did not converge mathematically. Results may be inaccurate.',
               severity: 'warning',
@@ -112,6 +125,18 @@ export class ChartBuilder {
         deletedAt: null,
       });
     } catch (error) {
+      if (
+        error instanceof InvalidCoordinateError ||
+        error instanceof InvalidDateTimeError ||
+        error instanceof UnsupportedHouseSystemError ||
+        error instanceof UnsupportedChartTypeError ||
+        error instanceof UnsupportedCelestialBodyError ||
+        error instanceof UnresolvableTimezoneError ||
+        error instanceof DataIntegrityError
+      ) {
+        throw error;
+      }
+
       if (error instanceof Error) {
         throw new ChartCalculationFailed(`Failed to calculate chart: ${error.message}`, error);
       }

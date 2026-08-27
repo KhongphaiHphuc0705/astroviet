@@ -137,7 +137,7 @@ describe('ChartBuilder', () => {
     });
 
     expect(chart.warnings).toHaveLength(1);
-    expect(chart.warnings[0]?.code).toBe('NON_CONVERGENT_HOUSE_SYSTEM');
+    expect(chart.warnings[0]?.code).toBe('HOUSE_SYSTEM_NOT_CONVERGING');
   });
 
   it('should wrap unhandled exceptions in ChartCalculationFailed', async () => {
@@ -154,5 +154,27 @@ describe('ChartBuilder', () => {
         engineInput: createEngineInput(true),
       }),
     ).rejects.toThrowError(ChartCalculationFailed);
+  });
+
+  it('should propagate Domain Errors directly without wrapping (AC #5)', async () => {
+    const provider = createMockEphemerisProvider();
+    // Simulate Sun being retrograde (which violates INV-14)
+    provider.calculateNatal = vi.fn().mockResolvedValue({
+      planets: [
+        { name: PlanetName.Sun, longitude: 10, latitude: 0, speed: -1 }, // Speed < 0 -> Retrograde
+        { name: PlanetName.Moon, longitude: 20, latitude: 0, speed: 1 },
+      ],
+    });
+
+    const builder = new ChartBuilder(provider);
+
+    await expect(
+      builder.build({
+        id: 'test-id',
+        userId: 'user-id',
+        birthProfileId: null,
+        engineInput: createEngineInput(true),
+      }),
+    ).rejects.toThrowError('Sun cannot be retrograde');
   });
 });
