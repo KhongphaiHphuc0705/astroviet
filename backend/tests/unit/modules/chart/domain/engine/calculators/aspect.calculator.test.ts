@@ -69,7 +69,22 @@ describe('AspectCalculator', () => {
     expect(aspects2[0]?.aspectType).toBe('Square');
   });
 
-  it('should order planets alphabetically in canonical ordering', () => {
+  it('should apply Personal (wider) orb if at least one planet is Personal (Decision M3-8)', () => {
+    // Sun is Personal, Jupiter is NonPersonal.
+    // Square max orb for Personal is 7, for NonPersonal is 5.
+    // If we have a separation of 96.5, orb is 6.5.
+    // It should be detected as a Square because 6.5 <= 7 (Personal orb wins).
+    const p1 = createPlanet(PlanetName.Sun, 10);
+    const p2 = createPlanet(PlanetName.Jupiter, 106.5);
+
+    const aspects = AspectCalculator.calculate([p1, p2]);
+
+    expect(aspects).toHaveLength(1);
+    expect(aspects[0]?.aspectType).toBe('Square');
+    expect(aspects[0]?.orb).toBeCloseTo(6.5, 5);
+  });
+
+  it('should order planets alphabetically in canonical ordering (TR-11)', () => {
     const p1 = createPlanet(PlanetName.Sun, 10); // 'Sun' > 'Moon'
     const p2 = createPlanet(PlanetName.Moon, 10);
 
@@ -80,7 +95,7 @@ describe('AspectCalculator', () => {
     expect(aspects[0]?.planetB).toBe(PlanetName.Sun);
   });
 
-  it('should correctly calculate angular separation across the 0/360 boundary', () => {
+  it('should correctly calculate angular separation across the 0/360 boundary (TR-18)', () => {
     const p1 = createPlanet(PlanetName.Sun, 358);
     const p2 = createPlanet(PlanetName.Moon, 4); // Separation = 6. Max Conjunction orb = 8.
 

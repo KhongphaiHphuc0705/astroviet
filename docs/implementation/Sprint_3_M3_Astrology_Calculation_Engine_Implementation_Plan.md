@@ -535,6 +535,11 @@ CONFIRMED — không dùng `00:00`, không để mặc định ngầm của thư
 
 Chi tiết: Mục 14.
 
+### Decision M3-8 — Quy tắc kết hợp Orb khi khác nhóm (Personal + NonPersonal)
+
+**Phát hiện:** Domain Spec §18.1 chỉ ghi "tra bảng orb theo (aspectType, category của planetA/planetB)", không định nghĩa quy tắc chọn cột nếu 2 hành tinh khác category.
+**Quyết định:** Khi kiểm tra orb, nếu ít nhất một trong hai hành tinh thuộc nhóm `Personal`, sử dụng cột orb rộng hơn (của nhóm `Personal`). Nguyên tắc "Widest applicable orb" này phù hợp với thông lệ chung trong phần mềm chiêm tinh (hành tinh cá nhân sẽ kéo rộng khoảng ảnh hưởng) và đã được đưa vào implementation của `aspect.calculator.ts` cùng với Unit test tương ứng.
+
 ---
 
 ## 21. Risks & Mitigations

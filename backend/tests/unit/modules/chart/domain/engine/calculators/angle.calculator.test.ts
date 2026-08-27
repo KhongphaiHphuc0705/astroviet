@@ -4,7 +4,7 @@ import { AngleCalculator } from '../../../../../../../src/modules/chart/domain/e
 import { HouseCalculationResult } from '../../../../../../../src/modules/chart/domain/ports/ephemeris-provider.port.js';
 
 describe('AngleCalculator', () => {
-  it('should return exactly 4 angles for a convergent result (TR-7)', () => {
+  it('should return exactly 4 angles for a convergent result', () => {
     const result: HouseCalculationResult = {
       status: 'success',
       data: {

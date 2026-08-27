@@ -113,7 +113,9 @@ export class AspectCalculator {
    * Determines if the aspect is applying (getting closer to exactness) or separating.
    */
   private static calculateIsApplying(p1: Planet, p2: Planet, currentSeparation: number): boolean {
-    const dt = 1; // 1 arbitrary time unit for derivative approximation
+    // Domain Spec §18.3: Δt is a small, fixed constant (e.g., 1 hour) to approximate instantaneous derivative.
+    // Assuming speed is in degrees/day (standard for Swiss Ephemeris), 1 hour = 1/24 day.
+    const dt = 1 / 24;
     const l1_next = p1.longitude + p1.speed * dt;
     const l2_next = p2.longitude + p2.speed * dt;
 
