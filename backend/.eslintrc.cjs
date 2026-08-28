@@ -34,7 +34,11 @@ module.exports = {
       { type: 'health', pattern: 'src/health/**' },
       { type: 'domain', pattern: 'src/modules/*/domain/**', capture: ['moduleName'] },
       { type: 'application', pattern: 'src/modules/*/application/**', capture: ['moduleName'] },
-      { type: 'infrastructure', pattern: 'src/modules/*/infrastructure/**', capture: ['moduleName'] },
+      {
+        type: 'infrastructure',
+        pattern: 'src/modules/*/infrastructure/**',
+        capture: ['moduleName'],
+      },
       { type: 'presentation', pattern: 'src/modules/*/presentation/**', capture: ['moduleName'] },
     ],
     'boundaries/files': [
@@ -108,7 +112,9 @@ module.exports = {
         default: 'allow',
         policies: [
           {
-            target: { element: { type: ['domain', 'application', 'infrastructure', 'presentation'] } },
+            target: {
+              element: { type: ['domain', 'application', 'infrastructure', 'presentation'] },
+            },
             allow: 'module-root',
           },
         ],
