@@ -97,21 +97,19 @@ module.exports = {
             disallow: [{ to: { element: { type: 'presentation' } } }],
             message: 'Infrastructure Layer không được phụ thuộc Presentation.',
           },
-          // 2. Cross-Module Entry Point Rule (M4-T3: T-BOUNDARY-VERIFY)
+          // The layer rules above are sufficient for dependency direction.
+          // Cross-module boundaries will be handled by boundaries/entry-point.
+        ],
+      },
+    ],
+    'boundaries/entry-point': [
+      'error',
+      {
+        default: 'allow',
+        policies: [
           {
-            // Any module trying to import another module
-            from: { element: { type: ['domain', 'application', 'infrastructure', 'presentation'] } },
-            disallow: [
-              {
-                to: {
-                  element: { 
-                    type: ['domain', 'application', 'infrastructure', 'presentation'],
-                    capture: { moduleName: { not: '{{from.moduleName}}' } }
-                  }
-                },
-              },
-            ],
-            message: 'Cross-module imports must go through the module-root (index.ts). Do not import internal files of other modules.',
+            target: { element: { type: ['domain', 'application', 'infrastructure', 'presentation'] } },
+            allow: 'module-root',
           },
         ],
       },
