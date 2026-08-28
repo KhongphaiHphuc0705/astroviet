@@ -32,11 +32,13 @@ module.exports = {
       { type: 'shared', pattern: 'src/shared/**' },
       { type: 'config', pattern: 'src/config/**' },
       { type: 'health', pattern: 'src/health/**' },
-      { type: 'domain', pattern: 'src/modules/*/domain/**' },
-      { type: 'application', pattern: 'src/modules/*/application/**' },
-      { type: 'infrastructure', pattern: 'src/modules/*/infrastructure/**' },
-      { type: 'presentation', pattern: 'src/modules/*/presentation/**' },
-      { type: 'module-root', pattern: 'src/modules/*/index.ts' },
+      { type: 'domain', pattern: 'src/modules/*/domain/**', capture: ['moduleName'] },
+      { type: 'application', pattern: 'src/modules/*/application/**', capture: ['moduleName'] },
+      { type: 'infrastructure', pattern: 'src/modules/*/infrastructure/**', capture: ['moduleName'] },
+      { type: 'presentation', pattern: 'src/modules/*/presentation/**', capture: ['moduleName'] },
+    ],
+    'boundaries/files': [
+      { category: 'module-root', pattern: 'src/modules/*/index.ts', capture: ['moduleName'] },
     ],
   },
   rules: {
@@ -65,27 +67,51 @@ module.exports = {
     // --- Dependency Rules / Clean Architecture boundaries ---
     // (Backend Implementation Guide Mục 4 — Domain layer TUYỆT ĐỐI không phụ thuộc
     //  Application/Infrastructure/Presentation; Application không phụ thuộc Infrastructure/Presentation)
-    'boundaries/element-types': [
+    'boundaries/dependencies': [
       'error',
       {
         default: 'allow',
-        rules: [
+        policies: [
+          // 1. Layer Dependencies Rules
           {
-            from: 'domain',
-            disallow: ['application', 'infrastructure', 'presentation'],
+            from: { element: { type: 'domain' } },
+            disallow: [
+              { to: { element: { type: 'application' } } },
+              { to: { element: { type: 'infrastructure' } } },
+              { to: { element: { type: 'presentation' } } },
+            ],
             message:
               'Domain Layer không được phụ thuộc Application/Infrastructure/Presentation (Project Architecture Spec Mục 6).',
           },
           {
-            from: 'application',
-            disallow: ['infrastructure', 'presentation'],
+            from: { element: { type: 'application' } },
+            disallow: [
+              { to: { element: { type: 'infrastructure' } } },
+              { to: { element: { type: 'presentation' } } },
+            ],
             message:
               'Application Layer không được phụ thuộc Infrastructure/Presentation (chỉ phụ thuộc Domain interface).',
           },
           {
-            from: 'infrastructure',
-            disallow: ['presentation'],
+            from: { element: { type: 'infrastructure' } },
+            disallow: [{ to: { element: { type: 'presentation' } } }],
             message: 'Infrastructure Layer không được phụ thuộc Presentation.',
+          },
+          // 2. Cross-Module Entry Point Rule (M4-T3: T-BOUNDARY-VERIFY)
+          {
+            // Any module trying to import another module
+            from: { element: { type: ['domain', 'application', 'infrastructure', 'presentation'] } },
+            disallow: [
+              {
+                to: {
+                  element: { 
+                    type: ['domain', 'application', 'infrastructure', 'presentation'],
+                    capture: { moduleName: { not: '{{from.moduleName}}' } }
+                  }
+                },
+              },
+            ],
+            message: 'Cross-module imports must go through the module-root (index.ts). Do not import internal files of other modules.',
           },
         ],
       },
