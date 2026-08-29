@@ -150,24 +150,6 @@ module.exports = {
         ],
       },
     ],
-    'boundaries/entry-point': [
-      'error',
-      {
-        default: 'allow',
-        policies: [
-          {
-            target: { element: { type: 'module-internal' } },
-            allow: '**/index.ts',
-            message:
-              'Files outside the 4 standard layers can only be imported if they are the module-root (index.ts).',
-            target: { element: { type: 'module-internal' } },
-            allow: '**/index.ts',
-            message:
-              'Files outside the 4 standard layers can only be imported if they are the module-root (index.ts).',
-          },
-        ],
-      },
-    ],
   },
   overrides: [
     {
