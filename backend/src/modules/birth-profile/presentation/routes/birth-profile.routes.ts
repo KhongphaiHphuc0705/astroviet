@@ -6,7 +6,6 @@ import { requireAuth } from '../../../../shared/middlewares/require-auth.middlew
 import { validateBody } from '../../../../shared/middlewares/validate-body.middleware.js';
 import { validateParams } from '../../../../shared/middlewares/validate-params.middleware.js';
 import { validateQuery } from '../../../../shared/middlewares/validate-query.middleware.js';
-import { ITokenProvider } from '../../../identity/domain/ports/token-provider.port.js';
 import { BirthProfileController } from '../controllers/birth-profile.controller.js';
 import { birthProfileIdSchema } from '../schemas/birth-profile-id.schema.js';
 import { createBirthProfileSchema } from '../schemas/create-birth-profile.schema.js';
@@ -15,7 +14,7 @@ import { updateBirthProfileSchema } from '../schemas/update-birth-profile.schema
 
 export const createBirthProfileRoutes = (
   controller: BirthProfileController,
-  tokenProvider: ITokenProvider,
+  tokenProvider: Parameters<typeof authMiddleware>[0],
 ): Router => {
   const router = Router();
   const bpRouter = Router();

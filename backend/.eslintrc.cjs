@@ -6,6 +6,11 @@
  * `domain|application|infrastructure|presentation`. Ở Sprint 0, `src/modules/` còn trống —
  * rule vẫn được bật ngay từ bây giờ để mọi module thêm sau tự động bị enforce, không cần
  * "nhớ" bật lại sau này.
+ *
+ * Cross-module boundary (T-BOUNDARY-VERIFY, Sprint 3 M4): chỉ dùng `boundaries/dependencies`
+ * (kết hợp `boundaries/elements` + `boundaries/files`) — KHÔNG dùng `boundaries/entry-point`,
+ * vì rule đó đã bị `eslint-plugin-boundaries@7.2.0` đánh dấu deprecated, khuyến nghị migrate
+ * chính vào `boundaries/dependencies` (xem policy #2 bên dưới).
  */
 module.exports = {
   root: true,
@@ -40,9 +45,16 @@ module.exports = {
         capture: ['moduleName'],
       },
       { type: 'presentation', pattern: 'src/modules/*/presentation/**', capture: ['moduleName'] },
+      { type: 'module-internal', pattern: 'src/modules/*/**', capture: ['moduleName'] },
     ],
     'boundaries/files': [
-      { category: 'module-root', pattern: 'src/modules/*/index.ts', capture: ['moduleName'] },
+      {
+        category: 'module-root',
+        pattern: 'src/modules/*/index.ts',
+        capture: ['moduleName'],
+        stopMatching: true,
+      },
+      { category: 'module-internal-file', pattern: 'src/modules/*/**', capture: ['moduleName'] },
     ],
   },
   rules: {
@@ -101,8 +113,40 @@ module.exports = {
             disallow: [{ to: { element: { type: 'presentation' } } }],
             message: 'Infrastructure Layer không được phụ thuộc Presentation.',
           },
-          // The layer rules above are sufficient for dependency direction.
-          // Cross-module boundaries will be handled by boundaries/entry-point.
+          // 2. Cross-Module Entry Point Rule
+          {
+            from: {
+              element: {
+                type: [
+                  'domain',
+                  'application',
+                  'infrastructure',
+                  'presentation',
+                  'module-internal',
+                  'module-root',
+                ],
+              },
+            },
+            disallow: [
+              {
+                to: {
+                  element: {
+                    type: [
+                      'domain',
+                      'application',
+                      'infrastructure',
+                      'presentation',
+                      'module-internal',
+                    ],
+                    captured: { moduleName: '!{{ from.moduleName }}' }, // ← chặn nếu khác module
+                  },
+                  file: { categories: 'module-internal-file' }, // ← chỉ áp dụng cho file KHÔNG phải module-root
+                },
+              },
+            ],
+            message:
+              'Cross-module imports must go through the module-root (index.ts). Do not import internal files of other modules.',
+          },
         ],
       },
     ],
@@ -112,10 +156,14 @@ module.exports = {
         default: 'allow',
         policies: [
           {
-            target: {
-              element: { type: ['domain', 'application', 'infrastructure', 'presentation'] },
-            },
-            allow: 'module-root',
+            target: { element: { type: 'module-internal' } },
+            allow: '**/index.ts',
+            message:
+              'Files outside the 4 standard layers can only be imported if they are the module-root (index.ts).',
+            target: { element: { type: 'module-internal' } },
+            allow: '**/index.ts',
+            message:
+              'Files outside the 4 standard layers can only be imported if they are the module-root (index.ts).',
           },
         ],
       },
