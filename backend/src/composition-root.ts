@@ -12,6 +12,7 @@ import { ListBirthProfilesUseCase } from './modules/birth-profile/application/us
 import { SearchBirthLocationsUseCase } from './modules/birth-profile/application/use-cases/search-birth-locations.usecase.js';
 import { UpdateBirthProfileUseCase } from './modules/birth-profile/application/use-cases/update-birth-profile.usecase.js';
 import { ILocationSearchProvider } from './modules/birth-profile/domain/ports/location-search-provider.port.js';
+import { GetBirthProfileSnapshotUseCase } from './modules/birth-profile/index.js';
 import { GeoTzTimezoneAdapter } from './modules/birth-profile/infrastructure/adapters/geo-tz-timezone.adapter.js';
 import { GeoNamesLocationSearchAdapter } from './modules/birth-profile/infrastructure/adapters/geonames-location-search.adapter.js';
 import { PrismaBirthProfileRepository } from './modules/birth-profile/infrastructure/repositories/prisma-birth-profile.repository.js';
@@ -101,6 +102,7 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   const updateBirthProfileUseCase = new UpdateBirthProfileUseCase(birthProfileRepository);
   const deleteBirthProfileUseCase = new DeleteBirthProfileUseCase(birthProfileRepository);
   const listBirthProfilesUseCase = new ListBirthProfilesUseCase(birthProfileRepository);
+  const getBirthProfileSnapshotUseCase = new GetBirthProfileSnapshotUseCase(birthProfileRepository);
 
   const birthProfileController = new BirthProfileController(
     createBirthProfileUseCase,
@@ -147,6 +149,7 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
       deleteBirthProfileUseCase,
       listBirthProfilesUseCase,
       searchBirthLocationsUseCase,
+      getBirthProfileSnapshotUseCase,
     },
     providers: {
       ephemerisProvider,
