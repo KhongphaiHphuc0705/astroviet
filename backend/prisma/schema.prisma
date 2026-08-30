@@ -23,6 +23,7 @@ model User {
 
   tokens         RefreshToken[]
   birth_profiles BirthProfile[]
+  charts         Chart[]
 
   @@map("users")
   @@schema("identity")
@@ -63,7 +64,8 @@ model BirthProfile {
   deleted_at             DateTime? @db.Timestamptz
   version                Int       @default(1)
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  charts Chart[]
 
   @@index([user_id])
   @@map("birth_profiles")
@@ -75,7 +77,139 @@ model HouseSystem {
   requires_precise_birth_time Boolean
   supports_polar_latitudes    Boolean
   is_active                   Boolean @default(true)
+  charts                      Chart[]
 
   @@map("house_systems")
+  @@schema("astrology")
+}
+
+model Chart {
+  id                              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                         String    @db.Uuid
+  birth_profile_id                String?   @db.Uuid
+  chart_type                      String
+  house_system                    String
+  is_house_data_available         Boolean
+  engine_version                  String
+  calculated_at                   DateTime  @default(now()) @db.Timestamptz
+  warnings                        Json      @default("[]")
+  snapshot_interpretation_version String
+  snapshot_full_name              String?
+  snapshot_birth_date             DateTime  @db.Date
+  snapshot_birth_time             DateTime? @db.Time
+  snapshot_is_birth_time_known    Boolean
+  snapshot_place_name             String
+  snapshot_latitude               Decimal   @db.Decimal(9, 6)
+  snapshot_longitude              Decimal   @db.Decimal(9, 6)
+  snapshot_timezone_id            String
+  created_at                      DateTime  @default(now()) @db.Timestamptz
+  deleted_at                      DateTime? @db.Timestamptz
+
+  user          User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  birth_profile BirthProfile? @relation(fields: [birth_profile_id], references: [id], onDelete: SetNull)
+  system        HouseSystem   @relation(fields: [house_system], references: [name], onDelete: Restrict)
+
+  planets  ChartPlanet[]
+  houses   ChartHouse[]
+  angles   ChartAngle[]
+  aspects  ChartAspect[]
+  patterns ChartPattern[]
+
+  @@index([user_id, calculated_at(sort: Desc)])
+  @@index([birth_profile_id])
+  @@map("charts")
+  @@schema("astrology")
+}
+
+model ChartPlanet {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chart_id       String   @db.Uuid
+  name           String
+  category       String
+  longitude      Decimal  @db.Decimal(6, 3)
+  latitude       Decimal? @db.Decimal(6, 3)
+  speed          Decimal  @db.Decimal(9, 5)
+  is_retrograde  Boolean
+  sign           String
+  degree_in_sign Decimal  @db.Decimal(5, 2)
+  house_number   Int?
+
+  chart           Chart                @relation(fields: [chart_id], references: [id], onDelete: Cascade)
+  pattern_planets ChartPatternPlanet[]
+
+  @@unique([chart_id, name])
+  @@map("chart_planets")
+  @@schema("astrology")
+}
+
+model ChartHouse {
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chart_id     String  @db.Uuid
+  number       Int
+  cusp_degree  Decimal @db.Decimal(6, 3)
+  sign_on_cusp String
+
+  chart Chart @relation(fields: [chart_id], references: [id], onDelete: Cascade)
+
+  @@unique([chart_id, number])
+  @@map("chart_houses")
+  @@schema("astrology")
+}
+
+model ChartAngle {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chart_id       String  @db.Uuid
+  type           String
+  longitude      Decimal @db.Decimal(6, 3)
+  sign           String
+  degree_in_sign Decimal @db.Decimal(5, 2)
+
+  chart Chart @relation(fields: [chart_id], references: [id], onDelete: Cascade)
+
+  @@unique([chart_id, type])
+  @@map("chart_angles")
+  @@schema("astrology")
+}
+
+model ChartAspect {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chart_id    String  @db.Uuid
+  planet_a    String
+  planet_b    String
+  aspect_type String
+  exact_angle Decimal @db.Decimal(6, 3)
+  orb         Decimal @db.Decimal(5, 3)
+  is_applying Boolean
+  nature      String
+
+  chart Chart @relation(fields: [chart_id], references: [id], onDelete: Cascade)
+
+  @@unique([chart_id, planet_a, planet_b])
+  @@map("chart_aspects")
+  @@schema("astrology")
+}
+
+model ChartPattern {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chart_id     String   @db.Uuid
+  pattern_type String
+  created_at   DateTime @default(now()) @db.Timestamptz
+
+  chart           Chart                @relation(fields: [chart_id], references: [id], onDelete: Cascade)
+  pattern_planets ChartPatternPlanet[]
+
+  @@map("chart_patterns")
+  @@schema("astrology")
+}
+
+model ChartPatternPlanet {
+  pattern_id String @db.Uuid
+  planet_id  String @db.Uuid
+
+  pattern ChartPattern @relation(fields: [pattern_id], references: [id], onDelete: Cascade)
+  planet  ChartPlanet  @relation(fields: [planet_id], references: [id], onDelete: Cascade)
+
+  @@id([pattern_id, planet_id])
+  @@map("chart_pattern_planets")
   @@schema("astrology")
 }
