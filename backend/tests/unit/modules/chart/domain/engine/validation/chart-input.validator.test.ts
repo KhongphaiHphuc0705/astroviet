@@ -23,6 +23,8 @@ describe('ChartInputValidator', () => {
     latitude: 40.7128,
     longitude: -74.006,
     timezoneId: 'America/New_York',
+    fullName: 'Test User',
+    placeName: 'Test Location',
   };
 
   const validChartOptions = {

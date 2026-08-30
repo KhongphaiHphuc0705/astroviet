@@ -26,6 +26,8 @@ describe('Chart Entity', () => {
       latitude: 0,
       longitude: 0,
       timezoneId: 'UTC',
+      fullName: 'Test User',
+      placeName: 'Test Location',
     },
     { houseSystem: HouseSystem.Placidus, includeOptionalPoints: [], chartType: ChartType.Natal },
   );

@@ -51,6 +51,8 @@ describe('ChartBuilder', () => {
         latitude: 10,
         longitude: 106,
         timezoneId: 'Asia/Ho_Chi_Minh',
+        fullName: 'Test User',
+        placeName: 'Test Location',
         isBirthTimeKnown,
       },
       {

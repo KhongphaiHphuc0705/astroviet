@@ -8,6 +8,8 @@ export interface GetBirthProfileSnapshotCommand {
 }
 
 export interface BirthDataSnapshot {
+  fullName: string | null;
+  placeName: string;
   birthDate: Date;
   birthTime: { hour: number; minute: number; second: number } | null;
   isBirthTimeKnown: boolean;
@@ -31,6 +33,8 @@ export class GetBirthProfileSnapshotUseCase {
     const birthTime = profile.birthTime;
 
     return {
+      fullName: profile.fullName || null,
+      placeName: profile.birthLocation.placeName,
       birthDate: profile.birthDate.value,
       birthTime: birthTime
         ? {

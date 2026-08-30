@@ -84,6 +84,8 @@ describe('GetBirthProfileSnapshotUseCase', () => {
     const result = await useCase.execute(command);
 
     expect(result).toStrictEqual({
+      fullName: 'John Doe',
+      placeName: 'Ho Chi Minh',
       birthDate: mockProfileKnownTime.birthDate.value,
       birthTime: { hour: 12, minute: 30, second: 45 },
       isBirthTimeKnown: true,
@@ -104,6 +106,8 @@ describe('GetBirthProfileSnapshotUseCase', () => {
     const result = await useCase.execute(command);
 
     expect(result).toStrictEqual({
+      fullName: 'Jane Doe',
+      placeName: 'Ho Chi Minh',
       birthDate: mockProfileUnknownTime.birthDate.value,
       birthTime: null,
       isBirthTimeKnown: false,
