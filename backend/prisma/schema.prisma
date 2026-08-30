@@ -69,3 +69,13 @@ model BirthProfile {
   @@map("birth_profiles")
   @@schema("astrology")
 }
+
+model HouseSystem {
+  name                        String  @id
+  requires_precise_birth_time Boolean
+  supports_polar_latitudes    Boolean
+  is_active                   Boolean @default(true)
+
+  @@map("house_systems")
+  @@schema("astrology")
+}

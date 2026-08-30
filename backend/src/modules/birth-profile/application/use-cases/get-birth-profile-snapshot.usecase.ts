@@ -33,7 +33,7 @@ export class GetBirthProfileSnapshotUseCase {
     const birthTime = profile.birthTime;
 
     return {
-      fullName: profile.fullName || null,
+      fullName: profile.fullName ?? null,
       placeName: profile.birthLocation.placeName,
       birthDate: profile.birthDate.value,
       birthTime: birthTime
