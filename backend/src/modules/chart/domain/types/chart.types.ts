@@ -54,3 +54,5 @@ export enum AspectType {
   Trine = 'Trine',
   Opposition = 'Opposition',
 }
+
+export type AspectNature = 'Harmonious' | 'Challenging' | 'Neutral';

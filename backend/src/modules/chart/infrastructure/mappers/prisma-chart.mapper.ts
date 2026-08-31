@@ -83,19 +83,24 @@ export class PrismaChartMapper {
       }),
     );
 
-    const planets = record.planets.map((p) =>
-      Planet.reconstitute({
+    const planets = record.planets.map((p) => {
+      if (p.latitude === null) {
+        throw new Error(
+          `Data Integrity Error: Latitude is missing for planet ${p.name} in chart ${record.id}`,
+        );
+      }
+      return Planet.reconstitute({
         id: p.id,
         name: p.name as PlanetName,
         category: p.category as PlanetCategory,
         longitude: p.longitude.toNumber(),
-        latitude: p.latitude ? p.latitude.toNumber() : 0, // Fallback if 0
+        latitude: p.latitude.toNumber(),
         speed: p.speed.toNumber(),
         isRetrograde: p.is_retrograde,
         zodiacPosition: ZodiacPosition.fromLongitude(p.longitude.toNumber()),
         house: p.house_number,
-      }),
-    );
+      });
+    });
 
     const houses = record.houses.map((h) =>
       House.reconstitute({
@@ -246,12 +251,7 @@ export class PrismaChartMapper {
           exact_angle: a.exactAngle,
           orb: a.orb,
           is_applying: a.isApplying,
-          nature:
-            a.aspectType === AspectType.Trine || a.aspectType === AspectType.Sextile
-              ? 'Harmonious'
-              : a.aspectType === AspectType.Square || a.aspectType === AspectType.Opposition
-                ? 'Challenging'
-                : 'Neutral',
+          nature: a.nature,
         })),
       },
       patterns: {

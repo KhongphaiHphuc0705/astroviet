@@ -237,18 +237,8 @@ Nhận `PrismaClient` qua constructor, giống hệt `PrismaBirthProfileReposito
 
 ```
 save(chart: Chart): Promise<void>
-  → PrismaChartMapper.toPersistence(chart)  // tách thành 7 object: charts + 6 mảng con
-  → prisma.$transaction(async (tx) => {
-      await tx.chart.create({ data: chartData });
-      if (houses.length) await tx.chartHouse.createMany({ data: houseRows });
-      await tx.chartPlanet.createMany({ data: planetRows });   // sau houses — composite FK
-      if (angles.length) await tx.chartAngle.createMany({ data: angleRows });
-      if (aspects.length) await tx.chartAspect.createMany({ data: aspectRows });
-      if (patterns.length) {
-        await tx.chartPattern.createMany({ data: patternRows });
-        await tx.chartPatternPlanet.createMany({ data: patternPlanetRows });
-      }
-    })
+  → PrismaChartMapper.toPersistence(chart)  // trả về 1 object Prisma.ChartUncheckedCreateInput duy nhất (nested write)
+  → await prisma.chart.create({ data: chartData }) // Prisma tự bọc nested-write trong transaction ngầm
   → catch → InfrastructureError('Failed to save chart', {cause: error})
 ```
 
@@ -312,18 +302,10 @@ Tái sử dụng đúng `InfrastructureError` (shared) — không tạo taxonomy
 
 ### 9.1 Domain → Prisma (`toPersistence`)
 
-Trả về **7 object riêng biệt** (không phải 1 object lồng nhau — Prisma `create` với nested `include`/`create` cho quan hệ 1-N là khả thi nhưng phức tạp hơn cần thiết khi đã dùng `$transaction` với `createMany` riêng — đơn giản hơn, dễ test hơn):
+Trả về **1 object duy nhất** sử dụng tính năng **nested create** của Prisma. Cách này gọn gàng hơn, ít mã nguồn hơn và Prisma sẽ tự động bọc toàn bộ các thao tác `create` vào trong một database transaction ngầm (implicit transaction), đảm bảo tính toàn vẹn dữ liệu (atomic).
 
 ```typescript
-static toPersistence(chart: Chart): {
-  chart: Prisma.ChartUncheckedCreateInput;
-  planets: Prisma.ChartPlanetUncheckedCreateInput[];
-  houses: Prisma.ChartHouseUncheckedCreateInput[];
-  angles: Prisma.ChartAngleUncheckedCreateInput[];
-  aspects: Prisma.ChartAspectUncheckedCreateInput[];
-  patterns: Prisma.ChartPatternUncheckedCreateInput[];
-  patternPlanets: Prisma.ChartPatternPlanetUncheckedCreateInput[];
-}
+static toPersistence(chart: Chart): Prisma.ChartUncheckedCreateInput
 ```
 
 ### 9.2 Prisma → Domain (`toDomain`)

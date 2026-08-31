@@ -1,5 +1,5 @@
 import { DataIntegrityError } from '../errors/chart.errors.js';
-import { PlanetName, AspectType } from '../types/chart.types.js';
+import { PlanetName, AspectType, AspectNature } from '../types/chart.types.js';
 
 export interface AspectProps {
   id: string;
@@ -37,6 +37,16 @@ export class Aspect {
   }
   get isApplying(): boolean {
     return this.props.isApplying;
+  }
+  get nature(): AspectNature {
+    if (this.props.aspectType === AspectType.Trine || this.props.aspectType === AspectType.Sextile)
+      return 'Harmonious';
+    if (
+      this.props.aspectType === AspectType.Square ||
+      this.props.aspectType === AspectType.Opposition
+    )
+      return 'Challenging';
+    return 'Neutral';
   }
 
   public static create(props: AspectProps): Aspect {
