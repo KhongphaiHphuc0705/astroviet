@@ -93,7 +93,7 @@ model Chart {
   engine_version                  String
   calculated_at                   DateTime  @default(now()) @db.Timestamptz
   warnings                        Json      @default("[]")
-  snapshot_interpretation_version String
+  snapshot_interpretation_version String?
   snapshot_full_name              String?
   snapshot_birth_date             DateTime  @db.Date
   snapshot_birth_time             DateTime? @db.Time
@@ -198,6 +198,7 @@ model ChartPattern {
   chart           Chart                @relation(fields: [chart_id], references: [id], onDelete: Cascade)
   pattern_planets ChartPatternPlanet[]
 
+  @@index([chart_id])
   @@map("chart_patterns")
   @@schema("astrology")
 }
@@ -210,6 +211,7 @@ model ChartPatternPlanet {
   planet  ChartPlanet  @relation(fields: [planet_id], references: [id], onDelete: Cascade)
 
   @@id([pattern_id, planet_id])
+  @@index([planet_id])
   @@map("chart_pattern_planets")
   @@schema("astrology")
 }
