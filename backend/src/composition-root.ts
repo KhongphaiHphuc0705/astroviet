@@ -23,6 +23,7 @@ import {
   createLocationRoutes,
 } from './modules/birth-profile/presentation/index.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
+import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
 import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
@@ -120,7 +121,9 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   const searchBirthLocationsUseCase = new SearchBirthLocationsUseCase(locationSearchProvider);
   const locationSearchController = new LocationSearchController(searchBirthLocationsUseCase);
 
-  // --- Chart Module (Ephemeris) ---
+  // --- Chart Module ---
+  const chartRepository = new PrismaChartRepository(prisma);
+
   const swissEph = new SwissEph();
   await swissEph.initSwissEph();
   logger.info('Ephemeris Provider (Swiss Ephemeris WASM) initialized successfully', {
@@ -150,6 +153,9 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
       listBirthProfilesUseCase,
       searchBirthLocationsUseCase,
       getBirthProfileSnapshotUseCase,
+    },
+    repositories: {
+      chartRepository,
     },
     providers: {
       ephemerisProvider,

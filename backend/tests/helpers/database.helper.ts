@@ -22,7 +22,7 @@ export class DatabaseTestHelper {
     `;
 
     for (const { tablename, schemaname } of tableNames) {
-      if (tablename !== '_prisma_migrations') {
+      if (tablename !== '_prisma_migrations' && tablename !== 'house_systems') {
         try {
           await this.prisma.$executeRawUnsafe(
             `TRUNCATE TABLE "${schemaname}"."${tablename}" CASCADE;`,

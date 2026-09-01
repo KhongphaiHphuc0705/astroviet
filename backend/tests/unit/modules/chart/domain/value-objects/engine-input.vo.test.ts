@@ -20,6 +20,8 @@ describe('EngineInput VO', () => {
       latitude: 10,
       longitude: 20,
       timezoneId: 'UTC',
+      fullName: 'Test User',
+      placeName: 'Test Location',
     };
 
     const chartOptions: EngineInputChartOptions = {
@@ -53,6 +55,8 @@ describe('EngineInput VO', () => {
       latitude: 10,
       longitude: 20,
       timezoneId: 'UTC',
+      fullName: 'Test User',
+      placeName: 'Test Location',
     };
 
     const chartOptions: EngineInputChartOptions = {

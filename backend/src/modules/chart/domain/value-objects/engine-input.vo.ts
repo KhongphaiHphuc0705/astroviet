@@ -1,6 +1,8 @@
 import { HouseSystem, PlanetName, ChartType } from '../types/chart.types.js';
 
 export interface EngineInputBirthData {
+  readonly fullName: string | null;
+  readonly placeName: string;
   readonly birthDate: Date;
   readonly birthTime: {
     readonly hour: number;
@@ -33,6 +35,8 @@ export class EngineInput {
   public get birthData(): EngineInputBirthData {
     return {
       ...this._birthData,
+      fullName: this._birthData.fullName,
+      placeName: this._birthData.placeName,
       birthDate: new Date(this._birthData.birthDate.getTime()),
       birthTime: this._birthData.birthTime ? { ...this._birthData.birthTime } : null,
     };
@@ -54,6 +58,8 @@ export class EngineInput {
     return new EngineInput(
       // Copy objects to ensure immutability
       {
+        fullName: birthData.fullName,
+        placeName: birthData.placeName,
         birthDate: new Date(birthData.birthDate.getTime()),
         birthTime: birthData.birthTime ? { ...birthData.birthTime } : null,
         isBirthTimeKnown: birthData.isBirthTimeKnown,
