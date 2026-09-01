@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { User, RefreshToken } from '../../src/modules/identity/domain/entities';
+import { User, RefreshToken } from '../../src/modules/identity/domain/entities/index.js';
 
 // Using random UUIDs to simulate database values
 const generateUuid = () => crypto.randomUUID();
