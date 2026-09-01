@@ -242,7 +242,7 @@ save(chart: Chart): Promise<void>
   → catch → InfrastructureError('Failed to save chart', {cause: error})
 ```
 
-`createMany` cho mảng rỗng (`houses=[]` khi `isBirthTimeKnown=false`) **phải guard bằng `if (length)`** — `createMany({data: []})` với Prisma có thể throw hoặc no-op tùy version, cần verify thực tế lúc code (không phải quyết định kiến trúc, chỉ 1 dòng kiểm tra phòng thủ).
+Tính năng **nested create** của Prisma hỗ trợ việc mảng rỗng (ví dụ: `houses=[]` khi `isBirthTimeKnown=false`) một cách tự nhiên. Không cần bất kỳ lệnh kiểm tra `if (length)` thủ công nào, Prisma sẽ hiểu và tạo ra 0 bản ghi quan hệ tương ứng mà không quăng lỗi.
 
 ### 8.4 `findById()`
 
@@ -279,10 +279,10 @@ listByUserId(userId, options): Promise<{items, total}>
 
 ### 8.6 Transaction Boundary
 
-- Cơ chế: `this.prisma.$transaction(async (tx) => {...})` (interactive transaction, Prisma Client API) — xác nhận version Prisma đang dùng hỗ trợ cú pháp này (cùng version đã dùng cho `BirthProfile`, dù `BirthProfile` không có multi-insert nên chưa từng dùng `$transaction` — đây là lần đầu dự án dùng transaction thật, cần verify bằng cách chạy Integration Test thật, không chỉ đọc doc Prisma).
-- Ordering: `charts` → `chart_houses` → `chart_planets` (phụ thuộc houses) → `chart_angles`/`chart_aspects`/`chart_patterns` (độc lập nhau, thứ tự giữa 3 cái này không quan trọng) → `chart_pattern_planets` (phụ thuộc patterns + planets).
-- Rollback: bất kỳ exception nào trong callback `$transaction` → Prisma tự động ROLLBACK toàn bộ, không cần code thủ công.
-- Error propagation: catch ở method `save()` bên ngoài `$transaction`, wrap thành `InfrastructureError`.
+- Cơ chế: **Prisma Nested Writes**. Việc sử dụng `prisma.chart.create({ data: { planets: { create: [...] }, ... } })` tự động bọc mọi lệnh insert (bao gồm 6 bảng con) vào một transaction ngầm (implicit transaction) ở cấp độ cơ sở dữ liệu.
+- Ordering: Prisma query engine tự động phân tích foreign key và thực hiện chèn dữ liệu theo đúng thứ tự (`charts` → `chart_houses` → `chart_planets` → các bảng khác). Không cần phải xử lý ordering thủ công trong mã nguồn.
+- Rollback: Bất kỳ thao tác insert nào thất bại (như lỗi CHECK/UNIQUE constraint), Prisma tự động ROLLBACK toàn bộ transaction ngầm, giữ tính toàn vẹn dữ liệu.
+- Error propagation: catch ở method `save()`, wrap thành `InfrastructureError`.
 
 ### 8.7 Error Handling
 

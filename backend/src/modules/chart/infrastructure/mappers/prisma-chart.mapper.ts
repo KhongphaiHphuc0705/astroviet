@@ -15,6 +15,7 @@ import { Chart } from '../../domain/entities/chart.entity.js';
 import { House } from '../../domain/entities/house.entity.js';
 import { Pattern } from '../../domain/entities/pattern.entity.js';
 import { Planet } from '../../domain/entities/planet.entity.js';
+import { DataIntegrityError } from '../../domain/errors/chart.errors.js';
 import {
   ChartType,
   HouseSystem,
@@ -85,8 +86,8 @@ export class PrismaChartMapper {
 
     const planets = record.planets.map((p) => {
       if (p.latitude === null) {
-        throw new Error(
-          `Data Integrity Error: Latitude is missing for planet ${p.name} in chart ${record.id}`,
+        throw new DataIntegrityError(
+          `Latitude is missing for planet ${p.name} in chart ${record.id}`,
         );
       }
       return Planet.reconstitute({
@@ -193,9 +194,15 @@ export class PrismaChartMapper {
 
     const planetNameToId = new Map(planetsCreate.map((p) => [p.name, p.id]));
 
+    if (!chart.userId) {
+      throw new DataIntegrityError(
+        'Cannot persist a Chart without a userId (transient charts must not be saved)',
+      );
+    }
+
     return {
       id: chart.id,
-      user_id: chart.userId!,
+      user_id: chart.userId,
       birth_profile_id: chart.birthProfileId,
       chart_type: chart.chartType,
       house_system: chart.houseSystem,
