@@ -12,9 +12,35 @@ export class PrismaChartRepository implements IChartRepository {
     try {
       const data = PrismaChartMapper.toPersistence(chart);
 
-      // We map directly into Prisma.ChartUncheckedCreateInput with nested creates,
-      // so we can issue a single create to handle the atomic nested-write.
-      await this.prisma.chart.create({ data });
+      await this.prisma.$transaction(async (tx) => {
+        // 1. Create the chart aggregate root
+        await tx.chart.create({ data: data.chart });
+
+        // 2. Create houses first (because planets reference houses via composite FK)
+        if (data.houses.length > 0) {
+          await tx.chartHouse.createMany({ data: data.houses });
+        }
+
+        // 3. Create planets
+        if (data.planets.length > 0) {
+          await tx.chartPlanet.createMany({ data: data.planets });
+        }
+
+        // 4. Create angles
+        if (data.angles.length > 0) {
+          await tx.chartAngle.createMany({ data: data.angles });
+        }
+
+        // 5. Create aspects
+        if (data.aspects.length > 0) {
+          await tx.chartAspect.createMany({ data: data.aspects });
+        }
+
+        // 6. Create patterns (nested with pattern_planets is allowed because pattern_planets don't have cyclic dependencies)
+        for (const pattern of data.patterns) {
+          await tx.chartPattern.create({ data: pattern });
+        }
+      });
     } catch (error) {
       throw new InfrastructureError('Failed to save chart', { cause: error });
     }

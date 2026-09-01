@@ -270,10 +270,16 @@ Giống hệt `PrismaBirthProfileRepository.softDelete()` — **không** cần `
 ```
 listByUserId(userId, options): Promise<{items, total}>
   → where: {user_id: userId, deleted_at: null, ...(options.birthProfileId && {birth_profile_id: options.birthProfileId})}
-  → orderBy: {calculated_at: options.order}   // ListChartsOptions.sortBy chỉ có 'calculatedAt', không cần nhánh switch như BirthProfile's createdAt/fullName
+  → orderBy: {calculated_at: options.order}
   → Promise.all([findMany({include: đủ 6 bảng con, where, orderBy, skip, take}), count({where})])
   → items = records.map(PrismaChartMapper.toDomain)
 ```
+
+**Cập nhật kiến trúc (M5-T05): Explicit `$transaction` do giới hạn Nested Writes**
+- Khởi đầu, chúng tôi đã thử dùng Prisma Nested Writes (`prisma.chart.create({ data: { planets: { create: ... }, ... } })`) vì cú pháp gọn và atomic ngầm định.
+- Tuy nhiên, quá trình chạy test (CI) báo lỗi: `Foreign key constraint violated: chart_planets_chart_id_house_number_fkey`.
+- Nguyên nhân: Bản thiết kế DB sử dụng một khóa ngoại (composite FK) từ `chart_planets(chart_id, house_number)` sang `chart_houses(chart_id, number)`. Vì Prisma schema không định nghĩa rõ quan hệ này (để tránh cycle graph complexity), Prisma không biết `chart_houses` phải được insert TRƯỚC `chart_planets`. Nested writes chèn chúng ngẫu nhiên (hoặc planet trước), dẫn đến fail constraint.
+- Giải pháp: **Quay trở lại thiết kế gốc ban đầu (Mục 8.3/9.1)** là sử dụng explicit `$transaction` bằng tay, chèn theo đúng trình tự: Chart -> ChartHouse -> ChartPlanet -> ChartAngle -> ChartAspect -> ChartPattern, để đảm bảo thỏa mãn tuyệt đối mọi foreign keys của Database.
 
 **Lưu ý hiệu năng (ghi nhận, không chặn M5):** load đủ 6 bảng con cho **mỗi Chart** trong 1 danh sách phân trang có thể nặng nếu `pageSize` lớn — chấp nhận được ở MVP (M7 chưa tồn tại, chưa có real traffic), nhưng nên note thành Known Gap cho M7 cân nhắc lúc build `GET /charts` thật (có thể cần DTO rút gọn không load full aspect/pattern cho list view — quyết định của M7, không phải M5).
 

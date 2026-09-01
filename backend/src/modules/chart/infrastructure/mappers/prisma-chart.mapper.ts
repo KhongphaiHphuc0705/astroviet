@@ -36,6 +36,19 @@ export type PrismaChartWithRelations = PrismaChart & {
   patterns: (ChartPattern & { pattern_planets: ChartPatternPlanet[] })[];
 };
 
+export interface ChartPersistenceData {
+  chart: Prisma.ChartUncheckedCreateInput;
+  planets: Prisma.ChartPlanetUncheckedCreateInput[];
+  houses: Prisma.ChartHouseUncheckedCreateInput[];
+  angles: Prisma.ChartAngleUncheckedCreateInput[];
+  aspects: Prisma.ChartAspectUncheckedCreateInput[];
+  patterns: (Prisma.ChartPatternUncheckedCreateInput & {
+    pattern_planets: {
+      create: Prisma.ChartPatternPlanetUncheckedCreateWithoutPatternInput[];
+    };
+  })[];
+}
+
 export class PrismaChartMapper {
   static toDomain(record: PrismaChartWithRelations): Chart {
     const engineInputBirthData: EngineInputBirthData = {
@@ -168,7 +181,7 @@ export class PrismaChartMapper {
     });
   }
 
-  static toPersistence(chart: Chart): Prisma.ChartUncheckedCreateInput {
+  static toPersistence(chart: Chart): ChartPersistenceData {
     const input = chart.engineInput.birthData;
 
     let snapshotBirthTime: Date | null = null;
@@ -178,29 +191,13 @@ export class PrismaChartMapper {
       );
     }
 
-    // Prepare planets to get their IDs for the pattern linking
-    const planetsCreate = chart.planets.map((p) => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      longitude: p.longitude,
-      latitude: p.latitude,
-      speed: p.speed,
-      is_retrograde: p.isRetrograde,
-      sign: p.zodiacPosition.sign,
-      degree_in_sign: p.zodiacPosition.degreeInSign,
-      house_number: p.house,
-    }));
-
-    const planetNameToId = new Map(planetsCreate.map((p) => [p.name, p.id]));
-
     if (!chart.userId) {
       throw new DataIntegrityError(
         'Cannot persist a Chart without a userId (transient charts must not be saved)',
       );
     }
 
-    return {
+    const chartData: Prisma.ChartUncheckedCreateInput = {
       id: chart.id,
       user_id: chart.userId,
       birth_profile_id: chart.birthProfileId,
@@ -221,57 +218,77 @@ export class PrismaChartMapper {
       snapshot_timezone_id: input.timezoneId,
       created_at: chart.createdAt,
       deleted_at: chart.deletedAt,
+    };
 
-      // Nested writes for children
-      planets: {
-        create: planetsCreate,
-      },
-      houses: {
-        create: chart.houses.map((h) => {
-          const zodiac = ZodiacPosition.fromLongitude(h.cuspDegree);
-          return {
-            id: h.id,
-            number: h.number,
-            cusp_degree: h.cuspDegree,
-            sign_on_cusp: zodiac.sign,
-          };
-        }),
-      },
-      angles: {
-        create: chart.angles.map((a) => {
-          const zodiac = ZodiacPosition.fromLongitude(a.longitude);
-          return {
-            id: a.id,
-            type: a.type,
-            longitude: a.longitude,
-            sign: zodiac.sign,
-            degree_in_sign: zodiac.degreeInSign,
-          };
-        }),
-      },
-      aspects: {
-        create: chart.aspects.map((a) => ({
-          id: a.id,
-          planet_a: a.planetA,
-          planet_b: a.planetB,
-          aspect_type: a.aspectType,
-          exact_angle: a.exactAngle,
-          orb: a.orb,
-          is_applying: a.isApplying,
-          nature: a.nature,
+    const planets = chart.planets.map((p) => ({
+      id: p.id,
+      chart_id: chart.id,
+      name: p.name,
+      category: p.category,
+      longitude: p.longitude,
+      latitude: p.latitude,
+      speed: p.speed,
+      is_retrograde: p.isRetrograde,
+      sign: p.zodiacPosition.sign,
+      degree_in_sign: p.zodiacPosition.degreeInSign,
+      house_number: p.house,
+    }));
+
+    const planetNameToId = new Map(planets.map((p) => [p.name, p.id]));
+
+    const houses = chart.houses.map((h) => {
+      const zodiac = ZodiacPosition.fromLongitude(h.cuspDegree);
+      return {
+        id: h.id,
+        chart_id: chart.id,
+        number: h.number,
+        cusp_degree: h.cuspDegree,
+        sign_on_cusp: zodiac.sign,
+      };
+    });
+
+    const angles = chart.angles.map((a) => {
+      const zodiac = ZodiacPosition.fromLongitude(a.longitude);
+      return {
+        id: a.id,
+        chart_id: chart.id,
+        type: a.type,
+        longitude: a.longitude,
+        sign: zodiac.sign,
+        degree_in_sign: zodiac.degreeInSign,
+      };
+    });
+
+    const aspects = chart.aspects.map((a) => ({
+      id: a.id,
+      chart_id: chart.id,
+      planet_a: a.planetA,
+      planet_b: a.planetB,
+      aspect_type: a.aspectType,
+      exact_angle: a.exactAngle,
+      orb: a.orb,
+      is_applying: a.isApplying,
+      nature: a.nature,
+    }));
+
+    const patterns = chart.patterns.map((p) => ({
+      id: p.id,
+      chart_id: chart.id,
+      pattern_type: p.patternType,
+      pattern_planets: {
+        create: p.involvedPlanets.map((pName) => ({
+          planet_id: planetNameToId.get(pName)!,
         })),
       },
-      patterns: {
-        create: chart.patterns.map((p) => ({
-          id: p.id,
-          pattern_type: p.patternType,
-          pattern_planets: {
-            create: p.involvedPlanets.map((pName) => ({
-              planet_id: planetNameToId.get(pName)!,
-            })),
-          },
-        })),
-      },
+    }));
+
+    return {
+      chart: chartData,
+      planets,
+      houses,
+      angles,
+      aspects,
+      patterns,
     };
   }
 }
