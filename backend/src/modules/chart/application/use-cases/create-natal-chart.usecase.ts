@@ -53,15 +53,21 @@ export class CreateNatalChartUseCase {
       );
     }
 
+    // 2b. Guest + birthProfileId guard — Guest chỉ được dùng birthData inline
+    if (command.birthProfileId && command.requestingUserId === null) {
+      throw new AuthenticationError(
+        ErrorCode.UNAUTHORIZED,
+        'Guests cannot use a saved BirthProfile; provide birthData inline',
+      );
+    }
+
     // 3. Resolve birth data
     let engineInputBirthData: EngineInputBirthData;
 
     if (command.birthProfileId) {
       const snapshot = await this.getBirthProfileSnapshotUseCase.execute({
         birthProfileId: command.birthProfileId,
-        // Using ?? '' here to pass type check.
-        // If requestingUserId is null, getBirthProfileSnapshotUseCase will reject inside with AuthorizationError.
-        requestingUserId: command.requestingUserId ?? '',
+        requestingUserId: command.requestingUserId!, // đã đảm bảo non-null từ guard 2b
       });
 
       engineInputBirthData = {
