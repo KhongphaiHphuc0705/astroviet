@@ -22,6 +22,13 @@ import {
   createBirthProfileRoutes,
   createLocationRoutes,
 } from './modules/birth-profile/presentation/index.js';
+import {
+  CreateNatalChartUseCase,
+  DeleteChartUseCase,
+  GetChartUseCase,
+  ListChartsUseCase,
+  ChartBuilder,
+} from './modules/chart/index.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
 import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
@@ -131,6 +138,17 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   });
   const ephemerisProvider = new SwissEphemerisAdapter(swissEph);
 
+  const chartBuilder = new ChartBuilder(ephemerisProvider);
+
+  const createNatalChartUseCase = new CreateNatalChartUseCase(
+    getBirthProfileSnapshotUseCase,
+    chartBuilder,
+    chartRepository,
+  );
+  const getChartUseCase = new GetChartUseCase(chartRepository);
+  const listChartsUseCase = new ListChartsUseCase(chartRepository);
+  const deleteChartUseCase = new DeleteChartUseCase(chartRepository);
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
@@ -153,6 +171,11 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
       listBirthProfilesUseCase,
       searchBirthLocationsUseCase,
       getBirthProfileSnapshotUseCase,
+
+      createNatalChartUseCase,
+      getChartUseCase,
+      listChartsUseCase,
+      deleteChartUseCase,
     },
     repositories: {
       chartRepository,

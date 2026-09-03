@@ -42,7 +42,7 @@ export class PrismaChartRepository implements IChartRepository {
         }
       });
     } catch (error) {
-      throw new InfrastructureError('Failed to save chart', { cause: error });
+      throw new InfrastructureError('Failed to save chart', { cause: error as Error });
     }
   }
 
