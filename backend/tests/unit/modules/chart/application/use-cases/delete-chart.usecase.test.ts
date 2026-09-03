@@ -34,7 +34,7 @@ describe('DeleteChartUseCase', () => {
       save: vi.fn(),
       findById: vi.fn(),
       listByUserId: vi.fn(),
-      softDelete: vi.fn().mockResolvedValue(undefined),
+      softDelete: vi.fn().mockResolvedValue(true),
     };
 
     useCase = new DeleteChartUseCase(mockChartRepository);
@@ -109,5 +109,20 @@ describe('DeleteChartUseCase', () => {
     };
 
     await expect(useCase.execute(command)).rejects.toThrowError(dbError);
+  });
+  it('should throw NotFoundError if softDelete returns false (race condition)', async () => {
+    vi.mocked(mockChartRepository.findById).mockResolvedValue(ownChart);
+    vi.mocked(mockChartRepository.softDelete).mockResolvedValue(false);
+
+    const command: DeleteChartCommand = {
+      chartId: validChartId,
+      requestingUserId: validUserId,
+    };
+
+    await expect(useCase.execute(command)).rejects.toThrowError(NotFoundError);
+    await expect(useCase.execute(command)).rejects.toMatchObject({
+      message: 'Chart not found',
+    });
+    expect(mockChartRepository.softDelete).toHaveBeenCalledWith(validChartId, validUserId);
   });
 });

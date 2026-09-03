@@ -12,8 +12,3 @@ export type {
 
 export { DeleteChartUseCase } from './application/use-cases/delete-chart.usecase.js';
 export type { DeleteChartCommand } from './application/use-cases/delete-chart.usecase.js';
-
-export type { IChartRepository, ListChartsOptions } from './domain/ports/chart-repository.port.js';
-
-export { ChartBuilder } from './domain/engine/chart-builder.js';
-export type { ChartBuilderInput } from './domain/engine/chart-builder.js';

@@ -22,12 +22,12 @@ import {
   createBirthProfileRoutes,
   createLocationRoutes,
 } from './modules/birth-profile/presentation/index.js';
+import { ChartBuilder } from './modules/chart/domain/engine/chart-builder.js';
 import {
   CreateNatalChartUseCase,
   DeleteChartUseCase,
   GetChartUseCase,
   ListChartsUseCase,
-  ChartBuilder,
 } from './modules/chart/index.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
 import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';

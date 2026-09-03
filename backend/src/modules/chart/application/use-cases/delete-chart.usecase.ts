@@ -18,6 +18,9 @@ export class DeleteChartUseCase {
 
     assertChartOwnership(chart, command.requestingUserId);
 
-    await this.chartRepository.softDelete(chart.id, command.requestingUserId);
+    const deleted = await this.chartRepository.softDelete(chart.id, command.requestingUserId);
+    if (!deleted) {
+      throw new NotFoundError('Chart not found');
+    }
   }
 }
