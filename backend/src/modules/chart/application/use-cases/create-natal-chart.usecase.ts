@@ -8,6 +8,7 @@ import { Chart } from '../../domain/entities/chart.entity.js';
 import { IChartRepository } from '../../domain/ports/chart-repository.port.js';
 import { HouseSystem, PlanetName, ChartType } from '../../domain/types/chart.types.js';
 import { EngineInput, EngineInputBirthData } from '../../domain/value-objects/engine-input.vo.js';
+import { mapChartDomainErrorToAppError } from '../errors/map-domain-error.js';
 
 export interface CreateNatalChartCommand {
   requestingUserId: string | null; // null = Guest
@@ -102,13 +103,20 @@ export class CreateNatalChartUseCase {
       chartType: ChartType.Natal,
     });
 
-    // 5. Invoke ChartBuilder
-    const chart = await this.chartBuilder.build({
-      id: randomUUID(),
-      userId: command.requestingUserId,
-      birthProfileId: command.birthProfileId ?? null,
-      engineInput,
-    });
+    let chart: Chart;
+    try {
+      chart = await this.chartBuilder.build({
+        id: randomUUID(),
+        userId: command.requestingUserId,
+        birthProfileId: command.birthProfileId ?? null,
+        engineInput,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        throw mapChartDomainErrorToAppError(error);
+      }
+      throw error;
+    }
 
     // 6. Persistence branch
     if (command.save) {
