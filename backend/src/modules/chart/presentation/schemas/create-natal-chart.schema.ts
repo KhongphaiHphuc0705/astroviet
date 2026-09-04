@@ -29,9 +29,6 @@ export const createNatalChartSchema = z
       .optional()
       .default([]),
   })
-  .refine((data) => !!data.birthProfileId !== !!data.birthData, {
-    message: 'Exactly one of birthProfileId or birthData is required',
-  })
   .openapi('CreateNatalChartRequest');
 
 export type CreateNatalChartRequest = z.infer<typeof createNatalChartSchema>;
