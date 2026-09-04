@@ -10,6 +10,7 @@ import '../src/health/health.schema.js';
 import '../src/modules/identity/presentation/openapi/auth.openapi.js';
 import '../src/modules/birth-profile/presentation/openapi/birth-profile.openapi.js';
 import '../src/modules/birth-profile/presentation/openapi/location-search.openapi.js';
+import '../src/modules/chart/presentation/openapi/chart.openapi.js';
 
 import { generateOpenApiDocument } from '../src/docs/openapi.js';
 
