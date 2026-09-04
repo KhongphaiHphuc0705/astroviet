@@ -31,6 +31,8 @@ import {
 } from './modules/chart/index.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
 import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';
+import { ChartController } from './modules/chart/presentation/controllers/chart.controller.js';
+import { createChartRoutes } from './modules/chart/presentation/routes/chart.routes.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
 import { LogoutUserUseCase } from './modules/identity/application/use-cases/logout-user.usecase.js';
 import { RefreshTokenUseCase } from './modules/identity/application/use-cases/refresh-token.usecase.js';
@@ -149,12 +151,20 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   const listChartsUseCase = new ListChartsUseCase(chartRepository);
   const deleteChartUseCase = new DeleteChartUseCase(chartRepository);
 
+  const chartController = new ChartController(
+    createNatalChartUseCase,
+    getChartUseCase,
+    listChartsUseCase,
+    deleteChartUseCase,
+  );
+
   // --- Routers ---
   const routes: Router[] = [
     createHealthRoutes(healthController),
     createAuthRoutes(authController, tokenProvider),
     createBirthProfileRoutes(birthProfileController, tokenProvider),
     createLocationRoutes(locationSearchController),
+    createChartRoutes(chartController, tokenProvider),
     createDocsRoutes(config),
   ];
 
