@@ -1,13 +1,22 @@
 import { describe, expect, it } from 'vitest';
 
+import { Angle } from '../../../../../../src/modules/chart/domain/entities/angle.entity.js';
+import { Aspect } from '../../../../../../src/modules/chart/domain/entities/aspect.entity.js';
 import { Chart } from '../../../../../../src/modules/chart/domain/entities/chart.entity.js';
+import { House } from '../../../../../../src/modules/chart/domain/entities/house.entity.js';
+import { Pattern } from '../../../../../../src/modules/chart/domain/entities/pattern.entity.js';
+import { Planet } from '../../../../../../src/modules/chart/domain/entities/planet.entity.js';
 import {
+  AspectType,
   ChartType,
   HouseSystem,
+  PlanetCategory,
+  PlanetName,
 } from '../../../../../../src/modules/chart/domain/types/chart.types.js';
 import { ChartCalculationMetadata } from '../../../../../../src/modules/chart/domain/value-objects/calculation-metadata.vo.js';
 import { EngineInput } from '../../../../../../src/modules/chart/domain/value-objects/engine-input.vo.js';
 import { Warning } from '../../../../../../src/modules/chart/domain/value-objects/warning.vo.js';
+import { ZodiacPosition } from '../../../../../../src/modules/chart/domain/value-objects/zodiac-position.vo.js';
 import { ChartResponseMapper } from '../../../../../../src/modules/chart/presentation/mappers/chart-response.mapper.js';
 
 describe('ChartResponseMapper', () => {
@@ -37,11 +46,52 @@ describe('ChartResponseMapper', () => {
     chartType: ChartType.Natal,
     birthProfileId: null,
     engineInput: dummyEngineInput,
-    planets: [],
-    houses: [],
-    angles: [],
-    aspects: [],
-    patterns: [],
+    planets: [
+      Planet.reconstitute({
+        id: 'p-1',
+        name: PlanetName.Sun,
+        category: PlanetCategory.Personal,
+        longitude: 15.5,
+        latitude: 0,
+        speed: 1,
+        isRetrograde: false,
+        zodiacPosition: ZodiacPosition.fromLongitude(15.5),
+        house: 1,
+      }),
+    ],
+    houses: [
+      House.reconstitute({
+        id: 'h-1',
+        number: 1,
+        cuspDegree: 10,
+        houseSystem: HouseSystem.Placidus,
+      }),
+    ],
+    angles: [
+      Angle.reconstitute({
+        id: 'a-1',
+        type: 'Ascendant',
+        longitude: 10,
+      }),
+    ],
+    aspects: [
+      Aspect.reconstitute({
+        id: 'as-1',
+        planetA: PlanetName.Moon,
+        planetB: PlanetName.Sun,
+        aspectType: AspectType.Trine,
+        exactAngle: 120,
+        orb: 2,
+        isApplying: true,
+      }),
+    ],
+    patterns: [
+      Pattern.reconstitute({
+        id: 'pt-1',
+        patternType: 'Grand Trine',
+        involvedPlanets: [PlanetName.Sun, PlanetName.Moon, PlanetName.Jupiter],
+      }),
+    ],
     houseSystem: HouseSystem.Placidus,
     isHouseDataAvailable: false,
     calculationMetadata: ChartCalculationMetadata.create({
@@ -63,11 +113,50 @@ describe('ChartResponseMapper', () => {
     expect(response.chartType).toBe(ChartType.Natal);
     expect(response.houseSystem).toBe(HouseSystem.Placidus);
     expect(response.isHouseDataAvailable).toBe(false);
-    expect(response.planets).toEqual([]);
-    expect(response.houses).toEqual([]);
-    expect(response.angles).toEqual([]);
-    expect(response.aspects).toEqual([]);
-    expect(response.patterns).toEqual([]);
+    expect(response.planets).toEqual([
+      {
+        name: PlanetName.Sun,
+        category: PlanetCategory.Personal,
+        longitude: 15.5,
+        speed: 1,
+        isRetrograde: false,
+        sign: 'Aries',
+        degreeInSign: 15.5,
+        house: 1,
+      },
+    ]);
+    expect(response.houses).toEqual([
+      {
+        number: 1,
+        cuspDegree: 10,
+        signOnCusp: 'Aries',
+      },
+    ]);
+    expect(response.angles).toEqual([
+      {
+        type: 'Ascendant',
+        longitude: 10,
+        sign: 'Aries',
+        degreeInSign: 10,
+      },
+    ]);
+    expect(response.aspects).toEqual([
+      {
+        aspectType: AspectType.Trine,
+        planetA: PlanetName.Moon,
+        planetB: PlanetName.Sun,
+        exactAngle: 120,
+        orb: 2,
+        isApplying: true,
+        nature: 'Harmonious',
+      },
+    ]);
+    expect(response.patterns).toEqual([
+      {
+        patternType: 'Grand Trine',
+        involvedPlanets: [PlanetName.Sun, PlanetName.Moon, PlanetName.Jupiter],
+      },
+    ]);
     expect(response.interpretations).toEqual([]); // D-2 gap
     expect(response.warnings.length).toBe(1);
     expect(response.warnings[0]?.code).toBe('W1');

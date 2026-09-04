@@ -8,42 +8,35 @@ import { House } from '../../domain/entities/house.entity.js';
 import { Pattern } from '../../domain/entities/pattern.entity.js';
 import { Planet } from '../../domain/entities/planet.entity.js';
 import { Warning } from '../../domain/value-objects/warning.vo.js';
+import { ZodiacPosition } from '../../domain/value-objects/zodiac-position.vo.js';
 
 extendZodWithOpenApi(z);
 
-const zodiacPositionSchema = z.object({
+const planetResponseSchema = z.object({
+  name: z.string(),
+  category: z.string(),
+  longitude: z.number(),
+  speed: z.number(),
+  isRetrograde: z.boolean(),
+  sign: z.string(),
+  degreeInSign: z.number(),
+  house: z.number().nullable(),
+});
+
+const houseResponseSchema = z.object({
+  number: z.number(),
+  cuspDegree: z.number(),
+  signOnCusp: z.string(),
+});
+
+const angleResponseSchema = z.object({
+  type: z.string(),
   longitude: z.number(),
   sign: z.string(),
   degreeInSign: z.number(),
 });
 
-const planetResponseSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string(),
-  category: z.string(),
-  longitude: z.number(),
-  latitude: z.number(),
-  speed: z.number(),
-  isRetrograde: z.boolean(),
-  zodiacPosition: zodiacPositionSchema,
-  house: z.number().nullable(),
-});
-
-const houseResponseSchema = z.object({
-  id: z.string().uuid(),
-  number: z.number(),
-  cuspDegree: z.number(),
-  houseSystem: z.string(),
-});
-
-const angleResponseSchema = z.object({
-  id: z.string().uuid(),
-  type: z.string(),
-  longitude: z.number(),
-});
-
 const aspectResponseSchema = z.object({
-  id: z.string().uuid(),
   aspectType: z.string(),
   planetA: z.string(),
   planetB: z.string(),
@@ -54,7 +47,6 @@ const aspectResponseSchema = z.object({
 });
 
 const patternResponseSchema = z.object({
-  id: z.string().uuid(),
   patternType: z.string(),
   involvedPlanets: z.array(z.string()),
 });
@@ -103,33 +95,27 @@ export class ChartResponseMapper {
       houseSystem: chart.houseSystem,
       isHouseDataAvailable: chart.isHouseDataAvailable,
       planets: chart.planets.map((planet: Planet) => ({
-        id: planet.id,
         name: planet.name,
         category: planet.category,
         longitude: planet.longitude,
-        latitude: planet.latitude,
         speed: planet.speed,
         isRetrograde: planet.isRetrograde,
-        zodiacPosition: {
-          longitude: planet.zodiacPosition.longitude,
-          sign: planet.zodiacPosition.sign,
-          degreeInSign: planet.zodiacPosition.degreeInSign,
-        },
+        sign: planet.zodiacPosition.sign,
+        degreeInSign: planet.zodiacPosition.degreeInSign,
         house: planet.house,
       })),
       houses: chart.houses.map((house: House) => ({
-        id: house.id,
         number: house.number,
         cuspDegree: house.cuspDegree,
-        houseSystem: house.houseSystem,
+        signOnCusp: ZodiacPosition.fromLongitude(house.cuspDegree).sign,
       })),
       angles: chart.angles.map((angle: Angle) => ({
-        id: angle.id,
         type: angle.type,
         longitude: angle.longitude,
+        sign: ZodiacPosition.fromLongitude(angle.longitude).sign,
+        degreeInSign: ZodiacPosition.fromLongitude(angle.longitude).degreeInSign,
       })),
       aspects: chart.aspects.map((aspect: Aspect) => ({
-        id: aspect.id,
         aspectType: aspect.aspectType,
         planetA: aspect.planetA,
         planetB: aspect.planetB,
@@ -139,7 +125,6 @@ export class ChartResponseMapper {
         nature: aspect.nature,
       })),
       patterns: chart.patterns.map((pattern: Pattern) => ({
-        id: pattern.id,
         patternType: pattern.patternType,
         involvedPlanets: pattern.involvedPlanets as string[],
       })),
