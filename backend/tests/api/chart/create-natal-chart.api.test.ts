@@ -77,7 +77,7 @@ describe('POST /api/v1/charts/natal', () => {
     };
 
     const response = await request(app)
-      .post('/api/v1/charts/natal')
+      .post('/api/v1/charts/natal?save=true')
       .set('Authorization', `Bearer ${accessToken}`)
       .send(payload);
 
@@ -126,10 +126,31 @@ describe('POST /api/v1/charts/natal', () => {
       includeOptionalPoints: [],
     };
 
-    // Default save=true when no query param is provided
-    const response = await request(app).post('/api/v1/charts/natal').send(payload);
+    // Guest attempting to explicitly save should get 401
+    const response = await request(app).post('/api/v1/charts/natal?save=true').send(payload);
 
     expect(response.status).toBe(401); // Unauthorized
+  });
+
+  it('should default save=false and return 200 when Guest omits save query param', async () => {
+    const payload = {
+      birthData: {
+        birthDate: '1990-01-01',
+        birthTime: { hour: 14, minute: 30, second: 0 },
+        isBirthTimeKnown: true,
+        placeName: 'Hanoi',
+        latitude: 21.0285,
+        longitude: 105.8542,
+        timezoneId: 'Asia/Ho_Chi_Minh',
+      },
+      houseSystem: 'Placidus',
+      includeOptionalPoints: [],
+    };
+
+    const response = await request(app).post('/api/v1/charts/natal').send(payload);
+
+    expect(response.status).toBe(200);
+    expect(response.body.id).toBeDefined();
   });
 
   it('should return 422 if both birthProfileId and birthData are missing', async () => {

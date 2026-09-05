@@ -5,14 +5,7 @@ extendZodWithOpenApi(z);
 
 export const createNatalChartQuerySchema = z
   .object({
-    save: z
-      .union([z.string(), z.boolean()])
-      .optional()
-      .transform((val) => {
-        if (typeof val === 'boolean') return val;
-        if (val === 'false') return false;
-        return true; // Default to true if not provided or anything else
-      }),
+    save: z.preprocess((val) => val === 'true' || val === true, z.boolean().default(false)),
   })
   .openapi('CreateNatalChartQuery');
 
