@@ -17,6 +17,7 @@ import {
 import {
   AuthenticationError,
   AuthorizationError,
+  DomainError,
   NotFoundError,
   ValidationError,
 } from '../../../../../../src/shared/errors/app-error.js';
@@ -275,7 +276,7 @@ describe('CreateNatalChartUseCase', () => {
       expect(engineInput.chartOptions.houseSystem).toBe(HouseSystem.WholeSign);
     });
 
-    it('should propagate errors from ChartBuilder.build without wrapping', async () => {
+    it('should map domain errors to DomainError using mapChartDomainErrorToAppError', async () => {
       const calcError = new ChartCalculationFailed('Test error');
       vi.mocked(mockChartBuilder.build).mockRejectedValue(calcError);
 
@@ -287,7 +288,27 @@ describe('CreateNatalChartUseCase', () => {
         save: false,
       };
 
-      await expect(useCase.execute(command)).rejects.toThrowError(ChartCalculationFailed);
+      await expect(useCase.execute(command)).rejects.toThrowError(DomainError);
+      await expect(useCase.execute(command)).rejects.toMatchObject({
+        errorCode: ErrorCode.CHART_CALCULATION_FAILED,
+        statusCode: 422,
+        message: 'Test error',
+      });
+    });
+
+    it('should propagate non-domain errors from ChartBuilder.build without wrapping', async () => {
+      const genericError = new Error('Test generic error');
+      vi.mocked(mockChartBuilder.build).mockRejectedValue(genericError);
+
+      const command: CreateNatalChartCommand = {
+        requestingUserId: 'user-1',
+        birthData: validBirthData,
+        houseSystem: HouseSystem.Placidus,
+        includeOptionalPoints: [],
+        save: false,
+      };
+
+      await expect(useCase.execute(command)).rejects.toThrowError('Test generic error');
     });
   });
 
