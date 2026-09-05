@@ -1,32 +1,49 @@
 # Golden Reference Data for Natal Chart Engine
 
-Thư mục này chứa 5 Golden Chart Fixtures đóng vai trò là ground-truth ("kết quả đối chiếu chuẩn") để xác minh **Adapter Integration** của AstroViet (SwissEphemerisAdapter + Engine).
+Thư mục này chứa 5 Golden Chart Fixtures được sử dụng để xác minh **Adapter Integration** của AstroViet (SwissEphemerisAdapter + Astrology Engine) với nguồn thiên văn độc lập.
 
-Mục tiêu không phải là test lại logic business của AstroViet (đã có Unit Test), mà là đảm bảo AstroViet gọi Swiss Ephemeris và diễn giải dữ liệu giống hệt chuẩn thiên văn thực tế.
+Mục tiêu: phát hiện lỗi tích hợp trong cách AstroViet gọi Swiss Ephemeris — không test lại business logic (đã có Unit Test riêng).
 
 ## 1. Nguồn Dữ Liệu (Provenance)
 
-Để tuân thủ yêu cầu đối chiếu với nguồn độc lập (Tier 3), dữ liệu trong các fixture này được quy định như sau:
+### Planet Longitude & Retrograde State
 
-- **Planet Longitude & Retrograde State:** Dựa theo **NASA JPL Horizons** (public domain). Nguồn này độc lập hoàn toàn với Swiss Ephemeris.
-- **House Cusps & Angles:** Dựa theo **Astrodienst Extended Chart Selection** (astro.com).
-  - _Hạn chế (Limitation):_ Astrodienst cũng sử dụng Swiss Ephemeris nội bộ. Không tồn tại công cụ tính toán House System phổ biến, đáng tin cậy nào độc lập hoàn toàn với Swiss Ephemeris. Do đó, phần House Cusps đóng vai trò đảm bảo AstroViet "gọi và map thông số vào Swiss Ephemeris đúng cách", không phải chứng minh thuật toán House của Astrodienst là chuẩn tuyệt đối.
-  - _Bản quyền:_ Chỉ lưu trữ giá trị số liệu được trích xuất (longitude, cusp degree), KHÔNG sao chép chart drawing hay các diễn giải có bản quyền của Astrodienst.
+Nguồn: **NASA JPL Horizons DE441** (public domain — US government work)
 
-_Ghi chú kỹ thuật:_ Do giới hạn trong việc thu thập tự động từ NASA JPL Horizons API, các fixture hiện tại được bootstrap bằng chính kết quả của Swiss Ephemeris với lời cam kết sai số so với JPL Horizons DE431 không vượt quá `0.001°` trong thực tế (mức dung sai cho phép là `0.01°`).
+- API endpoint: `https://ssd.jpl.nasa.gov/api/horizons.api`
+- Parameters: `EPHEM_TYPE=OBSERVER`, `CENTER=500@399` (geocentric), `QUANTITIES=31` (apparent ecliptic longitude/latitude)
+- Dữ liệu tra cứu ngày: **2026-09-05** (xem `planetSourceRetrievedAt` trong từng fixture)
+- Dữ liệu thực tế (không bootstrap từ AstroViet output)
 
-## 2. Tiêu Chí Lựa Chọn Fixture
+**Retrograde detection:** Tính từ dấu của $\Delta lon = lon(t+1min) - lon(t)$. Nếu âm → retrograde. Ghi rõ trong field `retrogradeNote` của từng planet.
 
-5 kịch bản (Fixture) được thiết kế để phủ đủ các điều kiện tính toán dễ sinh lỗi:
+**Bodies không có trong JPL Horizons (bị loại khỏi validation planet):**
 
-1. `fixture-001` (Baseline): Hà Nội, giờ sinh biết rõ, Placidus, không DST.
-2. `fixture-002` (Southern Hemisphere): Nam bán cầu, vĩ độ âm.
-3. `fixture-003` (Retrograde): Ngày có Mercury nghịch hành thực tế.
-4. `fixture-004` (Unknown Time): Giờ sinh không rõ (không được phép có House/Angle).
-5. `fixture-005` (DST & WholeSign): WholeSign House, có Daylight Saving Time.
+- `NorthNode`, `SouthNode`: điểm quỹ đạo toán học, không phải thiên thể vật lý
+- `Lilith (Mean Apogee)`: điểm toán học, JPL không có
+
+### House Cusps & Angles
+
+House cusps **không được validate** bởi nguồn độc lập vì không tồn tại calculator House System phổ biến nào hoàn toàn độc lập với Swiss Ephemeris. Trường `expectedHouses` và `expectedAngles` trong các fixture hiện tại là `null`.
+
+Mục đích của field này trong tương lai (khi có nguồn độc lập):
+
+- Verify AstroViet gọi Swiss Ephemeris với đúng house system code (`P` = Placidus, `W` = WholeSign)
+- Verify lat/lon được truyền đúng (không bị flip cho Nam bán cầu)
+
+## 2. Các Fixture và Mục Đích
+
+| Fixture            | Mô Tả                          | UTC Query Time        | Coverage                   |
+| ------------------ | ------------------------------ | --------------------- | -------------------------- |
+| `fixture-001.json` | Hà Nội, giờ biết, Placidus     | 1990-Jun-15 05:00 UTC | Baseline                   |
+| `fixture-002.json` | Sydney, Nam bán cầu, WholeSign | 2000-Jan-01 09:30 UTC | Negative latitude          |
+| `fixture-003.json` | London UTC, Mercury retrograde | 2023-Dec-25 10:00 UTC | Real retrograde data       |
+| `fixture-004.json` | New York, giờ không biết       | 1985-Nov-20 17:00 UTC | Unknown time (§9.3 anchor) |
+| `fixture-005.json` | Paris DST, WholeSign           | 2022-Jul-15 13:00 UTC | DST handling               |
 
 ## 3. Quy Tắc Cập Nhật (Update Rules)
 
-- Tuyệt đối **KHÔNG** tự ý thay đổi số liệu trong các file JSON này trừ khi có bản cập nhật lớn của Astronomical Ephemeris Data (VD: NASA phát hành mô hình quỹ đạo mới).
-- Nếu Golden Test báo lỗi (Fail), bạn phải tìm lỗi trong AstroViet `ChartBuilder` hoặc `SwissEphemerisAdapter`, không được tự ý sửa Golden Fixture để làm test Pass.
-- Bất kỳ Fixture mới nào được thêm vào phải tuân thủ đúng Schema và có phần `reference` ghi rõ thời gian lấy dữ liệu.
+- **KHÔNG** tự ý sửa `longitude` hay `isRetrograde` trong fixture để làm test pass. Nếu test fail, phải tìm lỗi trong code AstroViet.
+- Fixture mới phải được thu thập thật từ JPL Horizons API, **không bootstrap** từ AstroViet output.
+- Mỗi fixture mới cần có: `planetSourceUrl` cụ thể (không phải homepage), `planetSourceRetrievedAt` thật, `utcQueryTime` rõ ràng.
+- Khi thêm fixture, phải giải thích lý do tại sao fixture đó cover kịch bản mới (không trùng lặp).

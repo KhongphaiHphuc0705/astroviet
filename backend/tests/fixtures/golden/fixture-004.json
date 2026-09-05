@@ -1,8 +1,8 @@
 {
   "fixtureId": "golden-004",
-  "description": "Unknown birth time",
+  "description": "Unknown birth time (New York, Nov 1985) — verifies planet-only result with anchor 12:00 local time per Swiss Ephemeris Integration Spec §9.3",
   "birthData": {
-    "birthDate": "1985-11-20T00:00:00.000Z",
+    "birthDate": "1985-11-20",
     "birthTime": null,
     "isBirthTimeKnown": false,
     "timezoneId": "America/New_York",
@@ -13,67 +13,40 @@
   "includeOptionalPoints": [],
   "reference": {
     "planetSource": "NASA JPL Horizons",
-    "planetSourceUrl": "https://ssd.jpl.nasa.gov/horizons/app.html",
-    "planetSourceRetrievedAt": "2026-09-05T12:32:38.924Z",
+    "planetSourceUrl": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='{BODY}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&START_TIME='1985-Nov-20+17:00'&STOP_TIME='1985-Nov-20+17:02'&STEP_SIZE='1+m'&QUANTITIES='31'",
+    "planetSourceRetrievedAt": "2026-09-05T16:05:00Z",
+    "planetSourceEphemeris": "DE441",
+    "utcQueryTime": "1985-Nov-20 17:00 UTC (anchor time = 12:00 local, America/New_York EST = UTC-5, 12:00 - (-5h) = 17:00 UTC per §9.3)",
     "houseSource": null,
     "houseSourceUrl": null,
     "houseSourceRetrievedAt": null,
     "houseSourceLimitation": null
   },
   "expectedPlanets": [
-    {
-      "name": "Sun",
-      "longitude": 238.32329234064377,
-      "isRetrograde": false
-    },
-    {
-      "name": "Moon",
-      "longitude": 343.8110796496312,
-      "isRetrograde": false
-    },
+    { "name": "Sun", "longitude": 238.3232835, "isRetrograde": false },
+    { "name": "Moon", "longitude": 343.8111187, "isRetrograde": false },
     {
       "name": "Mercury",
-      "longitude": 254.66684438588038,
-      "isRetrograde": true
+      "longitude": 254.66683,
+      "isRetrograde": true,
+      "retrogradeNote": "lon DECREASING: 254.6668300 -> 254.6665955 per minute"
     },
+    { "name": "Venus", "longitude": 223.8834886, "isRetrograde": false },
+    { "name": "Mars", "longitude": 195.0548809, "isRetrograde": false },
+    { "name": "Jupiter", "longitude": 310.754514, "isRetrograde": false },
+    { "name": "Saturn", "longitude": 240.430283, "isRetrograde": false },
+    { "name": "Uranus", "longitude": 257.0154773, "isRetrograde": false },
+    { "name": "Neptune", "longitude": 272.0838978, "isRetrograde": false },
+    { "name": "Pluto", "longitude": 215.6153707, "isRetrograde": false },
     {
-      "name": "Venus",
-      "longitude": 223.88349671879564,
-      "isRetrograde": false
-    },
-    {
-      "name": "Mars",
-      "longitude": 195.05489171617046,
-      "isRetrograde": false
-    },
-    {
-      "name": "Jupiter",
-      "longitude": 310.7545351931369,
-      "isRetrograde": false
-    },
-    {
-      "name": "Saturn",
-      "longitude": 240.43029974334695,
-      "isRetrograde": false
-    },
-    {
-      "name": "Uranus",
-      "longitude": 257.0154904983806,
-      "isRetrograde": false
-    },
-    {
-      "name": "Neptune",
-      "longitude": 272.08391104158284,
-      "isRetrograde": false
-    },
-    {
-      "name": "Pluto",
-      "longitude": 215.61539382812532,
-      "isRetrograde": false
+      "name": "Chiron",
+      "longitude": 72.7324018,
+      "isRetrograde": true,
+      "retrogradeNote": "lon DECREASING: 72.7324018 -> 72.7323631 per minute"
     }
   ],
   "expectedHouses": null,
   "expectedAngles": null,
   "tolerance": 0.01,
-  "notes": "Generated using Swiss Ephemeris equivalent values for validation. NASA JPL Horizons is theoretically matching within 0.001 degree."
+  "notes": "Unknown birth time fixture — houses and angles must be null (Domain rule D-9: isBirthTimeKnown=false => no house data). Anchor time 12:00 local per Swiss Ephemeris Integration Spec §9.3. Planet longitudes sourced from NASA JPL Horizons DE441. NorthNode, SouthNode, Lilith omitted."
 }
