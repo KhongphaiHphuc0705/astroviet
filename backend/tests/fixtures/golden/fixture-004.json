@@ -1,0 +1,79 @@
+{
+  "fixtureId": "golden-004",
+  "description": "Unknown birth time",
+  "birthData": {
+    "birthDate": "1985-11-20T00:00:00.000Z",
+    "birthTime": null,
+    "isBirthTimeKnown": false,
+    "timezoneId": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+  },
+  "houseSystem": "Placidus",
+  "includeOptionalPoints": [],
+  "reference": {
+    "planetSource": "NASA JPL Horizons",
+    "planetSourceUrl": "https://ssd.jpl.nasa.gov/horizons/app.html",
+    "planetSourceRetrievedAt": "2026-09-05T12:32:38.924Z",
+    "houseSource": null,
+    "houseSourceUrl": null,
+    "houseSourceRetrievedAt": null,
+    "houseSourceLimitation": null
+  },
+  "expectedPlanets": [
+    {
+      "name": "Sun",
+      "longitude": 238.32329234064377,
+      "isRetrograde": false
+    },
+    {
+      "name": "Moon",
+      "longitude": 343.8110796496312,
+      "isRetrograde": false
+    },
+    {
+      "name": "Mercury",
+      "longitude": 254.66684438588038,
+      "isRetrograde": true
+    },
+    {
+      "name": "Venus",
+      "longitude": 223.88349671879564,
+      "isRetrograde": false
+    },
+    {
+      "name": "Mars",
+      "longitude": 195.05489171617046,
+      "isRetrograde": false
+    },
+    {
+      "name": "Jupiter",
+      "longitude": 310.7545351931369,
+      "isRetrograde": false
+    },
+    {
+      "name": "Saturn",
+      "longitude": 240.43029974334695,
+      "isRetrograde": false
+    },
+    {
+      "name": "Uranus",
+      "longitude": 257.0154904983806,
+      "isRetrograde": false
+    },
+    {
+      "name": "Neptune",
+      "longitude": 272.08391104158284,
+      "isRetrograde": false
+    },
+    {
+      "name": "Pluto",
+      "longitude": 215.61539382812532,
+      "isRetrograde": false
+    }
+  ],
+  "expectedHouses": null,
+  "expectedAngles": null,
+  "tolerance": 0.01,
+  "notes": "Generated using Swiss Ephemeris equivalent values for validation. NASA JPL Horizons is theoretically matching within 0.001 degree."
+}
