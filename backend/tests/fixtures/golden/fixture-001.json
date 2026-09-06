@@ -1,0 +1,72 @@
+{
+  "fixtureId": "golden-001",
+  "description": "Hanoi, known time, Placidus — Baseline case",
+  "birthData": {
+    "birthDate": "1990-06-15",
+    "birthTime": { "hour": 12, "minute": 0, "second": 0 },
+    "isBirthTimeKnown": true,
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "latitude": 21.0285,
+    "longitude": 105.8542
+  },
+  "houseSystem": "Placidus",
+  "includeOptionalPoints": [],
+  "reference": {
+    "planetSource": "NASA JPL Horizons",
+    "planetSourceUrl": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='{BODY}'&OBJ_DATA='NO'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='500@399'&START_TIME='1990-Jun-15+05:00'&STOP_TIME='1990-Jun-15+05:02'&STEP_SIZE='1+m'&QUANTITIES='31'",
+    "planetSourceRetrievedAt": "2026-09-05T16:02:00Z",
+    "planetSourceEphemeris": "DE441",
+    "utcQueryTime": "1990-Jun-15 05:00 UTC (birthDate=1990-06-15 12:00 Asia/Ho_Chi_Minh = UTC+7 => 05:00 UTC)",
+    "houseSource": "Swiss Ephemeris (same engine — independent validation not available for house systems)",
+    "houseSourceUrl": null,
+    "houseSourceRetrievedAt": null,
+    "houseSourceLimitation": "House cusps are computed by SwissEphemerisAdapter itself. No independent house-system calculator exists that is not based on Swiss Ephemeris. These values verify AstroViet calls Swiss Ephemeris with correct parameters."
+  },
+  "expectedPlanets": [
+    { "name": "Sun", "longitude": 83.8509668, "isRetrograde": false, "jplDelta": 0.000013 },
+    { "name": "Moon", "longitude": 341.475857, "isRetrograde": false, "jplDelta": 0.0000095 },
+    { "name": "Mercury", "longitude": 65.1921566, "isRetrograde": false, "jplDelta": 0.0000129 },
+    { "name": "Venus", "longitude": 48.4346279, "isRetrograde": false, "jplDelta": 0.0000132 },
+    { "name": "Mars", "longitude": 10.8315562, "isRetrograde": false, "jplDelta": 0.0000135 },
+    { "name": "Jupiter", "longitude": 105.8263141, "isRetrograde": false, "jplDelta": 0.0000109 },
+    {
+      "name": "Saturn",
+      "longitude": 294.0489901,
+      "isRetrograde": true,
+      "jplDelta": 0.0000039,
+      "retrogradeNote": "lon decreasing: 294.0489901 -> 294.0489496 per minute"
+    },
+    {
+      "name": "Uranus",
+      "longitude": 278.1765404,
+      "isRetrograde": true,
+      "jplDelta": 0.000015,
+      "retrogradeNote": "lon decreasing: 278.1765404 -> 278.1765134 per minute"
+    },
+    {
+      "name": "Neptune",
+      "longitude": 283.7243545,
+      "isRetrograde": true,
+      "jplDelta": 0.0000027,
+      "retrogradeNote": "lon decreasing: 283.7243545 -> 283.7243372 per minute"
+    },
+    {
+      "name": "Pluto",
+      "longitude": 225.4073831,
+      "isRetrograde": true,
+      "jplDelta": 0.0000206,
+      "retrogradeNote": "lon decreasing: 225.4073831 -> 225.4073690 per minute"
+    },
+    {
+      "name": "Chiron",
+      "longitude": 106.0309948,
+      "isRetrograde": false,
+      "jplDelta": 0.0000052,
+      "retrogradeNote": "lon increasing: 106.0309948 -> 106.0310650 per minute"
+    }
+  ],
+  "expectedHouses": null,
+  "expectedAngles": null,
+  "tolerance": 0.01,
+  "notes": "Planet longitudes sourced from NASA JPL Horizons DE441 (independent of Swiss Ephemeris). Retrograde status derived from sign of longitude change between t and t+1min. NorthNode, SouthNode and Lilith not available from JPL Horizons (mathematical/computed points, not physical bodies) — omitted from planet validation. House/Angle validation not performed (no independent house calculator available)."
+}
