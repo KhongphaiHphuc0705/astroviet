@@ -17,10 +17,10 @@
     "planetSourceRetrievedAt": "2026-09-05T16:05:00Z",
     "planetSourceEphemeris": "DE441",
     "utcQueryTime": "2023-Dec-25 10:00 UTC (timezone=UTC, no conversion needed)",
-    "houseSource": "Swiss Ephemeris (same engine — independent validation not available for house systems)",
-    "houseSourceUrl": null,
-    "houseSourceRetrievedAt": null,
-    "houseSourceLimitation": "House cusps computed by SwissEphemerisAdapter itself."
+    "houseSource": "Swiss Ephemeris WASM via SwissEphemerisAdapter.calculateHouses() — same underlying engine as AstroViet",
+    "houseSourceUrl": "scripts/compute-golden-houses.ts (local computation)",
+    "houseSourceRetrievedAt": "2026-09-06T06:32:43Z",
+    "houseSourceLimitation": "Same underlying engine as AstroViet (Swiss Ephemeris). Validates that AstroViet calls swe.houses() with correct parameters (house code 'P', lat/lon, UTC Julian Day). Does NOT validate Placidus algorithm in absolute astronomical terms."
   },
   "expectedPlanets": [
     { "name": "Sun", "longitude": 273.3325208, "isRetrograde": false },
@@ -55,8 +55,26 @@
       "retrogradeNote": "lon DECREASING: 15.4530649 -> 15.4530638 per minute"
     }
   ],
-  "expectedHouses": null,
-  "expectedAngles": null,
+  "expectedHouses": [
+    { "number": 1, "cuspDegree": 305.7771565 },
+    { "number": 2, "cuspDegree": 6.0444535 },
+    { "number": 3, "cuspDegree": 42.8865963 },
+    { "number": 4, "cuspDegree": 65.4512223 },
+    { "number": 5, "cuspDegree": 83.2275198 },
+    { "number": 6, "cuspDegree": 101.0865146 },
+    { "number": 7, "cuspDegree": 125.7771565 },
+    { "number": 8, "cuspDegree": 186.0444535 },
+    { "number": 9, "cuspDegree": 222.8865963 },
+    { "number": 10, "cuspDegree": 245.4512223 },
+    { "number": 11, "cuspDegree": 263.2275198 },
+    { "number": 12, "cuspDegree": 281.0865146 }
+  ],
+  "expectedAngles": [
+    { "type": "Ascendant", "longitude": 305.7771565 },
+    { "type": "Midheaven", "longitude": 245.4512223 },
+    { "type": "Descendant", "longitude": 125.7771565 },
+    { "type": "ImumCoeli", "longitude": 65.4512223 }
+  ],
   "tolerance": 0.01,
-  "notes": "Mercury retrograde verified from real NASA JPL Horizons DE441 data (Dec 13-Jan 1, 2024 Mercury retrograde period). Jupiter and Uranus also retrograde as confirmed by decreasing longitude per JPL. NorthNode, SouthNode, Lilith omitted."
+  "notes": "Mercury retrograde verified from real NASA JPL Horizons DE441 data (Dec 13-Jan 1, 2024 Mercury retrograde period). Jupiter and Uranus also retrograde as confirmed by decreasing longitude per JPL. NorthNode, SouthNode, Lilith omitted. House/Angle data computed via Swiss Ephemeris WASM (same engine) — validates correct parameter passing (house code 'P', lat/lon, UTC)."
 }

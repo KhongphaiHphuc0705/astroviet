@@ -17,10 +17,10 @@
     "planetSourceRetrievedAt": "2026-09-05T16:05:00Z",
     "planetSourceEphemeris": "DE441",
     "utcQueryTime": "2022-Jul-15 13:00 UTC (birthDate=2022-07-15 15:00 Europe/Paris = CEST UTC+2 in summer => 13:00 UTC — DST applied correctly)",
-    "houseSource": "Swiss Ephemeris (same engine — independent validation not available for house systems)",
-    "houseSourceUrl": null,
-    "houseSourceRetrievedAt": null,
-    "houseSourceLimitation": "House cusps computed by SwissEphemerisAdapter itself. These values verify correct DST+UTC conversion and WholeSign house system parameter."
+    "houseSource": "Swiss Ephemeris WASM via SwissEphemerisAdapter.calculateHouses() — same underlying engine as AstroViet",
+    "houseSourceUrl": "scripts/compute-golden-houses.ts (local computation)",
+    "houseSourceRetrievedAt": "2026-09-06T06:32:43Z",
+    "houseSourceLimitation": "Same underlying engine as AstroViet (Swiss Ephemeris). Validates that AstroViet calls swe.houses() with correct parameters (house code 'W', lat/lon, UTC Julian Day with DST correctly applied). Does NOT validate WholeSign algorithm in absolute astronomical terms."
   },
   "expectedPlanets": [
     { "name": "Sun", "longitude": 113.0382629, "isRetrograde": false },
@@ -55,8 +55,26 @@
       "retrogradeNote": "lon increasing: 16.4261298 -> 16.4261323 per minute"
     }
   ],
-  "expectedHouses": null,
-  "expectedAngles": null,
+  "expectedHouses": [
+    { "number": 1, "cuspDegree": 209.5475056 },
+    { "number": 2, "cuspDegree": 210.0 },
+    { "number": 3, "cuspDegree": 240.0 },
+    { "number": 4, "cuspDegree": 270.0 },
+    { "number": 5, "cuspDegree": 300.0 },
+    { "number": 6, "cuspDegree": 330.0 },
+    { "number": 7, "cuspDegree": 0.0 },
+    { "number": 8, "cuspDegree": 30.0 },
+    { "number": 9, "cuspDegree": 60.0 },
+    { "number": 10, "cuspDegree": 90.0 },
+    { "number": 11, "cuspDegree": 120.0 },
+    { "number": 12, "cuspDegree": 150.0 }
+  ],
+  "expectedAngles": [
+    { "type": "Ascendant", "longitude": 209.5475056 },
+    { "type": "Midheaven", "longitude": 128.2935277 },
+    { "type": "Descendant", "longitude": 29.5475056 },
+    { "type": "ImumCoeli", "longitude": 308.2935277 }
+  ],
   "tolerance": 0.01,
-  "notes": "DST verification fixture: Europe/Paris in July = CEST (UTC+2), not CET (UTC+1). If DST were ignored and CET applied, UTC would be 14:00 instead of 13:00 — producing measurably different planet positions. Planet longitudes sourced from NASA JPL Horizons DE441. WholeSign house system. NorthNode, SouthNode, Lilith omitted."
+  "notes": "DST verification fixture: Europe/Paris in July = CEST (UTC+2), not CET (UTC+1). If DST were ignored and CET applied, UTC would be 14:00 instead of 13:00 — producing measurably different planet positions. Planet longitudes sourced from NASA JPL Horizons DE441. WholeSign house system. NorthNode, SouthNode, Lilith omitted. House/Angle data computed via Swiss Ephemeris WASM (same engine) — validates DST+UTC conversion is correct before passing Julian Day to swe.houses()."
 }
