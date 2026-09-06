@@ -17,10 +17,10 @@
     "planetSourceRetrievedAt": "2026-09-05T16:02:00Z",
     "planetSourceEphemeris": "DE441",
     "utcQueryTime": "1990-Jun-15 05:00 UTC (birthDate=1990-06-15 12:00 Asia/Ho_Chi_Minh = UTC+7 => 05:00 UTC)",
-    "houseSource": "Swiss Ephemeris WASM via SwissEphemerisAdapter.calculateHouses() — same underlying engine as AstroViet",
-    "houseSourceUrl": "scripts/compute-golden-houses.ts (local computation)",
-    "houseSourceRetrievedAt": "2026-09-06T06:32:43Z",
-    "houseSourceLimitation": "Same underlying engine as AstroViet (Swiss Ephemeris). Validates that AstroViet calls swe.houses() with correct parameters (house system code 'P', lat/lon, UTC Julian Day). Does NOT validate that the Placidus algorithm itself is astronomically correct in absolute terms."
+    "houseSource": "Swiss Ephemeris (same engine — independent validation not available for house systems)",
+    "houseSourceUrl": null,
+    "houseSourceRetrievedAt": null,
+    "houseSourceLimitation": "House cusps are computed by SwissEphemerisAdapter itself. No independent house-system calculator exists that is not based on Swiss Ephemeris. These values verify AstroViet calls Swiss Ephemeris with correct parameters."
   },
   "expectedPlanets": [
     { "name": "Sun", "longitude": 83.8509668, "isRetrograde": false, "jplDelta": 0.000013 },
@@ -65,26 +65,8 @@
       "retrogradeNote": "lon increasing: 106.0309948 -> 106.0310650 per minute"
     }
   ],
-  "expectedHouses": [
-    { "number": 1, "cuspDegree": 174.4694365 },
-    { "number": 2, "cuspDegree": 203.4703781 },
-    { "number": 3, "cuspDegree": 233.953836 },
-    { "number": 4, "cuspDegree": 264.5639626 },
-    { "number": 5, "cuspDegree": 294.9857566 },
-    { "number": 6, "cuspDegree": 325.2283248 },
-    { "number": 7, "cuspDegree": 354.4694365 },
-    { "number": 8, "cuspDegree": 23.4703781 },
-    { "number": 9, "cuspDegree": 53.953836 },
-    { "number": 10, "cuspDegree": 84.5639626 },
-    { "number": 11, "cuspDegree": 114.9857566 },
-    { "number": 12, "cuspDegree": 145.2283248 }
-  ],
-  "expectedAngles": [
-    { "type": "Ascendant", "longitude": 174.4694365 },
-    { "type": "Midheaven", "longitude": 84.5639626 },
-    { "type": "Descendant", "longitude": 354.4694365 },
-    { "type": "ImumCoeli", "longitude": 264.5639626 }
-  ],
+  "expectedHouses": null,
+  "expectedAngles": null,
   "tolerance": 0.01,
-  "notes": "Planet longitudes sourced from NASA JPL Horizons DE441 (independent of Swiss Ephemeris). Retrograde status derived from sign of longitude change between t and t+1min. NorthNode, SouthNode and Lilith not available from JPL Horizons (mathematical/computed points, not physical bodies) — omitted from planet validation. House/Angle data computed via Swiss Ephemeris WASM (same engine) — validates correct parameter passing (house code 'P', lat/lon, UTC), not algorithm correctness in absolute terms."
+  "notes": "Planet longitudes sourced from NASA JPL Horizons DE441 (independent of Swiss Ephemeris). Retrograde status derived from sign of longitude change between t and t+1min. NorthNode, SouthNode and Lilith not available from JPL Horizons (mathematical/computed points, not physical bodies) — omitted from planet validation. House/Angle validation not performed (no independent house calculator available)."
 }
