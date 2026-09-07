@@ -202,4 +202,12 @@ describe('Chart Entity', () => {
     expect(chart.isHouseDataAvailable).toBe(false);
     expect(chart.houses).toHaveLength(12); // Bypasses validation
   });
+
+  it('TR-14: Chart entity does not expose any update/mutation method', () => {
+    const chart = Chart.create(validProps);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((chart as any).update).toBeUndefined();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((chart as any).set).toBeUndefined();
+  });
 });
