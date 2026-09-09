@@ -95,6 +95,30 @@ describe('ChartBuilder', () => {
     expect(chart1.houses[0]?.cuspDegree).toEqual(chart2.houses[0]?.cuspDegree);
   });
 
+  it('Edge Case #18: repeated calculation with different Chart id calls the ephemeris provider twice — no caching/dedup', async () => {
+    const provider = createMockEphemerisProvider();
+    const builder = new ChartBuilder(provider);
+    const calculateNatalSpy = vi.spyOn(provider, 'calculateNatal');
+
+    const chart1 = await builder.build({
+      id: 'chart-id-1',
+      userId: 'user-id',
+      birthProfileId: 'profile-id',
+      engineInput: createEngineInput(true),
+    });
+
+    const chart2 = await builder.build({
+      id: 'chart-id-2',
+      userId: 'user-id',
+      birthProfileId: 'profile-id',
+      engineInput: createEngineInput(true),
+    });
+
+    expect(calculateNatalSpy).toHaveBeenCalledTimes(2); // chứng minh thực sự execute lại, không dedupe
+    expect(chart1.id).not.toBe(chart2.id);
+    expect(chart1.planets[0]?.longitude).toEqual(chart2.planets[0]?.longitude);
+  });
+
   it('should bypass house/angle calculations when birth time is unknown (TR-7)', async () => {
     const provider = createMockEphemerisProvider();
     const builder = new ChartBuilder(provider);
