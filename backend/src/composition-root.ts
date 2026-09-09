@@ -29,6 +29,7 @@ import {
   GetChartUseCase,
   ListChartsUseCase,
 } from './modules/chart/index.js';
+import { initializeEphemerisProvider } from './modules/chart/infrastructure/adapters/initialize-ephemeris-provider.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
 import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';
 import { ChartController } from './modules/chart/presentation/controllers/chart.controller.js';
@@ -134,7 +135,7 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
   const chartRepository = new PrismaChartRepository(prisma);
 
   const swissEph = new SwissEph();
-  await swissEph.initSwissEph();
+  await initializeEphemerisProvider(swissEph);
   logger.info('Ephemeris Provider (Swiss Ephemeris WASM) initialized successfully', {
     module: 'chart',
   });
