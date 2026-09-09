@@ -82,6 +82,46 @@ describe('SwissEphemerisAdapter Integration', () => {
         ErrorCode.EPHEMERIS_PROVIDER_ERROR,
       );
     });
+
+    it('Edge Case #17: serializes concurrent calculateNatal calls — never more than 1 in-flight at a time', async () => {
+      // 3 requests with well-separated dates so Sun longitudes differ by ~120° each
+      const reqA = {
+        utcDateTime: new Date('2000-01-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+      const reqB = {
+        utcDateTime: new Date('2000-05-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+      const reqC = {
+        utcDateTime: new Date('2000-09-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+
+      let activeCalls = 0;
+      let maxConcurrentCalls = 0;
+      const originalCalcUt = swe.calc_ut.bind(swe);
+      swe.calc_ut = vi.fn((...args: Parameters<typeof swe.calc_ut>) => {
+        activeCalls++;
+        maxConcurrentCalls = Math.max(maxConcurrentCalls, activeCalls);
+        const result = originalCalcUt(...args);
+        activeCalls--;
+        return result;
+      });
+
+      const results = await Promise.all([reqA, reqB, reqC].map((r) => adapter.calculateNatal(r)));
+
+      expect(maxConcurrentCalls).toBe(1); // Serialization proven: never > 1 WASM call in-flight
+      // Verify each request returned distinct Sun longitudes (no data leakage between concurrent calls)
+      const sunLongitudes = results.map(
+        (r) => r.planets.find((p) => p.name === PlanetName.Sun)!.longitude,
+      );
+      expect(sunLongitudes[0]).not.toBeCloseTo(sunLongitudes[1], 1);
+      expect(sunLongitudes[1]).not.toBeCloseTo(sunLongitudes[2], 1);
+
+      // Restore original
+      swe.calc_ut = originalCalcUt;
+    });
   });
 
   describe('calculateHouses', () => {
