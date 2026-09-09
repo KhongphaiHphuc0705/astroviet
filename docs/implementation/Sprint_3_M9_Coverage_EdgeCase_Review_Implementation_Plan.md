@@ -23,6 +23,8 @@ M1–M8 đã đóng, verify sạch trên `dev` (`d699afe`). M9 là milestone aud
 
 Sau khi audit đầy đủ 21 TR + 18 Edge Case + Leap Year bằng cách đọc trực tiếp từng test file (không suy đoán từ tên file), phát hiện: **20/21 TR PASS đầy đủ, 1 TR PARTIAL**; **13/18 Edge Case PASS, 1 PARTIAL, 4 GAP thật**; **Leap Year đã có test nhưng ở sai layer** (BirthProfile input-validation, chưa từng exercise qua pipeline tính toán Chart thật).
 
+**Phát hiện quan trọng thứ hai (đã RESOLVED qua audit, không còn là Open Question):** Swiss Ephemeris Integration Spec §36 (case 11/12) đã đóng băng yêu cầu: *"mọi lỗi initialization/runtime của Swiss Ephemeris phải được translate thành `ExternalServiceError('EPHEMERIS_PROVIDER_ERROR', ...)` tại Infrastructure boundary trước khi lỗi đi ra ngoài adapter"* — đây **không phải quyết định cần chọn**, mà là requirement đã freeze. Đã audit trực tiếp `composition-root.ts`: `await swissEph.initSwissEph();` được gọi **trực tiếp trên `SwissEph` thô**, **trước khi** `SwissEphemerisAdapter` được khởi tạo — nghĩa là lệnh init hiện tại **nằm ngoài Adapter boundary hoàn toàn**, không có try/catch nào bọc nó. Đây là **corrective task thật** (Mục 8, M9-T4), không phải chỉ thiếu test.
+
 ---
 
 ## 2. Current-State Verification
@@ -132,7 +134,7 @@ Sau khi audit đầy đủ 21 TR + 18 Edge Case + Leap Year bằng cách đọc 
 | G1 | TR-14 — thiếu assertion "method không tồn tại" | Thấp | Thêm 1 test nhỏ |
 | G2 | Edge Case #8 — exact sign boundary floating-point | Thấp | Thêm 1 test |
 | G3 | Edge Case #10 — station/zero speed | Trung bình | Thêm 1 test |
-| G4 | Edge Case #11+12 — ephemeris/WASM init fail-fast | Cao — ảnh hưởng khả năng khởi động app | Thêm test mock init throw |
+| G4 | Edge Case #11+12 — ephemeris/WASM init fail-fast **chưa translate đúng contract đã freeze** | Cao — ảnh hưởng khả năng khởi động app đúng ngữ nghĩa lỗi | Corrective fix (wrap `initSwissEph()` tại boundary) + test verify đúng behavior sau fix |
 | G5 | Edge Case #17 — concurrent calculations | Trung bình | Thêm test gọi đồng thời N request |
 | G6 | Edge Case #18 — repeated calculations khác `id` | Thấp | Mở rộng test TR-15 hiện có |
 | G7 | Leap year — chưa test qua Chart pipeline thật | Trung bình | Thêm 1 test ở `time-conversion.test.ts` |
@@ -153,14 +155,16 @@ it('TR-14: Chart entity does not expose any update/mutation method', () => {
 });
 ```
 
-### M9-T2 — Edge Case #8: exact sign boundary floating-point
+### M9-T2 — Edge Case #8: exact sign boundary floating-point (CONFIRMED — OQ-2 resolved)
 File: `tests/unit/modules/chart/domain/value-objects/zodiac-position.vo.test.ts`.
 ```typescript
-it('Edge Case #8: accepts natural floating-point imprecision near sign boundary (29.9999999°)', () => {
+it('Edge Case #8: 29.9999999° stays in Aries (floor(longitude/30), no rounding/compensation)', () => {
   const position = ZodiacPosition.fromLongitude(29.9999999);
-  expect(position).toBeDefined(); // verify không throw; giá trị Sign cụ thể xác nhận từ output thật — xem OQ-2
+  expect(position.sign).toBe(ZodiacSign.Aries);
+  expect(position.degreeInSign).toBeCloseTo(29.9999999, 6);
 });
 ```
+Domain Spec đã đóng băng công thức `sign = floor(longitude / 30)` và yêu cầu chấp nhận floating-point boundary tự nhiên, không thêm rule bù trừ — `29.9999999 / 30 = 0.999...` → `floor = 0` → Aries. Assertion cụ thể, không còn phụ thuộc kết quả chạy thử.
 
 ### M9-T3 — Edge Case #10: station/zero speed
 File: `tests/unit/modules/chart/domain/engine/calculators/planet.calculator.test.ts`.
@@ -172,35 +176,82 @@ it('Edge Case #10: speed exactly 0 is not retrograde (D-12 Deferred, binary chec
 });
 ```
 
-### M9-T4 — Edge Case #11+12: ephemeris/WASM init fail-fast
-File: `tests/unit/modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.test.ts` (thêm `describe` mới, không sửa test cũ).
+### M9-T4 — Edge Case #11+12: ephemeris/WASM init fail-fast (REWRITTEN — CONFIRMED, không test raw SDK)
+
+**Quyết định (CONFIRMED):** Không test trực tiếp `brokenSwe.initSwissEph()` như test chính — test đó chỉ chứng minh SDK gốc có throw, **không chứng minh AstroViet bắt và dịch lỗi đúng contract**. Test phải nhắm vào **boundary thật của AstroViet** (Adapter/bootstrap), không phải raw `swisseph-wasm`.
+
+**Corrective fix trước (bắt buộc, vì Decision 1 — Mục 12 — đã RESOLVED: đây là requirement đã freeze, không phải tính năng mới):** Đã audit `composition-root.ts` — `swissEph.initSwissEph()` hiện gọi trực tiếp, không có try/catch. Bổ sung 1 hàm nhỏ, testable, **không thay đổi lifecycle/thứ tự khởi tạo hiện có** (chỉ bọc lại đúng call site đã có):
+
 ```typescript
-describe('Bootstrap failure (Edge Case #11, #12)', () => {
-  it('surfaces a thrown error from initSwissEph() instead of silently succeeding', async () => {
-    const brokenSwe = new SwissEph();
-    vi.spyOn(brokenSwe, 'initSwissEph').mockRejectedValue(new Error('corrupt ephemeris data'));
-    await expect(brokenSwe.initSwissEph()).rejects.toThrow();
-    // Xem OQ-1 — xác nhận trước liệu composition-root có (hoặc nên có) wrapper dịch lỗi này
-    // thành ExternalServiceError hay không, trước khi viết assertion cứng theo kỳ vọng đó.
+// composition-root.ts (hoặc file nhỏ riêng nếu cần export để test, ví dụ initialize-ephemeris-provider.ts)
+export async function initializeEphemerisProvider(swe: SwissEph): Promise<void> {
+  try {
+    await swe.initSwissEph();
+  } catch (error) {
+    throw new ExternalServiceError(
+      ErrorCode.EPHEMERIS_PROVIDER_ERROR,
+      'Failed to initialize Swiss Ephemeris',
+      { cause: error },
+    );
+  }
+}
+```
+`composition-root.ts` gọi `await initializeEphemerisProvider(swissEph);` thay vì gọi thẳng `swissEph.initSwissEph()` — **không đổi thứ tự, không đổi lifecycle**, chỉ bọc đúng 1 lớp translation tại đúng vị trí đã freeze.
+
+File test: file mới nhỏ cạnh hàm trên (`initialize-ephemeris-provider.test.ts`), vì `composition-root.ts` không có test file hiện có.
+
+```typescript
+describe('Ephemeris Provider bootstrap boundary (Edge Case #11, #12)', () => {
+  it('translates a raw initSwissEph() failure into ExternalServiceError(EPHEMERIS_PROVIDER_ERROR) — fail-fast', async () => {
+    const brokenSwe = { initSwissEph: vi.fn().mockRejectedValue(new Error('corrupt ephemeris data')) } as unknown as SwissEph;
+
+    await expect(initializeEphemerisProvider(brokenSwe)).rejects.toMatchObject({
+      constructor: ExternalServiceError,
+      errorCode: ErrorCode.EPHEMERIS_PROVIDER_ERROR,
+    });
   });
 });
 ```
+Assertion nhắm đúng **behavior của boundary AstroViet** (`initializeEphemerisProvider`), không phải hành vi của `swisseph-wasm` tự nó.
 
-### M9-T5 — Edge Case #17: concurrent calculations
+### M9-T5 — Edge Case #17: concurrent calculations (REWRITTEN — CONFIRMED, phải chứng minh serialization)
 File: `tests/unit/modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.test.ts`.
+
+**Quyết định (CONFIRMED):** `Promise.all()` + kết quả khác nhau **chưa chứng minh** queue/serialization hoạt động — chỉ chứng minh output đúng, có thể đúng "tình cờ". Test phải **track số lượng WASM call đang chạy đồng thời tại một thời điểm**, xác nhận tối đa 1 (đúng cơ chế Mutex/serialize queue đã thiết kế từ M2).
+
 ```typescript
-it('Edge Case #17: serializes concurrent calculateNatal calls without corrupting results', async () => {
-  const results = await Promise.all([reqA, reqB, reqC].map(r => adapter.calculateNatal(r)));
-  expect(results[0].planets[0].longitude).not.toBeCloseTo(results[1].planets[0].longitude, 1);
+it('Edge Case #17: serializes concurrent calculateNatal calls — never more than 1 in-flight at a time', async () => {
+  let activeCalls = 0;
+  let maxConcurrentCalls = 0;
+  const originalCalcUt = mockSwe.calc_ut;
+  mockSwe.calc_ut = vi.fn(async (...args) => {
+    activeCalls++;
+    maxConcurrentCalls = Math.max(maxConcurrentCalls, activeCalls);
+    await new Promise((r) => setTimeout(r, 5)); // giả lập độ trễ WASM thật
+    activeCalls--;
+    return originalCalcUt(...args);
+  });
+
+  const results = await Promise.all([reqA, reqB, reqC].map((r) => adapter.calculateNatal(r)));
+
+  expect(maxConcurrentCalls).toBe(1); // chứng minh serialization thật, không chỉ suy luận từ output
+  expect(results[0].planets[0].longitude).not.toBeCloseTo(results[1].planets[0].longitude, 1); // đồng thời verify từng request vẫn đúng, không lẫn dữ liệu
 });
 ```
 
-### M9-T6 — Edge Case #18: mở rộng test TR-15 hiện có
+### M9-T6 — Edge Case #18: mở rộng test TR-15 hiện có (REWRITTEN — CONFIRMED, phải chứng minh "no dedupe" thật)
 File: `tests/unit/modules/chart/domain/engine/chart-builder.test.ts` (thêm case mới, không tạo file mới).
+
+**Quyết định (CONFIRMED):** `chart1.id !== chart2.id` + giá trị số giống nhau **chỉ chứng minh determinism** (đã có ở TR-15) — **chưa chứng minh** không có cache/dedupe. Test phải spy trực tiếp `calculateNatal()` và xác nhận gọi đúng 2 lần.
+
 ```typescript
-it('Edge Case #18: repeated calculation with different Chart id produces identical values, no dedup', async () => {
+it('Edge Case #18: repeated calculation with different Chart id calls the ephemeris provider twice — no caching/dedup', async () => {
+  const calculateNatalSpy = vi.spyOn(fakeEphemerisProvider, 'calculateNatal');
+
   const chart1 = await builder.build({ ...baseInput, id: 'chart-id-1' });
   const chart2 = await builder.build({ ...baseInput, id: 'chart-id-2' });
+
+  expect(calculateNatalSpy).toHaveBeenCalledTimes(2); // chứng minh thực sự execute lại, không dedupe
   expect(chart1.id).not.toBe(chart2.id);
   expect(chart1.planets[0].longitude).toEqual(chart2.planets[0].longitude);
 });
@@ -252,15 +303,17 @@ it('correctly converts a leap-year birth date (2000-02-29) to UTC', () => {
 
 | File | Loại | Lý do |
 |---|---|---|
+| `composition-root.ts` (hoặc file nhỏ mới `initialize-ephemeris-provider.ts`) | Sửa/thêm (corrective, CONFIRMED — Decision 1) | M9-T4 — bọc `initSwissEph()` bằng translation đã freeze, không đổi lifecycle |
 | `tests/unit/modules/chart/domain/entities/chart.entity.test.ts` | Sửa (thêm test) | M9-T1 |
 | `tests/unit/modules/chart/domain/value-objects/zodiac-position.vo.test.ts` | Sửa (thêm test) | M9-T2 |
 | `tests/unit/modules/chart/domain/engine/calculators/planet.calculator.test.ts` | Sửa (thêm test) | M9-T3 |
-| `tests/unit/modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.test.ts` | Sửa (thêm 2 `describe` mới) | M9-T4, M9-T5 |
+| `tests/unit/modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.test.ts` | Sửa (thêm `describe` mới) | M9-T5 |
+| (test file mới cho `initializeEphemerisProvider`) | Mới, nhỏ | M9-T4 |
 | `tests/unit/modules/chart/domain/engine/chart-builder.test.ts` | Sửa (thêm 1 test) | M9-T6 |
 | `tests/unit/modules/chart/domain/engine/time-conversion.test.ts` | Sửa (thêm test) | M9-T7 |
 | `backend/vitest.config.ts` | Sửa (xóa `thresholds` block) | M9-T8 |
 
-**Không tạo file test mới nào** — toàn bộ 7 gap về test được vá bằng cách bổ sung vào file đã có. **Không sửa file production nào trong `chart/domain/`, `chart/infrastructure/adapters/`** trừ khi OQ-1 xác nhận cần corrective task riêng.
+**Duy nhất 1 file production được sửa** (`composition-root.ts`, corrective fix đã CONFIRMED cần thiết — không phải "mở rộng scope", mà là hiện thực hóa đúng requirement đã freeze mà audit phát hiện chưa implement). Toàn bộ 7 gap test (G1-G7) được vá bằng cách bổ sung vào file test đã có (trừ 1 file test nhỏ mới cho `initializeEphemerisProvider`, vì hàm này chưa từng tồn tại).
 
 ---
 
@@ -268,7 +321,8 @@ it('correctly converts a leap-year birth date (2000-02-29) to UTC', () => {
 
 ```
 M9-T1, T2, T3, T6, T7 (độc lập nhau, có thể làm song song)
-M9-T4, T5 (cùng file adapter test, nên làm tuần tự tránh conflict, độc lập về logic)
+M9-T4 (corrective fix `initializeEphemerisProvider` TRƯỚC, rồi mới viết test tương ứng — không thể đảo ngược thứ tự)
+M9-T5 (cùng file adapter test với phần describe của T4 cũ, độc lập về logic, có thể làm song song T4)
 M9-T8 (độc lập hoàn toàn — chỉ sửa config)
       │
       ▼ (tất cả xong)
@@ -277,27 +331,21 @@ M9 Final Review — chạy lại toàn bộ test + coverage report (không thres
 
 ---
 
-## 12. Open Questions
+## 12. Resolved Decisions (trước là Open Questions — cả 2 đã CONFIRMED)
 
-### OQ-1 — Composition-root có wrap `initSwissEph()` bằng try/catch dịch sang error type cụ thể không?
+### Decision 1 (trước: OQ-1) — Error translation tại init boundary là bắt buộc, không phải lựa chọn
 
-**Question:** §36 case 11/12 kỳ vọng lỗi init được dịch thành lỗi có ý nghĩa (`ExternalServiceError` hoặc tương đương). Đã đọc `composition-root.ts` (`await swissEph.initSwissEph();`) — **không có try/catch quanh dòng này** — nếu `initSwissEph()` throw, lỗi propagate nguyên trạng (`Error` thô), không phải error type có ý nghĩa như §36 mô tả kỳ vọng.
+**Đã RESOLVED:** Swiss Ephemeris Integration Spec đã đóng băng yêu cầu — mọi lỗi initialization/runtime của Swiss Ephemeris phải translate thành `ExternalServiceError('EPHEMERIS_PROVIDER_ERROR', ...)` tại Infrastructure boundary. Đây không còn là quyết định cần chọn.
 
-**Why it matters:** Có thể đây là **gap thứ 2** ngoài "thiếu test" — thiếu cả code xử lý, không chỉ thiếu test. Cần xác nhận trước khi viết M9-T4, vì nếu code chưa dịch lỗi, viết test theo đúng kỳ vọng §36 sẽ **fail thật** (đúng mục đích M9) chứ không phải lỗi tự tạo.
+**Audit hiện tại:** `composition-root.ts` gọi `swissEph.initSwissEph()` trực tiếp, không có translation — vi phạm requirement đã freeze.
 
-**Recommendation:** Viết M9-T4 theo đúng hành vi **hiện tại** trước (test lỗi propagate nguyên trạng) — nếu fail đúng như dự đoán, đây là corrective task nhỏ bổ sung (thêm try/catch dịch lỗi), báo cáo rõ thay vì tự ý mở rộng scope.
+**Hành động:** Corrective fix (Mục 8, M9-T4) — bọc call site bằng `initializeEphemerisProvider()`, dịch đúng sang `ExternalServiceError(EPHEMERIS_PROVIDER_ERROR)`. **M9 chỉ audit implementation hiện tại để xác định đúng vị trí boundary, không tự thiết kế lại lifecycle khởi tạo** — thứ tự/cách gọi `initSwissEph()` giữ nguyên, chỉ thêm đúng 1 lớp translation tại đúng vị trí đã có.
 
-**Priority:** Trung bình. **Blocks:** Chỉ M9-T4 viết đúng ngay từ đầu, không chặn 6 task khác.
+### Decision 2 (trước: OQ-2) — `29.9999999°` thuộc Aries
 
-### OQ-2 — Assertion chính xác cho Edge Case #8 (giá trị `29.9999999°` map Sign nào)
+**Đã RESOLVED:** Domain Spec đã đóng băng công thức `sign = floor(longitude / 30)`, yêu cầu chấp nhận floating-point boundary tự nhiên, không thêm rounding/compensation rule → `29.9999999°` → Aries, `degreeInSign ≈ 29.9999999`. Assertion cụ thể đã áp dụng ở M9-T2 (Mục 8), không còn phụ thuộc kết quả chạy thử trước khi viết.
 
-**Question:** Domain Spec chỉ nói "chấp nhận sai số tự nhiên, không bù trừ" — không nói rõ kết quả cụ thể.
-
-**Recommendation:** Chạy thử thật `ZodiacPosition.fromLongitude(29.9999999)` trước khi viết assertion cứng — dùng kết quả thật quan sát được (test "không throw/không crash", không phải test "giá trị nghiệp vụ cụ thể nào đúng").
-
-**Priority:** Thấp. **Blocks:** Không.
-
-**Không có Open Question nào chặn toàn bộ M9.**
+**Không còn Open Question nào trong M9.**
 
 ---
 
@@ -305,7 +353,7 @@ M9 Final Review — chạy lại toàn bộ test + coverage report (không thres
 
 | Risk | Impact | Likelihood | Mitigation |
 |---|---|---|---|
-| M9-T4 phát hiện thật sự thiếu code xử lý (không chỉ thiếu test) — xem OQ-1 | Trung bình | Trung bình | Xử lý như corrective task riêng, báo cáo rõ, không âm thầm mở rộng scope |
+| M9-T4 corrective fix chưa đúng vị trí boundary, cần điều chỉnh lại sau review | Trung bình | Thấp (đã audit rõ vị trí — `composition-root.ts`, Mục 12 Decision 1) | Code review kỹ trước khi merge, đối chiếu đúng requirement đã freeze |
 | Xóa `coverage.thresholds` làm giảm động lực viết test trong tương lai | Thấp | Thấp | §12.7 đã risk-assessed điều này — review có chủ đích (M9 đang làm) là cơ chế thay thế đã chấp nhận |
 | Test concurrent (M9-T5) flaky do timing thật | Thấp | Thấp | Dùng `Promise.all` với input cố định, so sánh giá trị không so sánh thời gian |
 | Sign boundary test (M9-T2) không nhất quán giữa môi trường | Rất thấp | Rất thấp | JS `Number` xử lý theo IEEE 754, không phụ thuộc OS/platform |
@@ -318,7 +366,7 @@ M9 Final Review — chạy lại toàn bộ test + coverage report (không thres
 2. Ma trận 18 Edge Case đầy đủ.
 3. Leap year đánh giá riêng, không lẫn vào 18 case.
 4. Discrepancy `vitest.config.ts` được báo cáo và sửa, trích dẫn rõ §12.7.
-5. Đúng 7 gap test được vá, không tạo file test thừa, không sửa production logic ngoài phạm vi cần thiết.
+5. Đúng 7 gap test (G1-G7) được vá, cộng 1 corrective fix production (`initializeEphemerisProvider`, Decision 1) — không tạo file test thừa ngoài kế hoạch, không sửa production logic ngoài phạm vi cần thiết.
 6. Không mở lại quyết định đã đóng (D-8 tolerance, D-12 station deferred, D-14 Pattern deferred).
 
 ---
@@ -329,8 +377,8 @@ M9 Final Review — chạy lại toàn bộ test + coverage report (không thres
 - [ ] 18/18 Edge Case có dòng trong ma trận, đối chiếu test thật.
 - [ ] Leap year đánh giá riêng, gap được vá (M9-T7).
 - [ ] `vitest.config.ts` không còn `coverage.thresholds` global, đã ghi chú lý do trong chính file.
-- [ ] 6 gap test (G1-G6) được vá bằng cách bổ sung vào file test đã có.
-- [ ] OQ-1 được xác nhận trước khi merge M9-T4.
+- [ ] 7 gap test (G1-G7) được vá bằng cách bổ sung vào file test đã có (hoặc 1 file test nhỏ mới cho `initializeEphemerisProvider`).
+- [ ] Corrective fix `initializeEphemerisProvider` (Decision 1) triển khai đúng, không đổi lifecycle khởi tạo hiện có.
 - [ ] `npm run lint`/`typecheck`/`build` pass.
 - [ ] `npm run test:coverage` chạy xong (có report), không fail vì %.
 - [ ] Không sửa Domain Model, REST API contract, DB schema, hay bất kỳ quyết định đã đóng băng nào khác.
@@ -339,4 +387,4 @@ M9 Final Review — chạy lại toàn bộ test + coverage report (không thres
 
 ## 16. Final Recommendation
 
-> **READY FOR IMPLEMENTATION**, với đúng 1 điều kiện cần xác nhận trước (OQ-1) ảnh hưởng cách viết chính xác M9-T4 — không chặn 6 task còn lại. Phát hiện quan trọng nhất của M9 không nằm trong danh sách 21 TR/18 Edge Case đề bài liệt kê sẵn, mà là **discrepancy hạ tầng CI** (`vitest.config.ts` threshold mâu thuẫn §12.7) — đúng đây mới là giá trị thật của 1 milestone "Coverage & Edge-Case Review" độc lập: không chỉ tick-box từng case đã biết, mà phát hiện được sai lệch hệ thống mà không ai chủ động tìm trước đó.
+> **READY FOR IMPLEMENTATION** — không còn Open Question nào (cả 2 đã CONFIRMED thành Resolved Decisions, Mục 12). Phát hiện quan trọng nhất của M9 không nằm trong danh sách 21 TR/18 Edge Case đề bài liệt kê sẵn, mà là **discrepancy hạ tầng CI** (`vitest.config.ts` threshold mâu thuẫn §12.7) — đúng đây mới là giá trị thật của 1 milestone "Coverage & Edge-Case Review" độc lập: không chỉ tick-box từng case đã biết, mà phát hiện được sai lệch hệ thống mà không ai chủ động tìm trước đó. Song song đó, audit cũng phát hiện 1 corrective fix production thật sự cần thiết (`initializeEphemerisProvider`) — không phải chỉ thiếu test, mà thiếu đúng 1 lớp translation đã được đóng băng làm requirement từ trước.
