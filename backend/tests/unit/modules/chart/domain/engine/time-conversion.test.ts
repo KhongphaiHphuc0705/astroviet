@@ -22,6 +22,16 @@ describe('time-conversion', () => {
       expect(utcDate.toISOString()).toBe('1990-05-15T18:30:00.000Z');
     });
 
+    it('correctly converts a leap-year birth date (2000-02-29) to UTC', () => {
+      const localDate = new Date('2000-02-29T00:00:00.000Z');
+      const localTime = { hour: 12, minute: 0, second: 0 };
+
+      const utcDate = convertLocalTimeToUtc(localDate, localTime, true, 'Asia/Ho_Chi_Minh');
+
+      // 12:00 LMT (Asia/Ho_Chi_Minh in 2000 is UTC+7) -> 05:00 UTC
+      expect(utcDate.toISOString()).toBe('2000-02-29T05:00:00.000Z');
+    });
+
     it('should use anchor time when isBirthTimeKnown is false', () => {
       const localDate = new Date('1990-05-15T00:00:00.000Z');
 
