@@ -45,6 +45,14 @@ describe('ZodiacPosition VO', () => {
     expect(position.degreeInSign).toBe(15);
   });
 
+  it('Edge Case #8: accepts natural floating-point imprecision near sign boundary (29.9999999°)', () => {
+    const position = ZodiacPosition.fromLongitude(29.9999999);
+    expect(position).toBeDefined(); // verify không throw
+    // Giá trị này nhỏ hơn 30 nên vẫn thuộc Aries
+    expect(position.sign).toBe('Aries');
+    expect(position.degreeInSign).toBeCloseTo(29.9999999, 7);
+  });
+
   it('should be immutable (no setters)', () => {
     const position = ZodiacPosition.fromLongitude(10);
     // Object is frozen, so setting it should throw a TypeError in strict mode

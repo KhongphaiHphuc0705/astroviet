@@ -33,14 +33,10 @@ export default defineConfig({
         'src/shared/logger/logger.interface.ts',
         'src/shared/utils/type.utils.ts',
       ],
-      thresholds: {
-        statements: 80,
-        branches: 80,
-        functions: 80,
-        lines: 80,
-        // Chú ý: Ở Sprint 0-4, ta áp dụng 80% cho Application (health, etc).
-        // Sau này sẽ config overrides cho 'src/modules/*/domain/**' là 90%.
-      },
+      // Coverage threshold toàn cục đã bị loại bỏ theo Sprint 3 Backend Plan §12.7
+      // (CONFIRMED, risk-based policy — không dùng % làm Acceptance Criterion).
+      // Report vẫn được sinh ra (text/json/html) để làm công cụ chẩn đoán,
+      // nhưng KHÔNG làm fail CI dựa trên %.
     },
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

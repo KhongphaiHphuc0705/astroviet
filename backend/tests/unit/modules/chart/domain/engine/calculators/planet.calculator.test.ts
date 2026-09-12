@@ -85,6 +85,14 @@ describe('PlanetCalculator', () => {
     expect(venus?.isRetrograde).toBe(false);
   });
 
+  it('Edge Case #10: speed exactly 0 is not retrograde (D-12 Deferred, binary check only)', () => {
+    const rawData = createMockRawEphemeris({
+      [PlanetName.Mercury]: { speed: 0 },
+    });
+    const result = PlanetCalculator.calculate(rawData, []);
+    expect(result.find((p) => p.name === PlanetName.Mercury)?.isRetrograde).toBe(false);
+  });
+
   it('should let DataIntegrityError bubble up if Sun or Moon is retrograde (TR-13, INV-14)', () => {
     const rawDataSun = createMockRawEphemeris({
       [PlanetName.Sun]: { speed: -0.1 },

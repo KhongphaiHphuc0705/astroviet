@@ -82,6 +82,60 @@ describe('SwissEphemerisAdapter Integration', () => {
         ErrorCode.EPHEMERIS_PROVIDER_ERROR,
       );
     });
+
+    it('Edge Case #17: concurrent calculateNatal calls all complete correctly — no throw, no data leakage between requests', async () => {
+      // 3 requests with well-separated dates so Sun longitudes differ by ~120° each
+      const reqA = {
+        utcDateTime: new Date('2000-01-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+      const reqB = {
+        utcDateTime: new Date('2000-05-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+      const reqC = {
+        utcDateTime: new Date('2000-09-15T12:00:00Z'),
+        coordinates: { latitude: 21.0, longitude: 105.8 },
+      };
+
+      let activeCalls = 0;
+      let maxConcurrentCalls = 0;
+
+      // To truly prove serialization (and avoid the "39 orphan promises" issue where mocking
+      // the synchronous calc_ut with an async function causes the loop to fire off un-awaited promises),
+      // we spy on the Mutex's run method and wrap the actual task with a simulated delay.
+      const adapterAny = adapter as any;
+      const originalRun = adapterAny.mutex.run.bind(adapterAny.mutex);
+      vi.spyOn(adapterAny.mutex, 'run').mockImplementation(async (task: () => Promise<any>) => {
+        return originalRun(async () => {
+          activeCalls++;
+          maxConcurrentCalls = Math.max(maxConcurrentCalls, activeCalls);
+          await new Promise((r) => setTimeout(r, 5)); // Simulate async work yielding the event loop
+          const result = await task();
+          activeCalls--;
+          return result;
+        });
+      });
+
+      // All 3 concurrent requests must resolve (no throw)
+      const results = await Promise.all([reqA, reqB, reqC].map((r) => adapter.calculateNatal(r)));
+
+      expect(results).toHaveLength(3);
+      for (const result of results) {
+        expect(result.planets).toHaveLength(14);
+      }
+
+      // Each result must carry distinct Sun longitudes — verifies no cross-request data leakage
+      const sunLongitudes = results.map(
+        (r) => r.planets.find((p) => p.name === PlanetName.Sun)!.longitude,
+      );
+      expect(sunLongitudes[0]).not.toBeCloseTo(sunLongitudes[1], 1);
+      expect(sunLongitudes[1]).not.toBeCloseTo(sunLongitudes[2], 1);
+
+      expect(maxConcurrentCalls).toBe(1); // Serialization proven via simulated async delay
+
+      vi.restoreAllMocks();
+    });
   });
 
   describe('calculateHouses', () => {
