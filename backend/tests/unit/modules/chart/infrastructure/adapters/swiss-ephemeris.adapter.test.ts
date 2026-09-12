@@ -84,16 +84,6 @@ describe('SwissEphemerisAdapter Integration', () => {
     });
 
     it('Edge Case #17: concurrent calculateNatal calls all complete correctly — no throw, no data leakage between requests', async () => {
-      // Note on scope: swisseph-wasm's calc_ut is synchronous (WASM). Because there is no
-      // await point inside the Mutex task body, JS single-thread execution already prevents
-      // true interleaving for this specific implementation. This test therefore does NOT
-      // claim to prove the Mutex serialization mechanism itself — it verifies the observable
-      // behavior: Promise.all over 3 requests with distinct dates all resolve without error
-      // and each result contains Sun longitude values that match the expected date (no data
-      // leakage / cross-contamination between concurrent requests).
-      // If calc_ut ever becomes async (e.g. future WASM worker), the Mutex will be the
-      // correct guard; a dedicated Mutex unit test should be added at that point.
-
       // 3 requests with well-separated dates so Sun longitudes differ by ~120° each
       const reqA = {
         utcDateTime: new Date('2000-01-15T12:00:00Z'),
@@ -107,6 +97,25 @@ describe('SwissEphemerisAdapter Integration', () => {
         utcDateTime: new Date('2000-09-15T12:00:00Z'),
         coordinates: { latitude: 21.0, longitude: 105.8 },
       };
+
+      let activeCalls = 0;
+      let maxConcurrentCalls = 0;
+
+      // To truly prove serialization (and avoid the "39 orphan promises" issue where mocking
+      // the synchronous calc_ut with an async function causes the loop to fire off un-awaited promises),
+      // we spy on the Mutex's run method and wrap the actual task with a simulated delay.
+      const adapterAny = adapter as any;
+      const originalRun = adapterAny.mutex.run.bind(adapterAny.mutex);
+      vi.spyOn(adapterAny.mutex, 'run').mockImplementation(async (task: () => Promise<any>) => {
+        return originalRun(async () => {
+          activeCalls++;
+          maxConcurrentCalls = Math.max(maxConcurrentCalls, activeCalls);
+          await new Promise((r) => setTimeout(r, 5)); // Simulate async work yielding the event loop
+          const result = await task();
+          activeCalls--;
+          return result;
+        });
+      });
 
       // All 3 concurrent requests must resolve (no throw)
       const results = await Promise.all([reqA, reqB, reqC].map((r) => adapter.calculateNatal(r)));
@@ -122,6 +131,10 @@ describe('SwissEphemerisAdapter Integration', () => {
       );
       expect(sunLongitudes[0]).not.toBeCloseTo(sunLongitudes[1], 1);
       expect(sunLongitudes[1]).not.toBeCloseTo(sunLongitudes[2], 1);
+
+      expect(maxConcurrentCalls).toBe(1); // Serialization proven via simulated async delay
+
+      vi.restoreAllMocks();
     });
   });
 
