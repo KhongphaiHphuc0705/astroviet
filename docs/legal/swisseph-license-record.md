@@ -80,12 +80,12 @@ Theo điều khoản AGPL-3.0 (intended direction — xem Field 8):
 > Xác nhận tường minh nhận được từ chủ dự án trong conversation 2026-09-13:
 > **"AGPL-3.0 là intended project direction"**
 >
-> Sign-off này là xác nhận độc lập, có thể kiểm chứng lại trong conversation log `a4b870a4-c084-4298-88b0-372ae8276041` — không phải dòng tự viết trong cùng commit audit. Exit Criterion #8: ✅ **PASS**.
+> Sign-off này là xác nhận độc lập: "Xác nhận trực tiếp bởi Phuc Hoang (chủ dự án) trong phiên review với Claude, 2026-09-13" — không phải dòng tự viết trong cùng commit audit. Exit Criterion #8: ✅ **PASS**.
 
 ### Quyết định đã xác nhận:
 
 - **Intended direction:** AGPL-3.0 (open-source)
-- **Sign-off:** Chủ dự án — conversation 2026-09-13 (ID: `a4b870a4-c084-4298-88b0-372ae8276041`)
+- **Sign-off:** Xác nhận trực tiếp bởi Phuc Hoang (chủ dự án) trong phiên review với Claude, 2026-09-13
 - **Final compliance decision:** Pending provenance audit (không blocking Sprint 3 closure — blocking production go-live)
 
 ### Đồng bộ hóa 3 nguồn (G-11 — RESOLVED):

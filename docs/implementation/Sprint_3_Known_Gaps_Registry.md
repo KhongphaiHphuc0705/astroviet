@@ -197,7 +197,7 @@
 | **Nguồn** | Phát hiện độc lập trong Pre-Plan Audit M10; `docs/legal/swisseph-license-record.md` Field 8 |
 | **Impact** | Compliance gap — không có xác nhận tường minh độc lập về intended project license. AGPL-3.0 là "proposed direction" theo Sprint 3 Plan, nhưng chưa có sign-off có thể kiểm chứng. |
 | **Severity** | **Cao** |
-| **Status** | ✅ RESOLVED — Chủ dự án xác nhận tường minh AGPL-3.0 là intended direction (conversation 2026-09-13, ID: `a4b870a4`) |
+| **Status** | ✅ RESOLVED — Xác nhận trực tiếp bởi Phuc Hoang (chủ dự án) trong phiên review với Claude, 2026-09-13 |
 | **Owner** | Chủ dự án (business/legal decision) — sign-off đã nhận |
 | **Follow-up Milestone** | Provenance audit trước production go-live |
 | **Blocks Sprint 3 closure?** | Không — đã resolve |

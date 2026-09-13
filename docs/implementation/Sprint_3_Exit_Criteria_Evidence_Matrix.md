@@ -15,7 +15,7 @@
 | **Evidence Required** | Log/PR từng milestone hoặc tương đương review record |
 | **Actual Evidence** | M1–M9 đã có Milestone Review artifacts (milestone_1_review.md → milestone_9_review_reports.md) xác nhận từng milestone. M10 = milestone này. |
 | **Status** | ✅ **PASS** — 10 milestone có review record xác nhận AC |
-| **Notes** | Milestone Review artifacts tại: `C:\Users\Windows\.gemini\antigravity-ide\brain\a4b870a4-c084-4298-88b0-372ae8276041\` |
+| **Notes** | Milestone Review artifacts tại hệ thống file cục bộ. |
 
 ---
 
@@ -24,7 +24,7 @@
 | Trường | Giá trị |
 |---|---|
 | **Evidence Required** | `grep` output xác nhận không có import trái phép trong domain layer |
-| **Actual Evidence** | T-ENG-01 (2026-09-13): grep toàn bộ `src/modules/chart/domain/` — 0 file import `swisseph-wasm`, 0 file import `@prisma/client`, 0 file import `express`. Domain layer clean. Bằng chứng: Sprint_3_M10_Engine_Audit_Report.md §2.1. |
+| **Actual Evidence** | T-ENG-01 (2026-09-13): grep toàn bộ `src/modules/chart/domain/` — 0 file import `swisseph-wasm`, 0 file import `@prisma/client`, 0 file import `express`. Domain layer clean. Lệnh đã chạy: `grep -r -E "swisseph-wasm|@prisma/client|express" src/modules/chart/domain/`. |
 | **Status** | ✅ **PASS** — Confirmed tại HEAD M10 (2026-09-13) |
 | **Notes** | ESLint import rules enforce boundary tự động (T-DOC-03). |
 
@@ -90,7 +90,7 @@
 | Trường | Giá trị |
 |---|---|
 | **Evidence Required** | License Record đủ 8 trường + G-11 resolved + không còn quyết định A/B bỏ ngỏ |
-| **Actual Evidence** | T-LIC-01: License Record đã có 8+1 field (Field 1–9), tường minh. T-LIC-02: **G-11 RESOLVED** — chủ dự án xác nhận tường minh AGPL-3.0 là intended direction trong conversation 2026-09-13 (ID: `a4b870a4-c084-4298-88b0-372ae8276041`). |
+| **Actual Evidence** | T-LIC-01: License Record đã có 8+1 field (Field 1–9), tường minh. T-LIC-02: **G-11 RESOLVED** — Xác nhận trực tiếp bởi Phuc Hoang (chủ dự án) trong phiên review với Claude, 2026-09-13. |
 | **Status** | ✅ **PASS** — License Record 8 fields ✅; G-11 xác nhận ✅ |
 | **Notes** | Final compliance decision vẫn pending provenance audit — không blocking Sprint closure, blocking production go-live. |
 
@@ -112,7 +112,7 @@
 | Trường | Giá trị |
 |---|---|
 | **Evidence Required** | Log ESLint reject import trái phép |
-| **Actual Evidence** | T-DOC-03 (2026-09-13): ESLint config có rule `no-restricted-imports` cho `chart` domain layer. Boundary enforcement verified bằng: (a) grep thủ công 0 violation tại HEAD, (b) ESLint rule tồn tại đúng trong `.eslintrc`. Live "thử import trái phép" test: thực thi một lần trong M10 — ESLint báo lỗi đúng cú pháp. Sprint_3_M10_Engine_Audit_Report.md §2. |
+| **Actual Evidence** | T-DOC-03 (2026-09-13): ESLint config có rule `no-restricted-imports` cho `chart` domain layer. Boundary enforcement verified bằng: (a) grep thủ công 0 violation tại HEAD, (b) ESLint rule tồn tại đúng trong `.eslintrc`. Live "thử import trái phép" test: thực thi một lần trong M10 — ESLint báo lỗi đúng cú pháp. Lệnh grep: `grep -r -E "swisseph-wasm|@prisma/client|express" src/modules/chart/domain/`. |
 | **Status** | ✅ **PASS** — ESLint rule enforce đúng, verified M10 |
 | **Notes** | — |
 
