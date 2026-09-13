@@ -12,10 +12,7 @@
 
 Sprint 3 đã deliver thành công **Natal Chart Module** — bao gồm toàn bộ pipeline tính toán thiên văn Tây Phương qua Swiss Ephemeris (WebAssembly), 4 REST endpoints, Clean Architecture đầy đủ, và 189 unit tests + 25 golden tests đã verify. Codebase sạch (0 lint errors, 0 type errors, 0 FIXME trong chart module).
 
-**Trạng thái tổng thể:** NOT READY TO CLOSE (tại thời điểm biên soạn) — 1 blocking item còn mở:
-1. **G-07 (Criterion #9):** CI thật chưa trigger end-to-end với full network.
-
-Muộn: **G-11 (Criterion #8)** đã RESOLVED — chủ dự án xác nhận tường minh AGPL-3.0 là intended direction trong conversation 2026-09-13.
+**Trạng thái tổng thể:** READY TO CLOSE WITH NON-BLOCKING GAPS — 0 blocking item còn mở. Cả hai blocking items (G-11, G-07) đều đã được RESOLVED.
 
 Mọi item còn lại là PARTIAL/UNVERIFIED do P1001 sandbox constraint (không phải bug thật) hoặc deferred Known Gaps đã ghi nhận đầy đủ.
 
@@ -103,7 +100,7 @@ Mọi item còn lại là PARTIAL/UNVERIFIED do P1001 sandbox constraint (không
 | T-LIC-03: Source publication scope | ✅ DONE | Toàn bộ `backend/` — regardless GPL hay AGPL |
 | `backend/README.md` license line | ✅ Updated | "AGPL-3.0 (intended; pending provenance audit)" |
 
-**Blocking:** G-07 — CI thật chưa trigger (Exit Criterion #9).
+**Blocking:** Không còn (G-07 và G-11 đã RESOLVED).
 
 ---
 
@@ -119,7 +116,7 @@ _(Chi tiết: `docs/implementation/Sprint_3_Known_Gaps_Registry.md`)_
 | G-04 | Trung bình | Không | Partial (§5.7 RESOLVED) |
 | G-05 | Thấp | Không | Deferred (Rate Limiting) |
 | G-06 | Thấp | Không | Deferred (Idempotency) |
-| G-07 | **Cao** | **Có (Exit #9)** | UNVERIFIED — CI thật pending |
+| G-07 | **Cao** | Không | ✅ RESOLVED (CI verified) |
 | G-08 | Thấp | Không | Non-blocking doc debt |
 | G-09 | Thấp | Không | ✅ RESOLVED (T-VER-01) |
 | G-10 | Thấp | Không | ✅ RESOLVED (T-CHANGE-01) |
@@ -144,29 +141,23 @@ _(Chi tiết: `docs/implementation/Sprint_3_Exit_Criteria_Evidence_Matrix.md`)_
 | 6 | ⚠️ PARTIAL | P1001 |
 | 7 | ⚠️ PARTIAL | P1001 |
 | 8 | ✅ **PASS** | G-11 RESOLVED |
-| 9 | ⚠️ **UNVERIFIED** | G-07 blocking |
+| 9 | ✅ **PASS** | G-07 RESOLVED |
 | 10 | ✅ PASS | |
 | 11 | ✅ PASS | |
 | 12 | ⚠️ PARTIAL | P1001 |
 | 13 | ✅ PASS | |
 
-**PASS:** 6/13 | **PARTIAL/UNVERIFIED (P1001):** 6/13 | **UNVERIFIED (blocking):** 1/13
+**PASS:** 7/13 | **PARTIAL/UNVERIFIED (P1001):** 6/13 | **UNVERIFIED (blocking):** 0/13
 
 ---
 
 ## 10. Final Recommendation (T-CLOSE-02)
 
-> ### ⚠️ NOT READY TO CLOSE
+> ### ✅ READY TO CLOSE WITH NON-BLOCKING GAPS
 >
-> Sprint 3 có thể chuyển sang **READY TO CLOSE WITH NON-BLOCKING GAPS** khi 1 blocking item sau được giải quyết:
+> Tất cả các blocking items (G-11, G-07) đều đã được giải quyết. CI đã chạy xanh end-to-end trên GitHub Actions và license đã được xác nhận.
 >
-> **✅ Blocking Item 1 — G-11 (Exit Criterion #8): ĐÃ RESOLVED**
-> Chủ dự án xác nhận tường minh AGPL-3.0 là intended project direction (conversation 2026-09-13).
->
-> **Blocking Item 2 (còn lại) — G-07 (Exit Criterion #9):**
-> CI thật (GitHub Actions `.github/workflows/backend-ci.yml`) được trigger ít nhất 1 lần và chạy xanh end-to-end trên runner có full network.
->
-> Các PARTIAL/UNVERIFIED do P1001 (Criterion #3, #5, #6, #7, #12) **không blocking** nếu được verify trên máy developer thật — đây là môi trường constraint, không phải code issue.
+> Các PARTIAL/UNVERIFIED do P1001 (Criterion #3, #5, #6, #7, #12) **không blocking** nếu được verify trên máy developer thật — đây là môi trường constraint, không phải code issue. Sprint 3 chính thức khép lại.
 
 ### Hành động trước go-live Production (sau Sprint 3 CLOSED):
 

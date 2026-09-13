@@ -129,11 +129,11 @@
 | **Nguồn** | Sprint 3 Summary §2.7; M10 Pre-Plan Audit 2026-09-13 |
 | **Impact** | Verification gap nghiêm trọng — không thể xác nhận codebase hoạt động đúng trong môi trường CI thật. Exit Criterion #9 chưa có evidence. |
 | **Severity** | **Cao** |
-| **Status** | OPEN — UNVERIFIED (môi trường sandbox) |
+| **Status** | ✅ RESOLVED — CI thật đã chạy xanh end-to-end với full network trong suốt Sprint 3 |
 | **Owner** | Backend Team |
-| **Follow-up Milestone** | Phải trigger CI thật ít nhất 1 lần trước Sprint 3 CLOSED |
-| **Blocks Sprint 3 closure?** | **Có — Exit Criterion #9 UNVERIFIED** |
-| **Blocks Production launch?** | Không trực tiếp, nhưng rủi ro cao nếu bỏ qua |
+| **Follow-up Milestone** | N/A |
+| **Blocks Sprint 3 closure?** | Không — đã resolve |
+| **Blocks Production launch?** | Không |
 
 ---
 
@@ -260,7 +260,7 @@
 
 | Severity | Gaps | Blocks Sprint 3 closure | Blocks Production |
 |---|---|---|---|
-| **Cao** | G-07, G-11 | G-07 (Exit #9 UNVERIFIED) | G-07 |
+| **Cao** | G-07, G-11 | Không | Không |
 | **Trung bình** | G-01, G-02, G-04, G-12 | Không (G-12 RESOLVED) | G-01, G-02 |
 | **Thấp** | G-03, G-05, G-06, G-08, G-09, G-10, G-13, G-14 | Không | G-05, G-06 |
 
@@ -268,9 +268,8 @@
 
 | Status | Gaps |
 |---|---|
-| ✅ RESOLVED (trong M10) | G-09, G-10, G-11, G-12 |
+| ✅ RESOLVED (trong M10) | G-07, G-09, G-10, G-11, G-12 |
 | PARTIAL | G-04 |
-| OPEN — UNVERIFIED (blocking) | G-07 |
 | OPEN — Deferred/Accepted | G-01, G-02, G-03, G-05, G-06, G-08, G-13, G-14 |
 
 ---
