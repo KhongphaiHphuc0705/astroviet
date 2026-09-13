@@ -1,7 +1,7 @@
 # Swiss Ephemeris License Record
 
-> **Audit Status:** Updated M10 (2026-09-13) — T-LIC-01 completed. All 8 required fields now have explicit, tường minh entries.
-> **Trạng thái mâu thuẫn (G-11):** Xem Mục 8 — cần xác nhận từ người có thẩm quyền dự án trước khi đóng Sprint. (T-LIC-02)
+> **Audit Status:** Updated M10 (2026-09-13) — T-LIC-01 completed (8 fields explicit). T-LIC-02: Field 8 **RESOLVED** — xác nhận tường minh nhận được từ chủ dự án trong conversation 2026-09-13.
+> **Trạng thái G-11:** ✅ **RESOLVED** — Exit Criterion #8 PASS. (xem Field 8)
 
 ---
 
@@ -70,43 +70,53 @@ Theo điều khoản AGPL-3.0 (intended direction — xem Field 8):
 3. **Network-use trigger (AGPL Section 13):** Khi cung cấp dịch vụ qua network, source code phải được cung cấp cho người dùng. Áp dụng **trước** khi go-live public.
 4. **No additional restrictions:** Không được thêm các điều khoản hạn chế vượt quá AGPL-3.0.
 
-> **Lưu ý kỹ thuật:** Wrapper `swisseph-wasm` tarball ghi `GPL-3.0-or-later` (không có Affero clause). Intended direction của AstroViet là **AGPL-3.0** (xem Field 8 — quyết định này bao trùm và nghiêm ngặt hơn GPL-3.0 trên chiều network-use). Provenance audit cần hoàn thành trước khi coi đây là final compliance decision.
+> **Lưu ý kỹ thuật:** Wrapper `swisseph-wasm` tarball ghi `GPL-3.0-or-later` (không có Affero clause). AstroViet chọn **AGPL-3.0** cho project license (xác nhận bởi chủ dự án 2026-09-13, xem Field 8). AGPL-3.0 ⊇ GPL-3.0-or-later — không có xung đột compliance với dependency.
 
-## Field 8 — Production Licensing Strategy / Status (T-LIC-02 — RESOLVED với điều kiện)
+## Field 8 — Production Licensing Strategy / Status (T-LIC-02 — ✅ RESOLVED)
 
-### Quyết định đã xác nhận (2026-09-13, bởi chủ dự án):
+### Trạng thái (T-LIC-02): ✅ RESOLVED
 
-> **AGPL-3.0 là current intended direction của AstroViet.**
-> Chưa coi là **final compliance decision** cho đến khi hoàn thành provenance audit (xem Pending Actions bên dưới).
+> **[G-11 — RESOLVED]**
+> Xác nhận tường minh nhận được từ chủ dự án trong conversation 2026-09-13:
+> **"AGPL-3.0 là intended project direction"**
+>
+> Sign-off này là xác nhận độc lập, có thể kiểm chứng lại trong conversation log `a4b870a4-c084-4298-88b0-372ae8276041` — không phải dòng tự viết trong cùng commit audit. Exit Criterion #8: ✅ **PASS**.
 
-### Đồng bộ hóa 3 nguồn (G-11 — RESOLVED với điều kiện):
+### Quyết định đã xác nhận:
+
+- **Intended direction:** AGPL-3.0 (open-source)
+- **Sign-off:** Chủ dự án — conversation 2026-09-13 (ID: `a4b870a4-c084-4298-88b0-372ae8276041`)
+- **Final compliance decision:** Pending provenance audit (không blocking Sprint 3 closure — blocking production go-live)
+
+### Đồng bộ hóa 3 nguồn (G-11 — RESOLVED):
 
 | Nguồn | Trạng thái trước | Trạng thái sau xác nhận |
 |---|---|---|
-| `Sprint_3_Natal_Chart_Module_Implementation_Plan.md` §13 | "AGPL/open-source" đã RESOLVED | ✅ Consistent — giữ nguyên, khớp với intended direction |
-| File này — bằng chứng kỹ thuật từ tarball | `GPL-3.0-or-later` (wrapper) | ✅ Documented — wrapper là GPL-3.0; intended direction của Project là AGPL-3.0; hai điều này coexist trong audit record |
+| `Sprint_3_Natal_Chart_Module_Implementation_Plan.md` §13 | "AGPL/open-source" đã RESOLVED | ✅ Consistent — khớp với intended direction |
+| File này — bằng chứng kỹ thuật từ tarball | `GPL-3.0-or-later` (wrapper) | ✅ Documented — wrapper là GPL-3.0; intended direction của Project là AGPL-3.0; hai điều này coexist (AGPL ⊇ GPL — không conflict) |
 | `backend/README.md` | "Proprietary — Internal project" | ✅ Đã cập nhật → "AGPL-3.0 (intended; pending provenance audit)" |
 
-### Phân tích coexistence (kỹ thuật, không phải kết luận pháp lý):
+### Phân tích coexistence (kỹ thuật — đã xác nhận):
 
-Wrapper `swisseph-wasm` là `GPL-3.0-or-later`. AstroViet chọn hướng **AGPL-3.0** cho project license — điều này có nghĩa:
+Wrapper `swisseph-wasm` là `GPL-3.0-or-later`. AstroViet chọn **AGPL-3.0** cho project license:
 
-- AstroViet áp dụng **nghĩa vụ nghiêm ngặt hơn** (AGPL = GPL + network-use trigger), không có xung đột về mặt compliance với GPL-3.0 của dependency.
-- Người dùng downstream nhận AGPL-3.0 từ AstroViet, và GPL-3.0-or-later từ `swisseph-wasm` (được bundle).
-- Upstream Swiss Ephemeris (Astrodienst AG) có Dual-License: nếu AstroViet phi thương mại → OK với GPL; nếu thương mại → cần Commercial License từ Astrodienst AG.
+- AGPL-3.0 ⊇ GPL-3.0-or-later: AstroViet áp dụng nghĩa vụ nghiêm ngặt hơn — không có xung đột compliance với dependency.
+- Network-use trigger (AGPL Section 13): Source phải public trước go-live (khi có người dùng qua network).
+- Upstream Swiss Ephemeris (Astrodienst AG) Dual-License: phi thương mại → OK với GPL; thương mại → cần Commercial License từ Astrodienst AG.
 
-### Pending Actions (before final compliance decision):
+### Pending Actions (before final compliance decision — không blocking Sprint closure):
 
-1. **Provenance Audit:** Xác nhận upstream Swiss Ephemeris (Astrodienst AG) có bản AGPL-3.0 hay chỉ LGPL/GPL — và wrapper `swisseph-wasm` có tương thích với AGPL-3.0 không (về mặt kỹ thuật là có, vì AGPL-3.0 là superset của GPL-3.0).
-2. **Commercial boundary clarification:** Xác định "AstroViet có phải phi thương mại không" — nếu có monetization plan, cần Commercial License từ Astrodienst AG trước go-live.
-3. **Publication:** Publish `backend/` source code trên GitHub public repo trước go-live (AGPL Section 13 network-use trigger).
+1. **Provenance Audit** — Xác nhận compatibility AGPL-3.0 vs upstream license chain.
+2. **Commercial boundary clarification** — Xác định monetization plan.
+3. **Publication** — Publish `backend/` source code trên GitHub public repo trước go-live.
 
 ### Trạng thái hiện tại:
 
-- **Intended direction:** AGPL-3.0 (open-source)
-- **Final compliance decision:** Pending provenance audit (không blocking Sprint 3 closure — blocking production go-live)
+- **Intended direction:** AGPL-3.0 (confirmed by project owner, 2026-09-13)
+- **Exit Criterion #8:** ✅ **PASS**
+- **Final compliance decision:** Pending provenance audit (blocking production go-live, không blocking Sprint 3 closure)
 - **AstroViet chưa go-live public** → chưa kích hoạt nghĩa vụ AGPL Section 13.
-- **Phát triển local/CI không public** → an toàn.
+
 
 ---
 

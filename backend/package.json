@@ -1,7 +1,7 @@
 {
   "name": "astroviet-backend",
-  "version": "0.2.0",
-  "description": "AstroViet Platform — Backend (Sprint 2: Birth Profile Module)",
+  "version": "0.3.0",
+  "description": "AstroViet Platform — Backend (Sprint 3: Natal Chart Module + Swiss Ephemeris Integration)",
   "private": true,
   "type": "module",
   "engines": {

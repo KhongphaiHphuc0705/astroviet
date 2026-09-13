@@ -42,7 +42,11 @@ describe('PrismaChartRepository Integration', () => {
     await dbHelper.clearDatabase();
   });
 
-  const createTestChart = (userId: string, birthProfileId: string | null = null): Chart => {
+  const createTestChart = (
+    userId: string,
+    birthProfileId: string | null = null,
+    fullName: string = 'Test User',
+  ): Chart => {
     const engineInput = EngineInput.create(
       {
         birthDate: new Date('1990-01-01T00:00:00Z'),
@@ -51,7 +55,7 @@ describe('PrismaChartRepository Integration', () => {
         latitude: 10.8231,
         longitude: 106.6297,
         timezoneId: 'Asia/Ho_Chi_Minh',
-        fullName: 'Test User',
+        fullName,
         placeName: 'Ho Chi Minh',
       },
       { houseSystem: HouseSystem.Placidus, includeOptionalPoints: [], chartType: ChartType.Natal },
@@ -219,34 +223,40 @@ describe('PrismaChartRepository Integration', () => {
     it('should retain original snapshot data even if birth profile is updated', async () => {
       const user = await factory.createUser();
 
-      // 1. Create a Birth Profile
-      const originalDate = new Date('1990-01-01T00:00:00Z');
+      // 1. Create a Birth Profile with a specific full_name we will later mutate
       const profile = await factory.createBirthProfile(user.id, {
-        birth_date: originalDate,
         full_name: 'Original Name',
+        birth_date: new Date('1990-01-01T00:00:00Z'),
       });
 
-      // 2. Create and save a chart based on this profile
-      const chart = createTestChart(user.id, profile.id);
-
-      // The chart creation logic already creates snapshot fields correctly in the repository.
+      // 2. Create and save a chart using the SAME full_name as the profile.
+      //    This simulates the real use-case where the snapshot captures the profile
+      //    value at chart creation time (via CreateNatalChartUseCase → EngineInput).
+      const chart = createTestChart(user.id, profile.id, profile.full_name);
       await repository.save(chart);
 
-      // Verify the chart was saved with original data
+      // 3. Verify the snapshot recorded the profile's name at creation time
       let savedChart = await prisma.chart.findUnique({ where: { id: chart.id } });
-      expect(savedChart?.snapshot_full_name).toBe('Test User'); // Based on createTestChart hardcoded input
+      expect(savedChart?.snapshot_full_name).toBe('Original Name');
 
-      // 3. Modify the Birth Profile
+      // 4. Mutate the Birth Profile — simulates the user editing their profile after
+      //    the chart was already calculated
       await prisma.birthProfile.update({
         where: { id: profile.id },
         data: { full_name: 'Modified Name', birth_date: new Date('1995-05-05T00:00:00Z') },
       });
 
-      // 4. Verify Chart snapshot remains unchanged
+      // 5. Re-fetch the Chart and assert snapshot is still the ORIGINAL value.
+      //    If the Chart were a live JOIN back to BirthProfile, this would now return
+      //    'Modified Name' — proving the snapshot design is what keeps it at 'Original Name'.
       savedChart = await prisma.chart.findUnique({ where: { id: chart.id } });
-      expect(savedChart?.snapshot_full_name).toBe('Test User');
+      expect(savedChart?.snapshot_full_name).toBe('Original Name');
 
-      // This proves Chart does not dynamically join or change when BirthProfile changes
+      // 6. Also verify via repository.findById() — the full Domain reconstruction path
+      //    must also return the original name, not the updated profile name.
+      //    This confirms neither the mapper nor any JOIN reads live BirthProfile data.
+      const domainChart = await repository.findById(chart.id);
+      expect(domainChart?.engineInput.birthData.fullName).toBe('Original Name');
     });
   });
 
