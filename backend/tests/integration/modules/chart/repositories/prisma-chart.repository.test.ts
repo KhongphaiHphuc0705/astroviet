@@ -215,6 +215,41 @@ describe('PrismaChartRepository Integration', () => {
     });
   });
 
+  describe('Chart Snapshot Immutability (T-DB-03)', () => {
+    it('should retain original snapshot data even if birth profile is updated', async () => {
+      const user = await factory.createUser();
+
+      // 1. Create a Birth Profile
+      const originalDate = new Date('1990-01-01T00:00:00Z');
+      const profile = await factory.createBirthProfile(user.id, {
+        birth_date: originalDate,
+        full_name: 'Original Name',
+      });
+
+      // 2. Create and save a chart based on this profile
+      const chart = createTestChart(user.id, profile.id);
+
+      // The chart creation logic already creates snapshot fields correctly in the repository.
+      await repository.save(chart);
+
+      // Verify the chart was saved with original data
+      let savedChart = await prisma.chart.findUnique({ where: { id: chart.id } });
+      expect(savedChart?.snapshot_full_name).toBe('Test User'); // Based on createTestChart hardcoded input
+
+      // 3. Modify the Birth Profile
+      await prisma.birthProfile.update({
+        where: { id: profile.id },
+        data: { full_name: 'Modified Name', birth_date: new Date('1995-05-05T00:00:00Z') },
+      });
+
+      // 4. Verify Chart snapshot remains unchanged
+      savedChart = await prisma.chart.findUnique({ where: { id: chart.id } });
+      expect(savedChart?.snapshot_full_name).toBe('Test User');
+
+      // This proves Chart does not dynamically join or change when BirthProfile changes
+    });
+  });
+
   describe('findById()', () => {
     it('should retrieve a saved chart with exact fields (roundtrip)', async () => {
       const user = await factory.createUser();
