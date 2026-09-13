@@ -188,4 +188,4 @@ _(Xem chi tiết tại `docs/development/Coding_Standards_And_Conventions.md`)_
 
 ---
 
-**License:** Proprietary — Internal project.
+**License:** AGPL-3.0 (intended direction; final compliance decision pending provenance audit — see `docs/legal/swisseph-license-record.md`).
