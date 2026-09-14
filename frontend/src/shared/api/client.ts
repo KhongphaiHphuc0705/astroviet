@@ -3,6 +3,8 @@ import axios, { type AxiosError } from "axios";
 import { env } from "@shared/config/env";
 import { useAuthStore } from "@shared/stores/authStore";
 
+import { coordinateRefresh } from "./auth-refresh-coordinator";
+
 export class ApiError extends Error {
   public status: number;
   public errorCode: string;
@@ -73,8 +75,15 @@ apiClient.interceptors.response.use(
 
     if (status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
-      // TODO(Core): Implement refresh token logic (call refresh endpoint, then retry originalRequest) khi features/auth sẵn sàng
-      useAuthStore.getState().logout();
+      try {
+        const newAccessToken = await coordinateRefresh<string>();
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
+        return apiClient(originalRequest);
+      } catch {
+        return Promise.reject(apiError);
+      }
     }
 
     return Promise.reject(apiError);

@@ -4,10 +4,15 @@ import { describe, expect, it, beforeEach, vi } from "vitest";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
 
+import {
+  setRefreshHandler,
+  __resetRefreshCoordinatorForTests,
+} from "./auth-refresh-coordinator";
 import { apiClient, ApiError } from "./client";
 
 describe("apiClient", () => {
   beforeEach(() => {
+    __resetRefreshCoordinatorForTests();
     useAuthStore.setState({
       accessToken: "fake-token",
       status: "authenticated",
@@ -62,9 +67,7 @@ describe("apiClient", () => {
     });
 
     // 2. RFC7807 với metadata.fieldErrors 1 field, 1 message.
-    // Và đồng thời test M1.6: trigger logout on 401 (lưu ý: M1.6 sẽ sửa cái logout này sau, giờ M1.3 vẫn giữ nguyên là test có logout)
-    it("2. parses metadata.fieldErrors (1 field, 1 message) and triggers logout on 401", async () => {
-      const logoutSpy = vi.spyOn(useAuthStore.getState(), "logout");
+    it("2. parses metadata.fieldErrors (1 field, 1 message)", async () => {
       server.use(
         http.get("http://localhost:5173/api/error", () => {
           return HttpResponse.json(
@@ -75,7 +78,7 @@ describe("apiClient", () => {
                 fieldErrors: { token: ["Invalid"] },
               },
             },
-            { status: 401 },
+            { status: 400 }, // Đổi thành 400 để không trigger logic 401 retry ở đây
           );
         }),
       );
@@ -86,10 +89,97 @@ describe("apiClient", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(ApiError);
         const apiError = error as ApiError;
-        expect(apiError.status).toBe(401);
+        expect(apiError.status).toBe(400);
         expect(apiError.fieldErrors).toEqual({ token: ["Invalid"] });
       }
-      expect(logoutSpy).toHaveBeenCalled();
+    });
+
+    describe("401 Retry Integration (M1.6)", () => {
+      it("retries original request with new token from coordinator on 401", async () => {
+        let attempt = 0;
+        let capturedToken = "";
+
+        server.use(
+          http.get("http://localhost:5173/api/protected", ({ request }) => {
+            attempt++;
+            if (attempt === 1) {
+              return HttpResponse.json(
+                { errorCode: "TOKEN_EXPIRED" },
+                { status: 401 },
+              );
+            }
+            // Second attempt
+            capturedToken = request.headers.get("Authorization") || "";
+            return HttpResponse.json({ success: true });
+          }),
+        );
+
+        const handlerSpy = vi.fn().mockImplementation(async () => {
+          // Simulate the real features/auth handler behavior: it updates the store with the new token
+          useAuthStore.setState({ accessToken: "new-refreshed-token" });
+          return "new-refreshed-token";
+        });
+        setRefreshHandler(handlerSpy);
+
+        const response = await apiClient.get("/protected", {
+          baseURL: "http://localhost:5173/api",
+        });
+
+        expect(response.data).toEqual({ success: true });
+        expect(handlerSpy).toHaveBeenCalledTimes(1);
+        expect(capturedToken).toBe("Bearer new-refreshed-token");
+      });
+
+      it("rejects with ORIGINAL 401 error if refresh fails", async () => {
+        server.use(
+          http.get("http://localhost:5173/api/protected", () => {
+            return HttpResponse.json(
+              { errorCode: "TOKEN_EXPIRED" },
+              { status: 401 },
+            );
+          }),
+        );
+
+        const handlerSpy = vi
+          .fn()
+          .mockRejectedValue(new Error("Refresh completely failed"));
+        setRefreshHandler(handlerSpy);
+
+        try {
+          await apiClient.get("/protected", {
+            baseURL: "http://localhost:5173/api",
+          });
+          expect.fail("Should have thrown");
+        } catch (error) {
+          expect(error).toBeInstanceOf(ApiError);
+          expect((error as ApiError).status).toBe(401);
+          expect((error as ApiError).errorCode).toBe("TOKEN_EXPIRED");
+        }
+        expect(handlerSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("rejects with ORIGINAL 401 error if coordinator throws No handler registered", async () => {
+        server.use(
+          http.get("http://localhost:5173/api/protected", () => {
+            return HttpResponse.json(
+              { errorCode: "TOKEN_EXPIRED" },
+              { status: 401 },
+            );
+          }),
+        );
+
+        // We explicitly do NOT register a handler here to simulate the state where features/auth is missing.
+        try {
+          await apiClient.get("/protected", {
+            baseURL: "http://localhost:5173/api",
+          });
+          expect.fail("Should have thrown");
+        } catch (error) {
+          expect(error).toBeInstanceOf(ApiError);
+          expect((error as ApiError).status).toBe(401);
+          expect((error as ApiError).errorCode).toBe("TOKEN_EXPIRED");
+        }
+      });
     });
 
     // 3. metadata.fieldErrors 1 field, nhiều message.
