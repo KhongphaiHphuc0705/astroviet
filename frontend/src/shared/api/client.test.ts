@@ -180,6 +180,52 @@ describe("apiClient", () => {
           expect((error as ApiError).errorCode).toBe("TOKEN_EXPIRED");
         }
       });
+
+      it("deduplicates concurrent 401 requests using the coordinator", async () => {
+        let attempts = 0;
+
+        server.use(
+          http.get("http://localhost:5173/api/protected", () => {
+            attempts++;
+            if (attempts <= 3) {
+              return HttpResponse.json(
+                { errorCode: "TOKEN_EXPIRED" },
+                { status: 401 },
+              );
+            }
+            return HttpResponse.json({ success: true });
+          }),
+        );
+
+        let resolveHandler: (val: string) => void;
+        const pendingPromise = new Promise<string>((resolve) => {
+          resolveHandler = resolve;
+        });
+
+        const handlerSpy = vi.fn().mockImplementation(() => {
+          return pendingPromise;
+        });
+        setRefreshHandler(handlerSpy);
+
+        // Fire 3 concurrent requests that will all hit 401
+        const req1 = apiClient.get("/protected", {
+          baseURL: "http://localhost:5173/api",
+        });
+        const req2 = apiClient.get("/protected", {
+          baseURL: "http://localhost:5173/api",
+        });
+        const req3 = apiClient.get("/protected", {
+          baseURL: "http://localhost:5173/api",
+        });
+
+        // Resolve the handler
+        resolveHandler!("concurrent-token");
+
+        await Promise.all([req1, req2, req3]);
+
+        // The handler should only be called once, despite 3 concurrent 401s
+        expect(handlerSpy).toHaveBeenCalledTimes(1);
+      });
     });
 
     // 3. metadata.fieldErrors 1 field, nhiều message.
