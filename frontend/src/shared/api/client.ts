@@ -8,7 +8,7 @@ export class ApiError extends Error {
   public errorCode: string;
   public title: string;
   public detail?: string;
-  public fieldErrors?: { field: string; message: string }[];
+  public fieldErrors?: Record<string, string[]>;
 
   constructor(
     message: string,
@@ -16,7 +16,7 @@ export class ApiError extends Error {
     errorCode: string,
     title: string,
     detail?: string,
-    fieldErrors?: { field: string; message: string }[],
+    fieldErrors?: Record<string, string[]>,
   ) {
     super(message);
     this.status = status;
@@ -55,8 +55,9 @@ apiClient.interceptors.response.use(
     const title =
       (data.title as string) || error.message || "An unexpected error occurred";
     const detail = data.detail as string | undefined;
-    const fieldErrors = data.fieldErrors as
-      { field: string; message: string }[] | undefined;
+    const metadata = data.metadata as Record<string, unknown> | undefined;
+    const fieldErrors = metadata?.fieldErrors as
+      Record<string, string[]> | undefined;
 
     const apiError = new ApiError(
       title,
