@@ -1,8 +1,10 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import { render, type RenderOptions } from "@testing-library/react";
 import React, { type ReactElement } from "react";
 import { MemoryRouter, type MemoryRouterProps } from "react-router-dom";
 
 import { ThemeProvider } from "@app/providers/ThemeProvider";
+import { queryClient } from "@shared/api/queryClient";
 
 interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   initialEntries?: MemoryRouterProps["initialEntries"];
@@ -15,8 +17,12 @@ export function renderWithProviders(
   const AllProviders = ({ children }: { children: React.ReactNode }) => {
     return (
       <ThemeProvider>
-        {/* TODO(Core): Bọc QueryClientProvider và I18nextProvider khi thực sự cài đặt (Architecture Spec §14.3) */}
-        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+        {/* TODO(Core): Bọc I18nextProvider khi thực sự cài đặt (Architecture Spec §14.3) */}
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter initialEntries={initialEntries}>
+            {children}
+          </MemoryRouter>
+        </QueryClientProvider>
       </ThemeProvider>
     );
   };
