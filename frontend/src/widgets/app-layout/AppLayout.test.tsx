@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import React from "react";
 import { describe, it, expect } from "vitest";
 
 import { AppLayout } from "./index";
@@ -39,5 +38,22 @@ describe("AppLayout", () => {
 
     const closeBtn = screen.getByLabelText("Đóng menu");
     expect(closeBtn).toBeInTheDocument();
+  });
+
+  it("renders fallback header actions when no headerActions prop is provided", () => {
+    render(<AppLayout>Dashboard Content</AppLayout>);
+    expect(screen.getByTestId("header-actions-fallback")).toBeInTheDocument();
+  });
+
+  it("renders provided headerActions and hides fallback", () => {
+    render(
+      <AppLayout headerActions={<div data-testid="custom-actions">Custom</div>}>
+        Dashboard Content
+      </AppLayout>,
+    );
+    expect(screen.getByTestId("custom-actions")).toBeInTheDocument();
+    expect(
+      screen.queryByTestId("header-actions-fallback"),
+    ).not.toBeInTheDocument();
   });
 });
