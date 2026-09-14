@@ -308,7 +308,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | engine_version | TEXT | ✘ | — | — | Semver string, ví dụ `'1.2.0'` — bắt buộc để biết Chart nào cần tính lại khi Engine sửa lỗi (Engine Spec Mục 7) |
 | calculated_at | TIMESTAMPTZ | ✘ | `now()` | — | Thời điểm Engine tính toán — **khác** với `birth_date` (thời điểm sinh) |
 | warnings | JSONB | ✘ | `'[]'::jsonb` | — | Mảng `Warning` object (REST API Spec Mục 5.8) — xem Mục 8 |
-| snapshot_interpretation_version | TEXT | ✘ | — | FK → `astrology.interpretation_contents(version)` *(logic, không phải FK vật lý — xem ghi chú)* | **Quyết định 14.2:** Ghim Chart vào 1 phiên bản cụ thể của content bank tại thời điểm tính (ví dụ `'1.0'`). Khi build `ChartResponse`, JOIN `interpretation_contents` theo `(subject_type, subject_key, language, version = charts.snapshot_interpretation_version)` thay vì luôn lấy bản mới nhất |
+| snapshot_interpretation_version | TEXT | ✔ | NULL | FK → `astrology.interpretation_contents(version)` *(logic, không phải FK vật lý — xem ghi chú)* | **Quyết định 14.2:** Ghim Chart vào 1 phiên bản cụ thể của content bank tại thời điểm tính (ví dụ `'1.0'`). Khi build `ChartResponse`, JOIN `interpretation_contents` theo `(subject_type, subject_key, language, version = charts.snapshot_interpretation_version)` thay vì luôn lấy bản mới nhất |
 | snapshot_full_name | TEXT | ✔ | NULL | — | Copy tại thời điểm tính, không đổi dù BirthProfile gốc đổi tên |
 | snapshot_birth_date | DATE | ✘ | — | — | — |
 | snapshot_birth_time | TIME | ✔ | NULL | — | — |

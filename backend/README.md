@@ -2,7 +2,7 @@
 
 Backend cho nền tảng AstroViet — Western Astrology cho người Việt.
 
-> **Trạng thái:** Hoàn thành Sprint 2 (Birth Profile Module), sẵn sàng release. Hệ thống cung cấp đầy đủ quản lý hồ sơ sinh (Birth Profile) tích hợp tìm kiếm toạ độ và múi giờ lịch sử, cùng với hệ thống Register/Login/Refresh/Logout an toàn (Identity Module).
+> **Trạng thái:** Hoàn thành Sprint 3 (Natal Chart Module), sẵn sàng review. Hệ thống cung cấp tính năng tạo và quản lý lá số chiêm tinh (Natal Chart) tích hợp tính toán thiên văn qua Swiss Ephemeris (WebAssembly), cùng với quản lý hồ sơ sinh (Birth Profile Module — Sprint 2) và hệ thống xác thực người dùng (Identity Module — Sprint 1).
 
 ## Architecture
 
@@ -10,7 +10,7 @@ Hệ thống được thiết kế chặt chẽ theo **Clean Architecture** đ�
 
 1. **Domain Layer:** Chứa Entities và Ports (Interfaces), hoàn toàn không phụ thuộc framework hay thư viện bên ngoài.
 2. **Application Layer:** Chứa các Use Cases (Business Logic), chỉ gọi Domain Ports.
-3. **Infrastructure Layer:** Triển khai các Ports (Adapters), giao tiếp với Database, Hashers, Token Providers.
+3. **Infrastructure Layer:** Triển khai các Ports (Adapters), giao tiếp với Database, Hashers, Token Providers, Swiss Ephemeris WASM.
 4. **Presentation Layer:** Giao tiếp với Client (Express Controllers, Routes, OpenAPI Schemas).
 
 Dependency Rule: **Layer ngoài chỉ được import layer trong, layer trong không bao giờ biết đến layer ngoài.**
@@ -24,6 +24,7 @@ _(Xem chi tiết tại `docs/architecture/Project_Architecture_Specification.md`
 - **Validation:** Zod
 - **Testing:** Vitest
 - **Logging:** Pino
+- **Astronomy Engine:** `swisseph-wasm` v0.1.0 (Swiss Ephemeris compiled to WebAssembly)
   _(Xem file `package.json` để biết phiên bản chính xác)_
 
 ## Folder Structure
@@ -34,6 +35,11 @@ src/
 ├── docs/                # Code sinh OpenAPI và cấu hình Swagger UI
 ├── health/              # Module Health Check cơ bản
 ├── modules/
+│   ├── chart/           # 🪐 Natal Chart Module (Lá số chiêm tinh)
+│   │   ├── domain/        # Entities (Chart, Planet, House, Angle, Aspect, Pattern), Ports
+│   │   ├── application/   # Use Cases (CreateNatalChart, GetChart, ListCharts, DeleteChart)
+│   │   ├── infrastructure/# SwissEphemerisAdapter, NatalChartEngine, Prisma Repositories
+│   │   └── presentation/  # Controllers, Routes, Zod Schemas, OpenAPI
 │   ├── birth-profile/   # 👤 Birth Profile Module (Quản lý hồ sơ sinh, toạ độ, timezone)
 │   │   ├── domain/        # Entities, Value Objects (Coordinates, Timezone), Ports
 │   │   ├── application/   # Use Cases (CRUD, Search Locations)
@@ -93,6 +99,8 @@ Tạo file `.env` dựa trên `.env.example`. Dưới đây là giải thích c�
 | `GEONAMES_USERNAME`         |    Có    | -             | Tên đăng nhập GeoNames API dùng cho tính năng tìm toạ độ.    |
 | `SEED_ADMIN_*`              |  Không   | -             | Email/Password dùng cho `prisma:seed` để tạo Admin đầu tiên. |
 
+> **Lưu ý Sprint 3:** `swisseph-wasm` không yêu cầu biến môi trường riêng — thư viện sử dụng ephemeris data bundled sẵn (Swiss Ephemeris DE431), không cần cấu hình path ngoài.
+
 ## Authentication Flow
 
 Hệ thống sử dụng cơ chế Access/Refresh token bảo mật:
@@ -108,7 +116,18 @@ Module Birth Profile quản lý các hồ sơ cá nhân với dữ liệu sinh p
 
 1. **Quản lý Hồ sơ:** Hỗ trợ đầy đủ các thao tác CRUD (tạo, đọc, cập nhật, xóa) bảo mật, đảm bảo người dùng chỉ được can thiệp vào hồ sơ của chính mình (Ownership Isolation).
 2. **External Service Abstraction:** Quá trình tìm kiếm địa điểm kết hợp gọi API của **GeoNames** (geocoding) và **geo-tz** (historical timezone resolution) để tự động hóa việc tính toán thông tin toạ độ, múi giờ chính xác tại thời điểm sinh ra.
-3. **Validation Chặt chẽ:** 100% dữ liệu đầu vào (từ query params như pagination, đến body JSON) đều đi qua bộ lọc Zod schema và chuyển hóa lỗi chuẩn mực thành RFC7807 Problem Details.
+3. **Validation Chặt chẽ:** 100% dữ liệu đầu vào đều đi qua bộ lọc Zod schema và chuyển hóa lỗi chuẩn mực thành RFC7807 Problem Details.
+
+## Chart Flow (Natal Chart Module — Sprint 3)
+
+Module Natal Chart cung cấp tính năng tính toán và lưu trữ lá số chiêm tinh Tây Phương:
+
+1. **Tạo Lá Số:** `POST /api/v1/charts/natal` nhận dữ liệu sinh (ngày/giờ/toạ độ/timezone) và tham số tính toán (`houseSystem`, `save`). Nếu `save=true`, chart được lưu vào DB và trả về `id` để truy vấn sau. Nếu `save=false`, chart được tính và trả về trực tiếp (không lưu).
+2. **Tính Toán Thiên Văn:** `SwissEphemerisAdapter` bọc thư viện `swisseph-wasm` (Swiss Ephemeris compiled to WebAssembly) — tính toán vị trí 10 hành tinh, 12 house (hệ Placidus), 4 góc chính (ASC, DSC, MC, IC). Mutex bảo vệ toàn bộ WASM calls để đảm bảo chỉ có 1 phép tính đồng thời tại bất kỳ thời điểm nào.
+3. **Snapshot Immutability:** Khi chart được lưu, dữ liệu sinh (họ tên, địa điểm, toạ độ, timezone) được snapshot vào chart record (`snapshot_*` columns). Thay đổi BirthProfile sau này không ảnh hưởng đến chart đã lưu.
+4. **Danh Sách & Lọc:** `GET /api/v1/charts` hỗ trợ phân trang, filter theo `chartType`, sort theo `createdAt` (mặc định mới nhất trước). Kết quả `ChartSummaryResponse` là lightweight view, không include toàn bộ planet data.
+5. **Xem Chi Tiết:** `GET /api/v1/charts/:id` trả về `ChartResponse` đầy đủ gồm planets, houses, angles, aspects, patterns. Lưu ý: `interpretations` luôn `[]` (Interpretation Engine chưa tồn tại — G-01, deferred).
+6. **Xóa Chart:** `DELETE /api/v1/charts/:id` thực hiện soft-delete (set `deletedAt`, không xóa row khỏi DB).
 
 ## Running Test
 
@@ -124,7 +143,7 @@ npm run test:coverage
 npx vitest run tests/unit
 ```
 
-_(Lưu ý: Nếu có file test tên trùng nhau ở `tests/unit/` và `tests/integration/`, đó là chủ ý phân tách mock test và real-DB test)._
+_(Lưu ý: Nếu có file test tên trùng nhau ở `tests/unit/` và `tests/integration/`, đó là chủ ý phân tách mock test và real-DB test.)_
 
 ## OpenAPI / Swagger UI
 
@@ -184,8 +203,9 @@ _(Xem chi tiết tại `docs/development/Coding_Standards_And_Conventions.md`)_
 
 - **Sprint 1:** Identity Module (Hoàn thành) ✅
 - **Sprint 2:** Birth Profile Module (Hoàn thành) ✅
-- **Sprint 3:** Natal Chart Module (Sắp tới) 🔜
+- **Sprint 3:** Natal Chart Module (Hoàn thành) ✅
+- **Sprint 4:** Interpretation Engine / Production Hardening 🔜
 
 ---
 
-**License:** Proprietary — Internal project.
+**License:** AGPL-3.0 (intended direction; final compliance decision pending provenance audit — see `docs/legal/swisseph-license-record.md`).

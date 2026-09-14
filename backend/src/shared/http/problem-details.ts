@@ -13,7 +13,7 @@ export const problemDetailsSchema = z
     status: z.number(),
     detail: z.string(),
     instance: z.string(),
-    errorCode: z.string(),
+    errorCode: z.nativeEnum(ErrorCode),
     requestId: z.string().optional(),
     timestamp: z.string().datetime(),
     errors: z.any().optional(),
