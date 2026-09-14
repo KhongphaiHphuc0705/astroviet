@@ -7,11 +7,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import * as errorMessagesModule from "@shared/lib/error-messages";
 import * as reportErrorModule from "@shared/lib/report-error";
 
-import { queryClient } from "./queryClient";
+import { createQueryClient, queryClient } from "./queryClient";
 
-// Wrapper sử dụng cùng queryClient instance
+// Wrapper sử dụng queryClient instance mới để tránh leak cache
 const wrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(QueryClientProvider, { client: queryClient }, children);
+  React.createElement(
+    QueryClientProvider,
+    { client: createQueryClient() },
+    children,
+  );
 
 describe("queryClient", () => {
   beforeEach(() => {
