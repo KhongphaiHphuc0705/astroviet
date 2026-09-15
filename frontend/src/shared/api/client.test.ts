@@ -8,7 +8,7 @@ import {
   setRefreshHandler,
   __resetRefreshCoordinatorForTests,
 } from "./auth-refresh-coordinator";
-import { apiClient, ApiError } from "./client";
+import { apiClient, ApiError, AUTH_REFRESH_ENDPOINT } from "./client";
 
 describe("apiClient", () => {
   beforeEach(() => {
@@ -225,6 +225,38 @@ describe("apiClient", () => {
 
         // The handler should only be called once, despite 3 concurrent 401s
         expect(handlerSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("rejects immediately with 401 and does not call coordinator if the failed request was a refresh request", async () => {
+        server.use(
+          http.post(`http://localhost:5173${AUTH_REFRESH_ENDPOINT}`, () => {
+            return HttpResponse.json(
+              { errorCode: "REFRESH_FAILED" },
+              { status: 401 },
+            );
+          }),
+        );
+
+        const handlerSpy = vi.fn();
+        setRefreshHandler(handlerSpy);
+
+        try {
+          await apiClient.post(
+            AUTH_REFRESH_ENDPOINT,
+            {},
+            {
+              baseURL: "http://localhost:5173",
+            },
+          );
+          expect.fail("Should have thrown");
+        } catch (error) {
+          expect(error).toBeInstanceOf(ApiError);
+          expect((error as ApiError).status).toBe(401);
+          expect((error as ApiError).errorCode).toBe("REFRESH_FAILED");
+        }
+
+        // The spy should not be called because it bypasses the 401 interceptor retry logic
+        expect(handlerSpy).not.toHaveBeenCalled();
       });
     });
 
