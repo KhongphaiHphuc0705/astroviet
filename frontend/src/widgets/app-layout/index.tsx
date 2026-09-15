@@ -6,7 +6,12 @@ import { Container } from "@shared/ui/Container";
 import { SkipLink } from "@shared/ui/SkipLink";
 import { Stack } from "@shared/ui/Stack";
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+interface AppLayoutProps {
+  children: React.ReactNode;
+  headerActions?: React.ReactNode;
+}
+
+export function AppLayout({ children, headerActions }: AppLayoutProps) {
   const sidebarCollapsed = useUiStore((state) => state.sidebarCollapsed);
   const mobileDrawerOpen = useUiStore((state) => state.mobileDrawerOpen);
   const toggleSidebar = useUiStore((state) => state.toggleSidebar);
@@ -40,9 +45,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </Stack>
 
-        {/* User profile placeholder */}
+        {/* User profile placeholder / Header Actions */}
         <div className="flex items-center gap-4">
-          <div className="h-8 w-8 rounded-full border border-subtle bg-surface-raised" />
+          {headerActions ?? (
+            <div
+              className="h-8 w-8 rounded-full border border-subtle bg-surface-raised"
+              data-testid="header-actions-fallback"
+            />
+          )}
         </div>
       </Stack>
 

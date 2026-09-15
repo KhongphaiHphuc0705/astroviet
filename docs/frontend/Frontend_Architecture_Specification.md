@@ -537,7 +537,7 @@ ApiError {
   errorCode: string        // map trực tiếp từ field Backend (ví dụ "VALIDATION_ERROR")
   title: string
   detail?: string
-  fieldErrors?: { field: string; message: string }[]   // cho ValidationError
+  fieldErrors?: Record<string, string[]>   // cho ValidationError, đọc từ metadata.fieldErrors
 }
 ```
 
@@ -624,7 +624,7 @@ Vòng đời: khi app khởi động (`app/providers`, trước khi render Route
 
 Ngoài ra, `shared/api/client.ts` có **response interceptor** bắt lỗi `401` từ bất kỳ API call nào giữa phiên làm việc (Access Token hết hạn giữa chừng) → tự động gọi refresh 1 lần, **retry đúng 1 lần** request gốc nếu refresh thành công, nếu refresh cũng thất bại → set `unauthenticated` + điều hướng `/login` (không retry vô hạn, tránh loop).
 
-> **Phụ thuộc quyết định chưa chốt** (kế thừa Open Question UI Spec §25 mục 1): cơ chế trên giả định Refresh Token nằm trong `HttpOnly Cookie` (browser tự gửi kèm, Frontend không cầm token này) — nếu Backend xác nhận trả qua response body thay vào đó, kiến trúc trên vẫn đứng vững về mặt luồng, chỉ đổi cách gọi endpoint refresh (gửi token trong body thay vì dựa vào cookie tự động) — đây là lý do interceptor refresh được cô lập trong `features/auth/api/`, không rải logic refresh ra `shared/api/client.ts` (chỉ interceptor *gọi* refresh khi gặp 401 nằm ở `shared`, còn *cách* refresh hoạt động nằm ở `features/auth`) — giảm chi phí thay đổi khi câu hỏi này được trả lời.
+> **Quyết định đã chốt (M1)**: Backend trả refresh token qua **cả `HttpOnly Cookie` lẫn response body**. Frontend đã quyết định **bỏ qua body field** và tiếp tục dựa hoàn toàn vào cơ chế `HttpOnly Cookie` tự động của trình duyệt để gửi refresh token. Điều này giúp giảm thiểu rủi ro bảo mật (Frontend không cần giữ token ở vùng nhớ dễ bị XSS) và đơn giản hóa logic client. Interceptor bắt 401 nằm ở `shared/api/client.ts` và gọi coordinator, trong khi logic gọi API refresh thật sẽ nằm ở `features/auth/api/refresh.ts` (M2).
 
 ### 12.3. XSS Prevention
 
