@@ -5,6 +5,12 @@ import { useAuthStore } from "@shared/stores/authStore";
 
 import { coordinateRefresh } from "./auth-refresh-coordinator";
 
+export const AUTH_REFRESH_ENDPOINT = "/api/v1/auth/refresh";
+
+function isRefreshRequest(config?: { url?: string }): boolean {
+  return config?.url === AUTH_REFRESH_ENDPOINT;
+}
+
 export class ApiError extends Error {
   public status: number;
   public errorCode: string;
@@ -74,6 +80,9 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config as ExtendedRequestConfig | undefined;
 
     if (status === 401 && originalRequest && !originalRequest._retry) {
+      if (isRefreshRequest(originalRequest)) {
+        return Promise.reject(apiError);
+      }
       originalRequest._retry = true;
       try {
         const newAccessToken = await coordinateRefresh<string>();
