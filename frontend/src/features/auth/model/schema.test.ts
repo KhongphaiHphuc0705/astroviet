@@ -66,6 +66,16 @@ describe("auth schemas", () => {
       }
     });
 
+    it("accepts password at exactly 72 characters", () => {
+      const pw = "a".repeat(71) + "1"; // 72 ký tự, có chữ số
+      const result = registerSchema.safeParse({
+        email: "a@b.com",
+        password: pw,
+        confirmPassword: pw,
+      });
+      expect(result.success).toBe(true);
+    });
+
     it("rejects password longer than 72 characters", () => {
       const data = {
         email: "a@b.com",
