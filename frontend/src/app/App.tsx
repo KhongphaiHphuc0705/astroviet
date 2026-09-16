@@ -6,7 +6,10 @@ import { ThemeProvider } from "@app/providers/ThemeProvider";
 import { router } from "@app/router";
 import { queryClient } from "@shared/api/queryClient";
 
+import { useSessionBootstrap } from "../features/auth/hooks/useSessionBootstrap";
+
 export default function App() {
+  useSessionBootstrap();
   return (
     <StrictMode>
       <ThemeProvider>
