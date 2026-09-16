@@ -8,7 +8,12 @@ import {
 import { AUTH_REFRESH_ENDPOINT } from "@shared/api/client";
 import { server } from "@test/msw-server";
 
-import { registerAuthInfrastructure } from "./index";
+import {
+  registerAuthInfrastructure,
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+} from "./index";
 
 describe("registerAuthInfrastructure", () => {
   beforeEach(() => {
@@ -82,5 +87,13 @@ describe("features/auth import side-effects", () => {
     await expect(coordinateRefresh()).rejects.toThrow(
       "No refresh handler registered",
     );
+  });
+});
+
+describe("features/auth exports", () => {
+  it("exports all public hooks as functions", () => {
+    expect(typeof useLoginMutation).toBe("function");
+    expect(typeof useRegisterMutation).toBe("function");
+    expect(typeof useLogoutMutation).toBe("function");
   });
 });
