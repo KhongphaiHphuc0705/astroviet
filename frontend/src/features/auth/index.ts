@@ -6,6 +6,7 @@ import { refresh } from "./api/refresh";
 export { useLoginMutation } from "./hooks/useLoginMutation";
 export { useRegisterMutation } from "./hooks/useRegisterMutation";
 export { useLogoutMutation } from "./hooks/useLogoutMutation";
+export { useSessionBootstrap } from "./hooks/useSessionBootstrap";
 
 export function registerAuthInfrastructure(): void {
   setRefreshHandler(async () => {
