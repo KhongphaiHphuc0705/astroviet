@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 
 import { createQueryClient } from "@shared/api/queryClient";
 import { server } from "@test/msw-server";
@@ -123,5 +124,96 @@ describe("LoginPage - Mutation & Navigation", () => {
     await waitFor(() => {
       expect(screen.getByTestId("profile-page")).toBeInTheDocument();
     });
+  });
+
+  // M5-T04: Login failure (401) shows Alert with getErrorMessage
+  it("M5-T04: login failure 401 shows error Alert", async () => {
+    server.use(
+      http.post("*/api/v1/auth/login", () => {
+        return HttpResponse.json(
+          {
+            errorCode: "INVALID_CREDENTIALS",
+          },
+          { status: 401 },
+        );
+      }),
+    );
+
+    const user = userEvent.setup();
+    render(<LoginPage />, { wrapper });
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com");
+    await user.type(screen.getByLabelText("Mật khẩu"), "wrongpassword");
+    await user.click(screen.getByRole("button", { name: "Đăng nhập" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(
+        screen.getByText("Email hoặc mật khẩu không đúng."),
+      ).toBeInTheDocument();
+    });
+  });
+
+  // M5-T05: dangerous redirect defaults to /app
+  it("M5-T05: dangerous redirect defaults to /app", async () => {
+    server.use(
+      http.post("*/api/v1/auth/login", () => {
+        return HttpResponse.json(
+          { accessToken: "fake", user: { id: "1" } },
+          { status: 200 },
+        );
+      }),
+    );
+
+    const user = userEvent.setup();
+    render(<LoginPage />, {
+      wrapper: (props) =>
+        wrapper({
+          ...props,
+          initialEntries: ["/login?redirect=https://evil.com"],
+        }),
+    });
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com");
+    await user.type(screen.getByLabelText("Mật khẩu"), "password123");
+    await user.click(screen.getByRole("button", { name: "Đăng nhập" }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("app-page")).toBeInTheDocument();
+    });
+  });
+});
+
+describe("LoginPage - Accessibility", () => {
+  // M5-T06: axe tests
+  it("M5-T06: passes accessibility check (axe) in initial state", async () => {
+    const { container } = render(<LoginPage />, { wrapper });
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it("M5-T06: passes accessibility check (axe) with error states", async () => {
+    server.use(
+      http.post("*/api/v1/auth/login", () => {
+        return HttpResponse.json(
+          { errorCode: "INVALID_CREDENTIALS" },
+          { status: 401 },
+        );
+      }),
+    );
+
+    const user = userEvent.setup();
+    const { container } = render(<LoginPage />, { wrapper });
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com");
+    await user.type(screen.getByLabelText("Mật khẩu"), "wrong");
+    await user.click(screen.getByRole("button", { name: "Đăng nhập" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });
