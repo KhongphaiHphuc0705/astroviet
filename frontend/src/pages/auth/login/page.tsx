@@ -1,18 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { loginSchema } from "@features/auth/model/schema";
+import { useLoginMutation } from "@features/auth/hooks/useLoginMutation";
+import { loginSchema, type LoginFormValues } from "@features/auth/model/schema";
 import { useZodForm } from "@shared/hooks/useZodForm";
 import { getInputFieldProps } from "@shared/lib/formFields";
+import { getSafeRedirectDestination } from "@shared/lib/redirect-url";
 import { Button } from "@shared/ui/Button";
 import { Input } from "@shared/ui/Input";
 import { Stack } from "@shared/ui/Stack";
 
 export default function LoginPage() {
-  const form = useZodForm(loginSchema);
+  const form = useZodForm<LoginFormValues>(loginSchema);
+  const loginMutation = useLoginMutation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  // M5.4 temporary submit handler. Full submit integration in M5.5
-  const onSubmit = form.handleSubmit(() => {
-    // console.log("Form valid, values:", values);
+  const destination = getSafeRedirectDestination(searchParams.get("redirect"));
+
+  const onSubmit = form.handleSubmit((values) => {
+    loginMutation.mutate(values, {
+      onSuccess: () => navigate(destination, { replace: true }),
+    });
   });
 
   return (
@@ -40,7 +48,12 @@ export default function LoginPage() {
             {...getInputFieldProps("password", form)}
           />
 
-          <Button type="submit" variant="primary" className="w-full">
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full"
+            isLoading={loginMutation.isPending}
+          >
             Đăng nhập
           </Button>
         </Stack>

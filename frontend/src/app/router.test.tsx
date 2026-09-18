@@ -1,7 +1,9 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { describe, expect, it, beforeEach, vi } from "vitest";
 
+import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
 
 import { routesConfig } from "./router";
@@ -38,7 +40,11 @@ describe("Router Integration Tests", () => {
     const router = createMemoryRouter(testRoutesConfig, {
       initialEntries: [initialPath],
     });
-    return render(<RouterProvider router={router} />);
+    return render(
+      <QueryClientProvider client={createQueryClient()}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+    );
   };
 
   it("Public route (/) render đúng MarketingLayout + HomePage và test Lazy Loading / Suspense", async () => {
@@ -59,7 +65,7 @@ describe("Router Integration Tests", () => {
     renderRouter("/login");
 
     expect(
-      await screen.findByRole("heading", { name: "Đăng nhập" }),
+      await screen.findByRole("heading", { name: /đăng nhập/i }),
     ).toBeInTheDocument();
   });
 
@@ -69,7 +75,7 @@ describe("Router Integration Tests", () => {
 
     // Vì redirect sang /login nên ta sẽ thấy UI của trang đăng nhập
     expect(
-      await screen.findByRole("heading", { name: "Đăng nhập" }),
+      await screen.findByRole("heading", { name: /đăng nhập/i }),
     ).toBeInTheDocument();
   });
 
