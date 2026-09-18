@@ -15,6 +15,7 @@ export interface InputProps extends Omit<
   "size"
 > {
   label?: string;
+  labelClassName?: string;
   error?: string | boolean;
   success?: boolean;
   helperText?: ReactNode;
@@ -29,6 +30,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     {
       className,
       label,
+      labelClassName,
       error,
       success,
       helperText,
@@ -64,7 +66,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <Label
             htmlFor={inputId}
             required={required}
-            className={cn(disabled && "cursor-not-allowed opacity-50")}
+            className={cn(
+              disabled && "cursor-not-allowed opacity-50",
+              labelClassName,
+            )}
           >
             {label}
           </Label>
