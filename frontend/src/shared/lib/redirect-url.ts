@@ -16,3 +16,18 @@ export const createSafeRedirectUrl = (
 
   return `/login?redirect=${encodeURIComponent(safePath)}`;
 };
+
+/**
+ * Validates and returns a safe destination path for redirecting after login.
+ * Falls back to the provided fallback path (default "/app") if the param is unsafe (e.g. absolute URL).
+ */
+export const getSafeRedirectDestination = (
+  redirectParam: string | null,
+  fallback: string = "/app",
+): string => {
+  if (!redirectParam) return fallback;
+  if (!redirectParam.startsWith("/")) return fallback; // prevent absolute URLs (e.g. https://evil.com, evil.com)
+  if (redirectParam.startsWith("//")) return fallback; // prevent protocol-relative URLs (e.g. //evil.com)
+
+  return redirectParam;
+};

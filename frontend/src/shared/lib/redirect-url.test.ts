@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { createSafeRedirectUrl } from "./redirect-url";
+import {
+  createSafeRedirectUrl,
+  getSafeRedirectDestination,
+} from "./redirect-url";
 
 describe("createSafeRedirectUrl", () => {
   it("creates a redirect url from a simple path", () => {
@@ -20,5 +23,27 @@ describe("createSafeRedirectUrl", () => {
     expect(createSafeRedirectUrl("///evil.com")).toBe(
       "/login?redirect=%2Fevil.com",
     );
+  });
+});
+
+describe("getSafeRedirectDestination", () => {
+  it("returns fallback for null or empty string", () => {
+    expect(getSafeRedirectDestination(null)).toBe("/app");
+    expect(getSafeRedirectDestination("")).toBe("/app");
+  });
+
+  it("returns fallback for absolute urls", () => {
+    expect(getSafeRedirectDestination("https://evil.com")).toBe("/app");
+    expect(getSafeRedirectDestination("evil.com/app")).toBe("/app");
+  });
+
+  it("returns fallback for protocol-relative urls", () => {
+    expect(getSafeRedirectDestination("//evil.com")).toBe("/app");
+    expect(getSafeRedirectDestination("///evil.com")).toBe("/app");
+  });
+
+  it("returns the path if it is a valid relative path", () => {
+    expect(getSafeRedirectDestination("/app/dashboard")).toBe("/app/dashboard");
+    expect(getSafeRedirectDestination("/settings?a=1")).toBe("/settings?a=1");
   });
 });
