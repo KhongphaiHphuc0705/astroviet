@@ -76,6 +76,28 @@ describe("getInputFieldProps", () => {
     );
     expect(props.error).toBeUndefined();
   });
+
+  it("forwards registerOptions to form.register (M6 regression for optional fields)", () => {
+    let capturedName: string | undefined;
+    let capturedOptions: unknown;
+
+    const mockForm = {
+      register: (name: string, options: unknown) => {
+        capturedName = name;
+        capturedOptions = options;
+        return { name, onChange: () => {}, onBlur: () => {}, ref: () => {} };
+      },
+      formState: { errors: {} },
+    } as unknown as ReturnType<typeof renderForm>["result"]["current"];
+
+    const customOptions = {
+      setValueAs: (v: unknown) => (v === "" ? undefined : v),
+    };
+    getInputFieldProps<FormValues>("username", mockForm, customOptions);
+
+    expect(capturedName).toBe("username");
+    expect(capturedOptions).toBe(customOptions);
+  });
 });
 
 // ── getCheckboxFieldProps ─────────────────────────────────────────────────────
@@ -109,7 +131,7 @@ describe("useSelectField", () => {
       const form = useZodForm(schema, {
         defaultValues: { username: "", country: "" },
       });
-      return useSelectField<FormValues>("country", form.control);
+      return useSelectField("country", form.control);
     });
 
     const field = result.current;
@@ -125,7 +147,7 @@ describe("useSelectField", () => {
       const form = useZodForm(schema, {
         defaultValues: { username: "", country: "" },
       });
-      return useSelectField<FormValues>("country", form.control);
+      return useSelectField("country", form.control);
     });
 
     // ref must be defined (not null/undefined) so RHF can attach it.
@@ -139,7 +161,7 @@ describe("useSelectField", () => {
       const form = useZodForm(schema, {
         defaultValues: { username: "", country: "" },
       });
-      return useSelectField<FormValues>("country", form.control);
+      return useSelectField("country", form.control);
     });
 
     // onChange must accept a string directly (not a DOM event).
@@ -158,7 +180,7 @@ describe("useSelectField", () => {
         defaultValues: { username: "", country: "" },
       });
       return {
-        field: useSelectField<FormValues>("country", form.control),
+        field: useSelectField("country", form.control),
         trigger: form.trigger,
       };
     });
