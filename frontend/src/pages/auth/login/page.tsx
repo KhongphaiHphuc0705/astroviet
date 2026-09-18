@@ -3,8 +3,10 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useLoginMutation } from "@features/auth/hooks/useLoginMutation";
 import { loginSchema, type LoginFormValues } from "@features/auth/model/schema";
 import { useZodForm } from "@shared/hooks/useZodForm";
+import { getErrorMessage } from "@shared/lib/error-messages";
 import { getInputFieldProps } from "@shared/lib/formFields";
 import { getSafeRedirectDestination } from "@shared/lib/redirect-url";
+import { Alert } from "@shared/ui/Alert";
 import { Button } from "@shared/ui/Button";
 import { Input } from "@shared/ui/Input";
 import { Stack } from "@shared/ui/Stack";
@@ -33,10 +35,18 @@ export default function LoginPage() {
 
       <form onSubmit={onSubmit} noValidate>
         <Stack gap="4">
+          {loginMutation.isError && loginMutation.error && (
+            <Alert
+              variant="danger"
+              title={getErrorMessage(loginMutation.error.errorCode || "")}
+            />
+          )}
+
           <Input
             label="Email"
             labelClassName="normal-case"
             placeholder="Nhập địa chỉ email"
+            disabled={loginMutation.isPending}
             {...getInputFieldProps("email", form)}
           />
 
@@ -45,6 +55,7 @@ export default function LoginPage() {
             labelClassName="normal-case"
             type="password"
             placeholder="Nhập mật khẩu"
+            disabled={loginMutation.isPending}
             {...getInputFieldProps("password", form)}
           />
 
