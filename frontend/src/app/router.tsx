@@ -7,6 +7,7 @@ import { Spinner } from "@shared/ui/Spinner";
 import { AppLayout } from "@widgets/app-layout";
 import { AuthLayout } from "@widgets/auth-layout";
 import { MarketingLayout } from "@widgets/marketing-layout";
+import { UserMenu } from "@widgets/user-menu";
 
 // Error Pages
 const NotFoundPage = lazy(() => import("@pages/errors/not-found-page"));
@@ -99,7 +100,7 @@ export const routesConfig = [
         children: [
           {
             element: (
-              <AppLayout>
+              <AppLayout headerActions={<UserMenu />}>
                 <Suspense fallback={<SuspenseFallback />}>
                   <Outlet />
                 </Suspense>
