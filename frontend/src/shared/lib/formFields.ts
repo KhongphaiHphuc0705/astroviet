@@ -62,12 +62,14 @@ type FormWithRegisterAndErrors<T extends FieldValues> = {
  *
  * @param name  Field name as defined in the Zod schema.
  * @param form  The form object returned by `useZodForm`.
+ * @param registerOptions Optional RHF register options (e.g. setValueAs).
  */
 export function getInputFieldProps<T extends FieldValues>(
   name: FieldPath<T>,
-  form: FormWithRegisterAndErrors<T>,
+  form: FormWithRegisterAndErrors<T> & { register: UseFormRegister<T> },
+  registerOptions?: Parameters<UseFormRegister<T>>[1],
 ): ReturnType<UseFormRegister<T>> & { error: string | undefined } {
-  const registered = form.register(name);
+  const registered = form.register(name, registerOptions);
   const errorMessage = (
     form.formState.errors[name] as { message?: string } | undefined
   )?.message;
@@ -107,9 +109,14 @@ export function getCheckboxFieldProps<T extends FieldValues>(
  * @param name     Field name as defined in the Zod schema.
  * @param control  The `control` object returned by `useZodForm`.
  */
-export function useSelectField<T extends FieldValues>(
-  name: FieldPath<T>,
-  control: Control<T>,
+export function useSelectField<
+  TFieldValues extends FieldValues,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TContext = any,
+  TTransformedValues extends FieldValues | undefined = undefined,
+>(
+  name: FieldPath<TFieldValues>,
+  control: Control<TFieldValues, TContext, TTransformedValues>,
 ): SelectFieldProps {
   const {
     field,
