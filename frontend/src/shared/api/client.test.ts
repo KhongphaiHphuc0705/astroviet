@@ -374,5 +374,24 @@ describe("apiClient", () => {
         expect((error as ApiError).fieldErrors).toBeUndefined();
       }
     });
+
+    // 8. Lỗi network thuần túy (không có response) → fallback statusCode 500 và UNKNOWN_ERROR.
+    it("8. handles pure network errors (no response)", async () => {
+      server.use(
+        http.get("http://localhost:5173/api/error", () => {
+          return HttpResponse.error();
+        }),
+      );
+
+      try {
+        await apiClient.get("/error", { baseURL: "http://localhost:5173/api" });
+        expect.fail("Should have thrown");
+      } catch (error) {
+        const apiError = error as ApiError;
+        expect(apiError.status).toBe(500);
+        expect(apiError.errorCode).toBe("UNKNOWN_ERROR");
+        expect(apiError.title).toBe("Network Error");
+      }
+    });
   });
 });

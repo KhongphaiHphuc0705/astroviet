@@ -175,6 +175,35 @@ describe("RegisterPage - Tests", () => {
     });
   });
 
+  // M6-T04-B (Gap test M8)
+  it("M6-T04-B: shows generic danger alert on non-409 errors (e.g., 500)", async () => {
+    server.use(
+      http.post("*/api/v1/auth/register", () => {
+        return HttpResponse.json(
+          { errorCode: "INTERNAL_SERVER_ERROR", title: "Something went wrong" },
+          { status: 500 },
+        );
+      }),
+    );
+
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<RegisterPage />, { wrapper });
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com");
+    await user.type(screen.getByLabelText("Mật khẩu"), "password123");
+    await user.type(screen.getByLabelText("Xác nhận mật khẩu"), "password123");
+    await user.click(screen.getByRole("button", { name: "Đăng ký" }));
+
+    // Assert the generic danger alert is shown
+    await waitFor(() => {
+      const genericAlert = screen.getByRole("alert");
+      expect(genericAlert).toBeInTheDocument();
+      expect(
+        screen.getByText("Đã có lỗi xảy ra, vui lòng thử lại."),
+      ).toBeInTheDocument();
+    });
+  });
+
   // M6-T05
   it("M6-T05: Forgot Password is not present", () => {
     render(<RegisterPage />, { wrapper });
