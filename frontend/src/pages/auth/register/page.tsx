@@ -22,6 +22,9 @@ export default function RegisterPage() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...payload } =
       values as unknown as RegisterFormValues;
+    if (payload.displayName === "") {
+      delete payload.displayName;
+    }
     registerMutation.mutate(payload, {
       onSuccess: () => {
         setTimeout(() => navigate("/login"), 2000);

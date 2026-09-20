@@ -13,7 +13,17 @@ test.describe("Full Auth Flow", () => {
     "Yêu cầu backend thật + Postgres cục bộ — CI chưa có hạ tầng này (Phát hiện 1, out of scope M8)",
   );
 
-  test("1. Register a new user", async ({ page }) => {
+  let page: import("@playwright/test").Page;
+
+  test.beforeAll(async ({ browser }) => {
+    page = await browser.newPage();
+  });
+
+  test.afterAll(async () => {
+    await page.close();
+  });
+
+  test("1. Register a new user", async () => {
     await page.goto("/register");
 
     // Điền form đăng ký
@@ -36,7 +46,7 @@ test.describe("Full Auth Flow", () => {
     ).toBeVisible();
   });
 
-  test("2. Login with the newly created user", async ({ page }) => {
+  test("2. Login with the newly created user", async () => {
     await page.goto("/login");
 
     // Điền form đăng nhập
@@ -52,7 +62,7 @@ test.describe("Full Auth Flow", () => {
     ).toBeVisible();
   });
 
-  test("3. Logout from the app", async ({ page }) => {
+  test("3. Logout from the app", async () => {
     // Navigate straight to /app to verify session persists across tabs/reloads
     await page.goto("/app");
     await expect(
@@ -63,7 +73,7 @@ test.describe("Full Auth Flow", () => {
     await page.getByRole("button", { name: "Đăng xuất" }).click();
 
     // Xác nhận điều hướng về /login
-    await page.waitForURL("**/login");
+    await page.waitForURL("**/login*");
     await expect(
       page.getByRole("heading", { name: "ĐĂNG NHẬP" }),
     ).toBeVisible();
