@@ -121,6 +121,10 @@ describe("M8: Full Auth Flow Integration", () => {
     expect(response.data).toEqual({ data: "secret data" });
     expect(mockProtectedCallCount).toBe(2); // First failed (401), second succeeded (200)
     expect(useAuthStore.getState().status).toBe("authenticated"); // Still authenticated
+    expect(useAuthStore.getState().user).toMatchObject({
+      id: "1",
+      email: "test@example.com",
+    }); // User data must survive the refresh
 
     // --- STEP 4: Logout ---
     // Click the logout button inside UserMenu (which is visible in AppLayout)
