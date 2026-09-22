@@ -7,12 +7,8 @@ const uniqueEmail = `e2e-${Date.now()}@test.local`;
 const password = "Password123!";
 
 test.describe("Full Auth Flow", () => {
-  // Phát hiện 1 từ M8 Plan: Bỏ qua test này trên CI vì không có hạ tầng backend
-  test.skip(
-    !!process.env.CI,
-    "Yêu cầu backend thật + Postgres cục bộ — CI chưa có hạ tầng này (Phát hiện 1, out of scope M8)",
-  );
-
+  // G-05 resolved: CI giờ có Postgres service + backend thật (xem frontend-ci.yml),
+  // nên test này chạy thật trên CI thay vì tự skip như trước (M8/M9).
   let page: import("@playwright/test").Page;
 
   test.beforeAll(async ({ browser }) => {

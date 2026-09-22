@@ -4,50 +4,131 @@ on:
   push:
     paths:
       - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/frontend-ci.yml'
   pull_request:
     paths:
       - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/frontend-ci.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: astroviet_e2e
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Use Node.js 22.x
       uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'npm'
         cache-dependency-path: 'frontend/package-lock.json'
-        
-    - name: Install dependencies
+
+    # ---------- Frontend: static checks (unchanged from before G-05) ----------
+    - name: Install frontend dependencies
+      working-directory: frontend
       run: npm ci
-      
-    - name: Setup Environment
+
+    - name: Setup frontend environment
+      working-directory: frontend
       run: cp .env.example .env
-      
+
     - name: Check Formatting
+      working-directory: frontend
       run: npm run format:check
-      
+
     - name: Lint
+      working-directory: frontend
       run: npm run lint
-      
+
     - name: Typecheck
+      working-directory: frontend
       run: npm run typecheck
-      
+
     - name: Test
+      working-directory: frontend
       run: npm run test:coverage
-      
+
     - name: Build
+      working-directory: frontend
       run: npm run build
-      
+
+    # ---------- Backend: boot a real instance so E2E has something to talk to (G-05) ----------
+    - name: Install backend dependencies
+      working-directory: backend
+      run: npm ci
+
+    - name: Setup backend environment
+      working-directory: backend
+      run: |
+        cat <<EOF > .env
+        NODE_ENV=test
+        PORT=3000
+        CORS_ORIGIN=http://localhost:5173
+        DATABASE_URL=postgresql://postgres:postgres@localhost:5432/astroviet_e2e
+        LOG_LEVEL=warn
+        JWT_ACCESS_SECRET=ci-e2e-access-secret-minimum-32-characters
+        JWT_REFRESH_SECRET=ci-e2e-refresh-secret-minimum-32-characters
+        JWT_ACCESS_EXPIRY_MINUTES=15
+        JWT_REFRESH_EXPIRY_DAYS=30
+        GEONAMES_USERNAME=ci-e2e-placeholder
+        EOF
+
+    - name: Migrate database
+      working-directory: backend
+      run: |
+        npm run prisma:generate
+        npm run prisma:deploy
+
+    - name: Build backend
+      working-directory: backend
+      run: npm run build
+
+    - name: Start backend server
+      working-directory: backend
+      run: |
+        nohup npm run start > backend.log 2>&1 &
+        for i in $(seq 1 30); do
+          if curl -sf http://localhost:3000/live > /dev/null; then
+            echo "Backend is up."
+            exit 0
+          fi
+          echo "Waiting for backend... ($i/30)"
+          sleep 2
+        done
+        echo "Backend failed to become healthy in time."
+        cat backend.log
+        exit 1
+
+    # ---------- E2E against the real backend ----------
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-      
+      working-directory: frontend
+      run: npx playwright install --with-deps chromium
+
     - name: Run E2E Tests
+      working-directory: frontend
       run: npm run test:e2e
+
+    - name: Upload backend log on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-log
+        path: backend/backend.log

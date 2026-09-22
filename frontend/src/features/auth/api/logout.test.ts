@@ -1,6 +1,7 @@
-import { http, HttpResponse } from "msw";
+import { HttpResponse } from "msw";
 import { describe, it, expect } from "vitest";
 
+import { mockLogout, problemDetails } from "@features/auth/api/mocks/handlers";
 import { ApiError } from "@shared/api/client";
 import { server } from "@test/msw-server";
 
@@ -10,7 +11,7 @@ describe("logout API", () => {
   it("resolves without throwing on 204 success", async () => {
     let capturedMethod = "";
     server.use(
-      http.post("*/api/v1/auth/logout", ({ request }) => {
+      mockLogout(({ request }) => {
         capturedMethod = request.method;
         return new HttpResponse(null, { status: 204 });
       }),
@@ -22,17 +23,14 @@ describe("logout API", () => {
 
   it("rejects with ApiError on 401", async () => {
     server.use(
-      http.post("*/api/v1/auth/logout", () => {
-        return HttpResponse.json(
-          {
-            type: "https://errors.astroviet.com/unauthorized",
-            title: "Unauthorized",
-            status: 401,
-            errorCode: "UNAUTHORIZED",
-          },
-          { status: 401 },
-        );
-      }),
+      mockLogout(() =>
+        problemDetails({
+          type: "https://errors.astroviet.com/unauthorized",
+          title: "Unauthorized",
+          status: 401,
+          errorCode: "UNAUTHORIZED",
+        }),
+      ),
     );
 
     let caughtError: unknown;
