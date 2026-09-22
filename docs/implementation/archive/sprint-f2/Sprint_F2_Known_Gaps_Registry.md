@@ -1,0 +1,16 @@
+# Sprint F2 Known Gaps Registry
+
+| ID | Area | Description | Evidence | Severity | F2 Impact | Status | Follow-up |
+|---|---|---|---|---|---|---|---|
+| G-01 | Documentation | Architecture Spec §12.2 ghi call site session-bootstrap là `app/providers`, thực tế là `app/App.tsx` | Đọc trực tiếp `App.tsx` (M4 review) + §12.2 | Thấp | Không blocking | Non-blocking known gap | Sửa 1 câu trong §12.2 ở lần cập nhật tài liệu tiếp theo |
+| G-02 | Deferred Feature | Forgot Password UI không có trong F2 | UI Spec §10.3 yêu cầu; backend Sprint 1 không có endpoint | Thấp | Đã thống nhất từ đầu (F2-OQ-3) | Deferred scope | Chờ backend Sprint tương lai bổ sung endpoint |
+| G-03 | Deferred Feature | Checkbox "Ghi nhớ đăng nhập" (UI Spec §10.3) không implement | `loginSchema` không có field, backend không hỗ trợ | Thấp | Không blocking | Deferred scope | Chờ quyết định backend nếu cần |
+| G-04 | Testing | MSW không mô phỏng cookie HttpOnly thật — cookie flow chỉ thật sự verify qua E2E | Ghi nhận từ M2, xác nhận lại M8 | Trung bình (đã bù bằng E2E) | Không blocking (đã có E2E bù) | Known limitation | Không cần follow-up nếu E2E tiếp tục chạy định kỳ |
+| G-05 | CI/CD | `frontend-ci.yml` không có service Postgres/backend — `auth.spec.ts` tự skip trong CI | Đọc trực tiếp workflow YAML (M8) | Trung bình | Không blocking cho F2 (đã xử lý bằng `test.skip`) | Infrastructure gap | Thêm CI service Postgres+backend — thuộc DevOps/CI Sprint tương lai, không phải F2 |
+| G-06 | Testing Standard | Coding Standards §13.3 yêu cầu MSW handlers tập trung ở `features/*/api/mocks/handlers.ts`; M1-M7 dùng inline `server.use()` | Đọc trực tiếp §13.3 + toàn bộ test M1-M7 (M8) | Thấp | Không blocking (test M1-M7 vẫn "adequate") | Technical Debt | Cân nhắc thống nhất pattern khi có Sprint testing-infra riêng |
+| G-07 | Documentation | `frontend/README.md` stale nghiêm trọng trước khi M9 sửa (Mục 2) | Đọc trực tiếp README | Cao (trước khi sửa) | Blocking cho "documentation reflects current state" nếu không sửa | **Đã xử lý trong M9** | Không cần follow-up nếu M9 hoàn thành đúng |
+| G-08 | Documentation | `frontend/CHANGELOG.md` không tồn tại | Xác nhận qua `ls` | Thấp | Cần quyết định, không tự động blocking | Documentation gap | **Đã xử lý trong M9** |
+| G-09 | Release Process | `package.json` version `0.0.0`, chưa từng bump, không có tiền lệ SemVer frontend | Đọc trực tiếp `package.json` | Thấp | Không blocking | Known limitation | **Đã xử lý trong M9** |
+| G-10 | Verification | E2E chưa được Claude tự chạy trực tiếp trong phiên audit này (giới hạn sandbox) | Mục 9 | Trung bình | **Blocking cho tới khi dev tự verify** | Verification gap | **Đã xử lý trong M9** (Dev đã chạy tự động pass 100%) |
+| G-11 | External Dependency | `npm audit`: 6 vulnerability (3 moderate, 3 high) trong frontend dependencies | `npm ci` output (Mục 9) | Thấp-Trung bình | Không blocking F2 (không liên quan trực tiếp auth logic) | External Dependency | Theo dõi, `npm audit fix` khi có Sprint bảo trì dependency |
+| G-12 | Testing | `register/page.test.tsx` có `act()` warning nhỏ khi chạy (không fail) — do `setTimeout` callback trong test không bọc `act()` | Quan sát trực tiếp qua console output khi chạy `npm run test:coverage` | Rất thấp | Không blocking | Technical Debt | Bọc `act()` khi có dịp sửa nhỏ |

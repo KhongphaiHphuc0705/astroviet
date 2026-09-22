@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 
-import { sign, verify, TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+const { sign, verify, TokenExpiredError } = jwt;
 import { z } from 'zod';
 
 import { AuthenticationError } from '../../../../shared/errors/app-error.js';

@@ -7,8 +7,9 @@ Dự án frontend này đóng vai trò là giao diện người dùng chính (SP
 
 ## 2. Features / Current Scope
 
-**Current Status: Sprint F1 — Frontend Foundation (Complete)**
-Sprint F1 chỉ tập trung vào việc thiết lập hạ tầng nền tảng (Foundation) bao gồm cấu trúc thư mục, hệ thống định tuyến, Design System (UI primitives), cấu hình CI/CD, Testing và các quy ước mã nguồn. Các tính năng nghiệp vụ như Authentication, Birth Profile, Chart Viewer **sẽ được phát triển ở các Sprint tiếp theo**.
+**Current Status: Sprint F1 + F2 (Authentication UI) — Complete**
+Sprint F1 tập trung vào việc thiết lập hạ tầng nền tảng (Foundation) bao gồm cấu trúc thư mục, hệ thống định tuyến, Design System (UI primitives), cấu hình CI/CD, Testing và các quy ước mã nguồn.
+Sprint F2 đã hoàn thiện quy trình Authentication Flow bao gồm: Register, Login, Session Bootstrap, Refresh Token và Logout.
 
 ## 3. Tech Stack
 
@@ -47,6 +48,8 @@ Biến quan trọng cần lưu ý:
 
 - `VITE_API_BASE_URL`: Địa chỉ URL gốc của backend REST API (mặc định `http://localhost:3000`). Bắt buộc phải cấu hình đúng để gọi API.
 
+_Lưu ý: Khi phát triển và chạy E2E Test (`npm run test:e2e`), backend và Postgres cục bộ bắt buộc phải đang chạy (thông qua lệnh `docker compose up` từ thư mục `backend/`)._
+
 ## 7. Development
 
 Bắt đầu Vite development server:
@@ -60,9 +63,9 @@ npm run dev
 - `npm run test`: Chạy unit/component test một lần.
 - `npm run test:watch`: Chạy test với chế độ tự động reload khi đổi file.
 - `npm run test:coverage`: Chạy test và tạo báo cáo độ bao phủ mã nguồn.
-- `npm run test:e2e`: Chạy Playwright E2E tests.
+- `npm run test:e2e`: Chạy Playwright E2E tests (yêu cầu local backend đang chạy).
 
-_Pipeline CI sẽ chạy toàn bộ các lệnh test này tự động trên mọi PR nhắm vào nhánh chính._
+_Pipeline CI sẽ chạy toàn bộ các lệnh test unit/component/coverage tự động trên mọi PR nhắm vào nhánh chính. Tuy nhiên E2E test (`auth.spec.ts`) sẽ bị skip trong CI do CI chưa thiết lập hạ tầng Backend/Postgres._
 
 ## 9. Linting
 
@@ -93,8 +96,6 @@ Dự án được cấu trúc theo Feature-Sliced Design (FSD):
 - `src/entities`: Các object, model và giao diện dùng chung gắn liền với domain.
 - `src/shared`: Utilities, hooks, design tokens, các API clients và UI primitives tái sử dụng trên toàn hệ thống.
 
-_Lưu ý: Sau Sprint F1, `features/` và `entities/` chỉ chứa các file scaffold (`.gitkeep`, `README.md`) làm tiền đề cho Sprint F2._
-
 ## 13. Architecture Overview
 
 Ứng dụng frontend tuân thủ kiến trúc "Feature-Sliced, Layered by Responsibility". Thay vì chia theo các lớp Domain như Backend, frontend chia nhỏ theo tính năng (features). Các layer (shared -> entities -> features -> widgets -> pages) tuân thủ quy tắc luồng phụ thuộc một chiều để đảm bảo maintainability và khả năng thay đổi.
@@ -122,14 +123,14 @@ Trong các Sprint tới, đặc biệt chú ý:
 Dưới đây là danh sách các khiếm khuyết được ghi nhận, có chủ đích hoặc cần khắc phục vào các Sprint kế tiếp:
 
 1. `Checkbox` đang thiếu prop `error`/`helperText` (Chờ khi có thực tế ≥ 2 form sử dụng).
-2. `QueryClientProvider` và `I18nextProvider` chưa được wrap quanh `AppProvider` và `renderWithProviders` (Kiến trúc §14.3 đã yêu cầu nhưng chưa triển khai vì chưa cần ở F1).
-3. `uiStore.ts` chưa chứa trạng thái `activeModalId` như dự kiến tại Kiến trúc §7.3.
-4. Cây định tuyến `router.tsx` hiện tại chỉ làm nền tảng, chưa ánh xạ các route của Phase 1/2/3 theo Frontend UI Specification.
-5. Chưa kích hoạt `eslint-plugin-boundaries` vì quy mô codebase hiện tại quá nhỏ, đang phải dùng manual review.
-6. AppLayout/MarketingLayout mobile menu chưa thay bằng Drawer thật + focus trap (Từ Backlog cũ M4).
-7. `Radio` variant card chưa hoàn thiện icon/layout (Từ Backlog cũ M5/M6).
-8. `<title>` động theo route chưa được hỗ trợ (OQ-M8-1, DEFERRED).
-9. Focus management chủ động sau khi điều hướng navigate (OQ-M8-2, DEFERRED).
-10. `Breadcrumb`, `PageHeader`, `ContentContainer`, `Toast` đã đặc tả nhưng chưa gán Milestone thực hiện.
-11. `usePosition` chưa hỗ trợ flip/collision detection.
-12. Sprint F2 (Authentication UI) chưa được xác nhận chính thức gần đây.
+2. `uiStore.ts` chưa chứa trạng thái `activeModalId` như dự kiến tại Kiến trúc §7.3.
+3. Cây định tuyến `router.tsx` hiện tại chỉ làm nền tảng, chưa ánh xạ các route của Phase 1/2/3 theo Frontend UI Specification.
+4. Chưa kích hoạt `eslint-plugin-boundaries` vì quy mô codebase hiện tại quá nhỏ, đang phải dùng manual review.
+5. AppLayout/MarketingLayout mobile menu chưa thay bằng Drawer thật + focus trap (Từ Backlog cũ M4).
+6. `Radio` variant card chưa hoàn thiện icon/layout (Từ Backlog cũ M5/M6).
+7. `<title>` động theo route chưa được hỗ trợ (OQ-M8-1, DEFERRED).
+8. Focus management chủ động sau khi điều hướng navigate (OQ-M8-2, DEFERRED).
+9. `Breadcrumb`, `PageHeader`, `ContentContainer`, `Toast` đã đặc tả nhưng chưa gán Milestone thực hiện.
+10. `usePosition` chưa hỗ trợ flip/collision detection.
+
+_Xem thêm `docs/implementation/Sprint_F2_Known_Gaps_Registry.md` để biết thêm chi tiết về các Known Gaps của Sprint F2._
