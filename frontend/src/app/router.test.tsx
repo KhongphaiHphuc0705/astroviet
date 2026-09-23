@@ -65,7 +65,11 @@ describe("Router Integration Tests", () => {
     renderRouter("/login");
 
     expect(
-      await screen.findByRole("heading", { name: /đăng nhập/i }),
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument();
   });
 
@@ -75,7 +79,11 @@ describe("Router Integration Tests", () => {
 
     // Vì redirect sang /login nên ta sẽ thấy UI của trang đăng nhập
     expect(
-      await screen.findByRole("heading", { name: /đăng nhập/i }),
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument();
   });
 

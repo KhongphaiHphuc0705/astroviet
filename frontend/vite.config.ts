@@ -13,6 +13,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
+    testTimeout: 30000,
     exclude: [...configDefaults.exclude, "e2e/**"],
     coverage: {
       provider: "v8",

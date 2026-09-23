@@ -1,11 +1,14 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { http, HttpResponse } from "msw";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
+import {
+  loginSuccess,
+  loginInvalidCredentials,
+} from "@features/auth/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { server } from "@test/msw-server";
 
@@ -73,17 +76,7 @@ describe("LoginPage - Form Validation", () => {
 describe("LoginPage - Mutation & Navigation", () => {
   // M5-T02: Login success, mặc định (/app)
   it("M5-T02: successful login navigates to /app by default", async () => {
-    server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          {
-            accessToken: "fake",
-            user: { id: "1" },
-          },
-          { status: 200 },
-        );
-      }),
-    );
+    server.use(loginSuccess());
 
     const user = userEvent.setup();
     render(<LoginPage />, { wrapper });
@@ -99,17 +92,7 @@ describe("LoginPage - Mutation & Navigation", () => {
 
   // M5-T03: Login success, redirect hợp lệ (/profile)
   it("M5-T03: successful login navigates to valid redirect destination", async () => {
-    server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          {
-            accessToken: "fake",
-            user: { id: "1" },
-          },
-          { status: 200 },
-        );
-      }),
-    );
+    server.use(loginSuccess());
 
     const user = userEvent.setup();
     render(<LoginPage />, {
@@ -128,16 +111,7 @@ describe("LoginPage - Mutation & Navigation", () => {
 
   // M5-T04: Login failure (401) shows Alert with getErrorMessage
   it("M5-T04: login failure 401 shows error Alert", async () => {
-    server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          {
-            errorCode: "INVALID_CREDENTIALS",
-          },
-          { status: 401 },
-        );
-      }),
-    );
+    server.use(loginInvalidCredentials());
 
     const user = userEvent.setup();
     render(<LoginPage />, { wrapper });
@@ -156,14 +130,7 @@ describe("LoginPage - Mutation & Navigation", () => {
 
   // M5-T05: dangerous redirect defaults to /app
   it("M5-T05: dangerous redirect defaults to /app", async () => {
-    server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          { accessToken: "fake", user: { id: "1" } },
-          { status: 200 },
-        );
-      }),
-    );
+    server.use(loginSuccess());
 
     const user = userEvent.setup();
     render(<LoginPage />, {
@@ -193,14 +160,7 @@ describe("LoginPage - Accessibility", () => {
   });
 
   it("M5-T06: passes accessibility check (axe) with error states", async () => {
-    server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          { errorCode: "INVALID_CREDENTIALS" },
-          { status: 401 },
-        );
-      }),
-    );
+    server.use(loginInvalidCredentials());
 
     const user = userEvent.setup();
     const { container } = render(<LoginPage />, { wrapper });

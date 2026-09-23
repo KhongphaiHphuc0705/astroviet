@@ -1,6 +1,11 @@
-import { http, HttpResponse } from "msw";
+import { HttpResponse } from "msw";
 import { describe, it, expect } from "vitest";
 
+import {
+  mockLogin,
+  mockUser,
+  problemDetails,
+} from "@features/auth/api/mocks/handlers";
 import { ApiError } from "@shared/api/client";
 import { server } from "@test/msw-server";
 
@@ -11,20 +16,14 @@ describe("login API", () => {
     let capturedBody: unknown = null;
 
     server.use(
-      http.post("*/api/v1/auth/login", async ({ request }) => {
+      mockLogin(async ({ request }) => {
         capturedBody = await request.json();
         return HttpResponse.json(
           {
             accessToken: "fake-access-token",
             refreshToken: "fake-refresh-token",
             expiresIn: 3600,
-            user: {
-              id: "123",
-              email: "test@example.com",
-              displayName: "Test User",
-              role: "user",
-              createdAt: "2023-01-01T00:00:00.000Z",
-            },
+            user: mockUser(),
           },
           { status: 200 },
         );
@@ -43,35 +42,21 @@ describe("login API", () => {
       accessToken: "fake-access-token",
       refreshToken: "fake-refresh-token",
       expiresIn: 3600,
-      user: {
-        id: "123",
-        email: "test@example.com",
-        displayName: "Test User",
-        role: "user",
-        createdAt: "2023-01-01T00:00:00.000Z",
-      },
+      user: mockUser(),
     });
   });
 
   it("rejects with ApiError on 401 INVALID_CREDENTIALS", async () => {
     server.use(
-      http.post("*/api/v1/auth/login", () => {
-        return HttpResponse.json(
-          {
-            type: "https://errors.astroviet.com/unauthorized",
-            title: "Unauthorized",
-            status: 401,
-            errorCode: "INVALID_CREDENTIALS",
-            detail: "Invalid credentials",
-          },
-          {
-            status: 401,
-            headers: {
-              "Content-Type": "application/problem+json",
-            },
-          },
-        );
-      }),
+      mockLogin(() =>
+        problemDetails({
+          type: "https://errors.astroviet.com/unauthorized",
+          title: "Unauthorized",
+          status: 401,
+          errorCode: "INVALID_CREDENTIALS",
+          detail: "Invalid credentials",
+        }),
+      ),
     );
 
     const input = {

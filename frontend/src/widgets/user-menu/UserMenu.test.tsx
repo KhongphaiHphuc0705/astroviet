@@ -1,10 +1,13 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { http, HttpResponse } from "msw";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, afterEach, describe, expect, it } from "vitest";
 
+import {
+  logoutSuccess,
+  logoutServerError,
+} from "@features/auth/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
@@ -48,11 +51,7 @@ describe("UserMenu - Tests", () => {
   });
 
   it("Test 1: Logout success - clears session and navigates to /login", async () => {
-    server.use(
-      http.post("*/api/v1/auth/logout", () => {
-        return new HttpResponse(null, { status: 204 });
-      }),
-    );
+    server.use(logoutSuccess());
 
     const user = userEvent.setup();
     render(<UserMenu />, { wrapper });
@@ -74,14 +73,7 @@ describe("UserMenu - Tests", () => {
   });
 
   it("Test 2: Logout failure - still clears session and navigates to /login", async () => {
-    server.use(
-      http.post("*/api/v1/auth/logout", () => {
-        return HttpResponse.json(
-          { errorCode: "INTERNAL_ERROR" },
-          { status: 500 },
-        );
-      }),
-    );
+    server.use(logoutServerError());
 
     const user = userEvent.setup();
     render(<UserMenu />, { wrapper });
