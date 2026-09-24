@@ -1,8 +1,11 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor, act } from "@testing-library/react";
-import { http, HttpResponse } from "msw";
 import { describe, it, expect, beforeEach } from "vitest";
 
+import {
+  logoutSuccess,
+  logoutServerError,
+} from "@features/auth/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
@@ -32,11 +35,7 @@ describe("useLogoutMutation", () => {
   });
 
   it("E — Logout success: clears session", async () => {
-    server.use(
-      http.post("*/api/v1/auth/logout", () => {
-        return new HttpResponse(null, { status: 204 });
-      }),
-    );
+    server.use(logoutSuccess());
 
     const { result } = renderHook(() => useLogoutMutation(), { wrapper });
 
@@ -55,14 +54,7 @@ describe("useLogoutMutation", () => {
   });
 
   it("F — Logout failure: still clears session (onSettled), exposes error", async () => {
-    server.use(
-      http.post("*/api/v1/auth/logout", () => {
-        return HttpResponse.json(
-          { errorCode: "INTERNAL_SERVER_ERROR" },
-          { status: 500 },
-        );
-      }),
-    );
+    server.use(logoutServerError());
 
     const { result } = renderHook(() => useLogoutMutation(), { wrapper });
 

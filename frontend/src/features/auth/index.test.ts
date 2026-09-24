@@ -1,11 +1,13 @@
-import { http, HttpResponse } from "msw";
 import { describe, it, expect, beforeEach } from "vitest";
 
+import {
+  refreshSuccess,
+  refreshUnauthorized,
+} from "@features/auth/api/mocks/handlers";
 import {
   coordinateRefresh,
   __resetRefreshCoordinatorForTests,
 } from "@shared/api/auth-refresh-coordinator";
-import { AUTH_REFRESH_ENDPOINT } from "@shared/api/client";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
 
@@ -27,25 +29,7 @@ describe("registerAuthInfrastructure", () => {
   });
 
   it("registers handler that calls refresh and returns accessToken", async () => {
-    server.use(
-      http.post(`*${AUTH_REFRESH_ENDPOINT}`, () => {
-        return HttpResponse.json(
-          {
-            accessToken: "new-access-token",
-            refreshToken: "new-refresh-token",
-            expiresIn: 3600,
-            user: {
-              id: "123",
-              email: "test@example.com",
-              displayName: "Test User",
-              role: "user",
-              createdAt: "2023-01-01T00:00:00.000Z",
-            },
-          },
-          { status: 200 },
-        );
-      }),
-    );
+    server.use(refreshSuccess());
 
     registerAuthInfrastructure();
 
@@ -60,25 +44,7 @@ describe("registerAuthInfrastructure", () => {
   });
 
   it("is safe to call multiple times", async () => {
-    server.use(
-      http.post(`*${AUTH_REFRESH_ENDPOINT}`, () => {
-        return HttpResponse.json(
-          {
-            accessToken: "new-access-token-2",
-            refreshToken: "new-refresh-token",
-            expiresIn: 3600,
-            user: {
-              id: "123",
-              email: "test@example.com",
-              displayName: "Test User",
-              role: "user",
-              createdAt: "2023-01-01T00:00:00.000Z",
-            },
-          },
-          { status: 200 },
-        );
-      }),
-    );
+    server.use(refreshSuccess({ accessToken: "new-access-token-2" }));
 
     registerAuthInfrastructure();
     registerAuthInfrastructure(); // Second call
@@ -101,14 +67,7 @@ describe("registerAuthInfrastructure", () => {
       },
     });
 
-    server.use(
-      http.post(`*${AUTH_REFRESH_ENDPOINT}`, () => {
-        return HttpResponse.json(
-          { errorCode: "UNAUTHORIZED" },
-          { status: 401 },
-        );
-      }),
-    );
+    server.use(refreshUnauthorized());
 
     registerAuthInfrastructure();
 

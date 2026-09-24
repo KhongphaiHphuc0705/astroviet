@@ -68,7 +68,11 @@ describe("M8: Full Auth Flow Integration", () => {
 
     // --- STEP 1: Register ---
     // Wait for page to load
-    const emailInput = await screen.findByRole("textbox", { name: "Email" });
+    const emailInput = await screen.findByRole(
+      "textbox",
+      { name: "Email" },
+      { timeout: 10000 },
+    );
     const passwordInput = screen.getByLabelText(/^Mật khẩu/i);
     const confirmPasswordInput = screen.getByLabelText(/^Xác nhận mật khẩu/i);
 

@@ -5,8 +5,9 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, it, expect, beforeEach } from "vitest";
 
 import { ProtectedRoute } from "@app/routing/ProtectedRoute";
+import { mockRefresh, mockUser } from "@features/auth/api/mocks/handlers";
 import { __resetRefreshCoordinatorForTests } from "@shared/api/auth-refresh-coordinator";
-import { apiClient, AUTH_REFRESH_ENDPOINT } from "@shared/api/client";
+import { apiClient } from "@shared/api/client";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
 
@@ -53,7 +54,7 @@ describe("Integration: useSessionBootstrap Race Condition", () => {
           { status: 401 },
         );
       }),
-      http.post(`*${AUTH_REFRESH_ENDPOINT}`, async () => {
+      mockRefresh(async () => {
         refreshCallCount++;
         await delay(50); // Simulate network delay to force the race condition
         return HttpResponse.json(
@@ -61,13 +62,7 @@ describe("Integration: useSessionBootstrap Race Condition", () => {
             accessToken: "new-access-token",
             refreshToken: "new-refresh-token",
             expiresIn: 3600,
-            user: {
-              id: "123",
-              email: "test@example.com",
-              displayName: "Test User",
-              role: "user",
-              createdAt: "2023-01-01T00:00:00.000Z",
-            },
+            user: mockUser(),
           },
           { status: 200 },
         );

@@ -1,11 +1,17 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { http, HttpResponse } from "msw";
+import { HttpResponse } from "msw";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { axe } from "vitest-axe";
 
+import {
+  mockRegister,
+  registerConflict,
+  registerSuccess,
+  registerServerError,
+} from "@features/auth/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
@@ -75,7 +81,7 @@ describe("RegisterPage - Tests", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let capturedPayload: any = null;
     server.use(
-      http.post("*/api/v1/auth/register", async ({ request }) => {
+      mockRegister(async ({ request }) => {
         capturedPayload = await request.json();
         return HttpResponse.json({}, { status: 201 });
       }),
@@ -103,14 +109,7 @@ describe("RegisterPage - Tests", () => {
 
   // M6-T03
   it("M6-T03: 409 EMAIL_ALREADY_EXISTS shows error under email field", async () => {
-    server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json(
-          { errorCode: "EMAIL_ALREADY_EXISTS" },
-          { status: 409 },
-        );
-      }),
-    );
+    server.use(registerConflict());
 
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<RegisterPage />, { wrapper });
@@ -133,11 +132,7 @@ describe("RegisterPage - Tests", () => {
 
   // M6-T04
   it("M6-T04: successful registration shows success alert and navigates after 2000ms", async () => {
-    server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json({}, { status: 201 });
-      }),
-    );
+    server.use(registerSuccess());
 
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<RegisterPage />, { wrapper });
@@ -177,14 +172,7 @@ describe("RegisterPage - Tests", () => {
 
   // M6-T04-B (Gap test M8)
   it("M6-T04-B: shows generic danger alert on non-409 errors (e.g., 500)", async () => {
-    server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json(
-          { errorCode: "INTERNAL_SERVER_ERROR", title: "Something went wrong" },
-          { status: 500 },
-        );
-      }),
-    );
+    server.use(registerServerError());
 
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<RegisterPage />, { wrapper });
@@ -219,14 +207,7 @@ describe("RegisterPage - Tests", () => {
   });
 
   it("M6-T06: passes accessibility check (axe) with error states", async () => {
-    server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json(
-          { errorCode: "EMAIL_ALREADY_EXISTS" },
-          { status: 409 },
-        );
-      }),
-    );
+    server.use(registerConflict());
 
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const { container } = render(<RegisterPage />, { wrapper });
@@ -247,11 +228,7 @@ describe("RegisterPage - Tests", () => {
   });
 
   it("M6-T06: passes accessibility check (axe) with success state", async () => {
-    server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json({}, { status: 201 });
-      }),
-    );
+    server.use(registerSuccess());
 
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const { container } = render(<RegisterPage />, { wrapper });

@@ -1,6 +1,11 @@
-import { http, HttpResponse } from "msw";
+import { HttpResponse } from "msw";
 import { describe, it, expect } from "vitest";
 
+import {
+  mockRegister,
+  mockUser,
+  problemDetails,
+} from "@features/auth/api/mocks/handlers";
 import { ApiError } from "@shared/api/client";
 import { server } from "@test/msw-server";
 
@@ -11,20 +16,9 @@ describe("register API", () => {
     let capturedBody: unknown = null;
 
     server.use(
-      http.post("*/api/v1/auth/register", async ({ request }) => {
+      mockRegister(async ({ request }) => {
         capturedBody = await request.json();
-        return HttpResponse.json(
-          {
-            user: {
-              id: "123",
-              email: "test@example.com",
-              displayName: "Test User",
-              role: "user",
-              createdAt: "2023-01-01T00:00:00.000Z",
-            },
-          },
-          { status: 201 },
-        );
+        return HttpResponse.json({ user: mockUser() }, { status: 201 });
       }),
     );
 
@@ -37,34 +31,20 @@ describe("register API", () => {
     const response = await register(input);
 
     expect(capturedBody).toEqual(input);
-    expect(response.user).toEqual({
-      id: "123",
-      email: "test@example.com",
-      displayName: "Test User",
-      role: "user",
-      createdAt: "2023-01-01T00:00:00.000Z",
-    });
+    expect(response.user).toEqual(mockUser());
   });
 
   it("rejects with ApiError on 409 EMAIL_ALREADY_EXISTS", async () => {
     server.use(
-      http.post("*/api/v1/auth/register", () => {
-        return HttpResponse.json(
-          {
-            type: "https://errors.astroviet.com/conflict",
-            title: "Conflict",
-            status: 409,
-            errorCode: "EMAIL_ALREADY_EXISTS",
-            detail: "Email already exists",
-          },
-          {
-            status: 409,
-            headers: {
-              "Content-Type": "application/problem+json",
-            },
-          },
-        );
-      }),
+      mockRegister(() =>
+        problemDetails({
+          type: "https://errors.astroviet.com/conflict",
+          title: "Conflict",
+          status: 409,
+          errorCode: "EMAIL_ALREADY_EXISTS",
+          detail: "Email already exists",
+        }),
+      ),
     );
 
     const input = {
