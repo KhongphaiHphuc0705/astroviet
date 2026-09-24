@@ -21,6 +21,23 @@ describe("searchLocations", () => {
     expect(result[0]?.placeName).toBe("Hồ Chí Minh, Việt Nam");
   });
 
+  it("sends correct query parameters in the request", async () => {
+    let capturedUrl: URL | undefined;
+    server.use(
+      mockSearchLocations(async ({ request }) => {
+        capturedUrl = new URL(request.url);
+        return new Response(JSON.stringify([]), { status: 200 });
+      }),
+    );
+    await searchLocations({
+      q: "Test City",
+      date: "2000-01-01",
+    });
+    expect(capturedUrl).toBeDefined();
+    expect(capturedUrl?.searchParams.get("q")).toBe("Test City");
+    expect(capturedUrl?.searchParams.get("date")).toBe("2000-01-01");
+  });
+
   it("rejects with ApiError on 400 MALFORMED_REQUEST", async () => {
     server.use(birthProfileMalformedRequest(mockSearchLocations));
     const promise = searchLocations({
