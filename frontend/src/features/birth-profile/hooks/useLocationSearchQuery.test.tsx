@@ -104,4 +104,53 @@ describe("useLocationSearchQuery", () => {
     expect(result.current.fetchStatus).toBe("idle");
     expect(callCount).toBe(0);
   });
+
+  it("only fires one API request when query changes rapidly within debounce window", async () => {
+    let callCount = 0;
+    server.use(
+      mockSearchLocations(async () => {
+        callCount++;
+        return new Response(JSON.stringify([]), { status: 200 });
+      }),
+    );
+
+    const { result, rerender } = renderHook(
+      (props: { query: string; date: string | undefined }) =>
+        useLocationSearchQuery(props),
+      {
+        wrapper: createWrapper(),
+        initialProps: { query: "", date: "2000-01-01" },
+      },
+    );
+
+    // Rapidly change query, advancing time but not enough to trigger the 300ms debounce
+    rerender({ query: "Ho", date: "2000-01-01" });
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    rerender({ query: "Ho C", date: "2000-01-01" });
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    rerender({ query: "Ho Chi", date: "2000-01-01" });
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    rerender({ query: "Ho Chi Minh", date: "2000-01-01" });
+
+    // Complete the remaining 300ms for the final query
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(callCount).toBe(1);
+    expect(result.current.data).toBeDefined();
+  });
 });

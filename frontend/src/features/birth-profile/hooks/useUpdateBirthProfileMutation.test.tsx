@@ -43,4 +43,33 @@ describe("useUpdateBirthProfileMutation", () => {
       queryKey: birthProfileKeys.detail("123"),
     });
   });
+
+  it("uses variables.id dynamically for invalidation", async () => {
+    server.use(updateBirthProfileSuccess());
+    const queryClient = createQueryClient();
+    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
+
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+
+    const { result } = renderHook(() => useUpdateBirthProfileMutation(), {
+      wrapper,
+    });
+
+    act(() => {
+      result.current.mutate({
+        id: "456",
+        input: { label: "Dynamic Updated" },
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(invalidateSpy).toHaveBeenCalledWith({
+      queryKey: birthProfileKeys.detail("456"),
+    });
+  });
 });
