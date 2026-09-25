@@ -28,6 +28,7 @@ describe("BirthProfileForm Integration", () => {
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
+    queryClient.clear();
   });
 
   const renderComponent = (
@@ -224,7 +225,8 @@ describe("BirthProfileForm Integration", () => {
     expect(screen.getByText("Vui lòng chọn nơi sinh")).toBeInTheDocument();
   });
 
-  it("initializes form correctly in edit mode (with defaultValues)", () => {
+  it("initializes form correctly in edit mode (with defaultValues)", async () => {
+    const user = userEvent.setup();
     const defaultValues = {
       label: "Edit Profile",
       fullName: "Jane Doe",
@@ -244,5 +246,22 @@ describe("BirthProfileForm Integration", () => {
     // Verify step 1 values
     expect(screen.getByLabelText(/Tên hồ sơ/i)).toHaveValue("Edit Profile");
     expect(screen.getByLabelText(/Họ và tên/i)).toHaveValue("Jane Doe");
+
+    // Click Next to go to Step 2
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
+
+    // Verify step 2 values
+    expect(screen.getByLabelText(/^Ngày sinh/i)).toHaveValue("1995-12-15");
+
+    // Note: <input type="time" step="1"> may format the value based on browser/JSDOM,
+    // but JSDOM respects the exact value we pass or sets it to standard format.
+    expect(screen.getByLabelText(/^Giờ sinh/i)).toHaveValue("08:15:00");
+    expect(screen.getByLabelText(/Tôi biết rõ giờ sinh/i)).toBeChecked();
+
+    // Verify Location displays in readonly mode
+    expect(await screen.findByText("Hanoi")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("combobox", { name: /Nơi sinh/i }),
+    ).not.toBeInTheDocument();
   });
 });
