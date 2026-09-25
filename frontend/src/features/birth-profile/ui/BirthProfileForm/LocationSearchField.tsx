@@ -112,36 +112,50 @@ export function LocationSearchField({
   };
 
   return (
-    <div ref={containerRef} className="relative flex w-full flex-col gap-1.5">
-      <Input
-        label="Nơi sinh"
-        ref={inputRef}
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          if (e.target.value.trim().length >= 2) {
-            setIsOpen(true);
-          } else {
-            setIsOpen(false);
+    <div className="relative flex w-full flex-col gap-1.5">
+      <div className="flex w-full flex-col gap-1.5">
+        <label
+          htmlFor="birthLocation-input"
+          className={
+            isBirthDateValid
+              ? "flex items-center gap-1 text-body-sm font-medium uppercase text-primary"
+              : "flex cursor-not-allowed items-center gap-1 text-body-sm font-medium uppercase text-primary opacity-50"
           }
-        }}
-        onFocus={() => {
-          if (query.trim().length >= 2) setIsOpen(true);
-        }}
-        onKeyDown={handleKeyDown}
-        placeholder={
-          isBirthDateValid
-            ? "Nhập địa điểm (vd: Ho Chi Minh)..."
-            : "Vui lòng nhập ngày sinh trước"
-        }
-        disabled={!isBirthDateValid}
-        error={error?.message}
-        autoComplete="off"
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-controls={isOpen ? "location-suggestions" : undefined}
-        aria-haspopup="listbox"
-      />
+        >
+          Nơi sinh
+        </label>
+        <div ref={containerRef} className="relative w-full">
+          <Input
+            id="birthLocation-input"
+            ref={inputRef}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (e.target.value.trim().length >= 2) {
+                setIsOpen(true);
+              } else {
+                setIsOpen(false);
+              }
+            }}
+            onFocus={() => {
+              if (query.trim().length >= 2) setIsOpen(true);
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              isBirthDateValid
+                ? "Nhập địa điểm (vd: Ho Chi Minh)..."
+                : "Vui lòng nhập ngày sinh trước"
+            }
+            disabled={!isBirthDateValid}
+            error={error?.message}
+            autoComplete="off"
+            role="combobox"
+            aria-expanded={isOpen}
+            aria-controls={isOpen ? "location-suggestions" : undefined}
+            aria-haspopup="listbox"
+          />
+        </div>
+      </div>
 
       {isOpen &&
         createPortal(
