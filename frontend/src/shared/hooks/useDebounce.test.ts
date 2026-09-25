@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDebounce } from "./useDebounce";
@@ -32,11 +32,15 @@ describe("useDebounce", () => {
     expect(result.current).toBe("initial");
 
     // Advance time by 299ms
-    vi.advanceTimersByTime(299);
+    act(() => {
+      vi.advanceTimersByTime(299);
+    });
     expect(result.current).toBe("initial");
 
     // Advance time by 1ms (total 300ms)
-    vi.advanceTimersByTime(1);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(result.current).toBe("updated");
   });
 });
