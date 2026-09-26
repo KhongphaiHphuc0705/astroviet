@@ -22,6 +22,7 @@ const RegisterPage = lazy(() => import("@pages/auth/register/page"));
 
 // App Pages
 const AppPage = lazy(() => import("@pages/app/page"));
+const BirthProfilesPage = lazy(() => import("@pages/app/profiles/page"));
 
 const SuspenseFallback = () => (
   <div className="flex min-h-[50vh] items-center justify-center">
@@ -110,6 +111,10 @@ export const routesConfig = [
               {
                 index: true,
                 element: <AppPage />,
+              },
+              {
+                path: "profiles",
+                element: <BirthProfilesPage />,
               },
             ],
           },
