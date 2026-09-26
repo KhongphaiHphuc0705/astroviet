@@ -179,8 +179,9 @@ export default function BirthProfilesPage() {
       >
         <div className="space-y-4">
           <p className="text-body-base text-subtle">
-            Bạn có chắc chắn muốn xóa hồ sơ vĩnh viễn không? Hành động này không
-            thể hoàn tác.
+            Bạn có chắc chắn muốn xóa hồ sơ{" "}
+            <strong>{deletingProfile?.label}</strong> vĩnh viễn không? Hành động
+            này không thể hoàn tác.
           </p>
 
           {deleteMutation.isError && (
