@@ -8,6 +8,7 @@ import {
   type BirthProfileFormValues,
 } from "@features/birth-profile/ui/BirthProfileForm";
 import { toFormValues } from "@features/birth-profile/ui/BirthProfileForm";
+import { getErrorMessage } from "@shared/lib/error-messages";
 import { Alert } from "@shared/ui/Alert";
 import { Container } from "@shared/ui/Container";
 import { EmptyState } from "@shared/ui/EmptyState";
@@ -62,7 +63,10 @@ export default function BirthProfileEditPage() {
           />
         )}
         {mutation.isError && !mutation.isSuccess && (
-          <Alert variant="danger" title={mutation.error.message} />
+          <Alert
+            variant="danger"
+            title={getErrorMessage(mutation.error.errorCode)}
+          />
         )}
       </div>
       <BirthProfileForm

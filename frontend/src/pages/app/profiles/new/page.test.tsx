@@ -106,7 +106,9 @@ describe("BirthProfileCreatePage", () => {
     await user.click(screen.getByRole("button", { name: /Hoàn tất/i }));
 
     // Check error alert
-    expect(await screen.findByText("Dữ liệu không hợp lệ")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Đã có lỗi xảy ra, vui lòng thử lại."),
+    ).toBeInTheDocument();
 
     // Form should NOT be disabled after failure
     const submitBtn = screen.getByRole("button", { name: /Hoàn tất/i });
