@@ -74,16 +74,23 @@ describe("BirthProfileEditPage", () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     renderPage();
 
-    // Verify data is populated
+    // Verify data is populated in step 1
     expect(await screen.findByLabelText(/Tên hồ sơ/i)).toHaveValue(
       "My Profile",
     );
-    expect(screen.getByLabelText(/^Ngày sinh/i)).toHaveValue("1995-05-12");
 
     // Change label
     const labelInput = screen.getByLabelText(/Tên hồ sơ/i);
     await user.clear(labelInput);
     await user.type(labelInput, "Updated Profile");
+
+    // Click Next to go to Step 2
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
+
+    // Verify data is populated in step 2
+    expect(await screen.findByLabelText(/^Ngày sinh/i)).toHaveValue(
+      "1995-05-12",
+    );
 
     // Submit
     await user.click(screen.getByRole("button", { name: /Hoàn tất/i }));
@@ -96,8 +103,8 @@ describe("BirthProfileEditPage", () => {
     ).toBeInTheDocument();
 
     // Check that form becomes disabled (Submit button disabled)
-    const submitBtn = screen.getByRole("button", { name: /Đang xử lý/i });
-    expect(submitBtn).toBeDisabled();
+    const submitBtn = screen.getByRole("button", { name: /Hoàn tất/i });
+    expect(submitBtn).toHaveAttribute("aria-disabled", "true");
 
     // Wait for the setTimeout
     act(() => {
@@ -120,10 +127,13 @@ describe("BirthProfileEditPage", () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     renderPage();
 
-    // Wait for form to populate
+    // Wait for form to populate step 1
     expect(await screen.findByLabelText(/Tên hồ sơ/i)).toHaveValue(
       "My Profile",
     );
+
+    // Click Next to go to Step 2
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     // Submit
     await user.click(screen.getByRole("button", { name: /Hoàn tất/i }));
@@ -133,6 +143,6 @@ describe("BirthProfileEditPage", () => {
 
     // Form should NOT be disabled after failure
     const submitBtn = screen.getByRole("button", { name: /Hoàn tất/i });
-    expect(submitBtn).not.toBeDisabled();
+    expect(submitBtn).not.toHaveAttribute("aria-disabled", "true");
   });
 });

@@ -10,7 +10,7 @@ import {
   mockSearchLocations,
 } from "@features/birth-profile/api/mocks/handlers";
 import { server } from "@test/msw-server";
-import { renderWithProviders } from "@test/render";
+import { renderWithProviders, fireEvent } from "@test/render";
 
 import BirthProfileCreatePage from "./page";
 
@@ -48,6 +48,9 @@ describe("BirthProfileCreatePage", () => {
     const birthDateInput = screen.getByLabelText(/^Ngày sinh/i);
     await user.type(birthDateInput, "2000-01-01");
 
+    const birthTimeInput = screen.getByLabelText(/^Giờ sinh/i);
+    fireEvent.change(birthTimeInput, { target: { value: "12:00:00" } });
+
     const locationInput = screen.getByRole("combobox", { name: /Nơi sinh/i });
     await user.type(locationInput, "Da Nang");
 
@@ -75,8 +78,8 @@ describe("BirthProfileCreatePage", () => {
     ).toBeInTheDocument();
 
     // Check that form becomes disabled (Submit button disabled)
-    const submitBtn = screen.getByRole("button", { name: /Đang xử lý/i });
-    expect(submitBtn).toBeDisabled();
+    const submitBtn = screen.getByRole("button", { name: /Hoàn tất/i });
+    expect(submitBtn).toHaveAttribute("aria-disabled", "true");
 
     // Wait for the setTimeout and check navigation
     // Wait for the navigation to happen (2s delay)
@@ -103,12 +106,10 @@ describe("BirthProfileCreatePage", () => {
     await user.click(screen.getByRole("button", { name: /Hoàn tất/i }));
 
     // Check error alert
-    expect(
-      await screen.findByText("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại."),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Dữ liệu không hợp lệ")).toBeInTheDocument();
 
     // Form should NOT be disabled after failure
     const submitBtn = screen.getByRole("button", { name: /Hoàn tất/i });
-    expect(submitBtn).not.toBeDisabled();
+    expect(submitBtn).not.toHaveAttribute("aria-disabled", "true");
   });
 });
