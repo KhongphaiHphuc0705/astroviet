@@ -10,7 +10,10 @@ import { Spinner } from "@shared/ui/Spinner";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
-    as?: React.ElementType;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    as?: React.ElementType<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    to?: any; // To support react-router-dom Link when as={Link} is used
     variant?: "primary" | "secondary" | "ghost" | "danger" | "link";
     size?: "sm" | "md" | "lg";
     iconOnly?: boolean;
