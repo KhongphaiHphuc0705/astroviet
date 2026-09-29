@@ -105,9 +105,11 @@ describe("BirthProfileCreatePage", () => {
 
     await user.click(screen.getByRole("button", { name: /Hoàn tất/i }));
 
-    // Check error alert
+    // Check error alert — VALIDATION_ERROR is now mapped, so the real message appears
     expect(
-      await screen.findByText("Đã có lỗi xảy ra, vui lòng thử lại."),
+      await screen.findByText(
+        "Thông tin bạn nhập chưa hợp lệ. Vui lòng kiểm tra lại.",
+      ),
     ).toBeInTheDocument();
 
     // Form should NOT be disabled after failure
