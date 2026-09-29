@@ -23,6 +23,12 @@ const RegisterPage = lazy(() => import("@pages/auth/register/page"));
 // App Pages
 const AppPage = lazy(() => import("@pages/app/page"));
 const BirthProfilesPage = lazy(() => import("@pages/app/profiles/page"));
+const BirthProfileCreatePage = lazy(
+  () => import("@pages/app/profiles/new/page"),
+);
+const BirthProfileEditPage = lazy(
+  () => import("@pages/app/profiles/edit/page"),
+);
 
 const SuspenseFallback = () => (
   <div className="flex min-h-[50vh] items-center justify-center">
@@ -115,6 +121,14 @@ export const routesConfig = [
               {
                 path: "profiles",
                 element: <BirthProfilesPage />,
+              },
+              {
+                path: "profiles/new",
+                element: <BirthProfileCreatePage />,
+              },
+              {
+                path: "profiles/:id/edit",
+                element: <BirthProfileEditPage />,
               },
             ],
           },
