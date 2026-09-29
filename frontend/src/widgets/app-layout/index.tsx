@@ -1,5 +1,6 @@
-import { Menu, X, LayoutDashboard, Settings } from "lucide-react";
+import { Menu, X, LayoutDashboard, Settings, IdCard } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { useUiStore } from "@shared/stores/uiStore";
 import { Container } from "@shared/ui/Container";
@@ -75,6 +76,13 @@ export function AppLayout({ children, headerActions }: AppLayoutProps) {
               <LayoutDashboard size={20} className="shrink-0" />
               {!sidebarCollapsed && <span>Bảng điều khiển</span>}
             </a>
+            <Link
+              to="/app/profiles"
+              className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
+            >
+              <IdCard size={20} className="shrink-0" />
+              {!sidebarCollapsed && <span>Hồ sơ sinh</span>}
+            </Link>
             <a
               href="/"
               className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
@@ -140,6 +148,14 @@ export function AppLayout({ children, headerActions }: AppLayoutProps) {
                 <LayoutDashboard size={20} />
                 <span>Bảng điều khiển</span>
               </a>
+              <Link
+                to="/app/profiles"
+                className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
+                onClick={() => setMobileDrawerOpen(false)}
+              >
+                <IdCard size={20} />
+                <span>Hồ sơ sinh</span>
+              </Link>
               <a
                 href="/"
                 className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
