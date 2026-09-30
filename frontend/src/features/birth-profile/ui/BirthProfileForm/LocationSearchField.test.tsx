@@ -163,4 +163,96 @@ describe("LocationSearchField", () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
   });
+
+  it("selects a location using keyboard navigation", async () => {
+    server.use(
+      mockSearchLocations(async () => {
+        return new Response(
+          JSON.stringify([
+            {
+              placeName: "Da Nang",
+              latitude: 16,
+              longitude: 108,
+              historicalTimezoneId: "Asia/Ho_Chi_Minh",
+            },
+          ]),
+          { status: 200 },
+        );
+      }),
+    );
+
+    renderComponent("1995-05-12");
+    const input = screen.getByRole("combobox");
+
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await user.type(input, "Dan");
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Da Nang")).toBeInTheDocument();
+    });
+
+    // Hit ArrowDown to trigger lines 108-110 on input
+    await user.keyboard("{ArrowDown}");
+
+    // Focus moves to the first suggestion via Tab, then select with Enter
+    await user.tab();
+    await user.keyboard("{Enter}");
+
+    expect(screen.getByText("Da Nang")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Đổi địa điểm" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+  });
+
+  it("displays error alert and allows retry", async () => {
+    let callCount = 0;
+    server.use(
+      mockSearchLocations(async () => {
+        callCount++;
+        if (callCount === 1) {
+          return new Response(JSON.stringify({ message: "Server error" }), {
+            status: 500,
+          });
+        }
+        return new Response(
+          JSON.stringify([
+            {
+              placeName: "Nha Trang",
+              latitude: 12,
+              longitude: 109,
+              historicalTimezoneId: "Asia/Ho_Chi_Minh",
+            },
+          ]),
+          { status: 200 },
+        );
+      }),
+    );
+
+    renderComponent("1995-05-12");
+    const input = screen.getByRole("combobox");
+
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await user.type(input, "Nha");
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Lỗi tra cứu")).toBeInTheDocument();
+    });
+
+    // Click retry
+    const retryBtn = screen.getByRole("button", { name: "Thử lại" });
+    await user.click(retryBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText("Nha Trang")).toBeInTheDocument();
+    });
+  });
 });

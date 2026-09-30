@@ -44,12 +44,12 @@ test.describe("Birth Profile CRUD Flow", () => {
     await page.waitForURL("**/app/profiles/new");
 
     // Step 1
-    await page.getByLabel("Tên hồ sơ *").fill("Hồ sơ E2E Test");
+    await page.getByLabel("Họ và tên *").fill("Hồ sơ E2E Test");
     await page.getByRole("button", { name: "Tiếp tục" }).click();
 
     // Step 2
     await page.getByLabel("Ngày sinh *").fill("2000-01-01");
-    await page.getByLabel("Giờ sinh *").fill("12:00:00");
+    await page.getByLabel("Giờ sinh *").fill("12:00");
 
     // Mock location search API to avoid depending on external Geonames service in CI
     await page.route("**/api/v1/locations/search**", (route) =>
@@ -80,11 +80,8 @@ test.describe("Birth Profile CRUD Flow", () => {
 
     await page.getByRole("button", { name: "Hoàn tất" }).click();
 
-    // Alert success — filter to avoid matching Spinner's role="status" inside button
-    const alert = page
-      .getByRole("status")
-      .filter({ hasText: /Tạo hồ sơ thành công/i });
-    await expect(alert).toBeVisible();
+    // Alert success
+    await expect(page.getByText(/Tạo hồ sơ thành công/i)).toBeVisible();
 
     // Wait for redirect
     await page.waitForURL("**/app/profiles");
@@ -99,21 +96,18 @@ test.describe("Birth Profile CRUD Flow", () => {
     await page.waitForURL("**/app/profiles/*/edit");
 
     // Verify populated data
-    await expect(page.getByLabel("Tên hồ sơ *")).toHaveValue("Hồ sơ E2E Test");
+    await expect(page.getByLabel("Họ và tên *")).toHaveValue("Hồ sơ E2E Test");
 
     // Change label
-    await page.getByLabel("Tên hồ sơ *").fill("Hồ sơ E2E Test (Đã sửa)");
+    await page.getByLabel("Họ và tên *").fill("Hồ sơ E2E Test (Đã sửa)");
 
     // Navigate steps and save
     await page.getByRole("button", { name: "Tiếp tục" }).click();
 
     await page.getByRole("button", { name: "Hoàn tất" }).click();
 
-    // Alert success — filter to avoid matching Spinner's role="status" inside button
-    const alert = page
-      .getByRole("status")
-      .filter({ hasText: /Cập nhật thành công/i });
-    await expect(alert).toBeVisible();
+    // Alert success
+    await expect(page.getByText(/Cập nhật thành công/i)).toBeVisible();
 
     // Wait for redirect
     await page.waitForURL("**/app/profiles");
