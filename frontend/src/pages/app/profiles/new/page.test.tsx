@@ -10,7 +10,7 @@ import {
   mockSearchLocations,
 } from "@features/birth-profile/api/mocks/handlers";
 import { server } from "@test/msw-server";
-import { renderWithProviders, fireEvent } from "@test/render";
+import { renderWithProviders } from "@test/render";
 
 import BirthProfileCreatePage from "./page";
 
@@ -41,7 +41,7 @@ describe("BirthProfileCreatePage", () => {
     renderWithProviders(<BirthProfileCreatePage />);
 
     // Step 1
-    await user.type(screen.getByLabelText(/Tên hồ sơ/i), "Test Profile");
+    await user.type(screen.getByLabelText(/Họ và tên/i), "Test Profile");
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     // Step 2
@@ -49,7 +49,7 @@ describe("BirthProfileCreatePage", () => {
     await user.type(birthDateInput, "2000-01-01");
 
     const birthTimeInput = screen.getByLabelText(/^Giờ sinh/i);
-    fireEvent.change(birthTimeInput, { target: { value: "12:00:00" } });
+    await user.type(birthTimeInput, "1200");
 
     const locationInput = screen.getByRole("combobox", { name: /Nơi sinh/i });
     await user.type(locationInput, "Da Nang");

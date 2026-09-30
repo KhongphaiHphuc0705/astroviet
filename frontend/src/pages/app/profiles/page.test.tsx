@@ -70,12 +70,12 @@ describe("BirthProfilesPage", () => {
   it("renders list of profiles and handles pagination", async () => {
     const profile1 = mockBirthProfile({
       id: "1",
-      label: "Profile 1",
+      fullName: "Profile 1",
       birthDate: "1990-01-01",
     });
     const profile2 = mockBirthProfile({
       id: "2",
-      label: "Profile 2",
+      fullName: "Profile 2",
       birthDate: "1990-01-02",
     });
 
@@ -85,16 +85,16 @@ describe("BirthProfilesPage", () => {
         if (url.searchParams.get("page") === "2") {
           return HttpResponse.json({
             items: [profile2],
-            total: 21,
+            total: 11,
             page: 2,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         return HttpResponse.json({
           items: [profile1],
-          total: 21,
+          total: 11,
           page: 1,
-          pageSize: 20,
+          pageSize: 10,
         });
       }),
     );
@@ -126,11 +126,11 @@ describe("BirthProfilesPage", () => {
     const newNextBtn = screen.getByRole("button", { name: "Trang sau" });
 
     expect(newPrevBtn).not.toBeDisabled();
-    expect(newNextBtn).toBeDisabled(); // 2 * 20 > 21
+    expect(newNextBtn).toBeDisabled(); // 2 * 10 >= 11
   });
 
   it("handles deletion flow correctly and shows label in modal", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "To Be Deleted" });
+    const profile = mockBirthProfile({ id: "1", fullName: "To Be Deleted" });
     let deleteCalled = false;
 
     server.use(
@@ -193,7 +193,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("handles deletion cancellation", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "To Keep" });
+    const profile = mockBirthProfile({ id: "1", fullName: "To Keep" });
 
     server.use(
       mockListBirthProfiles(() => {
@@ -238,7 +238,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("handles deletion failure", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "Fail Delete" });
+    const profile = mockBirthProfile({ id: "1", fullName: "Fail Delete" });
 
     server.use(
       mockListBirthProfiles(() => {
@@ -285,7 +285,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("automatically retreats to previous page if last item on current page is deleted", async () => {
-    const profile = mockBirthProfile({ id: "21", label: "Page 2 Item" });
+    const profile = mockBirthProfile({ id: "21", fullName: "Page 2 Item" });
     let deleteCalled = false;
 
     server.use(
@@ -296,12 +296,12 @@ describe("BirthProfilesPage", () => {
         if (page === "1") {
           return HttpResponse.json({
             // Mocking page 1 items with unique ids to avoid React key warning
-            items: Array.from({ length: 20 }).map((_, i) =>
-              mockBirthProfile({ id: `other-${i}`, label: `Other ${i}` }),
+            items: Array.from({ length: 10 }).map((_, i) =>
+              mockBirthProfile({ id: `other-${i}`, fullName: `Other ${i}` }),
             ),
-            total: deleteCalled ? 20 : 21,
+            total: deleteCalled ? 10 : 11,
             page: 1,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         if (page === "2") {
@@ -309,16 +309,16 @@ describe("BirthProfilesPage", () => {
             // Should not be called really since we auto-retreat, but just in case
             return HttpResponse.json({
               items: [],
-              total: 20,
+              total: 10,
               page: 2,
-              pageSize: 20,
+              pageSize: 10,
             });
           }
           return HttpResponse.json({
             items: [profile], // Only 1 item on page 2
-            total: 21,
+            total: 11,
             page: 2,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         return new HttpResponse(null, { status: 404 });

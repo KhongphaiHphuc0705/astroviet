@@ -75,12 +75,11 @@ describe("BirthProfileEditPage", () => {
     renderPage();
 
     // Verify data is populated in step 1
-    expect(await screen.findByLabelText(/Tên hồ sơ/i)).toHaveValue(
-      "My Profile",
+    expect(await screen.findByLabelText(/Họ và tên/i)).toHaveValue(
+      "Phuc Hoang",
     );
 
-    // Change label
-    const labelInput = screen.getByLabelText(/Tên hồ sơ/i);
+    const labelInput = screen.getByLabelText(/Họ và tên/i);
     await user.clear(labelInput);
     await user.type(labelInput, "Updated Profile");
 
@@ -128,8 +127,8 @@ describe("BirthProfileEditPage", () => {
     renderPage();
 
     // Wait for form to populate step 1
-    expect(await screen.findByLabelText(/Tên hồ sơ/i)).toHaveValue(
-      "My Profile",
+    expect(await screen.findByLabelText(/Họ và tên/i)).toHaveValue(
+      "Phuc Hoang",
     );
 
     // Click Next to go to Step 2

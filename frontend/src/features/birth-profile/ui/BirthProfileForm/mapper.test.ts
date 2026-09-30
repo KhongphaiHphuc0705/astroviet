@@ -59,7 +59,7 @@ describe("mapper - toFormValues", () => {
 
     const formValues = toFormValues(profile);
 
-    expect(formValues.fullName).toBeNull();
+    expect(formValues.fullName).toBe("Unknown Time");
     expect(formValues.birthTime).toBeNull();
     expect(formValues.isBirthTimeKnown).toBe(false);
   });
