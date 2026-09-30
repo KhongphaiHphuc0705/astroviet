@@ -15,7 +15,11 @@ export default function BirthProfileCreatePage() {
   const mutation = useCreateBirthProfileMutation();
 
   const handleSubmit = (values: BirthProfileFormValues) => {
-    mutation.mutate(values as CreateBirthProfileInput, {
+    const payload: CreateBirthProfileInput = {
+      ...(values as CreateBirthProfileInput),
+      label: values.fullName.trim(),
+    };
+    mutation.mutate(payload, {
       onSuccess: () => setTimeout(() => navigate("/app/profiles"), 2000),
     });
   };

@@ -5,7 +5,7 @@ import type { BirthProfileFormValues } from "./types";
 export function toFormValues(profile: BirthProfile): BirthProfileFormValues {
   return {
     label: profile.label,
-    fullName: profile.fullName,
+    fullName: profile.fullName ?? profile.label,
     birthDate: profile.birthDate,
     birthTime: profile.birthTime,
     isBirthTimeKnown: profile.isBirthTimeKnown,

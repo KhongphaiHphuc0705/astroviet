@@ -1,3 +1,4 @@
+import { Calendar, MapPin } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -14,7 +15,7 @@ import { Modal } from "@shared/ui/Modal";
 import { Skeleton } from "@shared/ui/Skeleton";
 import { Stack } from "@shared/ui/Stack";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 const formatDate = (dateStr: string) => {
   const parts = dateStr.split("-");
@@ -83,25 +84,31 @@ export default function BirthProfilesPage() {
             <Card key={profile.id} className="flex flex-col">
               <div className="mb-4 flex-1">
                 <h3
-                  className="truncate text-heading-sm font-semibold"
-                  title={profile.label}
+                  className="truncate text-heading-sm font-semibold text-primary"
+                  title={profile.fullName ?? profile.label}
                 >
-                  {profile.label}
+                  {profile.fullName ?? profile.label}
                 </h3>
-                {profile.fullName && (
-                  <p className="mt-1 truncate text-body-sm text-subtle">
-                    {profile.fullName}
-                  </p>
-                )}
-                <div className="mt-4 space-y-2 text-body-sm text-subtle">
-                  <p>
-                    📅 {formatDate(profile.birthDate)}
+                <div className="mt-4 space-y-2 text-body-sm text-muted">
+                  <p className="flex items-center gap-2">
+                    <Calendar
+                      size={14}
+                      className="shrink-0 text-accent-primary"
+                    />
+                    {formatDate(profile.birthDate)}
                     {profile.isBirthTimeKnown &&
                       profile.birthTime &&
                       ` lúc ${formatTime(profile.birthTime)}`}
                   </p>
-                  <p className="truncate" title={profile.placeName}>
-                    📍 {profile.placeName}
+                  <p
+                    className="flex items-center gap-2 truncate"
+                    title={profile.placeName}
+                  >
+                    <MapPin
+                      size={14}
+                      className="shrink-0 text-accent-primary"
+                    />
+                    <span className="truncate">{profile.placeName}</span>
                   </p>
                 </div>
               </div>
@@ -115,7 +122,7 @@ export default function BirthProfilesPage() {
                   to={`/app/profiles/${profile.id}/edit`}
                   variant="secondary"
                   size="sm"
-                  aria-label={`Sửa hồ sơ ${profile.label}`}
+                  aria-label={`Sửa hồ sơ ${profile.fullName ?? profile.label}`}
                 >
                   Sửa
                 </Button>
@@ -123,7 +130,7 @@ export default function BirthProfilesPage() {
                   variant="danger"
                   size="sm"
                   onClick={() => setDeletingProfile(profile)}
-                  aria-label={`Xóa hồ sơ ${profile.label}`}
+                  aria-label={`Xóa hồ sơ ${profile.fullName ?? profile.label}`}
                 >
                   Xóa
                 </Button>
@@ -178,10 +185,12 @@ export default function BirthProfilesPage() {
         title="Xóa hồ sơ"
       >
         <div className="space-y-4">
-          <p className="text-body-base text-subtle">
+          <p className="text-body-base text-muted">
             Bạn có chắc chắn muốn xóa hồ sơ{" "}
-            <strong>{deletingProfile?.label}</strong> vĩnh viễn không? Hành động
-            này không thể hoàn tác.
+            <strong className="text-primary">
+              {deletingProfile?.fullName ?? deletingProfile?.label}
+            </strong>{" "}
+            vĩnh viễn không? Hành động này không thể hoàn tác.
           </p>
 
           {deleteMutation.isError && (
