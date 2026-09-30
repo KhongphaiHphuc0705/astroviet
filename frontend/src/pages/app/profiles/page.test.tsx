@@ -370,4 +370,104 @@ describe("BirthProfilesPage", () => {
     // Page 2 item should be gone
     expect(screen.queryByText("Page 2 Item")).not.toBeInTheDocument();
   });
+  it("navigates to previous page when clicking Prev", async () => {
+    const profile1 = mockBirthProfile({ id: "1", fullName: "Profile 1" });
+    const profile2 = mockBirthProfile({ id: "2", fullName: "Profile 2" });
+
+    server.use(
+      mockListBirthProfiles(({ request }) => {
+        const url = new URL(request.url);
+        if (url.searchParams.get("page") === "2") {
+          return HttpResponse.json({
+            items: [profile2],
+            total: 11,
+            page: 2,
+            pageSize: 10,
+          });
+        }
+        return HttpResponse.json({
+          items: [profile1],
+          total: 11,
+          page: 1,
+          pageSize: 10,
+        });
+      }),
+    );
+
+    renderWithProviders(<BirthProfilesPage />);
+
+    // Go to page 2 first
+    const nextBtn = await screen.findByRole("button", { name: "Trang sau" });
+    const user = userEvent.setup();
+    await user.click(nextBtn);
+
+    expect(await screen.findByText("Profile 2")).toBeInTheDocument();
+
+    // Now click Prev
+    const prevBtn = screen.getByRole("button", { name: "Trang trước" });
+    await user.click(prevBtn);
+
+    // Verify back to page 1
+    expect(await screen.findByText("Profile 1")).toBeInTheDocument();
+    expect(screen.queryByText("Profile 2")).not.toBeInTheDocument();
+  });
+
+  it("calls refetch when clicking Retry on list error", async () => {
+    let callCount = 0;
+    server.use(
+      mockListBirthProfiles(() => {
+        callCount++;
+        if (callCount === 1) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        return HttpResponse.json({
+          items: [mockBirthProfile({ id: "1", fullName: "Success Profile" })],
+          total: 1,
+          page: 1,
+          pageSize: 20,
+        });
+      }),
+    );
+
+    renderWithProviders(<BirthProfilesPage />);
+
+    // First time should fail
+    expect(
+      await screen.findByText("Không thể tải danh sách hồ sơ"),
+    ).toBeInTheDocument();
+
+    // Click retry
+    const retryBtn = screen.getByRole("button", { name: "Thử lại" });
+    const user = userEvent.setup();
+    await user.click(retryBtn);
+
+    // Should fetch successfully
+    expect(await screen.findByText("Success Profile")).toBeInTheDocument();
+  });
+
+  it("navigates to new profile page when clicking Create in empty state", async () => {
+    server.use(
+      mockListBirthProfiles(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 20 }),
+      ),
+    );
+
+    renderWithProviders(<BirthProfilesPage />);
+
+    expect(
+      await screen.findByText("Bạn chưa có hồ sơ sinh nào"),
+    ).toBeInTheDocument();
+
+    // The EmptyState component has a button to create a new profile.
+    // In our component, it's actually an a tag (Link) acting as a button with href.
+    // Let's find it. It might be inside the empty state.
+    // There are potentially two links with "Tạo hồ sơ mới" (header and empty state).
+    const createLinks = screen.getAllByRole("link", { name: "Tạo hồ sơ mới" });
+    expect(createLinks.length).toBeGreaterThan(0);
+    // They both point to /app/profiles/new
+    expect(createLinks[createLinks.length - 1]).toHaveAttribute(
+      "href",
+      "/app/profiles/new",
+    );
+  });
 });

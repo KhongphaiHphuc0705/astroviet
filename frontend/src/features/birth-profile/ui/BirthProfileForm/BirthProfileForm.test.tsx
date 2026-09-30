@@ -257,4 +257,25 @@ describe("BirthProfileForm Integration", () => {
       screen.queryByRole("combobox", { name: /Nơi sinh/i }),
     ).not.toBeInTheDocument();
   });
+  it("retains input values when clicking Back from step 2 to step 1", async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    // Fill step 1
+    const nameInput = screen.getByLabelText(/Họ và tên/i);
+    await user.type(nameInput, "John Doe");
+
+    // Click Next
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
+
+    // Verify we are on Step 2
+    expect(screen.getByText("Ngày sinh và Địa điểm")).toBeInTheDocument();
+
+    // Click Back
+    await user.click(screen.getByRole("button", { name: /Quay lại/i }));
+
+    // Verify we are back on Step 1 and the value is retained
+    expect(screen.getByText("Thông tin cơ bản")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Họ và tên/i)).toHaveValue("John Doe");
+  });
 });
