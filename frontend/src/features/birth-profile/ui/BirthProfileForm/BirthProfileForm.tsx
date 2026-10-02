@@ -114,6 +114,12 @@ export function BirthProfileForm({
                 placeholder="VD: 14:30"
                 disabled={!isBirthTimeKnown}
                 value={birthTimeDisplay}
+                aria-invalid={!!form.formState.errors.birthTime}
+                aria-describedby={
+                  form.formState.errors.birthTime
+                    ? "birthTime-error"
+                    : undefined
+                }
                 onChange={(e) => {
                   // Strip non-digits, keep max 4 digits, then insert colon after pos 2
                   const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
@@ -138,7 +144,7 @@ export function BirthProfileForm({
                 }`}
               />
               {form.formState.errors.birthTime && (
-                <p className="text-body-sm text-danger">
+                <p id="birthTime-error" className="text-body-sm text-danger">
                   {form.formState.errors.birthTime.message}
                 </p>
               )}

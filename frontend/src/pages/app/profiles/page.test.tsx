@@ -1,6 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
+import { Route, Routes } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -452,22 +453,26 @@ describe("BirthProfilesPage", () => {
       ),
     );
 
-    renderWithProviders(<BirthProfilesPage />);
+    renderWithProviders(
+      <Routes>
+        <Route path="*" element={<BirthProfilesPage />} />
+        <Route
+          path="/app/profiles/new"
+          element={<div data-testid="new-profile-page">New Profile</div>}
+        />
+      </Routes>,
+    );
 
     expect(
       await screen.findByText("Bạn chưa có hồ sơ sinh nào"),
     ).toBeInTheDocument();
 
     // The EmptyState component has a button to create a new profile.
-    // In our component, it's actually an a tag (Link) acting as a button with href.
-    // Let's find it. It might be inside the empty state.
-    // There are potentially two links with "Tạo hồ sơ mới" (header and empty state).
-    const createLinks = screen.getAllByRole("link", { name: "Tạo hồ sơ mới" });
-    expect(createLinks.length).toBeGreaterThan(0);
-    // They both point to /app/profiles/new
-    expect(createLinks[createLinks.length - 1]).toHaveAttribute(
-      "href",
-      "/app/profiles/new",
-    );
+    // It is a button element, distinct from the header link.
+    const createBtn = screen.getByRole("button", { name: "Tạo hồ sơ mới" });
+    const user = userEvent.setup();
+    await user.click(createBtn);
+
+    expect(await screen.findByTestId("new-profile-page")).toBeInTheDocument();
   });
 });

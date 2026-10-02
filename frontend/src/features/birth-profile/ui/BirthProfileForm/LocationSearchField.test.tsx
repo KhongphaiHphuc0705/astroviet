@@ -255,4 +255,89 @@ describe("LocationSearchField", () => {
       expect(screen.getByText("Nha Trang")).toBeInTheDocument();
     });
   });
+
+  it("closes dropdown on click outside", async () => {
+    server.use(
+      mockSearchLocations(async () => {
+        return new Response(
+          JSON.stringify([
+            {
+              placeName: "Ho Chi Minh City",
+              latitude: 10,
+              longitude: 106,
+              historicalTimezoneId: "Asia/Ho_Chi_Minh",
+            },
+          ]),
+          { status: 200 },
+        );
+      }),
+    );
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <div data-testid="outside">Outside</div>
+        <TestForm birthDate="1995-05-12" />
+      </QueryClientProvider>,
+    );
+    const input = screen.getByRole("combobox");
+
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await user.type(input, "Hoc");
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Ho Chi Minh City")).toBeInTheDocument();
+    });
+
+    // Click outside
+    await user.click(screen.getByTestId("outside"));
+
+    expect(screen.queryByText("Ho Chi Minh City")).not.toBeInTheDocument();
+  });
+
+  it("resets to search mode when clicking Đổi địa điểm", async () => {
+    server.use(
+      mockSearchLocations(async () => {
+        return new Response(
+          JSON.stringify([
+            {
+              placeName: "Hanoi",
+              latitude: 21,
+              longitude: 105,
+              historicalTimezoneId: "Asia/Ho_Chi_Minh",
+            },
+          ]),
+          { status: 200 },
+        );
+      }),
+    );
+
+    renderComponent("1995-05-12");
+    const input = screen.getByRole("combobox");
+
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await user.type(input, "Han");
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    const option = await screen.findByText("Hanoi");
+    await user.click(option);
+
+    expect(screen.getByText("Hanoi")).toBeInTheDocument();
+    const changeBtn = screen.getByRole("button", { name: "Đổi địa điểm" });
+
+    await user.click(changeBtn);
+
+    // After click, combobox is back
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toHaveValue("");
+    expect(
+      screen.queryByRole("button", { name: "Đổi địa điểm" }),
+    ).not.toBeInTheDocument();
+  });
 });
