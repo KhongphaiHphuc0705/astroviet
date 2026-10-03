@@ -7,9 +7,10 @@ Dự án frontend này đóng vai trò là giao diện người dùng chính (SP
 
 ## 2. Features / Current Scope
 
-**Current Status: Sprint F1 + F2 (Authentication UI) — Complete**
+**Current Status: Sprint F1 + F2 + F3 — Complete**
 Sprint F1 tập trung vào việc thiết lập hạ tầng nền tảng (Foundation) bao gồm cấu trúc thư mục, hệ thống định tuyến, Design System (UI primitives), cấu hình CI/CD, Testing và các quy ước mã nguồn.
 Sprint F2 đã hoàn thiện quy trình Authentication Flow bao gồm: Register, Login, Session Bootstrap, Refresh Token và Logout.
+Sprint F3 đã hoàn thiện module Birth Profile bao gồm toàn bộ chức năng CRUD (danh sách, tạo mới, chỉnh sửa, xóa), form nhập liệu 2 bước trực quan, tính năng tìm kiếm địa điểm (Location search) trơn tru, và phân trang (Pagination). Toàn bộ luồng được tích hợp hoàn chỉnh với backend thực tế.
 
 ## 3. Tech Stack
 
@@ -65,7 +66,7 @@ npm run dev
 - `npm run test:coverage`: Chạy test và tạo báo cáo độ bao phủ mã nguồn.
 - `npm run test:e2e`: Chạy Playwright E2E tests (yêu cầu local backend đang chạy).
 
-_Pipeline CI sẽ chạy toàn bộ các lệnh test unit/component/coverage tự động trên mọi PR nhắm vào nhánh chính. Tuy nhiên E2E test (`auth.spec.ts`) sẽ bị skip trong CI do CI chưa thiết lập hạ tầng Backend/Postgres._
+_Pipeline CI sẽ chạy toàn bộ các lệnh test unit/component/coverage tự động trên mọi PR nhắm vào nhánh chính. Tuy nhiên E2E test (`auth.spec.ts`, `birth-profile.spec.ts`) sẽ bị skip trong CI do CI chưa thiết lập hạ tầng Backend/Postgres._
 
 ## 9. Linting
 
@@ -124,7 +125,7 @@ Dưới đây là danh sách các khiếm khuyết được ghi nhận, có ch�
 
 1. `Checkbox` đang thiếu prop `error`/`helperText` (Chờ khi có thực tế ≥ 2 form sử dụng).
 2. `uiStore.ts` chưa chứa trạng thái `activeModalId` như dự kiến tại Kiến trúc §7.3.
-3. Cây định tuyến `router.tsx` hiện tại chỉ làm nền tảng, chưa ánh xạ các route của Phase 1/2/3 theo Frontend UI Specification.
+3. Cây định tuyến `router.tsx` đã ánh xạ route Birth Profile (F3); Phase 2/3 (Chart, Interpretation...) vẫn chưa.
 4. Chưa kích hoạt `eslint-plugin-boundaries` vì quy mô codebase hiện tại quá nhỏ, đang phải dùng manual review.
 5. AppLayout/MarketingLayout mobile menu chưa thay bằng Drawer thật + focus trap (Từ Backlog cũ M4).
 6. `Radio` variant card chưa hoàn thiện icon/layout (Từ Backlog cũ M5/M6).
@@ -133,4 +134,4 @@ Dưới đây là danh sách các khiếm khuyết được ghi nhận, có ch�
 9. `Breadcrumb`, `PageHeader`, `ContentContainer`, `Toast` đã đặc tả nhưng chưa gán Milestone thực hiện.
 10. `usePosition` chưa hỗ trợ flip/collision detection.
 
-_Xem thêm `docs/implementation/Sprint_F2_Known_Gaps_Registry.md` để biết thêm chi tiết về các Known Gaps của Sprint F2._
+_Xem thêm `docs/implementation/Sprint_F3_Known_Gaps_Registry.md` và `docs/implementation/Sprint_F2_Known_Gaps_Registry.md` để biết thêm chi tiết về các Known Gaps của Sprint F3 và F2._
