@@ -1,6 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
+import { Route, Routes } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -70,12 +71,12 @@ describe("BirthProfilesPage", () => {
   it("renders list of profiles and handles pagination", async () => {
     const profile1 = mockBirthProfile({
       id: "1",
-      label: "Profile 1",
+      fullName: "Profile 1",
       birthDate: "1990-01-01",
     });
     const profile2 = mockBirthProfile({
       id: "2",
-      label: "Profile 2",
+      fullName: "Profile 2",
       birthDate: "1990-01-02",
     });
 
@@ -85,16 +86,16 @@ describe("BirthProfilesPage", () => {
         if (url.searchParams.get("page") === "2") {
           return HttpResponse.json({
             items: [profile2],
-            total: 21,
+            total: 11,
             page: 2,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         return HttpResponse.json({
           items: [profile1],
-          total: 21,
+          total: 11,
           page: 1,
-          pageSize: 20,
+          pageSize: 10,
         });
       }),
     );
@@ -126,11 +127,11 @@ describe("BirthProfilesPage", () => {
     const newNextBtn = screen.getByRole("button", { name: "Trang sau" });
 
     expect(newPrevBtn).not.toBeDisabled();
-    expect(newNextBtn).toBeDisabled(); // 2 * 20 > 21
+    expect(newNextBtn).toBeDisabled(); // 2 * 10 >= 11
   });
 
   it("handles deletion flow correctly and shows label in modal", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "To Be Deleted" });
+    const profile = mockBirthProfile({ id: "1", fullName: "To Be Deleted" });
     let deleteCalled = false;
 
     server.use(
@@ -193,7 +194,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("handles deletion cancellation", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "To Keep" });
+    const profile = mockBirthProfile({ id: "1", fullName: "To Keep" });
 
     server.use(
       mockListBirthProfiles(() => {
@@ -238,7 +239,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("handles deletion failure", async () => {
-    const profile = mockBirthProfile({ id: "1", label: "Fail Delete" });
+    const profile = mockBirthProfile({ id: "1", fullName: "Fail Delete" });
 
     server.use(
       mockListBirthProfiles(() => {
@@ -285,7 +286,7 @@ describe("BirthProfilesPage", () => {
   });
 
   it("automatically retreats to previous page if last item on current page is deleted", async () => {
-    const profile = mockBirthProfile({ id: "21", label: "Page 2 Item" });
+    const profile = mockBirthProfile({ id: "21", fullName: "Page 2 Item" });
     let deleteCalled = false;
 
     server.use(
@@ -296,12 +297,12 @@ describe("BirthProfilesPage", () => {
         if (page === "1") {
           return HttpResponse.json({
             // Mocking page 1 items with unique ids to avoid React key warning
-            items: Array.from({ length: 20 }).map((_, i) =>
-              mockBirthProfile({ id: `other-${i}`, label: `Other ${i}` }),
+            items: Array.from({ length: 10 }).map((_, i) =>
+              mockBirthProfile({ id: `other-${i}`, fullName: `Other ${i}` }),
             ),
-            total: deleteCalled ? 20 : 21,
+            total: deleteCalled ? 10 : 11,
             page: 1,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         if (page === "2") {
@@ -309,16 +310,16 @@ describe("BirthProfilesPage", () => {
             // Should not be called really since we auto-retreat, but just in case
             return HttpResponse.json({
               items: [],
-              total: 20,
+              total: 10,
               page: 2,
-              pageSize: 20,
+              pageSize: 10,
             });
           }
           return HttpResponse.json({
             items: [profile], // Only 1 item on page 2
-            total: 21,
+            total: 11,
             page: 2,
-            pageSize: 20,
+            pageSize: 10,
           });
         }
         return new HttpResponse(null, { status: 404 });
@@ -369,5 +370,109 @@ describe("BirthProfilesPage", () => {
 
     // Page 2 item should be gone
     expect(screen.queryByText("Page 2 Item")).not.toBeInTheDocument();
+  });
+  it("navigates to previous page when clicking Prev", async () => {
+    const profile1 = mockBirthProfile({ id: "1", fullName: "Profile 1" });
+    const profile2 = mockBirthProfile({ id: "2", fullName: "Profile 2" });
+
+    server.use(
+      mockListBirthProfiles(({ request }) => {
+        const url = new URL(request.url);
+        if (url.searchParams.get("page") === "2") {
+          return HttpResponse.json({
+            items: [profile2],
+            total: 11,
+            page: 2,
+            pageSize: 10,
+          });
+        }
+        return HttpResponse.json({
+          items: [profile1],
+          total: 11,
+          page: 1,
+          pageSize: 10,
+        });
+      }),
+    );
+
+    renderWithProviders(<BirthProfilesPage />);
+
+    // Go to page 2 first
+    const nextBtn = await screen.findByRole("button", { name: "Trang sau" });
+    const user = userEvent.setup();
+    await user.click(nextBtn);
+
+    expect(await screen.findByText("Profile 2")).toBeInTheDocument();
+
+    // Now click Prev
+    const prevBtn = screen.getByRole("button", { name: "Trang trước" });
+    await user.click(prevBtn);
+
+    // Verify back to page 1
+    expect(await screen.findByText("Profile 1")).toBeInTheDocument();
+    expect(screen.queryByText("Profile 2")).not.toBeInTheDocument();
+  });
+
+  it("calls refetch when clicking Retry on list error", async () => {
+    let callCount = 0;
+    server.use(
+      mockListBirthProfiles(() => {
+        callCount++;
+        if (callCount === 1) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        return HttpResponse.json({
+          items: [mockBirthProfile({ id: "1", fullName: "Success Profile" })],
+          total: 1,
+          page: 1,
+          pageSize: 20,
+        });
+      }),
+    );
+
+    renderWithProviders(<BirthProfilesPage />);
+
+    // First time should fail
+    expect(
+      await screen.findByText("Không thể tải danh sách hồ sơ"),
+    ).toBeInTheDocument();
+
+    // Click retry
+    const retryBtn = screen.getByRole("button", { name: "Thử lại" });
+    const user = userEvent.setup();
+    await user.click(retryBtn);
+
+    // Should fetch successfully
+    expect(await screen.findByText("Success Profile")).toBeInTheDocument();
+  });
+
+  it("navigates to new profile page when clicking Create in empty state", async () => {
+    server.use(
+      mockListBirthProfiles(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 20 }),
+      ),
+    );
+
+    renderWithProviders(
+      <Routes>
+        <Route path="*" element={<BirthProfilesPage />} />
+        <Route
+          path="/app/profiles/new"
+          element={<div data-testid="new-profile-page">New Profile</div>}
+        />
+      </Routes>,
+    );
+
+    expect(
+      await screen.findByText("Bạn chưa có hồ sơ sinh nào"),
+    ).toBeInTheDocument();
+
+    // The EmptyState component has a button to create a new profile.
+    // It is a button element, distinct from the header link.
+    const createBtn = screen.getByRole("button", { name: "Tạo hồ sơ mới" });
+    const user = userEvent.setup();
+    await user.click(createBtn);
+
+    expect(await screen.findByTestId("new-profile-page")).toBeInTheDocument();
   });
 });

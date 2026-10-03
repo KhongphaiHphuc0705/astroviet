@@ -1,6 +1,6 @@
 export interface BirthProfileFormValues {
   label: string;
-  fullName: string | null;
+  fullName: string;
   birthDate: string;
   birthTime: string | null;
   isBirthTimeKnown: boolean;

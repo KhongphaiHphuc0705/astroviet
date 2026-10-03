@@ -35,17 +35,17 @@ describe("birthProfileFormSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("fails if label is missing", () => {
+  it("fails if fullName is missing", () => {
     const data = {
       ...validBase,
-      label: "",
+      fullName: "",
       isBirthTimeKnown: true,
       birthTime: "14:30:00",
     };
     const result = birthProfileFormSchema.safeParse(data);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues[0]?.path).toEqual(["label"]);
+      expect(result.error.issues[0]?.path).toEqual(["fullName"]);
     }
   });
 

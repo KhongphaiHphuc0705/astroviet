@@ -42,8 +42,12 @@ export default function BirthProfileEditPage() {
   }
 
   const handleSubmit = (values: BirthProfileFormValues) => {
+    const payload: UpdateBirthProfileInput = {
+      ...(values as UpdateBirthProfileInput),
+      label: values.fullName.trim(),
+    };
     mutation.mutate(
-      { id: id!, input: values as UpdateBirthProfileInput },
+      { id: id!, input: payload },
       {
         onSuccess: () => setTimeout(() => navigate("/app/profiles"), 2000),
       },

@@ -25,11 +25,16 @@ export function BirthProfileForm({
   isLoading,
 }: BirthProfileFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
+  // Separate display state for the HH:mm mask so partial input (1-3 digits)
+  // is preserved across re-renders without writing an invalid value into RHF.
+  const [birthTimeDisplay, setBirthTimeDisplay] = useState<string>(
+    () => defaultValues?.birthTime?.slice(0, 5) ?? "",
+  );
 
   const form = useZodForm(birthProfileFormSchema, {
     defaultValues: defaultValues ?? {
       label: "",
-      fullName: null,
+      fullName: "",
       birthDate: "",
       birthTime: null,
       isBirthTimeKnown: true,
@@ -43,7 +48,7 @@ export function BirthProfileForm({
   const birthDate = watch("birthDate");
 
   const onNext = async () => {
-    const valid = await form.trigger(["label", "fullName"]);
+    const valid = await form.trigger(["fullName"]);
     if (valid) {
       setStep(2);
     }
@@ -63,14 +68,8 @@ export function BirthProfileForm({
           <legend className="text-h3 mb-4 font-bold">Thông tin cơ bản</legend>
 
           <Input
-            label="Tên hồ sơ *"
-            placeholder="Ví dụ: Bản thân, Bạn gái..."
-            {...getInputFieldProps("label", form)}
-          />
-
-          <Input
-            label="Họ và tên"
-            placeholder="Nhập họ và tên đầy đủ (không bắt buộc)"
+            label="Họ và tên *"
+            placeholder="Nhập họ và tên đầy đủ"
             {...getInputFieldProps("fullName", form)}
           />
 
@@ -100,23 +99,68 @@ export function BirthProfileForm({
           />
 
           <div className="flex flex-col gap-2">
-            <Input
-              label="Giờ sinh *"
-              type="time"
-              step={1}
-              disabled={!isBirthTimeKnown}
-              {...getInputFieldProps("birthTime", form)}
-            />
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="birthTime-input"
+                className={`text-body-sm font-medium uppercase ${!isBirthTimeKnown ? "cursor-not-allowed opacity-50" : ""}`}
+              >
+                Giờ sinh *
+              </label>
+              <input
+                id="birthTime-input"
+                type="text"
+                inputMode="numeric"
+                maxLength={5}
+                placeholder="VD: 14:30"
+                disabled={!isBirthTimeKnown}
+                value={birthTimeDisplay}
+                aria-invalid={!!form.formState.errors.birthTime}
+                aria-describedby={
+                  form.formState.errors.birthTime
+                    ? "birthTime-error"
+                    : undefined
+                }
+                onChange={(e) => {
+                  // Strip non-digits, keep max 4 digits, then insert colon after pos 2
+                  const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
+                  const display =
+                    digits.length >= 3
+                      ? `${digits.slice(0, 2)}:${digits.slice(2)}`
+                      : digits;
+                  setBirthTimeDisplay(display);
+                  // Write HH:mm:00 into RHF only when input is complete (4 digits)
+                  const rhfValue =
+                    digits.length === 4
+                      ? `${digits.slice(0, 2)}:${digits.slice(2)}:00`
+                      : null;
+                  setValue("birthTime", rhfValue, {
+                    shouldValidate: digits.length === 4,
+                  });
+                }}
+                className={`w-full rounded-md border bg-surface px-4 py-2 text-body-md text-primary outline-none transition-colors placeholder:text-muted focus:border-accent-primary focus:ring-1 focus:ring-accent-primary disabled:cursor-not-allowed disabled:opacity-50 ${
+                  form.formState.errors.birthTime
+                    ? "border-danger"
+                    : "border-strong"
+                }`}
+              />
+              {form.formState.errors.birthTime && (
+                <p id="birthTime-error" className="text-body-sm text-danger">
+                  {form.formState.errors.birthTime.message}
+                </p>
+              )}
+            </div>
 
             <div className="mt-1 flex items-center gap-2">
               <Checkbox
                 id="isBirthTimeKnown-checkbox"
+                checked={isBirthTimeKnown}
                 {...checkboxProps}
                 onChange={(e) => {
                   checkboxProps.onChange(e);
                   // Case A: toggle OFF -> clear birth time
                   if (!e.target.checked) {
                     setValue("birthTime", null, { shouldValidate: true });
+                    setBirthTimeDisplay("");
                   }
                 }}
               />

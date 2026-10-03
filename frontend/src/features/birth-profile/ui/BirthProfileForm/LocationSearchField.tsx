@@ -171,7 +171,7 @@ export function LocationSearchField({
             <div
               id="location-suggestions"
               role="listbox"
-              className="max-h-60 flex flex-col overflow-hidden rounded-md border border-subtle bg-surface-raised py-1 shadow-level-3"
+              className="flex max-h-[200px] flex-col overflow-y-auto rounded-md border border-subtle bg-surface-raised py-1 shadow-level-3"
             >
               {isError ? (
                 <div className="p-2">

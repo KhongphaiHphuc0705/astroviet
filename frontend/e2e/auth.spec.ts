@@ -32,8 +32,7 @@ test.describe("Full Auth Flow", () => {
     await page.getByRole("button", { name: "Đăng ký" }).click();
 
     // Chờ thông báo thành công (Alert)
-    const alert = page.getByRole("status");
-    await expect(alert).toContainText(/thành công/i);
+    await expect(page.getByText(/thành công/i)).toBeVisible();
 
     // Xác nhận đã tự động điều hướng sang trang login sau 2 giây
     await page.waitForURL("**/login");

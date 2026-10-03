@@ -1,11 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import {
-  render,
-  screen,
-  act,
-  waitFor,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
@@ -48,7 +42,7 @@ describe("BirthProfileForm Integration", () => {
     renderComponent();
 
     // Fill step 1 and go to step 2
-    await user.type(screen.getByLabelText(/Tên hồ sơ/i), "Test Profile");
+    await user.type(screen.getByLabelText(/Họ và tên/i), "Test Profile");
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     // Now on step 2
@@ -61,8 +55,7 @@ describe("BirthProfileForm Integration", () => {
     expect(checkbox).toBeChecked();
     expect(birthTimeInput).not.toBeDisabled();
 
-    // Type a value
-    await user.type(birthTimeInput, "14:30");
+    await user.type(birthTimeInput, "1430");
     expect(birthTimeInput).toHaveValue("14:30");
 
     // Case A: Toggle OFF -> input becomes disabled and value is cleared
@@ -99,7 +92,7 @@ describe("BirthProfileForm Integration", () => {
     renderComponent();
 
     // Fill step 1 and go to step 2
-    await user.type(screen.getByLabelText(/Tên hồ sơ/i), "Test Profile");
+    await user.type(screen.getByLabelText(/Họ và tên/i), "Test Profile");
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     const birthDateInput = screen.getByLabelText(/^Ngày sinh/i);
@@ -155,7 +148,7 @@ describe("BirthProfileForm Integration", () => {
     const { onSubmit } = renderComponent();
 
     // Step 1
-    await user.type(screen.getByLabelText(/Tên hồ sơ/i), "Valid Profile");
+    await user.type(screen.getByLabelText(/Họ và tên/i), "Valid Profile");
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     // Step 2
@@ -163,7 +156,7 @@ describe("BirthProfileForm Integration", () => {
     await user.type(birthDateInput, "2000-01-01");
 
     const birthTimeInput = screen.getByLabelText(/^Giờ sinh/i);
-    fireEvent.change(birthTimeInput, { target: { value: "12:00:00" } });
+    await user.type(birthTimeInput, "1200");
 
     const locationInput = screen.getByRole("combobox", { name: /Nơi sinh/i });
     await user.type(locationInput, "Da Nang");
@@ -182,8 +175,8 @@ describe("BirthProfileForm Integration", () => {
       expect(onSubmit).toHaveBeenCalledTimes(1);
     });
     expect(onSubmit.mock.calls[0]?.[0]).toEqual({
-      label: "Valid Profile",
-      fullName: null,
+      label: "",
+      fullName: "Valid Profile",
       birthDate: "2000-01-01",
       birthTime: "12:00:00",
       isBirthTimeKnown: true,
@@ -196,18 +189,18 @@ describe("BirthProfileForm Integration", () => {
     });
   });
 
-  it("displays field-level error messages for empty label and invalid birthDate", async () => {
+  it("displays field-level error messages for empty fields", async () => {
     const user = userEvent.setup();
     renderComponent();
 
-    // Leave label empty, try to go next -> should show error
+    // Leave name empty, try to go next -> should show error
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
     expect(
-      await screen.findByText("Vui lòng nhập tên hồ sơ"),
+      await screen.findByText("Vui lòng nhập họ và tên"),
     ).toBeInTheDocument();
 
-    // Fix label to go to step 2
-    await user.type(screen.getByLabelText(/Tên hồ sơ/i), "Test Error");
+    // Fix name to go to step 2
+    await user.type(screen.getByLabelText(/Họ và tên/i), "Test Error");
     await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
 
     // Step 2: Leave everything empty and click Submit
@@ -244,7 +237,7 @@ describe("BirthProfileForm Integration", () => {
     renderComponent({ defaultValues });
 
     // Verify step 1 values
-    expect(screen.getByLabelText(/Tên hồ sơ/i)).toHaveValue("Edit Profile");
+    expect(screen.queryByLabelText(/Tên hồ sơ/i)).not.toBeInTheDocument();
     expect(screen.getByLabelText(/Họ và tên/i)).toHaveValue("Jane Doe");
 
     // Click Next to go to Step 2
@@ -255,7 +248,7 @@ describe("BirthProfileForm Integration", () => {
 
     // Note: <input type="time" step="1"> may format the value based on browser/JSDOM,
     // but JSDOM respects the exact value we pass or sets it to standard format.
-    expect(screen.getByLabelText(/^Giờ sinh/i)).toHaveValue("08:15:00");
+    expect(screen.getByLabelText(/^Giờ sinh/i)).toHaveValue("08:15");
     expect(screen.getByLabelText(/Tôi biết rõ giờ sinh/i)).toBeChecked();
 
     // Verify Location displays in readonly mode
@@ -263,5 +256,26 @@ describe("BirthProfileForm Integration", () => {
     expect(
       screen.queryByRole("combobox", { name: /Nơi sinh/i }),
     ).not.toBeInTheDocument();
+  });
+  it("retains input values when clicking Back from step 2 to step 1", async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    // Fill step 1
+    const nameInput = screen.getByLabelText(/Họ và tên/i);
+    await user.type(nameInput, "John Doe");
+
+    // Click Next
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/i }));
+
+    // Verify we are on Step 2
+    expect(screen.getByText("Ngày sinh và Địa điểm")).toBeInTheDocument();
+
+    // Click Back
+    await user.click(screen.getByRole("button", { name: /Quay lại/i }));
+
+    // Verify we are back on Step 1 and the value is retained
+    expect(screen.getByText("Thông tin cơ bản")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Họ và tên/i)).toHaveValue("John Doe");
   });
 });
