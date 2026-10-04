@@ -9,6 +9,8 @@ import {
   DataIntegrityError,
   UnresolvableTimezoneError,
   ChartCalculationFailed,
+  InvalidInterpretationSubjectKeyError,
+  InvalidContentVersionError,
 } from '../../../../../../src/modules/chart/domain/errors/chart.errors.js';
 
 describe('Chart Domain Errors', () => {
@@ -68,5 +70,19 @@ describe('Chart Domain Errors', () => {
     expect(error.name).toBe('ChartCalculationFailed');
     expect(error.message).toBe('Test message');
     expect(error.originalError).toBe(originalError);
+  });
+
+  it('InvalidInterpretationSubjectKeyError should have correct name and message', () => {
+    const error = new InvalidInterpretationSubjectKeyError('Test message');
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe('InvalidInterpretationSubjectKeyError');
+    expect(error.message).toBe('Test message');
+  });
+
+  it('InvalidContentVersionError should have correct name and message', () => {
+    const error = new InvalidContentVersionError('Test message');
+    expect(error).toBeInstanceOf(Error);
+    expect(error.name).toBe('InvalidContentVersionError');
+    expect(error.message).toBe('Test message');
   });
 });
