@@ -1,0 +1,23 @@
+{
+  "language": "vi",
+  "version": "1.0",
+  "status": "Draft",
+  "contentSource": "HumanAuthored",
+  "items": [
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Leo",
+      "bodyText": "Mặt Trời ở Sư Tử mang đến... [OWNER_CONTENT_REQUIRED]"
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_7",
+      "bodyText": "Sao Kim ở Nhà 7 thể hiện... [OWNER_CONTENT_REQUIRED]"
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Leo",
+      "bodyText": "Cung Mọc Sư Tử tạo nên... [OWNER_CONTENT_REQUIRED]"
+    }
+  ]
+}
