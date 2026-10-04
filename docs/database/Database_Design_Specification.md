@@ -194,7 +194,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | deleted_at | TIMESTAMPTZ | ✔ | NULL | — | Soft delete — tài khoản bị vô hiệu hóa nhưng giữ lại (audit, tránh mất liên kết Chart lịch sử) |
 | version | INTEGER | ✘ | `1` | — | Optimistic locking cho update đồng thời (ví dụ đổi `displayName` từ nhiều thiết bị) |
 
-**Ghi chú (A1/FD7):** Cột/tính năng `preferred_language` của user chưa được triển khai trong phase này.
+**Ghi chú (A4):** Cột/tính năng `preferred_language` của user chưa được triển khai trong phase này.
 
 **Check Constraints:** `CHECK (length(display_name) <= 100)`, `CHECK (role IN ('user','admin'))`, `CHECK (position('@' in email) > 1)` (kiểm tra tối thiểu, validation đầy đủ ở tầng app theo RFC 5322).
 
@@ -263,7 +263,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 
 **Check/Partial Unique Index:** Chỉ đúng 1 hàng có `is_default = true` — enforce bằng partial unique index (Mục 7): `CREATE UNIQUE INDEX ON astrology.languages (is_default) WHERE is_default = true;`
 
-**Ghi chú Seed Data:** Bản migration hiện tại (cả seed `house_systems` và `languages`) được tự động hóa qua lệnh `INSERT` bên trong file migration thay vì chạy script độc lập. Đối với `languages`, hiện tại chỉ seed tiếng Việt (`vi`), tiếng Anh (`en`) không được seed theo quyết định A4.
+**Ghi chú Seed Data:** Bản migration hiện tại (cả seed `house_systems` và `languages`) được tự động hóa qua lệnh `INSERT` bên trong file migration thay vì chạy script độc lập. Đối với `languages`, hiện tại chỉ seed tiếng Việt (`vi`), tiếng Anh (`en`) không được seed theo quyết định A1/FD7.
 
 ---
 
@@ -473,7 +473,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 
 **Business Constraint bổ sung (Quyết định 14.2):** Khi tạo 1 `version` content mới, **phải tồn tại bản ghi cho toàn bộ tổ hợp `subject_key` đang được dùng** (không được migrate nội dung nửa vời — nếu không, Chart mới sẽ JOIN ra thiếu Interpretation cho 1 số `subjectKey`). Ràng buộc này enforce ở tầng ứng dụng (CMS/Admin tool) khi publish 1 version mới, không khả thi để enforce bằng CHECK constraint đơn thuần ở DB.
 
-**Subject Key Grammar (Quyết định MVP):** Cấu trúc ngữ pháp của `subject_key` cho phạm vi MVP được định nghĩa và bảo vệ chặt chẽ tại tầng Domain (`interpretation-subject-key.ts`), không dùng `CHECK` constraint phức tạp ở DB (xem Engine Spec Mục 8.2). Cụ thể:
+**Subject Key Grammar (Quyết định MVP):** Cấu trúc ngữ pháp của `subject_key` cho phạm vi MVP được định nghĩa và bảo vệ chặt chẽ tại tầng Domain (`interpretation-subject-key.ts`), không dùng `CHECK` constraint phức tạp ở DB. Cụ thể:
 - `PlanetInSign`: `<Planet>_in_<Sign>` (ví dụ: `Sun_in_Leo`)
 - `PlanetInHouse`: `<Planet>_in_House_<Number>` (ví dụ: `Sun_in_House_7`)
 - `AngleInSign`: `Ascendant_in_<Sign>` (ví dụ: `Ascendant_in_Leo`)
@@ -689,7 +689,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | **Công cụ đề xuất** | **Prisma Migrate** — vì REST API Spec đã định hướng Backend Developer "xây dựng ORM từ tài liệu" bằng Prisma/TypeORM (nêu ở phần đầu prompt gốc); Prisma Migrate tích hợp trực tiếp với Prisma Schema, giảm 1 tầng công cụ riêng biệt so với Flyway (vốn phù hợp hơn với stack Java) |
 | **Versioning** | Mỗi migration là 1 file có timestamp prefix (chuẩn Prisma: `20260711_create_users_table/`) — không sửa migration đã chạy ở production, chỉ tạo migration mới để sửa lỗi (forward-only) |
 | **Backward Compatibility** | Theo nguyên tắc "expand-contract": khi đổi kiểu dữ liệu/xóa cột, luôn qua 2 bước — (1) thêm cột mới + dual-write, (2) xóa cột cũ ở migration sau, cách nhau đủ thời gian để Backend đã deploy xong bản dùng cột mới |
-| **Seed Data** | `house_systems` cần seed script. Lưu ý: `languages` được seed cứng `vi` trực tiếp trong migration SQL, `en` tạm thời không seed theo A4 |
+| **Seed Data** | `house_systems` và `languages` được tự động hóa qua lệnh `INSERT` bên trong file migration. Đối với `languages`, hiện tại chỉ seed tiếng Việt (`vi`), tiếng Anh (`en`) không được seed theo A1/FD7 |
 | **Migration User** | Chạy bằng DB role riêng có quyền DDL (`CREATE`/`ALTER`/`DROP`), **khác** với role Backend dùng để query (chỉ DML) — đúng nguyên tắc Least Privilege (Mục 10) |
 | **CI/CD Gate** | Migration chạy tự động trong pipeline deploy, **trước** khi deploy code Backend mới (đảm bảo schema sẵn sàng trước khi code kỳ vọng nó tồn tại) |
 

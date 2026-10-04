@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { enumerateMvpInterpretationSubjects } from '../../../../../../src/modules/chart/domain/interpretation/enumerate-mvp-subjects.js';
 import { isValidInterpretationSubjectKey } from '../../../../../../src/modules/chart/domain/interpretation/interpretation-subject-key.js';
+import { MVP_INTERPRETATION_SUBJECT_TYPES } from '../../../../../../src/modules/chart/domain/types/interpretation.types.js';
 
 describe('enumerateMvpInterpretationSubjects', () => {
   it('should generate exactly 252 canonical subjects', () => {
@@ -44,5 +45,13 @@ describe('enumerateMvpInterpretationSubjects', () => {
       subjectType: 'PlanetInHouse',
       subjectKey: 'Pluto_in_House_12',
     });
+  });
+
+  it('should match the MVP_INTERPRETATION_SUBJECT_TYPES order', () => {
+    expect(MVP_INTERPRETATION_SUBJECT_TYPES).toEqual([
+      'PlanetInSign',
+      'AngleInSign',
+      'PlanetInHouse',
+    ]);
   });
 });

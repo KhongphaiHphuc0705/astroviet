@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { Angle } from '../../../../../../src/modules/chart/domain/entities/angle.entity.js';
+import { Chart } from '../../../../../../src/modules/chart/domain/entities/chart.entity.js';
 import { Planet } from '../../../../../../src/modules/chart/domain/entities/planet.entity.js';
 import { deriveInterpretationSubjects } from '../../../../../../src/modules/chart/domain/interpretation/derive-interpretation-subjects.js';
 import {
@@ -55,12 +56,32 @@ describe('deriveInterpretationSubjects', () => {
 
     expect(subjects).toHaveLength(21); // 10 signs + 1 angle + 10 houses
 
-    // Verify ordering
-    expect(subjects[0]).toEqual({ subjectType: 'PlanetInSign', subjectKey: 'Sun_in_Leo' });
-    expect(subjects[9]).toEqual({ subjectType: 'PlanetInSign', subjectKey: 'Pluto_in_Scorpio' });
-    expect(subjects[10]).toEqual({ subjectType: 'AngleInSign', subjectKey: 'Ascendant_in_Leo' });
-    expect(subjects[11]).toEqual({ subjectType: 'PlanetInHouse', subjectKey: 'Sun_in_House_7' });
-    expect(subjects[20]).toEqual({ subjectType: 'PlanetInHouse', subjectKey: 'Pluto_in_House_2' });
+    // Verify ordering and completeness
+    const expectedKeys = [
+      'Sun_in_Leo',
+      'Moon_in_Cancer',
+      'Mercury_in_Virgo',
+      'Venus_in_Libra',
+      'Mars_in_Aries',
+      'Jupiter_in_Sagittarius',
+      'Saturn_in_Capricorn',
+      'Uranus_in_Aquarius',
+      'Neptune_in_Pisces',
+      'Pluto_in_Scorpio',
+      'Ascendant_in_Leo',
+      'Sun_in_House_7',
+      'Moon_in_House_6',
+      'Mercury_in_House_8',
+      'Venus_in_House_9',
+      'Mars_in_House_1',
+      'Jupiter_in_House_3',
+      'Saturn_in_House_4',
+      'Uranus_in_House_5',
+      'Neptune_in_House_6',
+      'Pluto_in_House_2',
+    ];
+
+    expect(subjects.map((s) => s.subjectKey)).toEqual(expectedKeys);
   });
 
   it('should derive only 10 PlanetInSign subjects when house data is not available', () => {
@@ -113,12 +134,22 @@ describe('deriveInterpretationSubjects', () => {
   });
 
   it('should output same sequence regardless of input array order', () => {
-    const p1 = createMockPlanet(PlanetName.Sun, 'Leo', 7);
-    const p2 = createMockPlanet(PlanetName.Moon, 'Cancer', 6);
+    const planets = [
+      createMockPlanet(PlanetName.Sun, 'Leo', 7),
+      createMockPlanet(PlanetName.Moon, 'Cancer', 6),
+      createMockPlanet(PlanetName.Mercury, 'Virgo', 8),
+      createMockPlanet(PlanetName.Venus, 'Libra', 9),
+      createMockPlanet(PlanetName.Mars, 'Aries', 1),
+      createMockPlanet(PlanetName.Jupiter, 'Sagittarius', 3),
+      createMockPlanet(PlanetName.Saturn, 'Capricorn', 4),
+      createMockPlanet(PlanetName.Uranus, 'Aquarius', 5),
+      createMockPlanet(PlanetName.Neptune, 'Pisces', 6),
+      createMockPlanet(PlanetName.Pluto, 'Scorpio', 2),
+    ];
     const a1 = createMockAngle('Ascendant', 120);
 
-    const chart1 = { planets: [p1, p2], angles: [a1], isHouseDataAvailable: true };
-    const chart2 = { planets: [p2, p1], angles: [a1], isHouseDataAvailable: true };
+    const chart1 = { planets: [...planets], angles: [a1], isHouseDataAvailable: true };
+    const chart2 = { planets: [...planets].reverse(), angles: [a1], isHouseDataAvailable: true };
 
     const subjects1 = deriveInterpretationSubjects(chart1 as any);
     const subjects2 = deriveInterpretationSubjects(chart2 as any);
@@ -173,5 +204,78 @@ describe('deriveInterpretationSubjects', () => {
     expect(subjects1).not.toBe(subjects2);
     expect(subjects1).toEqual(subjects2);
     expect(Object.isFrozen(subjects1[0])).toBe(true);
+  });
+
+  it('should throw an error if a planet is in an invalid house number (e.g. 13)', () => {
+    const chart = {
+      planets: [createMockPlanet(PlanetName.Sun, 'Leo', 13)],
+      angles: [],
+      isHouseDataAvailable: true,
+    };
+    expect(() => deriveInterpretationSubjects(chart as any)).toThrowError(/Invalid house/);
+  });
+
+  it('should generate PlanetInHouse subject for house 12', () => {
+    const chart = {
+      planets: [createMockPlanet(PlanetName.Sun, 'Leo', 12)],
+      angles: [],
+      isHouseDataAvailable: true,
+    };
+    const subjects = deriveInterpretationSubjects(chart as any);
+    expect(subjects).toContainEqual({
+      subjectType: 'PlanetInHouse',
+      subjectKey: 'Sun_in_House_12',
+    });
+  });
+
+  it('should skip PlanetInHouse subjects if isHouseDataAvailable is false even if house is not null', () => {
+    const chart = {
+      planets: [createMockPlanet(PlanetName.Sun, 'Leo', 1)],
+      angles: [],
+      isHouseDataAvailable: false, // Override flag
+    };
+    const subjects = deriveInterpretationSubjects(chart as any);
+    expect(subjects.filter((s) => s.subjectType === 'PlanetInHouse')).toHaveLength(0);
+  });
+
+  it('should work with a real Chart entity', () => {
+    const chart = Chart.create({
+      chartType: 'Natal' as any,
+      id: '123e4567-e89b-12d3-a456-426614174001',
+      birthProfileId: '123e4567-e89b-12d3-a456-426614174000',
+      userId: '123e4567-e89b-12d3-a456-426614174000',
+      planets: [
+        createMockPlanet(PlanetName.Sun, 'Leo', 1),
+        createMockPlanet(PlanetName.Moon, 'Cancer', 6),
+        createMockPlanet(PlanetName.Mercury, 'Virgo', 8),
+        createMockPlanet(PlanetName.Venus, 'Libra', 9),
+        createMockPlanet(PlanetName.Mars, 'Aries', 1),
+        createMockPlanet(PlanetName.Jupiter, 'Sagittarius', 3),
+        createMockPlanet(PlanetName.Saturn, 'Capricorn', 4),
+        createMockPlanet(PlanetName.Uranus, 'Aquarius', 5),
+        createMockPlanet(PlanetName.Neptune, 'Pisces', 6),
+        createMockPlanet(PlanetName.Pluto, 'Scorpio', 2),
+      ],
+      angles: [
+        createMockAngle('Ascendant', 120),
+        createMockAngle('Descendant', 300),
+        createMockAngle('Midheaven', 30),
+        createMockAngle('ImumCoeli', 210),
+      ],
+      houses: Array.from({ length: 12 }, (_, i) => ({ number: i + 1 }) as any),
+      aspects: [],
+      patterns: [],
+      warnings: [],
+      isHouseDataAvailable: true,
+      houseSystem: 'Placidus' as any,
+      createdAt: new Date(),
+      deletedAt: null,
+      engineInput: {} as any,
+      calculationMetadata: {} as any,
+    });
+
+    // Type checking Pick<Chart, ...> against a real Chart object
+    const subjects = deriveInterpretationSubjects(chart);
+    expect(subjects.length).toBeGreaterThan(0);
   });
 });

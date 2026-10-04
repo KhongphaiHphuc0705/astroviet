@@ -18,6 +18,9 @@ describe('Content Version Utilities', () => {
     it.each([
       [''],
       [' '],
+      [' 1.0'],
+      ['1.0 '],
+      ['1.0\n'],
       ['v1.0'],
       ['1.'],
       ['.1'],

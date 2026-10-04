@@ -292,7 +292,7 @@ Chỉ unit test, chạy bằng `vitest`, **không** cần PostgreSQL/Docker/Pris
 - Hành tinh tuỳ chọn trong `chart.planets` (Chiron, NorthNode): bị bỏ qua.
 - Thiếu một hành tinh MVP: bỏ qua, không ném lỗi.
 - Tính xác định: đầu vào xáo trộn thứ tự hành tinh → cùng đầu ra; hai lần gọi → `toEqual`, hai mảng khác tham chiếu; đầu vào không bị sửa.
-- Biên Ascendant theo longitude: `0` → Aries; `119.999` → Gemini… (kiểm vài mốc: `120` → Leo, `149.999` → Leo, `150` → Virgo, `359.999` → Pisces).
+- Biên Ascendant theo longitude: `0` → Aries; `119.999` → Cancer… (kiểm vài mốc: `120` → Leo, `149.999` → Leo, `150` → Virgo, `359.999` → Pisces).
 - Biên nhà: hành tinh ở nhà 1 và nhà 12.
 - Một ca dùng `Chart.create` thật để chứng minh `Chart` gán được vào tham số `Pick`.
 

@@ -42,6 +42,18 @@ export function buildAngleInSignKey(angle: 'Ascendant', sign: ZodiacSign): strin
   return `${angle}_in_${sign}`;
 }
 
+const PLANET_NAMES_REGEX_STR = MVP_INTERPRETATION_PLANETS.join('|');
+const SIGN_NAMES_REGEX_STR = ZODIAC_SIGNS.join('|');
+const HOUSE_NUMBERS_REGEX_STR = HOUSE_NUMBERS.join('|');
+
+const PLANET_IN_SIGN_REGEX = new RegExp(
+  `^(${PLANET_NAMES_REGEX_STR})_in_(${SIGN_NAMES_REGEX_STR})$`,
+);
+const PLANET_IN_HOUSE_REGEX = new RegExp(
+  `^(${PLANET_NAMES_REGEX_STR})_in_House_(${HOUSE_NUMBERS_REGEX_STR})$`,
+);
+const ANGLE_IN_SIGN_REGEX = new RegExp(`^Ascendant_in_(${SIGN_NAMES_REGEX_STR})$`);
+
 /**
  * Validates if the given key strictly matches the grammar for the given subjectType.
  * Non-MVP types (Aspect, PatternType, SignSummary, HouseSummary) will always return false as their grammar is undefined in Sprint 4.
@@ -52,22 +64,15 @@ export function isValidInterpretationSubjectKey(
 ): boolean {
   if (!key) return false;
 
-  const planetNamesRegex = MVP_INTERPRETATION_PLANETS.join('|');
-  const signNamesRegex = ZODIAC_SIGNS.join('|');
-  const houseNumbersRegex = HOUSE_NUMBERS.join('|');
-
   switch (subjectType) {
     case 'PlanetInSign': {
-      const regex = new RegExp(`^(${planetNamesRegex})_in_(${signNamesRegex})$`);
-      return regex.test(key);
+      return PLANET_IN_SIGN_REGEX.test(key);
     }
     case 'PlanetInHouse': {
-      const regex = new RegExp(`^(${planetNamesRegex})_in_House_(${houseNumbersRegex})$`);
-      return regex.test(key);
+      return PLANET_IN_HOUSE_REGEX.test(key);
     }
     case 'AngleInSign': {
-      const regex = new RegExp(`^Ascendant_in_(${signNamesRegex})$`);
-      return regex.test(key);
+      return ANGLE_IN_SIGN_REGEX.test(key);
     }
     default:
       // Aspect, PatternType, SignSummary, HouseSummary have no defined grammar in Sprint 4 MVP

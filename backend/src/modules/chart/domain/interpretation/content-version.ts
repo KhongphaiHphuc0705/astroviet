@@ -13,7 +13,7 @@ export function isValidContentVersion(value: string): boolean {
   if (!value || typeof value !== 'string') {
     return false;
   }
-  return VERSION_REGEX.test(value.trim());
+  return VERSION_REGEX.test(value);
 }
 
 /**
@@ -26,18 +26,15 @@ export function isValidContentVersion(value: string): boolean {
  * Throws InvalidContentVersionError if either version is invalid.
  */
 export function compareContentVersion(a: string, b: string): -1 | 0 | 1 {
-  const trimmedA = typeof a === 'string' ? a.trim() : a;
-  const trimmedB = typeof b === 'string' ? b.trim() : b;
-
-  if (!isValidContentVersion(trimmedA)) {
+  if (!isValidContentVersion(a)) {
     throw new InvalidContentVersionError(`Invalid content version: ${a}`);
   }
-  if (!isValidContentVersion(trimmedB)) {
+  if (!isValidContentVersion(b)) {
     throw new InvalidContentVersionError(`Invalid content version: ${b}`);
   }
 
-  const partsA = trimmedA.split('.');
-  const partsB = trimmedB.split('.');
+  const partsA = a.split('.');
+  const partsB = b.split('.');
 
   const maxLength = Math.max(partsA.length, partsB.length);
 
