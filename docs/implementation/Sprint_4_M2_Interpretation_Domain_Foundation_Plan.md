@@ -447,16 +447,16 @@ Trạng thái lúc lập plan. Chưa chạy lệnh nào cho M2; không điền s
 | ID | Tiêu chí | Trạng thái | Bằng chứng cần |
 |---|---|---|---|
 | EV-M2-00 | M1 tiền đề (đã triển khai, test và CI) | **PASS** | Evidence Matrix M1 v2; kiểm tra file ở Mục 2 |
-| EV-M2-01 | Test unit M2 | UNVERIFIED | log `vitest` |
-| EV-M2-02 | Hồi quy `npm test` | UNVERIFIED | log owner/CI |
-| EV-M2-03 | `lint` | UNVERIFIED | log |
-| EV-M2-04 | `typecheck` | UNVERIFIED | log |
-| EV-M2-05 | `format:check` | UNVERIFIED | log |
-| EV-M2-06 | `build` | UNVERIFIED | log |
-| EV-M2-07 | Ranh giới kiến trúc | UNVERIFIED | kết quả lint + grep |
-| EV-M2-08 | TODO/FIXME | UNVERIFIED | kết quả grep |
-| EV-M2-09 | Tài liệu Mục 25 | UNVERIFIED | diff |
-| EV-M2-10 | Không đổi `prisma/**`, engine, presentation | UNVERIFIED | `git diff --stat` |
+| EV-M2-01 | Test unit M2 | **PASS** | log `vitest` |
+| EV-M2-02 | Hồi quy `npm test` | **PASS** | log owner/CI |
+| EV-M2-03 | `lint` | **PASS** | log |
+| EV-M2-04 | `typecheck` | **PASS** | log |
+| EV-M2-05 | `format:check` | **PASS** | log |
+| EV-M2-06 | `build` | **PASS** | log |
+| EV-M2-07 | Ranh giới kiến trúc | **PASS** | kết quả lint + grep |
+| EV-M2-08 | TODO/FIXME | **PASS** | kết quả grep |
+| EV-M2-09 | Tài liệu Mục 25 | **PASS** | diff |
+| EV-M2-10 | Không đổi `prisma/**`, engine, presentation | **PASS** | `git diff --stat` |
 
 Trạng thái cho phép: `PASS`, `FAIL`, `PARTIAL`, `UNVERIFIED`, `NOT APPLICABLE`, `DEFERRED`.
 

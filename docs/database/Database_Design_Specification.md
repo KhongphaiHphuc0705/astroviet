@@ -194,7 +194,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | deleted_at | TIMESTAMPTZ | ✔ | NULL | — | Soft delete — tài khoản bị vô hiệu hóa nhưng giữ lại (audit, tránh mất liên kết Chart lịch sử) |
 | version | INTEGER | ✘ | `1` | — | Optimistic locking cho update đồng thời (ví dụ đổi `displayName` từ nhiều thiết bị) |
 
-**Ghi chú (A4):** Cột/tính năng `preferred_language` của user chưa được triển khai trong phase này.
+**Ghi chú (A1/FD7):** Cột/tính năng `preferred_language` của user chưa được triển khai trong phase này.
 
 **Check Constraints:** `CHECK (length(display_name) <= 100)`, `CHECK (role IN ('user','admin'))`, `CHECK (position('@' in email) > 1)` (kiểm tra tối thiểu, validation đầy đủ ở tầng app theo RFC 5322).
 
@@ -263,7 +263,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 
 **Check/Partial Unique Index:** Chỉ đúng 1 hàng có `is_default = true` — enforce bằng partial unique index (Mục 7): `CREATE UNIQUE INDEX ON astrology.languages (is_default) WHERE is_default = true;`
 
-**Ghi chú Seed Data:** Bản migration hiện tại chỉ seed tiếng Việt (`vi`). Tiếng Anh (`en`) tạm thời chưa seed theo quyết định A4.
+**Ghi chú Seed Data:** Bản migration hiện tại (cả seed `house_systems` và `languages`) được tự động hóa qua lệnh `INSERT` bên trong file migration thay vì chạy script độc lập. Đối với `languages`, hiện tại chỉ seed tiếng Việt (`vi`), tiếng Anh (`en`) không được seed theo quyết định A4.
 
 ---
 
@@ -472,6 +472,11 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 **Unique Constraint:** `UNIQUE (subject_type, subject_key, language, version, COALESCE(tone, ''))` — bổ sung `version` vào khóa duy nhất so với thiết kế ban đầu, vì giờ đây 1 tổ hợp `(subject_type, subject_key, language)` có thể tồn tại **nhiều hàng ở nhiều `version` khác nhau** cùng lúc (đây chính là điều làm cho version pinning hoạt động được).
 
 **Business Constraint bổ sung (Quyết định 14.2):** Khi tạo 1 `version` content mới, **phải tồn tại bản ghi cho toàn bộ tổ hợp `subject_key` đang được dùng** (không được migrate nội dung nửa vời — nếu không, Chart mới sẽ JOIN ra thiếu Interpretation cho 1 số `subjectKey`). Ràng buộc này enforce ở tầng ứng dụng (CMS/Admin tool) khi publish 1 version mới, không khả thi để enforce bằng CHECK constraint đơn thuần ở DB.
+
+**Subject Key Grammar (Quyết định MVP):** Cấu trúc ngữ pháp của `subject_key` cho phạm vi MVP được định nghĩa và bảo vệ chặt chẽ tại tầng Domain (`interpretation-subject-key.ts`), không dùng `CHECK` constraint phức tạp ở DB (xem Engine Spec Mục 8.2). Cụ thể:
+- `PlanetInSign`: `<Planet>_in_<Sign>` (ví dụ: `Sun_in_Leo`)
+- `PlanetInHouse`: `<Planet>_in_House_<Number>` (ví dụ: `Sun_in_House_7`)
+- `AngleInSign`: `Ascendant_in_<Sign>` (ví dụ: `Ascendant_in_Leo`)
 
 
 ---
