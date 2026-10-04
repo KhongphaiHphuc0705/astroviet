@@ -18,12 +18,15 @@ In `astroviet`, according to our Database Design Specification, we explicitly us
 
 1. `identity.users(email) WHERE deleted_at IS NULL`
 2. `identity.refresh_tokens(expires_at) WHERE revoked_at IS NULL`
+3. `astrology.languages(is_default) WHERE is_default = true` (Partial Unique)
+4. `astrology.interpretation_contents(subject_type, subject_key, language, version, COALESCE(tone, ''))` (UNIQUE Expression)
+5. `astrology.interpretation_contents(...) WHERE status = 'Published'` (Partial Index)
 
-These were implemented via **hand-written raw SQL** in `prisma/migrations/20260715000000_init_identity_module/migration.sql`.
+These were implemented via **hand-written raw SQL** in migrations (e.g. `20260715000000_init_identity_module` and `20261004120000_init_interpretation_content_bank`).
 
-Because `schema.prisma` declares `email` as simply `@unique`, Prisma may detect a "drift" (since the actual database index has a `WHERE` clause).
-If you run `npx prisma migrate dev` in the future, Prisma might try to generate a migration that drops our partial index and replaces it with a full unique index.
-**Do NOT let Prisma regenerate or "fix" these indexes.** Always review the generated SQL in `migrations/` before deploying, and manually delete any lines that attempt to drop the partial indexes on `email` or `expires_at`.
+Because `schema.prisma` declares these using basic `@unique` or `@@index` properties, Prisma may detect a "drift" (since the actual database index has a `WHERE` clause or expression).
+If you run `npx prisma migrate dev` in the future, Prisma might try to generate a migration that drops our partial/expression indexes and replaces them with basic ones.
+**Do NOT let Prisma regenerate or "fix" these indexes.** Always review the generated SQL in `migrations/` before deploying, and manually delete any lines that attempt to drop the partial/expression indexes.
 
 ## Scripts
 

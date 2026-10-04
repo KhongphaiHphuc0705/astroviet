@@ -46,6 +46,7 @@ describe('PrismaChartRepository Integration', () => {
     userId: string,
     birthProfileId: string | null = null,
     fullName: string = 'Test User',
+    snapshotInterpretationVersion: string | null = null,
   ): Chart => {
     const engineInput = EngineInput.create(
       {
@@ -135,6 +136,7 @@ describe('PrismaChartRepository Integration', () => {
       isHouseDataAvailable: true,
       calculationMetadata,
       warnings: [],
+      snapshotInterpretationVersion,
       createdAt: new Date(),
       deletedAt: null,
     });
@@ -171,6 +173,20 @@ describe('PrismaChartRepository Integration', () => {
       expect(rawChart?.snapshot_latitude.toNumber()).toBe(10.8231);
     });
 
+    it('should save and roundtrip snapshotInterpretationVersion', async () => {
+      const user = await factory.createUser();
+      const chart1 = createTestChart(user.id, null, 'Test 1', '1.0');
+      const chart2 = createTestChart(user.id, null, 'Test 2', null);
+
+      await repository.save(chart1);
+      await repository.save(chart2);
+
+      const savedChart1 = await repository.findById(chart1.id);
+      expect(savedChart1?.snapshotInterpretationVersion).toBe('1.0');
+
+      const savedChart2 = await repository.findById(chart2.id);
+      expect(savedChart2?.snapshotInterpretationVersion).toBeNull();
+    });
     it('should rollback entirely on constraint violation', async () => {
       const user = await factory.createUser();
       const chart = createTestChart(user.id);
