@@ -56,3 +56,17 @@ export class ChartCalculationFailed extends Error {
     this.name = 'ChartCalculationFailed';
   }
 }
+
+export class InvalidInterpretationSubjectKeyError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidInterpretationSubjectKeyError';
+  }
+}
+
+export class InvalidContentVersionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidContentVersionError';
+  }
+}
