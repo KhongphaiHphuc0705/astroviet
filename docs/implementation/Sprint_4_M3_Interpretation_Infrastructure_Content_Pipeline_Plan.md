@@ -545,6 +545,6 @@ JSON (owner) ──▶ CLI (prisma/) ──▶ Validator
 
 ## 33. Final Recommendation
 
-`READY`
+**Status:** `DONE`
 
 **Điều kiện:** Tất cả Open Questions đã được project owner xác nhận. Nội dung production 252 mục chưa có trong repo; đó là phụ thuộc của owner cho nghiệm thu ở M6, không chặn việc xây pipeline. Sẵn sàng triển khai M3.
