@@ -176,6 +176,7 @@ export class PrismaChartMapper {
       patterns,
       calculationMetadata,
       warnings,
+      snapshotInterpretationVersion: record.snapshot_interpretation_version,
       createdAt: record.created_at,
       deletedAt: record.deleted_at,
     });
@@ -207,7 +208,7 @@ export class PrismaChartMapper {
       engine_version: chart.calculationMetadata.engineVersion,
       calculated_at: chart.calculationMetadata.calculatedAt,
       warnings: chart.warnings as unknown as Prisma.InputJsonValue,
-      snapshot_interpretation_version: null, // As specified in M5-T04: always null for now
+      snapshot_interpretation_version: chart.snapshotInterpretationVersion,
       snapshot_full_name: input.fullName ?? null,
       snapshot_birth_date: input.birthDate,
       snapshot_birth_time: snapshotBirthTime,

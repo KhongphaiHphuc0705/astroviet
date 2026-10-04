@@ -25,6 +25,7 @@ export interface ChartProps {
   isHouseDataAvailable: boolean;
   calculationMetadata: ChartCalculationMetadata;
   warnings: Warning[];
+  snapshotInterpretationVersion?: string | null;
   createdAt: Date;
   deletedAt: Date | null;
 }
@@ -84,6 +85,9 @@ export class Chart {
   }
   get warnings(): readonly Warning[] {
     return this.props.warnings;
+  }
+  get snapshotInterpretationVersion(): string | null {
+    return this.props.snapshotInterpretationVersion ?? null;
   }
   get createdAt(): Date {
     return new Date(this.props.createdAt.getTime());

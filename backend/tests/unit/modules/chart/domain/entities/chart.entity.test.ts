@@ -92,11 +92,17 @@ describe('Chart Entity', () => {
     deletedAt: null,
   };
 
-  it('should create correctly with isHouseDataAvailable=true', () => {
+  it('should create correctly with isHouseDataAvailable=true and default snapshotInterpretationVersion to null', () => {
     const chart = Chart.create(validProps);
     expect(chart.id).toBe('test-chart');
     expect(chart.houses).toHaveLength(12);
     expect(chart.angles).toHaveLength(4);
+    expect(chart.snapshotInterpretationVersion).toBeNull();
+  });
+
+  it('should create correctly with provided snapshotInterpretationVersion', () => {
+    const chart = Chart.create({ ...validProps, snapshotInterpretationVersion: '1.0' });
+    expect(chart.snapshotInterpretationVersion).toBe('1.0');
   });
 
   it('should create correctly with isHouseDataAvailable=false', () => {
