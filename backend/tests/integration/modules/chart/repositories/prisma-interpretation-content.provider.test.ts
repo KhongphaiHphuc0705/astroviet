@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InterpretationContentRecord } from '../../../../../src/modules/chart/domain/types/interpretation.types.js';
 import { PrismaInterpretationContentProvider } from '../../../../../src/modules/chart/infrastructure/repositories/prisma-interpretation-content.provider.js';
@@ -13,6 +13,10 @@ describe('PrismaInterpretationContentProvider', () => {
 
   beforeEach(async () => {
     await dbHelper.clearDatabase();
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
   });
 
   const fixture1: InterpretationContentRecord = {
@@ -70,7 +74,15 @@ describe('PrismaInterpretationContentProvider', () => {
 
     it('should reject invalid language (FK)', async () => {
       const invalid = { ...fixture1, language: 'en' };
-      await expect(provider.insertMany([invalid])).rejects.toThrow(InfrastructureError);
+      try {
+        await provider.insertMany([invalid]);
+        expect.fail('Should have thrown');
+      } catch (e: any) {
+        expect(e).toBeInstanceOf(InfrastructureError);
+        expect(e.cause?.message || e.cause?.toString()).toMatch(
+          /interpretation_contents_language_fkey/,
+        );
+      }
     });
 
     it('should reject duplicate (type, key, language, version) when tone is null due to COALESCE', async () => {
@@ -83,6 +95,32 @@ describe('PrismaInterpretationContentProvider', () => {
       await provider.insertMany([fixture1]);
       const diffTone = { ...fixture1, tone: 'Encouraging' as const };
       await expect(provider.insertMany([diffTone])).resolves.not.toThrow();
+    });
+
+    it('should reject invalid tone', async () => {
+      const invalid = { ...fixture1, tone: 'InvalidTone' as any };
+      try {
+        await provider.insertMany([invalid]);
+        expect.fail('Should have thrown');
+      } catch (e: any) {
+        expect(e).toBeInstanceOf(InfrastructureError);
+        expect(e.cause?.message || e.cause?.toString()).toMatch(
+          /interpretation_contents_tone_check/,
+        );
+      }
+    });
+
+    it('should assert cause contains constraint name for subject_type', async () => {
+      const invalid = { ...fixture1, subjectType: 'InvalidType' as any };
+      try {
+        await provider.insertMany([invalid]);
+        expect.fail('Should have thrown');
+      } catch (e: any) {
+        expect(e).toBeInstanceOf(InfrastructureError);
+        expect(e.cause?.message || e.cause?.toString()).toMatch(
+          /interpretation_contents_subject_type_check/,
+        );
+      }
     });
   });
 
@@ -138,6 +176,23 @@ describe('PrismaInterpretationContentProvider', () => {
       const contents = await provider.findPublishedContents('vi', '1.0', []);
       expect(contents).toHaveLength(0);
     });
+
+    it('should allow multiple versions of the same subject to coexist', async () => {
+      const v2 = { ...fixture1, version: '2.0', bodyText: 'v2 text' };
+      await provider.insertMany([fixture1, v2]);
+
+      const contentsV1 = await provider.findPublishedContents('vi', '1.0', [
+        { subjectType: 'PlanetInSign', subjectKey: 'Sun_in_Leo' },
+      ]);
+      expect(contentsV1).toHaveLength(1);
+      expect(contentsV1[0].bodyText).toBe('Sun in Leo text');
+
+      const contentsV2 = await provider.findPublishedContents('vi', '2.0', [
+        { subjectType: 'PlanetInSign', subjectKey: 'Sun_in_Leo' },
+      ]);
+      expect(contentsV2).toHaveLength(1);
+      expect(contentsV2[0].bodyText).toBe('v2 text');
+    });
   });
 
   describe('Failure Semantics', () => {
@@ -162,6 +217,50 @@ describe('PrismaInterpretationContentProvider', () => {
     it('should retain vi in languages after clearDatabase()', async () => {
       const viLang = await prisma.language.findUnique({ where: { code: 'vi' } });
       expect(viLang).not.toBeNull();
+    });
+
+    it('should ignore duplicate seed on INSERT ON CONFLICT DO NOTHING', async () => {
+      await prisma.$executeRawUnsafe(
+        `INSERT INTO "astrology"."languages" ("code","display_name","is_default") VALUES ('vi','Tiếng Việt',true) ON CONFLICT ("code") DO NOTHING;`,
+      );
+      const langs = await prisma.language.findMany({ where: { code: 'vi' } });
+      expect(langs).toHaveLength(1);
+    });
+
+    it('should reject second language with is_default=true', async () => {
+      await expect(
+        prisma.$executeRawUnsafe(
+          `INSERT INTO "astrology"."languages" ("code","display_name","is_default") VALUES ('en','English',true);`,
+        ),
+      ).rejects.toThrowError(/Key \(is_default\)=\(t\) already exists/);
+    });
+
+    it('should reject duplicate PK', async () => {
+      await expect(
+        prisma.$executeRawUnsafe(
+          `INSERT INTO "astrology"."languages" ("code","display_name","is_default") VALUES ('vi','Vietnamese',false);`,
+        ),
+      ).rejects.toThrowError(/Key \(code\)=\(vi\) already exists/);
+    });
+  });
+
+  describe('Introspection (EV-04)', () => {
+    it('should verify pg_constraint and pg_indexes names', async () => {
+      const constraints = await prisma.$queryRaw<Array<{ conname: string }>>`
+        SELECT conname FROM pg_constraint WHERE conrelid = 'astrology.interpretation_contents'::regclass;
+      `;
+      const constraintNames = constraints.map((c) => c.conname);
+      expect(constraintNames).toContain('interpretation_contents_subject_type_check');
+      expect(constraintNames).toContain('interpretation_contents_content_source_check');
+      expect(constraintNames).toContain('interpretation_contents_tone_check');
+      expect(constraintNames).toContain('interpretation_contents_status_check');
+
+      const indexes = await prisma.$queryRaw<Array<{ indexname: string }>>`
+        SELECT indexname FROM pg_indexes WHERE tablename = 'interpretation_contents';
+      `;
+      const indexNames = indexes.map((i) => i.indexname);
+      expect(indexNames).toContain('interpretation_contents_published_lookup_idx');
+      expect(indexNames).toContain('interpretation_contents_subject_language_version_tone_key');
     });
   });
 });

@@ -194,6 +194,8 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | deleted_at | TIMESTAMPTZ | ✔ | NULL | — | Soft delete — tài khoản bị vô hiệu hóa nhưng giữ lại (audit, tránh mất liên kết Chart lịch sử) |
 | version | INTEGER | ✘ | `1` | — | Optimistic locking cho update đồng thời (ví dụ đổi `displayName` từ nhiều thiết bị) |
 
+**Ghi chú (A4):** Cột/tính năng `preferred_language` của user chưa được triển khai trong phase này.
+
 **Check Constraints:** `CHECK (length(display_name) <= 100)`, `CHECK (role IN ('user','admin'))`, `CHECK (position('@' in email) > 1)` (kiểm tra tối thiểu, validation đầy đủ ở tầng app theo RFC 5322).
 
 **Business Constraint:** Email unique là ràng buộc **Website Business Rule** (Domain Spec Mục 4 phân loại) — không phải quy tắc chiêm tinh.
@@ -260,6 +262,8 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | is_default | BOOLEAN | ✘ | `false` | — | — |
 
 **Check/Partial Unique Index:** Chỉ đúng 1 hàng có `is_default = true` — enforce bằng partial unique index (Mục 7): `CREATE UNIQUE INDEX ON astrology.languages (is_default) WHERE is_default = true;`
+
+**Ghi chú Seed Data:** Bản migration hiện tại chỉ seed tiếng Việt (`vi`). Tiếng Anh (`en`) tạm thời chưa seed theo quyết định A4.
 
 ---
 
@@ -454,7 +458,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | Cột | Kiểu dữ liệu | Nullable | Default | PK/Unique/FK | Ghi chú |
 |---|---|---|---|---|---|
 | id | UUID | ✘ | `gen_random_uuid()` | PK | — |
-| subject_type | TEXT | ✘ | — | — | CHECK `subject_type IN ('PlanetInSign','PlanetInHouse','Aspect','PatternType','SignSummary','HouseSummary')` |
+| subject_type | TEXT | ✘ | — | — | CHECK `subject_type IN ('PlanetInSign','PlanetInHouse','AngleInSign','Aspect','PatternType','SignSummary','HouseSummary')` |
 | subject_key | TEXT | ✘ | — | — | Ví dụ `'Venus_in_Leo'`, `'Sun_Square_Moon'` |
 | language | TEXT | ✘ | — | FK → `astrology.languages(code)` | — |
 | content_source | TEXT | ✘ | `'HumanAuthored'` | — | CHECK `content_source IN ('HumanAuthored','AIGenerated','Hybrid')` — **lưu nội bộ** dù REST API v1 không expose field này ra response (Quyết định 14.1 của REST API Spec chỉ ẩn ở tầng API, không có nghĩa là xóa khỏi Domain Model) |
@@ -680,7 +684,7 @@ Cả 3 bảng này **không đòi hỏi bất kỳ thay đổi nào ở schema `
 | **Công cụ đề xuất** | **Prisma Migrate** — vì REST API Spec đã định hướng Backend Developer "xây dựng ORM từ tài liệu" bằng Prisma/TypeORM (nêu ở phần đầu prompt gốc); Prisma Migrate tích hợp trực tiếp với Prisma Schema, giảm 1 tầng công cụ riêng biệt so với Flyway (vốn phù hợp hơn với stack Java) |
 | **Versioning** | Mỗi migration là 1 file có timestamp prefix (chuẩn Prisma: `20260711_create_users_table/`) — không sửa migration đã chạy ở production, chỉ tạo migration mới để sửa lỗi (forward-only) |
 | **Backward Compatibility** | Theo nguyên tắc "expand-contract": khi đổi kiểu dữ liệu/xóa cột, luôn qua 2 bước — (1) thêm cột mới + dual-write, (2) xóa cột cũ ở migration sau, cách nhau đủ thời gian để Backend đã deploy xong bản dùng cột mới |
-| **Seed Data** | `house_systems`, `languages` cần seed script chạy sau migration đầu (2 hàng Placidus/WholeSign, `vi`/`en`) — tách biệt seed script khỏi schema migration |
+| **Seed Data** | `house_systems` cần seed script. Lưu ý: `languages` được seed cứng `vi` trực tiếp trong migration SQL, `en` tạm thời không seed theo A4 |
 | **Migration User** | Chạy bằng DB role riêng có quyền DDL (`CREATE`/`ALTER`/`DROP`), **khác** với role Backend dùng để query (chỉ DML) — đúng nguyên tắc Least Privilege (Mục 10) |
 | **CI/CD Gate** | Migration chạy tự động trong pipeline deploy, **trước** khi deploy code Backend mới (đảm bảo schema sẵn sàng trước khi code kỳ vọng nó tồn tại) |
 
