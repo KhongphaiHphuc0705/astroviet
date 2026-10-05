@@ -98,7 +98,47 @@ describe('InterpretationContentValidator', () => {
 
   it('should return INVALID_SUBJECT_KEY for bad grammar', () => {
     const content = getValidFullContent() as any;
-    content.items[0].subjectKey = 'Sun_in_house_7';
+    const badKeys = [
+      'Sun_in_house_7',
+      'Sun_House_7',
+      'Ascendant_in_House_1',
+      'UnknownPlanet_in_Leo',
+      'Sun_in_UnknownSign',
+    ];
+
+    for (const key of badKeys) {
+      content.items[0].subjectKey = key;
+      const result = validateInterpretationContent(content);
+      expect(result.ok).toBe(false);
+      expect(result.issues).toContainEqual(
+        expect.objectContaining({ code: 'INVALID_SUBJECT_KEY', path: 'items.0.subjectKey' }),
+      );
+    }
+  });
+
+  it('should return INVALID_SUBJECT_KEY for invalid house numbers (0 and 13)', () => {
+    const content = getValidFullContent() as any;
+    content.items[0].subjectType = 'PlanetInHouse';
+
+    content.items[0].subjectKey = 'Sun_in_House_0';
+    let result = validateInterpretationContent(content);
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({ code: 'INVALID_SUBJECT_KEY', path: 'items.0.subjectKey' }),
+    );
+
+    content.items[0].subjectKey = 'Sun_in_House_13';
+    result = validateInterpretationContent(content);
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({ code: 'INVALID_SUBJECT_KEY', path: 'items.0.subjectKey' }),
+    );
+  });
+
+  it('should return INVALID_SUBJECT_KEY for valid key under wrong subject type (Ascendant_in_Leo under PlanetInSign)', () => {
+    const content = getValidFullContent() as any;
+    content.items[0].subjectType = 'PlanetInSign';
+    content.items[0].subjectKey = 'Ascendant_in_Leo';
     const result = validateInterpretationContent(content);
     expect(result.ok).toBe(false);
     expect(result.issues).toContainEqual(
@@ -159,10 +199,13 @@ describe('InterpretationContentValidator', () => {
 
   it('should return INVALID_VERSION for wrong format', () => {
     const content = getValidFullContent();
-    content.version = 'v1.0';
-    const result = validateInterpretationContent(content);
-    expect(result.ok).toBe(false);
-    expect(result.issues).toContainEqual(expect.objectContaining({ code: 'INVALID_VERSION' }));
+    const badVersions = ['v1.0', '', '1.0.0', '01.0'];
+    badVersions.forEach((v) => {
+      content.version = v;
+      const result = validateInterpretationContent(content);
+      expect(result.ok).toBe(false);
+      expect(result.issues).toContainEqual(expect.objectContaining({ code: 'INVALID_VERSION' }));
+    });
   });
 
   it('should return INVALID_VERSION for not major.minor', () => {
@@ -191,5 +234,18 @@ describe('InterpretationContentValidator', () => {
     expect(result.issues).toContainEqual(
       expect.objectContaining({ code: 'PLACEHOLDER_CONTENT', path: 'items.0.bodyText' }),
     );
+  });
+
+  it('should return INVALID_STATUS for unknown status or Archived', () => {
+    const content = getValidFullContent() as any;
+    content.status = 'Archived';
+    let result = validateInterpretationContent(content);
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(expect.objectContaining({ code: 'INVALID_STATUS' }));
+
+    content.status = 'UnknownStatus';
+    result = validateInterpretationContent(content);
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(expect.objectContaining({ code: 'INVALID_STATUS' }));
   });
 });

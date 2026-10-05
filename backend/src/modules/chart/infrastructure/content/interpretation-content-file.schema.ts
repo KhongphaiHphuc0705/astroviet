@@ -4,7 +4,9 @@ export const InterpretationContentItemSchema = z
   .object({
     subjectType: z.string(),
     subjectKey: z.string(),
-    bodyText: z.string().trim().min(1),
+    bodyText: z.string().refine((s) => s.trim().length >= 1, {
+      message: 'Body text must not be empty or whitespace only',
+    }),
   })
   .strict();
 

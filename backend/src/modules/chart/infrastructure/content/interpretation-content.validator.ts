@@ -14,13 +14,13 @@ import {
 
 export const OWNER_CONTENT_PLACEHOLDER = '[OWNER_CONTENT_REQUIRED]';
 
-export type InterpretationSubjectRef = { subjectType: string; subjectKey: string };
+export type ContentSubjectRef = { subjectType: string; subjectKey: string };
 
 export type ContentCoverage = {
   expected: number;
   present: number;
-  missing: InterpretationSubjectRef[];
-  unexpected: InterpretationSubjectRef[];
+  missing: ContentSubjectRef[];
+  unexpected: ContentSubjectRef[];
 };
 
 export type ValidationIssue = {
@@ -60,8 +60,14 @@ export function validateInterpretationContent(input: unknown): ValidationResult 
     for (const error of parseResult.error.errors) {
       const pathStr = error.path.join('.');
       let code = 'SCHEMA_ERROR';
-      if (pathStr.endsWith('.bodyText') && error.code === 'too_small') {
+      if (
+        pathStr.endsWith('.bodyText') &&
+        error.code === 'custom' &&
+        error.message === 'Body text must not be empty or whitespace only'
+      ) {
         code = 'EMPTY_BODY_TEXT';
+      } else if (pathStr === 'status' && error.code === 'invalid_enum_value') {
+        code = 'INVALID_STATUS';
       }
       issues.push({
         code,
@@ -128,16 +134,6 @@ export function validateInterpretationContent(input: unknown): ValidationResult 
     seenKeys.add(identity);
     presentSubjects.add(identity);
 
-    // Empty body
-    // Zod `.min(1)` already handles some of this, but `.trim().min(1)` returns length >= 1.
-    // So if it's empty, Zod caught it. Just in case, let's also check here.
-    if (!item.bodyText || item.bodyText.trim() === '') {
-      // Actually, Zod schema is strict and will catch empty/whitespace body text and output SCHEMA_ERROR.
-      // But according to the plan, we might need a specific code EMPTY_BODY_TEXT.
-      // Let's add it specifically just to be safe if it bypasses Zod or for exact error code matching.
-      // Zod `.min(1)` will catch it first though. Let's rely on Zod but change the issue code if it's that path.
-    }
-
     // Placeholder check
     if (file.status === 'Published' && item.bodyText.includes(OWNER_CONTENT_PLACEHOLDER)) {
       issues.push({
@@ -179,15 +175,9 @@ export function validateInterpretationContent(input: unknown): ValidationResult 
     }
   });
 
-  // Post-process SCHEMA_ERROR for bodyText to EMPTY_BODY_TEXT to match exact plan AC
-  // But since we returned early on SCHEMA_ERROR, this wouldn't hit.
-  // I'll adjust the logic to not return early on SCHEMA_ERROR if I want to collect all errors?
-  // The plan says: "Gom tối đa toàn bộ lỗi (không dừng ở lỗi đầu)".
-  // Wait, Zod returns all schema errors at once. We can map them.
-
   // Coverage calculation
-  const missing: InterpretationSubjectRef[] = [];
-  const unexpected: InterpretationSubjectRef[] = [];
+  const missing: ContentSubjectRef[] = [];
+  const unexpected: ContentSubjectRef[] = [];
   const expectedSet = new Set(expectedSubjects.map((s) => `${s.subjectType}:${s.subjectKey}`));
 
   expectedSubjects.forEach((s) => {
@@ -210,7 +200,7 @@ export function validateInterpretationContent(input: unknown): ValidationResult 
   };
 
   if (unexpected.length > 0) {
-    unexpected.slice(0, 5).forEach((u) => {
+    unexpected.forEach((u) => {
       issues.push({
         code: 'UNEXPECTED_SUBJECT',
         message: `Unexpected subject: ${u.subjectType}:${u.subjectKey}`,

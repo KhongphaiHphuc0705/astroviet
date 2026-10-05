@@ -200,7 +200,7 @@ describe('Interpretation Content Pipeline (Integration)', () => {
       } finally {
         // Restore 'vi' for other tests
         await prisma.language.create({
-          data: { code: 'vi', display_name: 'Vietnamese', is_default: true },
+          data: { code: 'vi', display_name: 'Tiếng Việt', is_default: true },
         });
       }
     });
