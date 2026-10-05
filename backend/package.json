@@ -40,6 +40,7 @@
     "prisma:seed": "prisma db seed",
     "db:reset": "prisma migrate reset",
     "db:push": "prisma db push",
+    "prisma:seed:content": "tsx prisma/seed-content.ts",
     "generate:openapi": "tsx scripts/generate-openapi.ts",
     "prepare": "husky"
   },

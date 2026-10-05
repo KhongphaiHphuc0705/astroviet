@@ -34,4 +34,16 @@ If you run `npx prisma migrate dev` in the future, Prisma might try to generate 
 - `npm run prisma:migrate` - Creates and applies a new migration.
 - `npm run prisma:deploy` - Applies pending migrations to the database (for CI/CD).
 - `npm run prisma:seed` - Runs `seed.ts` (using Zod configuration from `.env`).
+- `npm run prisma:seed:content` - Seeds interpretation content using `seed-content.ts`.
 - `npm run prisma:studio` - Opens Prisma Studio UI.
+
+## Interpretation Content Pipeline
+
+Astrology interpretation content (prose) is managed outside the regular Prisma schema workflow.
+
+- **Production Content**: The fully written `interpretations.vi.json` file is a **Content Owner Dependency**. It is NOT checked into the repository because it will be provided later in M6.
+- **Sample Content**: Developers can use the checked-in `prisma/content/interpretations.vi.sample.json` which contains a small mock dataset (Draft status) for testing structural validation.
+- **Seeding**: The `npm run prisma:seed:content` script validates the JSON file strictly against domain grammar and seeds it into the database via atomic transactions.
+  - It handles Conflict errors (e.g. attempting to downgrade a `Published` version to `Draft`).
+  - To test validity without seeding: `npm run prisma:seed:content -- --validate-only`
+- **Clean Database**: Running `npm run db:reset` will run pending migrations and recreate the admin user. To seed interpretation content, you must manually run `npm run prisma:seed:content`.
