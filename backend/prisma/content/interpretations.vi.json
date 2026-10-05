@@ -1,0 +1,1268 @@
+{
+  "language": "vi",
+  "version": "1.0",
+  "status": "Published",
+  "contentSource": "HumanAuthored",
+  "items": [
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Aries",
+      "bodyText": "Mặt Trời ở Bạch Dương biểu trưng cho sự khởi đầu, ý chí mạnh mẽ và khát khao khẳng định bản thân. Bạn thường có xu hướng hành động độc lập, tràn đầy năng lượng và luôn sẵn sàng tiên phong trong mọi lĩnh vực. Cần lưu ý rằng sự nôn nóng và thẳng thắn đôi khi có thể khiến bạn trở nên thiếu kiên nhẫn với người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Taurus",
+      "bodyText": "Mặt Trời ở Kim Ngưu đại diện cho sự ổn định, kiên định và yêu thích những giá trị vật chất vững bền. Bạn thường có xu hướng làm việc chăm chỉ, cẩn trọng và tận hưởng sự bình yên, thoải mái trong cuộc sống. Cần chú ý rằng sự gắn bó quá mức với vùng an toàn có thể khiến bạn đôi khi trở nên cứng nhắc trước những thay đổi."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Gemini",
+      "bodyText": "Mặt Trời ở Song Tử mang đến sự linh hoạt, trí tò mò và khả năng giao tiếp sắc bén. Bạn thường có xu hướng thích học hỏi, dễ dàng thích nghi với môi trường mới và luôn tìm kiếm những ý tưởng thú vị. Cần lưu ý rằng sự phân tán sự chú ý có thể khiến bạn đôi khi gặp khó khăn trong việc duy trì sự tập trung dài hạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Cancer",
+      "bodyText": "Mặt Trời ở Cự Giải tượng trưng cho cảm xúc sâu sắc, bản năng nuôi dưỡng và sự gắn bó với gia đình. Bạn thường có xu hướng trân trọng những giá trị tinh thần, biết quan tâm và bảo vệ những người thân yêu. Cần chú ý rằng sự nhạy cảm quá mức có thể khiến bạn đôi khi dễ bị tổn thương bởi những lời đánh giá xung quanh."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Leo",
+      "bodyText": "Mặt Trời ở Sư Tử gắn với nhu cầu được thể hiện bản thân và được ghi nhận. Bạn thường có sức hút tự nhiên và thích dẫn dắt khi làm điều mình tin tưởng. Cần chú ý rằng nhu cầu được công nhận đôi khi có thể khiến bạn nhạy cảm với sự phớt lờ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Virgo",
+      "bodyText": "Mặt Trời ở Xử Nữ mang lại sự tỉ mỉ, khả năng phân tích logic và tinh thần phục vụ thực tế. Bạn thường có xu hướng làm việc chỉn chu, thích sắp xếp mọi thứ ngăn nắp và luôn hướng tới sự hoàn thiện. Cần lưu ý rằng tiêu chuẩn cao đôi khi có thể khiến bạn trở nên quá khắt khe với chính mình và người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Libra",
+      "bodyText": "Mặt Trời ở Thiên Bình biểu tượng cho sự hòa hợp, tính ngoại giao và nhu cầu tìm kiếm sự cân bằng. Bạn thường có xu hướng coi trọng các mối quan hệ, thích sự công bằng và luôn biết cách làm dịu những căng thẳng. Cần chú ý rằng mong muốn làm hài lòng tất cả mọi người có thể khiến bạn đôi khi do dự trong việc đưa ra quyết định."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Scorpio",
+      "bodyText": "Mặt Trời ở Thiên Yết đại diện cho cường độ cảm xúc, sự biến đổi và trực giác nhạy bén. Bạn thường có xu hướng khao khát tìm hiểu chiều sâu của mọi vấn đề và sở hữu sức mạnh ý chí kiên cường. Cần chú ý rằng sự đa nghi và khao khát kiểm soát có thể khiến bạn đôi khi gặp khó khăn trong việc mở lòng tin tưởng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Sagittarius",
+      "bodyText": "Mặt Trời ở Nhân Mã mang đến tinh thần lạc quan, yêu tự do và khát kho mở rộng tầm nhìn. Bạn thường có xu hướng thích khám phá, đam mê học hỏi triết lý và luôn hướng về những viễn cảnh tươi sáng. Cần lưu ý rằng sự thẳng thắn quá mức có thể khiến bạn đôi khi thiếu đi sự tinh tế trong giao tiếp."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Capricorn",
+      "bodyText": "Mặt Trời ở Ma Kết tượng trưng cho tham vọng, sự kỷ luật và trách nhiệm cao trong công việc. Bạn thường có xu hướng làm việc bền bỉ, xây dựng từng bước vững chắc để đạt được thành tựu dài hạn. Cần chú ý rằng áp lực tự đặt ra đôi khi có thể khiến bạn bỏ quên việc tận hưởng những niềm vui nhỏ bé trong cuộc sống."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Aquarius",
+      "bodyText": "Mặt Trời ở Bảo Bình biểu trưng cho sự độc đáo, tinh thần đổi mới và lòng hướng ngoại cộng đồng. Bạn thường có xu hướng tư duy khác biệt, thích phá vỡ những quy chuẩn cũ và trân trọng sự tự do cá nhân. Cần chú ý rằng sự khao khát tách biệt đôi khi có thể khiến bạn trở nên xa cách về mặt cảm xúc với những người xung quanh."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Sun_in_Pisces",
+      "bodyText": "Mặt Trời ở Song Ngư mang lại lòng trắc ẩn, sự đồng cảm và khả năng sáng tạo nghệ thuật phong phú. Bạn thường có xu hướng nhìn đời qua lăng kính lãng mạn, trực giác nhạy bén và sẵn sàng giúp đỡ người khác. Cần chú ý rằng ranh giới cảm xúc mờ nhạt có thể khiến bạn đôi khi dễ bị ảnh hưởng bởi năng lượng tiêu cực từ môi trường."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Aries",
+      "bodyText": "Mặt Trăng ở Bạch Dương biểu trưng cho cảm xúc mãnh liệt, phản ứng nhanh nhạy và khao khát hành động. Bạn thường có xu hướng bộc lộ tình cảm một cách trực tiếp, nhiệt tình và luôn muốn bảo vệ những người thân yêu. Cần lưu ý rằng sự bốc đồng đôi khi có thể khiến bạn đưa ra quyết định vội vã khi nóng giận."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Taurus",
+      "bodyText": "Mặt Trăng ở Kim Ngưu đại diện cho nhu cầu an toàn, sự ổn định cảm xúc và trân trọng tiện nghi vật chất. Bạn thường có xu hướng tìm kiếm sự bình yên, thể hiện tình cảm qua những hành động chăm sóc thiết thực và đáng tin cậy. Cần chú ý rằng sự gắn bó quá mức với thói quen có thể khiến bạn trở nên bướng bỉnh trước những thay đổi."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Gemini",
+      "bodyText": "Mặt Trăng ở Song Tử mang lại nhu cầu giao tiếp, sự tò mò và cảm xúc luôn biến đổi đa dạng. Bạn thường có xu hướng phân tích cảm nhận của mình, thích trò chuyện và dễ dàng thích nghi với những tình huống mới. Cần lưu ý rằng việc lý trí hóa cảm xúc đôi khi có thể khiến bạn gặp khó khăn trong việc thấu hiểu cảm nhận sâu sắc của bản thân."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Cancer",
+      "bodyText": "Mặt Trăng ở Cự Giải tượng trưng cho trực giác mạnh mẽ, sự gắn kết gia đình và bản năng nuôi dưỡng sâu sắc. Bạn thường có xu hướng nhạy cảm với năng lượng xung quanh, trân trọng kỷ niệm và biết cách chăm sóc người khác một cách ân cần. Cần chú ý rằng sự nhạy cảm quá mức có thể khiến bạn dễ bị tổn thương và giữ mãi những muộn phiền trong lòng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Leo",
+      "bodyText": "Mặt Trăng ở Sư Tử gắn liền với nhu cầu được chú ý, khao khát thể hiện bản thân và sự ấm áp trong tình cảm. Bạn thường có xu hướng bộc lộ cảm xúc một cách kịch tính, hào phóng và mong muốn trở thành niềm tự hào của người khác. Cần lưu ý rằng nhu cầu được ghi nhận đôi khi có thể khiến bạn phản ứng thái quá khi bị phớt lờ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Virgo",
+      "bodyText": "Mặt Trăng ở Xử Nữ biểu tượng cho nhu cầu trật tự, sự hữu ích và cách thể hiện tình cảm qua việc chăm sóc chi tiết. Bạn thường có xu hướng phân tích cặn kẽ mọi vấn đề, thích giúp đỡ và cảm thấy an tâm khi mọi thứ được tổ chức tốt. Cần chú ý rằng tính cầu toàn có thể khiến bạn dễ lo âu và khắt khe với những sai sót nhỏ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Libra",
+      "bodyText": "Mặt Trăng ở Thiên Bình đại diện cho nhu cầu hòa hợp, sự tinh tế và trân trọng các mối quan hệ song phương. Bạn thường có xu hướng tìm kiếm sự công bằng, thích không gian yên bình và luôn muốn làm hài lòng mọi người xung quanh. Cần lưu ý rằng việc tránh né xung đột đôi khi có thể khiến bạn đánh mất tiếng nói thực sự của bản thân."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Scorpio",
+      "bodyText": "Mặt Trăng ở Thiên Yết mang đến cường độ cảm xúc sâu sắc, sự khao khát thân mật và khả năng thấu hiểu những điều thầm kín. Bạn thường có xu hướng yêu ghét rõ ràng, trực giác cực kỳ nhạy bén và không ngại đối mặt với những góc khuất tâm lý. Cần chú ý rằng xu hướng ghen tuông hoặc kiểm soát có thể khiến bạn tạo ra khoảng cách với người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Sagittarius",
+      "bodyText": "Mặt Trăng ở Nhân Mã tượng trưng cho sự lạc quan, tinh thần tự do và nhu cầu trải nghiệm không giới hạn. Bạn thường có xu hướng tìm kiếm niềm vui trong những chân trời mới, sống thẳng thắn và luôn giữ thái độ tích cực trước khó khăn. Cần chú ý rằng khát khao tự do quá mức có thể khiến bạn đôi khi lảng tránh những trách nhiệm về mặt cảm xúc."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Capricorn",
+      "bodyText": "Mặt Trăng ở Ma Kết biểu trưng cho sự nghiêm túc, khả năng kiểm soát cảm xúc và nhu cầu đạt được sự vững chắc. Bạn thường có xu hướng đặt trách nhiệm lên hàng đầu, thể hiện tình cảm một cách kín đáo và luôn hướng tới sự an toàn dài hạn. Cần chú ý rằng việc kìm nén cảm xúc đôi khi có thể khiến bạn trở nên lạnh lùng và xa cách."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Aquarius",
+      "bodyText": "Mặt Trăng ở Bảo Bình mang lại nhu cầu độc lập, tư duy khách quan và sự trân trọng những khác biệt cá nhân. Bạn thường có xu hướng quan sát cảm xúc từ xa, thích giao lưu trong các cộng đồng tư tưởng và trân trọng tự do cá nhân. Cần chú ý rằng việc phân tích cảm xúc qua lăng kính logic có thể khiến bạn đôi khi khó kết nối sâu sắc với người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Moon_in_Pisces",
+      "bodyText": "Mặt Trăng ở Song Ngư đại diện cho lòng trắc ẩn bao la, trực giác nghệ thuật và sự đồng cảm sâu sắc. Bạn thường có xu hướng hòa mình vào năng lượng xung quanh, dễ dàng thấu hiểu nỗi đau của người khác và sở hữu trí tưởng tượng phong phú. Cần chú ý rằng ranh giới cảm xúc mờ nhạt có thể khiến bạn dễ bị kiệt sức bởi những năng lượng tiêu cực."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Aries",
+      "bodyText": "Sao Thủy ở Bạch Dương biểu trưng cho tư duy nhanh nhạy, lời nói thẳng thắn và ý tưởng táo bạo. Bạn thường có xu hướng đưa ra quyết định dứt khoát, thích tranh luận và luôn đi thẳng vào trọng tâm của vấn đề. Cần lưu ý rằng sự nôn nóng trong giao tiếp đôi khi có thể khiến bạn trở nên thiếu tế nhị và dễ gây hiểu lầm."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Taurus",
+      "bodyText": "Sao Thủy ở Kim Ngưu đại diện cho tư duy thực tế, sự thận trọng và khả năng học hỏi bền bỉ. Bạn thường có xu hướng suy nghĩ kỹ lưỡng trước khi nói, tiếp thu kiến thức một cách có phương pháp và trân trọng những ý tưởng mang tính ứng dụng cao. Cần chú ý rằng sự kiên định quá mức có thể khiến bạn đôi khi bảo thủ trước những góc nhìn mới."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Gemini",
+      "bodyText": "Sao Thủy ở Song Tử mang đến tư duy linh hoạt, khả năng giao tiếp đa dạng và trí tò mò vô tận. Bạn thường có xu hướng nắm bắt thông tin nhanh chóng, thích trao đổi ý tưởng và dễ dàng thích nghi với mọi cuộc trò chuyện. Cần lưu ý rằng việc phân tán sự chú ý vào quá nhiều thứ đôi khi có thể khiến tư duy của bạn thiếu đi chiều sâu."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Cancer",
+      "bodyText": "Sao Thủy ở Cự Giải tượng trưng cho tư duy trực giác, trí nhớ tốt và khả năng giao tiếp giàu cảm xúc. Bạn thường có xu hướng lưu giữ những ấn tượng sâu sắc, thích trò chuyện thân tình và luôn thấu hiểu tâm lý của người nghe. Cần chú ý rằng việc để cảm xúc chi phối quá nhiều đôi khi có thể khiến bạn mất đi sự khách quan khi đánh giá vấn đề."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Leo",
+      "bodyText": "Sao Thủy ở Sư Tử gắn liền với tư duy sáng tạo, lời nói tự tự và khả năng truyền cảm hứng. Bạn thường có xu hướng diễn đạt ý tưởng một cách lôi cuốn, thích trình bày quan điểm cá nhân và dễ dàng thu hút sự chú ý. Cần lưu ý rằng cái tôi lớn trong giao tiếp đôi khi có thể khiến bạn thiếu đi sự lắng nghe đối với người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Virgo",
+      "bodyText": "Sao Thủy ở Xử Nữ biểu tượng cho tư duy logic, sự phân tích sắc bén và khả năng chú ý đến từng chi tiết. Bạn thường có xu hướng sắp xếp thông tin một cách hệ thống, thích sự chính xác và giao tiếp vô cùng rành mạch. Cần chú ý rằng tính phê phán cao đôi khi có thể khiến những lời nhận xét của bạn trở nên quá khắt khe."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Libra",
+      "bodyText": "Sao Thủy ở Thiên Bình đại diện cho tư duy cân bằng, khả năng ngoại giao và góc nhìn đa chiều. Bạn thường có xu hướng xem xét vấn đề từ nhiều phía, giao tiếp nhã nhặn và luôn tìm cách dung hòa những quan điểm đối lập. Cần chú ý rằng mong muốn làm hài lòng mọi người đôi khi có thể khiến bạn do dự và khó đưa ra kết luận cuối cùng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Scorpio",
+      "bodyText": "Sao Thủy ở Thiên Yết mang đến tư duy sắc bén, sự đào sâu nghiên cứu và khả năng nhìn thấu bản chất vấn đề. Bạn thường có xu hướng thích khám phá những bí ẩn, giao tiếp có sức nặng và không dễ bị lừa dối. Cần lưu ý rằng sự đa nghi và sắc sảo quá mức đôi khi có thể khiến lời nói của bạn trở nên mang tính đả kích."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Sagittarius",
+      "bodyText": "Sao Thủy ở Nhân Mã tượng trưng cho tư duy cởi mở, tầm nhìn xa rộng và sự quan tâm đến triết học hoặc tôn giáo. Bạn thường có xu hướng suy nghĩ về bức tranh tổng thể, giao tiếp nhiệt tình và luôn hướng tới sự thật. Cần lưu ý rằng việc bỏ qua những chi tiết nhỏ đôi khi có thể khiến các kế hoạch của bạn trở nên thiếu thực tế."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Capricorn",
+      "bodyText": "Sao Thủy ở Ma Kết biểu trưng cho tư duy chiến lược, sự tập trung và phương pháp giao tiếp chuyên nghiệp. Bạn thường có xu hướng đánh giá vấn đề dựa trên hiệu quả thực tế, phát ngôn cẩn trọng và tổ chức công việc cực kỳ logic. Cần chú ý rằng sự cứng nhắc trong tư duy đôi khi có thể khiến bạn gặp khó khăn khi phải linh hoạt ứng biến."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Aquarius",
+      "bodyText": "Sao Thủy ở Bảo Bình mang lại tư duy tiến bộ, những ý tưởng độc đáo và khả năng khách quan hóa vấn đề. Bạn thường có xu hướng thích đổi mới, giao tiếp thông minh và không ngần ngại bày tỏ những quan điểm đi ngược lại số đông. Cần lưu ý rằng sự tách biệt quá mức đôi khi có thể khiến lý lẽ của bạn trở nên xa rời với thực tế cảm xúc."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mercury_in_Pisces",
+      "bodyText": "Sao Thủy ở Song Ngư đại diện cho tư duy trực giác, trí tưởng tượng bay bổng và khả năng giao tiếp đầy chất thơ. Bạn thường có xu hướng tiếp nhận thông tin qua cảm nhận, suy nghĩ bằng hình ảnh và dễ dàng đồng cảm với người đối diện. Cần chú ý rằng sự mờ nhạt trong ranh giới logic đôi khi có thể khiến bạn trở nên đãng trí và thiếu rõ ràng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Aries",
+      "bodyText": "Sao Kim ở Bạch Dương biểu trưng cho tình yêu mãnh liệt, sự nhiệt huyết và khát khao chủ động trong các mối quan hệ. Bạn thường có xu hướng theo đuổi đối tượng một cách thẳng thắn, trân trọng sự độc lập và thích những trải nghiệm tình cảm mới mẻ. Cần lưu ý rằng sự cả thèm chóng chán đôi khi có thể khiến bạn đánh mất đi sự gắn kết lâu dài."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Taurus",
+      "bodyText": "Sao Kim ở Kim Ngưu đại diện cho tình yêu bền vững, sự chung thủy và trân trọng những giá trị vật chất, nhục cảm. Bạn thường có xu hướng tìm kiếm sự an toàn trong tình cảm, thích tận hưởng sự thoải mái và luôn chăm sóc người yêu chu đáo. Cần chú ý rằng sự sở hữu quá mức đôi khi có thể khiến bạn trở nên ghen tuông và cứng nhắc."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Gemini",
+      "bodyText": "Sao Kim ở Song Tử mang đến tình yêu dựa trên sự kết nối trí tuệ, sự linh hoạt và niềm vui trong giao tiếp. Bạn thường có xu hướng bị thu hút bởi những cuộc trò chuyện thú vị, thích sự đa dạng và luôn muốn cùng người yêu khám phá thế giới. Cần lưu ý rằng sự mau chán đôi khi có thể khiến bạn gặp khó khăn trong việc cam kết sâu sắc."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Cancer",
+      "bodyText": "Sao Kim ở Cự Giải tượng trưng cho tình yêu thuần khiết, sự quan tâm chăm sóc và khát khao một mái ấm gia đình. Bạn thường có xu hướng gắn bó sâu đậm, bảo vệ người mình yêu và trân trọng sự an toàn về mặt cảm xúc. Cần chú ý rằng sự nhạy cảm và xu hướng bám víu đôi khi có thể tạo ra áp lực ngột ngạt cho đối phương."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Leo",
+      "bodyText": "Sao Kim ở Sư Tử gắn liền với tình yêu nồng nhiệt, sự hào phóng và khao khát được tỏa sáng trong mắt người yêu. Bạn thường có xu hướng thể hiện tình cảm một cách rực rỡ, chân thành và thích mang lại những bất ngờ lãng mạn. Cần chú ý rằng nhu cầu được tôn vinh đôi khi có thể khiến bạn kỳ vọng quá nhiều vào sự ngưỡng mộ từ đối phương."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Virgo",
+      "bodyText": "Sao Kim ở Xử Nữ biểu tượng cho tình yêu thực tế, sự tận tụy và cách thể hiện sự quan tâm qua việc giúp đỡ thiết thực. Bạn thường có xu hướng chú ý đến những thói quen nhỏ của người yêu, thích sự hoàn thiện và chăm sóc mối quan hệ rất chu đáo. Cần chú ý rằng tiêu chuẩn khắt khe đôi khi có thể khiến bạn soi xét và phê bình người ấy quá mức."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Libra",
+      "bodyText": "Sao Kim ở Thiên Bình đại diện cho tình yêu thanh lịch, sự lãng mạn và khao khát một mối quan hệ cân bằng, hài hòa. Bạn thường có xu hướng trân trọng cái đẹp, cư xử tinh tế và luôn nỗ lực duy trì sự bình yên trong tình cảm. Cần chú ý rằng việc phụ thuộc vào sự đồng hành đôi khi có thể khiến bạn đánh mất đi bản sắc cá nhân độc lập."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Scorpio",
+      "bodyText": "Sao Kim ở Thiên Yết mang đến tình yêu sâu đậm, sự đam mê mãnh liệt và khát khao kết nối hoàn toàn về cả linh hồn lẫn thể xác. Bạn thường có xu hướng đòi hỏi sự chung thủy tuyệt đối, yêu hết mình và không ngại đương đầu với sóng gió cùng nhau. Cần chú ý rằng sự ghen tuông và ám ảnh kiểm soát đôi khi có thể phá vỡ niềm tin trong mối quan hệ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Sagittarius",
+      "bodyText": "Sao Kim ở Nhân Mã tượng trưng cho tình yêu tự do, sự lạc quan và khao khát cùng nhau khám phá những chân trời mới. Bạn thường có xu hướng tìm kiếm người đồng hành chung lý tưởng, trân trọng sự trung thực và thích những mối quan hệ không ràng buộc. Cần chú ý rằng sự ham vui và lảng tránh cam kết đôi khi có thể khiến bạn bỏ lỡ những tình cảm sâu sắc thực sự."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Capricorn",
+      "bodyText": "Sao Kim ở Ma Kết biểu trưng cho tình yêu nghiêm túc, sự cẩn trọng và khao khát một mối quan hệ mang lại địa vị vững chắc. Bạn thường có xu hướng chọn lọc kỹ càng đối tác, thể hiện tình cảm qua sự bảo bọc tài chính và cam kết dài hạn. Cần chú ý rằng việc quá coi trọng thực tế đôi khi có thể khiến mối quan hệ của bạn thiếu đi sự lãng mạn cần thiết."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Aquarius",
+      "bodyText": "Sao Kim ở Bảo Bình mang lại tình yêu dựa trên tình bạn, sự tôn trọng tự do cá nhân và những quan điểm độc đáo. Bạn thường có xu hướng bị thu hút bởi sự khác biệt, trân trọng không gian riêng tư và thích một mối quan hệ bình đẳng. Cần chú ý rằng thái độ lạnh lùng và xa cách đôi khi có thể khiến người yêu cảm thấy bạn thiếu đi sự nồng nhiệt."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Venus_in_Pisces",
+      "bodyText": "Sao Kim ở Song Ngư đại diện cho tình yêu vô điều kiện, sự lãng mạn tuyệt đối và khả năng hi sinh vì người mình yêu. Bạn thường có xu hướng đồng cảm sâu sắc, dễ dàng tha thứ và luôn nhìn thấy những điểm tốt đẹp nhất ở đối phương. Cần chú ý rằng sự mơ mộng và thiếu thực tế đôi khi có thể khiến bạn dễ bị lợi dụng trong các mối quan hệ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Aries",
+      "bodyText": "Sao Hỏa ở Bạch Dương biểu trưng cho năng lượng dồi dào, lòng can đảm và tinh thần chiến binh bẩm sinh. Bạn thường có xu hướng hành động ngay lập tức, thích cạnh tranh và luôn muốn dẫn đầu trong mọi lĩnh vực. Cần lưu ý rằng sự nóng vội và thiếu kiên nhẫn đôi khi có thể khiến bạn vướng vào những rắc rối không đáng có."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Taurus",
+      "bodyText": "Sao Hỏa ở Kim Ngưu đại diện cho sự kiên trì, sức bền bỉ và cách tiếp cận mục tiêu từ tốn nhưng chắc chắn. Bạn thường có xu hướng làm việc một cách kiên định, không dễ bỏ cuộc và thích những kết quả mang tính thực tế. Cần chú ý rằng sự cố chấp đôi khi có thể khiến bạn từ chối thay đổi phương pháp dù nó không còn hiệu quả."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Gemini",
+      "bodyText": "Sao Hỏa ở Song Tử mang đến năng lượng phân tán, tư duy sắc bén và khả năng hành động dựa trên ý tưởng mới. Bạn thường có xu hướng sử dụng ngôn từ như một vũ khí, thích sự đa dạng và dễ dàng thay đổi mục tiêu. Cần lưu ý rằng việc thiếu tập trung đôi khi có thể khiến bạn bỏ dở công việc giữa chừng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Cancer",
+      "bodyText": "Sao Hỏa ở Cự Giải tượng trưng cho năng lượng cảm xúc, hành động vì gia đình và bản năng bảo vệ mạnh mẽ. Bạn thường có xu hướng tiếp cận vấn đề một cách vòng vo, hành động khi cảm thấy an toàn và quyết liệt khi bảo vệ người thân. Cần chú ý rằng việc kìm nén sự tức giận đôi khi có thể bùng phát thành những cơn thịnh nộ khó kiểm soát."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Leo",
+      "bodyText": "Sao Hỏa ở Sư Tử gắn liền với sự kiêu hãnh, năng lượng sáng tạo và mong muốn khẳng định vị thế. Bạn thường có xu hướng hành động với phong thái đĩnh đạc, thích thu hút sự chú ý và có tố chất lãnh đạo bẩm sinh. Cần lưu ý rằng cái tôi quá cao đôi khi có thể khiến bạn trở nên độc đoán và thiếu nhượng bộ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Virgo",
+      "bodyText": "Sao Hỏa ở Xử Nữ biểu tượng cho hành động có tổ chức, sự tỉ mỉ và khao khát đạt đến sự hoàn hảo. Bạn thường có xu hướng lên kế hoạch cẩn thận trước khi làm, chú trọng chi tiết và không ngừng nỗ lực cải thiện hiệu suất. Cần chú ý rằng việc quá tập trung vào những lỗi nhỏ đôi khi có thể làm chậm tiến độ chung của bạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Libra",
+      "bodyText": "Sao Hỏa ở Thiên Bình đại diện cho hành động ngoại giao, sự do dự và mong muốn duy trì trạng thái cân bằng. Bạn thường có xu hướng hợp tác cùng người khác, tránh xung đột trực tiếp và sử dụng sự duyên dáng để đạt mục đích. Cần lưu ý rằng sự thiếu quyết đoán đôi khi có thể khiến bạn để lỡ những cơ hội quan trọng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Scorpio",
+      "bodyText": "Sao Hỏa ở Thiên Yết mang đến sức mạnh ý chí phi thường, chiến lược sắc bén và khả năng tái sinh mạnh mẽ. Bạn thường có xu hướng hành động trong im lặng, dồn toàn bộ tâm trí cho mục tiêu và không ngại những thử thách khắc nghiệt. Cần chú ý rằng xu hướng thù dai đôi khi có thể khiến bạn tự chuốc lấy những năng lượng tiêu cực."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Sagittarius",
+      "bodyText": "Sao Hỏa ở Nhân Mã tượng trưng cho sự nhiệt tình, tính phiêu lưu và hành động dựa trên lý tưởng lớn. Bạn thường có xu hướng thích những trải nghiệm mới mẻ, làm việc theo cảm hứng và luôn giữ tinh thần lạc quan. Cần chú ý rằng sự bốc đồng đôi khi có thể khiến bạn đưa ra những cam kết mà mình không thể thực hiện."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Capricorn",
+      "bodyText": "Sao Hỏa ở Ma Kết biểu trưng cho tham vọng, tính kỷ luật và khả năng hoạch định chiến lược dài hạn. Bạn thường có xu hướng hành động với mục đích rõ ràng, kiểm soát tốt năng lượng và luôn hướng đến sự nghiệp vững chắc. Cần chú ý rằng sự khắt khe đôi khi có thể khiến bạn trở nên tàn nhẫn và bỏ qua yếu tố cảm xúc."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Aquarius",
+      "bodyText": "Sao Hỏa ở Bảo Bình mang lại hành động đột phá, tinh thần phản kháng và khao khát cải cách. Bạn thường có xu hướng làm việc độc lập, sử dụng tư duy sáng tạo để giải quyết vấn đề và thích đi ngược lại đám đông. Cần chú ý rằng sự nổi loạn vô cớ đôi khi có thể khiến bạn tự cô lập mình khỏi tập thể."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Mars_in_Pisces",
+      "bodyText": "Sao Hỏa ở Song Ngư đại diện cho hành động dịu dàng, năng lượng thất thường và động lực bắt nguồn từ lòng trắc ẩn. Bạn thường có xu hướng tránh né đối đầu, hành động theo trực giác và thích giúp đỡ những người yếu thế hơn. Cần chú ý rằng sự thiếu định hướng đôi khi có thể khiến năng lượng của bạn bị phân tán hoặc lợi dụng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Aries",
+      "bodyText": "Sao Mộc ở Bạch Dương biểu trưng cho sự tự tin, tinh thần tiên phong và niềm tin mãnh liệt vào bản thân. Bạn thường có xu hướng gặp may mắn khi dám nghĩ dám làm, luôn sẵn sàng dẫn đầu và truyền cảm hứng cho người khác. Cần lưu ý rằng sự lạc quan thái quá đôi khi có thể khiến bạn đánh giá thấp những rủi ro tiềm ẩn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Taurus",
+      "bodyText": "Sao Mộc ở Kim Ngưu đại diện cho sự sung túc, khả năng thu hút tài chính và trân trọng vẻ đẹp tự nhiên. Bạn thường có xu hướng phát triển tốt nhất khi xây dựng nền tảng vững chắc, đầu tư thông minh và tận hưởng sự ổn định. Cần chú ý rằng xu hướng hưởng thụ quá đà đôi khi có thể dẫn đến sự trì trệ hoặc phung phí."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Gemini",
+      "bodyText": "Sao Mộc ở Song Tử mang đến may mắn thông qua trí tuệ, khả năng giao tiếp và sự kết nối rộng rãi. Bạn thường có xu hướng mở rộng tầm nhìn qua việc học hỏi liên tục, yêu thích trao đổi thông tin và nắm bắt cơ hội rất nhanh. Cần chú ý rằng việc phân tán năng lượng vào quá nhiều thứ đôi khi có thể khiến bạn thiếu đi sự chuyên sâu."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Cancer",
+      "bodyText": "Sao Mộc ở Cự Giải tượng trưng cho sự bảo bọc, gia đình và niềm tin xuất phát từ những giá trị truyền thống. Bạn thường có xu hướng thu hút sự thịnh vượng khi biết chăm sóc người khác, trân trọng cảm xúc và tạo ra môi trường an toàn. Cần chú ý rằng sự nhạy cảm quá mức đôi khi có thể làm cản trở những bước tiến vươn ra ngoài vùng an toàn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Leo",
+      "bodyText": "Sao Mộc ở Sư Tử gắn liền với sự hào phóng, lòng kiêu hãnh và nhu cầu được thể hiện tài năng cá nhân. Bạn thường có xu hướng gặp may mắn khi tự tin tỏa sáng, truyền năng lượng tích cực và dẫn dắt bằng trái tim ấm áp. Cần lưu ý rằng cái tôi được bơm phồng đôi khi có thể khiến bạn trở nên phô trương và thiếu khiêm tốn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Virgo",
+      "bodyText": "Sao Mộc ở Xử Nữ biểu tượng cho sự hoàn thiện, tinh thần phục vụ và khả năng tối ưu hóa mọi nguồn lực. Bạn thường có xu hướng đạt được thành công thông qua sự chăm chỉ, phân tích chi tiết và mang lại giá trị thực tế cho cộng đồng. Cần chú ý rằng việc cầu toàn thái quá đôi khi có thể khiến bạn bỏ lỡ bức tranh toàn cảnh."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Libra",
+      "bodyText": "Sao Mộc ở Thiên Bình đại diện cho sự hài hòa, tinh thần ngoại giao và may mắn đến từ các mối quan hệ. Bạn thường có xu hướng phát triển tốt nhất khi hợp tác, trân trọng sự công bằng và biết cách tạo ra không gian thẩm mỹ. Cần chú ý rằng mong muốn chiều lòng tất cả đôi khi có thể khiến bạn đánh mất đi những nguyên tắc của riêng mình."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Scorpio",
+      "bodyText": "Sao Mộc ở Thiên Yết mang đến sức mạnh chuyển hóa, sự thấu hiểu sâu sắc và khả năng vượt qua những giai đoạn khủng hoảng. Bạn thường có xu hướng thu hút thành công khi đào sâu nghiên cứu, sử dụng trực giác và không ngại đối mặt với những sự thật trần trụi. Cần chú ý rằng sự ám ảnh về quyền lực đôi khi có thể khiến bạn trở nên độc đoán."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Sagittarius",
+      "bodyText": "Sao Mộc ở Nhân Mã tượng trưng cho sự thông thái, tầm nhìn rộng lớn và niềm tin không giới hạn vào những điều tốt đẹp. Bạn thường có xu hướng gặp nhiều cơ hội khi đi du lịch, học hỏi triết học và truyền đạt kiến thức. Cần lưu ý rằng sự tự tin mù quáng đôi khi có thể khiến bạn đưa ra những lời hứa vượt quá khả năng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Capricorn",
+      "bodyText": "Sao Mộc ở Ma Kết biểu trưng cho tham vọng, sự kỷ luật và khả năng xây dựng cơ đồ bền vững. Bạn thường có xu hướng đạt được địa vị xã hội thông qua sự kiên nhẫn, tinh thần trách nhiệm và chiến lược cẩn trọng. Cần chú ý rằng việc quá tập trung vào mục tiêu vật chất đôi khi có thể khiến bạn trở nên lạnh lùng với những giá trị tinh thần."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Aquarius",
+      "bodyText": "Sao Mộc ở Bảo Bình mang lại sự tiến bộ, tinh thần cải cách và niềm tin vào sức mạnh của tập thể. Bạn thường có xu hướng mở rộng tiềm năng khi tham gia các hoạt động cộng đồng, trân trọng sự đổi mới và tư duy vượt giới hạn. Cần chú ý rằng thái độ lập dị đôi khi có thể khiến lý tưởng của bạn khó được người khác chấp nhận."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Jupiter_in_Pisces",
+      "bodyText": "Sao Mộc ở Song Ngư đại diện cho lòng trắc ẩn, trực giác tâm linh và sự đồng cảm với nhân loại. Bạn thường có xu hướng thu hút những điều may mắn thông qua sự cho đi vô điều kiện, tin vào phép màu và sở hữu trí tưởng tượng phong phú. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn chìm đắm trong ảo mộng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Aries",
+      "bodyText": "Sao Thổ ở Bạch Dương biểu trưng cho bài học về sự tự chủ, kỷ luật cá nhân và khả năng lãnh đạo có trách nhiệm. Bạn thường có xu hướng gặp khó khăn ban đầu khi khẳng định bản thân, đòi hỏi bạn phải kiên nhẫn và học cách kiểm soát sự nóng vội. Cần chú ý rằng nỗi sợ thất bại đôi khi có thể khiến bạn ngập ngừng trước những cơ hội cần sự mạo hiểm."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Taurus",
+      "bodyText": "Sao Thổ ở Kim Ngưu đại diện cho thử thách về mặt tài chính, sự kiên định và nhu cầu xây dựng nền tảng vật chất vững chắc. Bạn thường có xu hướng phải làm việc chăm chỉ hơn người khác để đạt được sự an toàn, đòi hỏi tính kỷ luật cao trong quản lý nguồn lực. Cần chú ý rằng nỗi sợ thiếu thốn đôi khi có thể khiến bạn trở nên quá tằn tiện hoặc thực dụng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Gemini",
+      "bodyText": "Sao Thổ ở Song Tử mang đến bài học về giao tiếp, tư duy logic và khả năng tập trung sâu sắc. Bạn thường có xu hướng gặp trở ngại trong việc diễn đạt ban đầu, đòi hỏi bạn phải học cách suy nghĩ có hệ thống và nói lời đáng tin cậy. Cần chú ý rằng sự hoài nghi đôi khi có thể khiến bạn hạn chế tư duy và ngại mở lòng tiếp thu điều mới."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Cancer",
+      "bodyText": "Sao Thổ ở Cự Giải tượng trưng cho thử thách về cảm xúc, sự gắn kết gia đình và quá trình chữa lành tổn thương. Bạn thường có xu hướng cảm thấy thiếu an toàn về mặt tình cảm, đòi hỏi bạn phải tự xây dựng sự vững chãi từ bên trong thay vì phụ thuộc. Cần chú ý rằng việc xây tường phòng thủ quá cao đôi khi có thể khiến bạn tự cô lập mình."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Leo",
+      "bodyText": "Sao Thổ ở Sư Tử gắn liền với bài học về sự tự tôn, khả năng sáng tạo và trách nhiệm của người dẫn đầu. Bạn thường có xu hướng cảm thấy áp lực khi phải thể hiện bản thân, đòi hỏi bạn phải rèn luyện sự khiêm tốn và tỏa sáng bằng năng lực thực chất. Cần chú ý rằng sự khắt khe với chính mình đôi khi có thể bóp nghẹt niềm vui tự nhiên của bạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Virgo",
+      "bodyText": "Sao Thổ ở Xử Nữ biểu tượng cho sự rèn luyện về tính tỉ mỉ, tinh thần trách nhiệm và phương pháp làm việc chuyên nghiệp. Bạn thường có xu hướng đặt tiêu chuẩn rất cao, đòi hỏi bạn phải học cách chấp nhận sự không hoàn hảo và tối ưu hóa hiệu suất mà không bị kiệt sức. Cần chú ý rằng xu hướng soi xét đôi khi có thể tạo ra áp lực lớn cho cả bạn và người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Libra",
+      "bodyText": "Sao Thổ ở Thiên Bình đại diện cho bài học về sự công bằng, tính cam kết và cách duy trì các mối quan hệ bền vững. Bạn thường có xu hướng gặp thử thách trong việc tìm kiếm sự cân bằng, đòi hỏi bạn phải học cách chịu trách nhiệm trong cả tình yêu lẫn hợp tác. Cần chú ý rằng nỗi sợ bị từ chối đôi khi có thể khiến bạn mắc kẹt trong những mối quan hệ không phù hợp."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Scorpio",
+      "bodyText": "Sao Thổ ở Thiên Yết mang đến những thử thách về quyền lực, sự tin tưởng và khả năng chuyển hóa khủng hoảng. Bạn thường có xu hướng phải đối mặt với những vấn đề tâm lý sâu sắc, đòi hỏi bạn phải học cách buông bỏ kiểm soát và tin tưởng vào quá trình tái sinh. Cần chú ý rằng sự đa nghi và cố chấp đôi khi có thể ngăn cản bạn đạt được sự bình an nội tâm."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Sagittarius",
+      "bodyText": "Sao Thổ ở Nhân Mã tượng trưng cho bài học về đức tin, triết lý sống và trách nhiệm đối với kiến thức. Bạn thường có xu hướng tìm kiếm sự thật một cách nghiêm túc, đòi hỏi bạn phải học cách kết hợp lý tưởng với thực tế cuộc sống. Cần chú ý rằng sự cứng nhắc trong tư tưởng đôi khi có thể khiến bạn trở nên giáo điều và thiếu bao dung."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Capricorn",
+      "bodyText": "Sao Thổ ở Ma Kết biểu trưng cho quyền uy, tham vọng lớn và khả năng xây dựng sự nghiệp vững chắc từ hai bàn tay trắng. Bạn thường có xu hướng chịu đựng áp lực tốt, đòi hỏi bạn phải học cách sử dụng quyền lực một cách khôn ngoan và có đạo đức. Cần chú ý rằng việc quá đề cao thành tựu đôi khi có thể khiến bạn đánh mất đi những niềm vui giản dị."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Aquarius",
+      "bodyText": "Sao Thổ ở Bảo Bình mang lại bài học về trách nhiệm xã hội, tư duy khách quan và cách làm việc trong tập thể. Bạn thường có xu hướng đối mặt với thử thách trong việc dung hòa sự khác biệt, đòi hỏi bạn phải học cách tổ chức và hiện thực hóa những ý tưởng cải cách. Cần chú ý rằng sự cứng nhắc về mặt tư tưởng đôi khi có thể khiến bạn trở nên xa cách với số đông."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Saturn_in_Pisces",
+      "bodyText": "Sao Thổ ở Song Ngư đại diện cho thử thách về mặt tâm linh, lòng trắc ẩn và quá trình thiết lập ranh giới cảm xúc. Bạn thường có xu hướng dễ bị ảnh hưởng bởi nỗi đau của người khác, đòi hỏi bạn phải học cách bảo vệ bản thân và đưa ước mơ vào thực tế. Cần chú ý rằng nỗi sợ hãi mơ hồ đôi khi có thể khiến bạn dễ dàng rơi vào trạng thái trốn tránh."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Aries",
+      "bodyText": "Thiên Vương ở Bạch Dương biểu trưng cho sự đột phá, tinh thần tiên phong và khát khao tự do cá nhân mạnh mẽ. Bạn thường có xu hướng mang lại những ý tưởng táo bạo, thích thay đổi và không ngại phá vỡ các quy tắc cũ. Cần lưu ý rằng sự nổi loạn bốc đồng đôi khi có thể dẫn đến những quyết định thiếu suy nghĩ và gây ra xáo trộn không đáng có."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Taurus",
+      "bodyText": "Thiên Vương ở Kim Ngưu đại diện cho sự thay đổi trong cấu trúc tài chính, giá trị vật chất và cách tiếp cận với sự ổn định. Bạn thường có xu hướng tìm kiếm những phương pháp sáng tạo để quản lý tài nguyên, thích sự độc lập và không muốn bị ràng buộc bởi thói quen cũ. Cần chú ý rằng sự cố chấp trước những thay đổi tất yếu đôi khi có thể khiến bạn gặp căng thẳng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Gemini",
+      "bodyText": "Thiên Vương ở Song Tử mang đến tư duy khác biệt, sự đổi mới trong giao tiếp và khả năng tiếp cận kiến thức công nghệ cao. Bạn thường có xu hướng sáng tạo trong cách truyền đạt, thích khám phá thông tin mới và sở hữu bộ não cực kỳ linh hoạt. Cần lưu ý rằng việc thay đổi hướng đi quá nhanh đôi khi có thể khiến tư duy của bạn thiếu đi sự kiên định."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Cancer",
+      "bodyText": "Thiên Vương ở Cự Giải tượng trưng cho sự thay đổi về quan niệm gia đình, cội nguồn và cách thể hiện cảm xúc. Bạn thường có xu hướng mang đến sự độc đáo cho không gian sống, thích phá vỡ những truyền thống gia đình cứng nhắc và tìm kiếm sự tự do tinh thần. Cần chú ý rằng sự xáo trộn cảm xúc đột ngột đôi khi có thể khiến bạn cảm thấy chơi vơi."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Leo",
+      "bodyText": "Thiên Vương ở Sư Tử gắn liền với sự nổi loạn trong sáng tạo, cách thể hiện bản thân và những thay đổi về nghệ thuật. Bạn thường có xu hướng thể hiện cá tính một cách độc nhất, thu hút sự chú ý bằng phong cách khác biệt và không chịu tuân theo bất kỳ khuôn mẫu nào. Cần lưu ý rằng cái tôi quá mức lập dị đôi khi có thể khiến bạn khó hòa nhập với tập thể."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Virgo",
+      "bodyText": "Thiên Vương ở Xử Nữ biểu tượng cho sự đổi mới trong công việc, công nghệ y tế và phương pháp tổ chức cuộc sống. Bạn thường có xu hướng tìm ra những cách thức làm việc tối ưu hơn, áp dụng các kỹ thuật tiên tiến và thích sự hiệu quả. Cần chú ý rằng sự căng thẳng thần kinh do thay đổi môi trường làm việc đôi khi có thể ảnh hưởng đến sức khỏe của bạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Libra",
+      "bodyText": "Thiên Vương ở Thiên Bình đại diện cho sự thay đổi về quan niệm hôn nhân, công lý xã hội và các mối quan hệ đối tác. Bạn thường có xu hướng tìm kiếm sự tự do trong tình yêu, đề cao tính công bằng độc đáo và thích những mối quan hệ ít ràng buộc. Cần chú ý rằng sự xa cách và thay đổi thái độ đột ngột đôi khi có thể phá vỡ những liên kết bền vững."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Scorpio",
+      "bodyText": "Thiên Vương ở Thiên Yết mang đến sự chuyển hóa sâu sắc, đột phá về mặt tâm lý và khát khao lật tẩy những bí mật. Bạn thường có xu hướng tiếp cận sự sống và cái chết với góc nhìn mới, không sợ hãi trước khủng hoảng và sở hữu trực giác sắc sảo. Cần chú ý rằng sự hủy diệt để tái sinh đôi khi có thể mang tính tàn phá đối với những nền tảng cũ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Sagittarius",
+      "bodyText": "Thiên Vương ở Nhân Mã tượng trưng cho sự đổi mới trong triết lý sống, tôn giáo và khao khát tự do khám phá thế giới. Bạn thường có xu hướng thách thức những niềm tin giáo điều, mang tư tưởng tiến bộ và thích những chuyến hành trình mang tính khai sáng. Cần lưu ý rằng sự cuồng tín vào những lý tưởng mới đôi khi có thể khiến bạn mất đi sự khách quan."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Capricorn",
+      "bodyText": "Thiên Vương ở Ma Kết biểu trưng cho sự thay đổi trong cấu trúc xã hội, chính trị và cách tổ chức quyền lực. Bạn thường có xu hướng cải tổ các hệ thống cũ, mang tư duy thực tế nhưng vẫn đề cao sự tiến bộ và độc lập. Cần chú ý rằng sự xung đột giữa khát khao tự do và luật lệ cứng nhắc đôi khi có thể tạo ra những biến động lớn trong sự nghiệp."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Aquarius",
+      "bodyText": "Thiên Vương ở Bảo Bình mang lại đỉnh cao của sự sáng tạo khoa học, lý tưởng nhân đạo và sức mạnh cộng đồng. Bạn thường có xu hướng đi trước thời đại, hành động vì lợi ích chung và trân trọng những cá nhân có tư duy khác biệt. Cần chú ý rằng sự tách biệt về mặt cảm xúc đôi khi có thể khiến bạn trở nên lạnh lùng với những vấn đề nhỏ nhặt của con người."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Uranus_in_Pisces",
+      "bodyText": "Thiên Vương ở Song Ngư đại diện cho sự thức tỉnh tâm linh, thay đổi về tiềm thức và khả năng sáng tạo nghệ thuật kỳ ảo. Bạn thường có xu hướng kết nối với những ý tưởng siêu việt, dễ dàng cảm nhận năng lượng vô hình và mong muốn giải phóng những khuôn mẫu tâm lý cũ. Cần chú ý rằng việc thiếu kết nối với thực tại đôi khi có thể khiến bạn chìm đắm trong ảo mộng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Aries",
+      "bodyText": "Hải Vương ở Bạch Dương biểu trưng cho những giấc mơ về sự độc lập, tinh thần anh hùng và lý tưởng hóa sức mạnh cá nhân. Bạn thường có xu hướng tin vào khả năng dẫn dắt của trực giác, khát khao chinh phục bằng niềm tin thay vì bạo lực. Cần chú ý rằng sự ảo tưởng về sức mạnh của bản thân đôi khi có thể khiến bạn đưa ra những hành động bốc đồng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Taurus",
+      "bodyText": "Hải Vương ở Kim Ngưu đại diện cho lý tưởng về vẻ đẹp tự nhiên, tài nguyên và khả năng chuyển hóa vật chất thành nghệ thuật. Bạn thường có xu hướng tìm kiếm sự thiêng liêng qua thiên nhiên, có cảm thụ tinh tế và thích cuộc sống bình yên, no đủ. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn dễ bị thất thoát hoặc lừa dối."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Gemini",
+      "bodyText": "Hải Vương ở Song Tử mang đến khả năng giao tiếp bằng trực giác, trí tưởng tượng ngôn từ phong phú và tư duy thơ ca. Bạn thường có xu hướng nhìn thế giới qua lăng kính đa chiều, dễ đồng cảm với nhiều luồng tư tưởng và học hỏi qua cảm nhận. Cần chú ý rằng sự thiếu rõ ràng trong giao tiếp đôi khi có thể dẫn đến những hiểu lầm hoặc thông tin sai lệch."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Cancer",
+      "bodyText": "Hải Vương ở Cự Giải tượng trưng cho sự nhạy cảm sâu sắc, lý tưởng hóa tình cảm gia đình và cội nguồn. Bạn thường có xu hướng mong muốn bảo vệ người khác bằng tình yêu thương vô điều kiện, sở hữu trực giác mạnh mẽ về cảm xúc của người thân. Cần chú ý rằng sự đắm chìm trong quá khứ đôi khi có thể khiến bạn khó thoát khỏi những tổn thương cũ."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Leo",
+      "bodyText": "Hải Vương ở Sư Tử gắn liền với những giấc mơ huy hoàng, sự lãng mạn trong nghệ thuật và lý tưởng hóa sự công nhận. Bạn thường có xu hướng truyền tải thông điệp tâm linh qua các tác phẩm sáng tạo, khao khát yêu đương mãnh liệt và luôn muốn mang lại niềm vui. Cần chú ý rằng việc tìm kiếm ảo ảnh hào quang đôi khi có thể khiến bạn thất vọng khi đối mặt với thực tế."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Virgo",
+      "bodyText": "Hải Vương ở Xử Nữ biểu tượng cho sự cống hiến thầm lặng, mong muốn chữa lành và lý tưởng hóa công việc phục vụ. Bạn thường có xu hướng tìm kiếm ý nghĩa thông qua việc giúp đỡ người khác, nhạy cảm với các vấn đề sức khỏe và có khả năng phân tích trực giác. Cần chú ý rằng sự cầu toàn kết hợp với sự mơ hồ đôi khi có thể khiến bạn dễ bị rối trí."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Libra",
+      "bodyText": "Hải Vương ở Thiên Bình đại diện cho lý tưởng về tình yêu hoàn hảo, sự hòa hợp xã hội và khả năng cảm thụ nghệ thuật tinh tế. Bạn thường có xu hướng khao khát một mối quan hệ không tì vết, đề cao công lý và muốn xây dựng một thế giới bình yên. Cần chú ý rằng việc né tránh xung đột bằng mọi giá đôi khi có thể khiến bạn bỏ lỡ những vấn đề cốt lõi cần giải quyết."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Scorpio",
+      "bodyText": "Hải Vương ở Thiên Yết mang đến sự nhạy cảm với những điều huyền bí, trực giác sâu sắc và khao khát chuyển hóa tâm hồn. Bạn thường có xu hướng thích khám phá ranh giới giữa sự sống và cái chết, tìm kiếm sự gắn kết mãnh liệt và thấu hiểu chiều sâu tâm lý. Cần chú ý rằng sự ám ảnh và nỗi sợ hãi mơ hồ đôi khi có thể khiến bạn dễ vướng vào những suy nghĩ tiêu cực."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Sagittarius",
+      "bodyText": "Hải Vương ở Nhân Mã tượng trưng cho đức tin bao la, lý tưởng hóa triết học và khao khát tìm kiếm sự thật tối thượng. Bạn thường có xu hướng nhìn đời với con mắt bao dung, thích mở rộng tầm nhìn qua tâm linh và luôn tin vào những phép màu. Cần chú ý rằng sự cuồng tín mù quáng đôi khi có thể khiến bạn dễ tin vào những giáo điều sai lệch."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Capricorn",
+      "bodyText": "Hải Vương ở Ma Kết biểu trưng cho sự hòa quyện giữa cấu trúc và trực giác, mong muốn xây dựng những lý tưởng thành thực tế vững chắc. Bạn thường có xu hướng sử dụng trí tưởng tượng để phục vụ công việc, khao khát tạo ra trật tự cho những điều hỗn độn và có tinh thần trách nhiệm cao. Cần chú ý rằng sự bi quan và thất vọng đôi khi có thể làm suy giảm niềm tin của bạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Aquarius",
+      "bodyText": "Hải Vương ở Bảo Bình mang lại những giấc mơ về sự bình đẳng, lý tưởng hóa cộng đồng và khao khát kết nối tâm linh đa dạng. Bạn thường có xu hướng tin vào sức mạnh của tập thể, trân trọng lòng nhân đạo và sẵn sàng hi sinh vì một tương lai tốt đẹp hơn. Cần chú ý rằng lý thuyết xa vời đôi khi có thể khiến bạn trở nên thiếu thực tế trong hành động cụ thể."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Neptune_in_Pisces",
+      "bodyText": "Hải Vương ở Song Ngư đại diện cho lòng trắc ẩn tuyệt đối, trực giác hòa quyện với vũ trụ và sức mạnh của tình yêu vô điều kiện. Bạn thường có xu hướng cảm nhận năng lượng một cách rõ rệt, dễ tha thứ và sở hữu tài năng nghệ thuật xuất chúng. Cần chú ý rằng việc thiếu ranh giới bảo vệ bản thân đôi khi có thể khiến bạn dễ bị lợi dụng bởi người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Aries",
+      "bodyText": "Diêm Vương ở Bạch Dương biểu trưng cho sự chuyển hóa qua hành động mãnh liệt, sức mạnh bản năng và khát khao phá vỡ giới hạn cá nhân. Bạn thường có xu hướng tìm kiếm sự tự do tuyệt đối, không ngần ngại đương đầu với thử thách để đạt được mục tiêu. Cần chú ý rằng sự quyết liệt quá mức đôi khi có thể biến thành thái độ áp đặt và gây tổn thương cho người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Taurus",
+      "bodyText": "Diêm Vương ở Kim Ngưu đại diện cho sự tái sinh giá trị vật chất, khao khát làm chủ tài nguyên và sức mạnh sự kiên định. Bạn thường có xu hướng bám trụ vững vàng trước những khủng hoảng, có khả năng biến không thành có và trân trọng sự an toàn. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở bước tiến của bạn."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Gemini",
+      "bodyText": "Diêm Vương ở Song Tử mang đến sức mạnh của ngôn từ, khả năng phân tích sâu sắc và khát khao chuyển hóa tư duy. Bạn thường có xu hướng sử dụng trí tuệ để tác động đến người khác, thích đào sâu chân lý và nhạy bén với thông tin. Cần chú ý rằng sự sắc sảo quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Cancer",
+      "bodyText": "Diêm Vương ở Cự Giải tượng trưng cho sự thay đổi tận gốc rễ về mặt cảm xúc, sức mạnh gia đình và quá trình chữa lành tổn thương. Bạn thường có xu hướng bảo vệ quyết liệt những người thân yêu, khao khát sự an toàn tuyệt đối và sở hữu trực giác sâu thẳm. Cần chú ý rằng sự kìm nén cảm xúc quá lâu đôi khi có thể dẫn đến những phản ứng bùng nổ tiêu cực."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Leo",
+      "bodyText": "Diêm Vương ở Sư Tử gắn liền với khát khao quyền lực, sự biến đổi qua sáng tạo và mong muốn để lại di sản huy hoàng. Bạn thường có xu hướng thể hiện cái tôi mạnh mẽ, sẵn sàng dẫn dắt và có khả năng thay đổi thế giới bằng tài năng của mình. Cần chú ý rằng cái tôi quá lớn đôi khi có thể khiến bạn trở nên độc đoán và khó lòng chấp nhận thất bại."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Virgo",
+      "bodyText": "Diêm Vương ở Xử Nữ biểu tượng cho sự chuyển hóa thông qua công việc, sức mạnh phân tích và khao khát hoàn thiện hệ thống. Bạn thường có xu hướng theo đuổi sự chính xác tuyệt đối, không ngừng cải tiến phương pháp và có năng lực phân loại chi tiết sắc bén. Cần chú ý rằng sự ám ảnh về tính hoàn hảo đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng và tự trừng phạt."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Libra",
+      "bodyText": "Diêm Vương ở Thiên Bình đại diện cho sự tái sinh thông qua các mối quan hệ, khát khao công lý xã hội và sức mạnh của sự hợp tác. Bạn thường có xu hướng tìm kiếm những liên kết sâu sắc, cố gắng duy trì sự cân bằng quyền lực và không ngại đối mặt với xung đột để tìm ra chân lý. Cần chú ý rằng xu hướng thao túng ngầm đôi khi có thể phá vỡ sự hòa hợp mà bạn luôn tìm kiếm."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Scorpio",
+      "bodyText": "Diêm Vương ở Thiên Yết mang đến sức mạnh chuyển hóa tối cao, khả năng đối mặt với phần tối của tâm hồn và khao khát tái sinh. Bạn thường có xu hướng tìm hiểu những điều bí ẩn, sở hữu ý chí kiên cường và khả năng phục hồi đáng kinh ngạc. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy những đau khổ không cần thiết."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Sagittarius",
+      "bodyText": "Diêm Vương ở Nhân Mã tượng trưng cho sự phá vỡ giáo điều, khao khát tìm kiếm sự thật và sức mạnh của niềm tin. Bạn thường có xu hướng thách thức các hệ thống triết học cũ, thích mở rộng tầm nhìn qua những trải nghiệm tâm linh và học thuật. Cần chú ý rằng sự cứng nhắc trong tư tưởng đôi khi có thể khiến bạn áp đặt lý tưởng của mình lên người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Capricorn",
+      "bodyText": "Diêm Vương ở Ma Kết biểu trưng cho sự chuyển hóa cấu trúc quyền lực, khát khao đạt được địa vị và khả năng chịu đựng áp lực lớn. Bạn thường có xu hướng làm việc với tinh thần trách nhiệm cao nhất, sẵn sàng phá bỏ những luật lệ lỗi thời để xây dựng nền móng mới. Cần chú ý rằng sự lạnh lùng và tham vọng quá mức đôi khi có thể khiến bạn trở nên vô cảm trước nhu cầu của người khác."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Aquarius",
+      "bodyText": "Diêm Vương ở Bảo Bình mang lại sức mạnh thay đổi xã hội, khao khát tự do tập thể và sự đột phá trong công nghệ. Bạn thường có xu hướng nhìn xa trông rộng, hành động vì lý tưởng nhân đạo và mong muốn phá bỏ các rào cản truyền thống. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể gây ra những hậu quả khó lường đối với cộng đồng."
+    },
+    {
+      "subjectType": "PlanetInSign",
+      "subjectKey": "Pluto_in_Pisces",
+      "bodyText": "Diêm Vương ở Song Ngư đại diện cho sự tái sinh về mặt tâm linh, khát khao hòa tan bản ngã và sức mạnh của lòng trắc ẩn sâu sắc. Bạn thường có xu hướng kết nối mạnh mẽ với tiềm thức, sử dụng tình yêu thương để chữa lành và dễ dàng thấu cảm nỗi đau của vạn vật. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn dễ bị thao túng hoặc lạc lối."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Aries",
+      "bodyText": "Cung Mọc Bạch Dương mang đến ấn tượng đầu tiên về sự năng động, quyết đoán và tràn đầy nhiệt huyết. Bạn thường có xu hướng tiếp cận cuộc sống một cách trực diện, hành động nhanh nhẹn và luôn toát ra phong thái của người dẫn đầu. Cần lưu ý rằng sự vội vã đôi khi có thể khiến bạn bỏ qua những chi tiết tinh tế trong giao tiếp."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Taurus",
+      "bodyText": "Cung Mọc Kim Ngưu tạo nên vẻ ngoài điềm đạm, vững chãi và đáng tin cậy. Bạn thường có xu hướng bước vào những môi trường mới một cách từ tốn, cẩn trọng quan sát và ưu tiên sự thoải mái về mặt thể chất. Cần chú ý rằng sự kiên định quá mức đôi khi có thể khiến bạn tỏ ra bướng bỉnh trong mắt người khác."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Gemini",
+      "bodyText": "Cung Mọc Song Tử mang lại phong thái linh hoạt, trẻ trung và ánh mắt luôn toát lên sự tò mò. Bạn thường có xu hướng dễ dàng bắt chuyện, thích nghi nhanh với hoàn cảnh và sử dụng ngôn ngữ cơ thể vô cùng sinh động. Cần lưu ý rằng sự thay đổi liên tục đôi khi có thể khiến bạn trông có vẻ thiếu kiên định."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Cancer",
+      "bodyText": "Cung Mọc Cự Giải tạo ra ấn tượng về sự dịu dàng, nhạy cảm và đầy tính bảo bọc. Bạn thường có xu hướng rụt rè lúc ban đầu, cẩn thận đánh giá sự an toàn của môi trường xung quanh trước khi thực sự mở lòng. Cần chú ý rằng thái độ phòng thủ quá cao đôi khi có thể khiến người khác khó tiếp cận bạn."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Leo",
+      "bodyText": "Cung Mọc Sư Tử mang đến vẻ ngoài rạng rỡ, tự tin và có sức hút bẩm sinh. Bạn thường có xu hướng chú ý đến diện mạo, thích trở thành tâm điểm của sự chú ý và tỏa ra năng lượng vô cùng ấm áp. Cần lưu ý rằng phong thái quá tự tin đôi khi có thể tạo ra cảm giác áp đảo đối với những người xung quanh."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Virgo",
+      "bodyText": "Cung Mọc Xử Nữ tạo nên ấn tượng về sự thanh lịch, chỉn chu và thông minh thực tế. Bạn thường có xu hướng cẩn trọng trong từng lời nói, thích quan sát chi tiết và giữ thái độ khiêm tốn khi tiếp xúc với người lạ. Cần chú ý rằng sự cầu toàn đôi khi có thể khiến bạn tỏ ra hơi lo âu hoặc khắt khe."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Libra",
+      "bodyText": "Cung Mọc Thiên Bình mang lại phong thái duyên dáng, hòa nhã và khiếu thẩm mỹ tuyệt vời. Bạn thường có xu hướng cư xử lịch thiệp, dễ dàng tạo thiện cảm và luôn muốn duy trì sự hòa hợp trong mọi cuộc gặp gỡ. Cần chú ý rằng việc quá chú trọng đến hình ảnh đôi khi có thể khiến bạn đánh mất đi sự chân thật tự nhiên."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Scorpio",
+      "bodyText": "Cung Mọc Thiên Yết tạo ra ấn tượng về sự bí ẩn, cường độ cảm xúc mạnh mẽ và ánh nhìn thấu suốt. Bạn thường có xu hướng giữ kín những suy nghĩ cá nhân, tỏa ra sức hút từ sự điềm tĩnh và cẩn trọng quan sát động cơ của người khác. Cần chú ý rằng thái độ khép kín đôi khi có thể khiến mọi người cảm thấy bạn quá xa cách."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Sagittarius",
+      "bodyText": "Cung Mọc Nhân Mã mang đến vẻ ngoài cởi mở, thân thiện và nụ cười rạng rỡ. Bạn thường có xu hướng tiếp cận thế giới với sự lạc quan, thích sự tự do và không ngại chia sẻ những ý tưởng lớn lao ngay từ lần đầu gặp mặt. Cần chú ý rằng sự bộc trực đôi khi có thể khiến bạn thiếu đi sự tinh tế cần thiết."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Capricorn",
+      "bodyText": "Cung Mọc Ma Kết tạo nên ấn tượng về sự nghiêm túc, trưởng thành và tinh thần trách nhiệm cao. Bạn thường có xu hướng giữ thái độ chừng mực, chú trọng đến địa vị xã hội và luôn xuất hiện với một phong thái chuyên nghiệp. Cần chú ý rằng vẻ ngoài lạnh lùng đôi khi có thể vô tình tạo ra khoảng cách với những người muốn thân thiết."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Aquarius",
+      "bodyText": "Cung Mọc Bảo Bình mang lại vẻ ngoài độc đáo, thân thiện nhưng vẫn giữ một khoảng cách nhất định. Bạn thường có xu hướng thể hiện cá tính riêng biệt, thích những cuộc trò chuyện mang tính trí tuệ và không để tâm quá nhiều đến định kiến xã hội. Cần chú ý rằng sự tách biệt đôi khi có thể khiến bạn trông có vẻ khó nắm bắt."
+    },
+    {
+      "subjectType": "AngleInSign",
+      "subjectKey": "Ascendant_in_Pisces",
+      "bodyText": "Cung Mọc Song Ngư tạo ra ấn tượng về sự mộng mơ, dịu dàng và lòng trắc ẩn sâu sắc. Bạn thường có xu hướng hòa mình vào bầu không khí chung, dễ dàng đồng cảm và tỏa ra năng lượng vô cùng êm dịu. Cần chú ý rằng sự mơ hồ và thiếu ranh giới đôi khi có thể khiến bạn dễ bị ảnh hưởng bởi môi trường xung quanh."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_1",
+      "bodyText": "Mặt Trời ở Nhà 1 biểu trưng cho sức sống dồi dào, sự tự tin và cái tôi mạnh mẽ được bộc lộ rõ rệt ra bên ngoài. Bạn thường có xu hướng khao khát thể hiện bản thân, muốn trở thành trung tâm của sự chú ý và không ngại dẫn đầu trong các dự án cá nhân. Cần lưu ý rằng việc quá tập trung vào bản thân đôi khi có thể khiến bạn vô tình bỏ qua cảm nhận của những người xung quanh."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_2",
+      "bodyText": "Mặt Trời ở Nhà 2 đại diện cho sự tập trung vào giá trị cá nhân, tài chính và khát khao xây dựng nền tảng vật chất vững chắc. Bạn thường có xu hướng đánh giá sự thành công thông qua khả năng kiếm tiền và tận hưởng những món đồ chất lượng cao. Cần chú ý rằng sự gắn bó quá mức với vật chất có thể khiến bạn đánh giá thấp những giá trị tinh thần cốt lõi."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_3",
+      "bodyText": "Mặt Trời ở Nhà 3 mang đến sự linh hoạt trong tư duy, kỹ năng giao tiếp tốt và khát khao học hỏi không ngừng. Bạn thường có xu hướng thể hiện bản sắc qua ngôn từ, thích tương tác với môi trường xung quanh và chia sẻ ý tưởng một cách nhiệt tình. Cần lưu ý rằng sự phân tán quá nhiều mối quan tâm có thể khiến bạn gặp khó khăn trong việc tập trung chuyên sâu."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_4",
+      "bodyText": "Mặt Trời ở Nhà 4 tượng trưng cho sự gắn kết sâu sắc với gia đình, cội nguồn và nhu cầu tìm kiếm sự an toàn bên trong. Bạn thường có xu hướng dồn nhiều năng lượng để xây dựng tổ ấm, coi trọng những giá trị truyền thống và bảo vệ những người thân yêu. Cần chú ý rằng việc quá thu mình trong thế giới riêng có thể khiến bạn e ngại việc bước ra môi trường rộng lớn hơn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_5",
+      "bodyText": "Mặt Trời ở Nhà 5 gắn liền với khả năng sáng tạo rực rỡ, niềm vui sống và khao khát được tỏa sáng qua nghệ thuật hoặc tình yêu. Bạn thường có xu hướng tìm kiếm sự lãng mạn, thích vui chơi và không ngại thể hiện tài năng cá nhân. Cần lưu ý rằng nhu cầu được chú ý đôi khi có thể khiến bạn trở nên kiêu ngạo hoặc quá phụ thuộc vào sự tung hô của người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_6",
+      "bodyText": "Mặt Trời ở Nhà 6 biểu tượng cho sự tận tụy trong công việc, ý thức về sức khỏe và khát khao trở nên hữu ích. Bạn thường có xu hướng thể hiện cái tôi thông qua việc phục vụ, tổ chức cuộc sống ngăn nắp và chú trọng đến những chi tiết thực tế. Cần chú ý rằng sự cầu toàn quá mức có thể khiến bạn dễ rơi vào trạng thái căng thẳng hoặc tự gây áp lực cho bản thân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_7",
+      "bodyText": "Mặt Trời ở Nhà 7 đại diện cho nhu cầu tìm kiếm sự hoàn thiện thông qua các mối quan hệ, hôn nhân và sự hợp tác. Bạn thường có xu hướng tỏa sáng nhất khi làm việc cùng người khác, coi trọng sự công bằng và giỏi ngoại giao. Cần lưu ý rằng việc quá phụ thuộc vào sự đồng hành có thể khiến bạn đánh mất đi tính độc lập vốn có của mình."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_8",
+      "bodyText": "Mặt Trời ở Nhà 8 mang đến sự quan tâm sâu sắc đến những vấn đề tâm lý, sự chuyển hóa và những bí ẩn của cuộc sống. Bạn thường có xu hướng khao khát khám phá những điều bị che giấu, trải qua những giai đoạn tái sinh mạnh mẽ để trưởng thành. Cần chú ý rằng sự ám ảnh về quyền lực hoặc sự kiểm soát có thể khiến bạn tạo ra những xung đột không cần thiết."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_9",
+      "bodyText": "Mặt Trời ở Nhà 9 tượng trưng cho khát khao mở rộng tầm nhìn thông qua triết học, giáo dục đại học hoặc những chuyến đi xa. Bạn thường có xu hướng tìm kiếm chân lý, đam mê khám phá các nền văn hóa mới và sẵn sàng truyền bá niềm tin của mình. Cần lưu ý rằng sự tự tin vào lý tưởng cá nhân đôi khi có thể khiến bạn trở nên giáo điều và thiếu bao dung."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_10",
+      "bodyText": "Mặt Trời ở Nhà 10 biểu trưng cho tham vọng vươn lên đỉnh cao, sự nghiệp vững chắc và mong muốn đạt được danh tiếng xã hội. Bạn thường có xu hướng đặt mục tiêu cao, tỏa sáng trong vai trò lãnh đạo và muốn để lại di sản đáng tự hào. Cần chú ý rằng việc quá chú trọng đến thành tựu công việc có thể khiến bạn bỏ bê cuộc sống cá nhân và gia đình."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_11",
+      "bodyText": "Mặt Trời ở Nhà 11 mang lại lý tưởng xã hội mạnh mẽ, sự gắn kết với cộng đồng và những tầm nhìn hướng về tương lai. Bạn thường có xu hướng thể hiện bản thân tốt nhất trong làm việc nhóm, kết nối với những người bạn cùng chí hướng và ủng hộ những phong trào tiến bộ. Cần chú ý rằng sự tách biệt về mặt cảm xúc có thể khiến bạn đôi khi có vẻ lạnh lùng với những cá nhân cụ thể."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Sun_in_House_12",
+      "bodyText": "Mặt Trời ở Nhà 12 đại diện cho thế giới nội tâm phong phú, trực giác tâm linh và khao khát tìm kiếm sự bình yên tĩnh lặng. Bạn thường có xu hướng nạp năng lượng qua những khoảng thời gian ở một mình, thích giúp đỡ người khác một cách thầm lặng và có khả năng thấu cảm sâu sắc. Cần chú ý rằng xu hướng trốn tránh thực tại đôi khi có thể khiến bạn dễ bị lạc lối trong những ảo tưởng."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_1",
+      "bodyText": "Mặt Trăng ở Nhà 1 biểu trưng cho sự nhạy cảm, trực giác mạnh mẽ và phản ứng cảm xúc được bộc lộ rõ ràng. Bạn thường có xu hướng thay đổi tâm trạng khá nhanh, dễ dàng nắm bắt cảm nhận của người khác và thể hiện sự quan tâm một cách tự nhiên. Cần lưu ý rằng việc quá để tâm đến cảm xúc đôi khi có thể khiến bạn đưa ra quyết định thiếu đi tính lý trí."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_2",
+      "bodyText": "Mặt Trăng ở Nhà 2 đại diện cho nhu cầu an toàn về mặt vật chất và sự gắn bó cảm xúc với những tài sản cá nhân. Bạn thường có xu hướng tìm kiếm sự bình yên thông qua việc tích lũy, chi tiêu theo tâm trạng và đánh giá bản thân dựa trên khả năng tài chính. Cần chú ý rằng nỗi sợ thiếu thốn có thể khiến bạn trở nên quá bám víu vào những thứ thuộc về thế giới vật chất."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_3",
+      "bodyText": "Mặt Trăng ở Nhà 3 mang đến sự linh hoạt trong giao tiếp, trí tò mò và khả năng kết nối cảm xúc thông qua ngôn từ. Bạn thường có xu hướng thích trò chuyện để giải tỏa tâm lý, học hỏi thông qua trực giác và gắn bó với anh chị em hoặc hàng xóm. Cần lưu ý rằng sự phân tán cảm xúc đôi khi có thể khiến bạn gặp khó khăn trong việc duy trì sự kiên định."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_4",
+      "bodyText": "Mặt Trăng ở Nhà 4 tượng trưng cho sự gắn kết sâu sắc với cội nguồn, nhu cầu về một mái ấm an toàn và tình cảm gia đình bền chặt. Bạn thường có xu hướng muốn bảo vệ người thân, thích chăm chút cho không gian sống và thường xuyên hồi tưởng về quá khứ. Cần chú ý rằng việc quá đắm chìm trong những kỷ niệm đôi khi có thể ngăn cản bạn tiến về phía trước."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_5",
+      "bodyText": "Mặt Trăng ở Nhà 5 gắn liền với nhu cầu bộc lộ cảm xúc qua sáng tạo, tình yêu lãng mạn và sự kết nối với trẻ em. Bạn thường có xu hướng tìm kiếm niềm vui trong những hoạt động nghệ thuật, yêu đương bằng cả trái tim và thích sự kịch tính. Cần lưu ý rằng khao khát được chú ý đôi khi có thể khiến bạn phản ứng thái quá nếu cảm thấy bị bỏ rơi."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_6",
+      "bodyText": "Mặt Trăng ở Nhà 6 biểu tượng cho nhu cầu chăm sóc người khác, sự gắn bó với thói quen hàng ngày và sự nhạy cảm về sức khỏe. Bạn thường có xu hướng tìm thấy sự an tâm khi làm việc hữu ích, chăm sóc vật nuôi và giữ gìn trật tự trong cuộc sống. Cần chú ý rằng sự lo lắng quá mức về những chi tiết nhỏ có thể ảnh hưởng tiêu cực đến trạng thái tinh thần của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_7",
+      "bodyText": "Mặt Trăng ở Nhà 7 đại diện cho khao khát tìm kiếm sự an toàn cảm xúc thông qua các mối quan hệ đối tác hoặc hôn nhân. Bạn thường có xu hướng đặt nhu cầu của người khác lên hàng đầu, rất nhạy bén với thái độ của đối phương và mong muốn một sự gắn kết hài hòa. Cần lưu ý rằng sự phụ thuộc tình cảm đôi khi có thể khiến bạn đánh mất đi sự tự chủ cá nhân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_8",
+      "bodyText": "Mặt Trăng ở Nhà 8 mang đến cường độ cảm xúc sâu sắc, khả năng trực giác sắc bén và sự nhạy cảm với những điều bí ẩn. Bạn thường có xu hướng khao khát những mối liên kết thân mật mãnh liệt, không ngại đối mặt với những khủng hoảng để chuyển hóa bản thân. Cần chú ý rằng xu hướng che giấu cảm xúc thật đôi khi có thể tạo ra những rào cản ngăn cản sự thấu hiểu từ người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_9",
+      "bodyText": "Mặt Trăng ở Nhà 9 tượng trưng cho nhu cầu tìm kiếm ý nghĩa cuộc sống, khao khát khám phá thế giới và học hỏi những triết lý mới. Bạn thường có xu hướng cảm thấy thoải mái nhất khi đi du lịch, tiếp thu kiến thức bằng trực giác và luôn giữ vững niềm tin của mình. Cần lưu ý rằng sự thay đổi liên tục về mặt lý tưởng đôi khi có thể khiến bạn trở nên thiếu thực tế."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_10",
+      "bodyText": "Mặt Trăng ở Nhà 10 biểu trưng cho nhu cầu được xã hội công nhận, sự nghiệp gắn liền với việc chăm sóc hoặc phục vụ công chúng. Bạn thường có xu hướng nhạy cảm với hình ảnh nghề nghiệp, dễ dàng thấu hiểu nhu cầu của đám đông và coi trọng địa vị. Cần chú ý rằng việc quá bận tâm đến danh tiếng đôi khi có thể khiến bạn lơ là những nhu cầu tình cảm cá nhân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_11",
+      "bodyText": "Mặt Trăng ở Nhà 11 mang lại nhu cầu gắn kết với cộng đồng, lý tưởng xã hội và những tình bạn sâu sắc. Bạn thường có xu hướng tìm kiếm sự an toàn trong các hội nhóm, thích chia sẻ ước mơ và luôn ủng hộ những phong trào mang tính nhân đạo. Cần chú ý rằng việc phân tán năng lượng cho quá nhiều mối quan hệ đôi khi có thể khiến bạn bỏ quên những người thực sự thân thiết."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Moon_in_House_12",
+      "bodyText": "Mặt Trăng ở Nhà 12 đại diện cho thế giới nội tâm thầm kín, sự nhạy cảm tâm linh và khao khát được chữa lành. Bạn thường có xu hướng giữ kín những cảm xúc sâu thẳm, đồng cảm vô điều kiện với nỗi đau của người khác và cần nhiều thời gian ở một mình để nạp lại năng lượng. Cần chú ý rằng sự thiếu ranh giới cảm xúc đôi khi có thể khiến bạn dễ dàng bị kiệt sức."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_1",
+      "bodyText": "Sao Thủy ở Nhà 1 biểu trưng cho tư duy nhạy bén, khả năng giao tiếp ấn tượng và khao khát bộc lộ ý tưởng một cách trực tiếp. Bạn thường có xu hướng tò mò về mọi thứ, ăn nói lưu loát và luôn muốn học hỏi những điều mới mẻ. Cần lưu ý rằng sự nhanh nhạy đôi khi có thể khiến bạn nói trước khi suy nghĩ kỹ, dẫn đến những hiểu lầm không đáng có."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_2",
+      "bodyText": "Sao Thủy ở Nhà 2 đại diện cho tư duy thực tế, khả năng quản lý tài chính thông minh và sự nhạy bén trong kinh doanh. Bạn thường có xu hướng suy nghĩ cẩn trọng về cách gia tăng tài sản, đánh giá vấn đề dựa trên tính ứng dụng và thích những ý tưởng sinh lời. Cần chú ý rằng việc quá tập trung vào lợi ích vật chất đôi khi có thể hạn chế tầm nhìn sáng tạo của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_3",
+      "bodyText": "Sao Thủy ở Nhà 3 mang đến sự linh hoạt tối đa trong giao tiếp, trí tuệ sắc sảo và niềm khao khát thông tin không ngừng. Bạn thường có xu hướng học hỏi rất nhanh, thích thảo luận sôi nổi và dễ dàng kết nối với những người xung quanh. Cần lưu ý rằng sự phân tán sự chú ý vào quá nhiều chủ đề đôi khi có thể khiến bạn thiếu đi sự kiên nhẫn để đào sâu một lĩnh vực."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_4",
+      "bodyText": "Sao Thủy ở Nhà 4 tượng trưng cho tư duy hướng về quá khứ, sự gắn kết trí tuệ với gia đình và khả năng thấu hiểu cảm xúc của người thân. Bạn thường có xu hướng thích trò chuyện về những kỷ niệm, quan tâm đến nguồn cội và lưu giữ thông tin một cách sâu sắc. Cần chú ý rằng sự chủ quan đôi khi có thể khiến lý trí của bạn bị che mờ bởi những tình cảm cá nhân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_5",
+      "bodyText": "Sao Thủy ở Nhà 5 gắn liền với khả năng sáng tạo ngôn từ, tư duy lãng mạn và khao khát truyền đạt ý tưởng thông qua nghệ thuật. Bạn thường có xu hướng thích thể hiện trí thông minh một cách hóm hỉnh, yêu thích các trò chơi trí tuệ và ăn nói rất có sức hút. Cần lưu ý rằng sự khoa trương trong giao tiếp đôi khi có thể khiến người khác cảm thấy bạn thiếu đi sự chân thành."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_6",
+      "bodyText": "Sao Thủy ở Nhà 6 biểu tượng cho tư duy phân tích, kỹ năng tổ chức chi tiết và khao khát tối ưu hóa quy trình làm việc. Bạn thường có xu hướng chú ý đến từng tiểu tiết, giao tiếp rành mạch và rất quan tâm đến các vấn đề sức khỏe. Cần chú ý rằng tính cầu toàn và hay phê bình đôi khi có thể gây áp lực cho cả bạn lẫn những đồng nghiệp xung quanh."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_7",
+      "bodyText": "Sao Thủy ở Nhà 7 đại diện cho khả năng ngoại giao xuất sắc, tư duy khách quan và khao khát kết nối trí tuệ trong các mối quan hệ. Bạn thường có xu hướng thích thảo luận cùng đối tác, lắng nghe nhiều góc nhìn và luôn cố gắng tìm ra giải pháp công bằng. Cần chú ý rằng mong muốn làm hài lòng tất cả đôi khi có thể khiến bạn do dự và khó đưa ra quyết định độc lập."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_8",
+      "bodyText": "Sao Thủy ở Nhà 8 mang đến tư duy sâu sắc, kỹ năng điều tra nhạy bén và khao khát tìm hiểu những sự thật bị che giấu. Bạn thường có xu hướng suy nghĩ rất thấu đáo, ăn nói sắc sảo và không dễ dàng tin tưởng vào những điều hời hợt. Cần lưu ý rằng sự đa nghi quá mức đôi khi có thể khiến lời nói của bạn trở nên mang tính dò xét và thiếu thân thiện."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_9",
+      "bodyText": "Sao Thủy ở Nhà 9 tượng trưng cho tư duy vĩ mô, tình yêu với triết lý sống và khao khát khám phá các nền văn hóa mới. Bạn thường có xu hướng thích tranh luận về những ý tưởng lớn, học hỏi qua những chuyến đi xa và giao tiếp một cách nhiệt thành. Cần lưu ý rằng việc bỏ qua những chi tiết nhỏ lẻ đôi khi có thể khiến các kế hoạch của bạn trở nên thiếu tính khả thi."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_10",
+      "bodyText": "Sao Thủy ở Nhà 10 biểu trưng cho tư duy chiến lược, khả năng giao tiếp chuyên nghiệp và khao khát đạt được vị thế thông qua trí tuệ. Bạn thường có xu hướng suy nghĩ nghiêm túc về sự nghiệp, phát ngôn cẩn trọng và rất giỏi trong việc lập kế hoạch dài hạn. Cần chú ý rằng sự cứng nhắc trong công việc đôi khi có thể khiến bạn gặp khó khăn trong việc linh hoạt xử lý tình huống."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_11",
+      "bodyText": "Sao Thủy ở Nhà 11 mang lại tư duy tiến bộ, những ý tưởng cải cách và khao khát giao lưu trí tuệ trong cộng đồng. Bạn thường có xu hướng nhìn xa trông rộng, thích kết nối với những nhóm người đa dạng và luôn đưa ra những giải pháp đột phá. Cần chú ý rằng lý thuyết quá xa vời đôi khi có thể khiến những đề xuất của bạn trở nên khó áp dụng vào thực tế."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mercury_in_House_12",
+      "bodyText": "Sao Thủy ở Nhà 12 đại diện cho tư duy trực giác, khả năng giao tiếp không lời và khao khát khám phá những điều huyền bí. Bạn thường có xu hướng suy nghĩ bằng hình ảnh, thấu hiểu tiềm thức và giữ kín những ý tưởng sâu sắc cho riêng mình. Cần chú ý rằng sự thiếu rõ ràng trong ngôn từ đôi khi có thể khiến bạn gặp khó khăn trong việc truyền đạt ý muốn thực sự."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_1",
+      "bodyText": "Sao Kim ở Nhà 1 biểu trưng cho sức hút bẩm sinh, vẻ ngoài duyên dáng và khao khát được yêu thương. Bạn thường có xu hướng dễ dàng tạo thiện cảm với người đối diện, chăm chút cho ngoại hình và luôn tỏa ra năng lượng thân thiện. Cần lưu ý rằng việc quá chú trọng đến việc làm hài lòng người khác đôi khi có thể khiến bạn đánh mất đi bản sắc cá nhân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_2",
+      "bodyText": "Sao Kim ở Nhà 2 đại diện cho tình yêu đối với vật chất, khả năng thu hút tài chính và sự trân trọng cái đẹp. Bạn thường có xu hướng tìm kiếm sự an toàn thông qua tài sản, thích những món đồ chất lượng và biết cách tận hưởng những thú vui cảm giác. Cần chú ý rằng sự gắn bó quá mức với vật chất đôi khi có thể khiến bạn trở nên thực dụng trong tình cảm."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_3",
+      "bodyText": "Sao Kim ở Nhà 3 mang đến sự quyến rũ trong giao tiếp, ngôn từ ngọt ngào và khát khao kết nối xã hội. Bạn thường có xu hướng dễ dàng làm quen với người mới, thích trao đổi những câu chuyện thú vị và luôn giữ thái độ hòa nhã với mọi người xung quanh. Cần lưu ý rằng sự hời hợt trong các mối quan hệ đôi khi có thể khiến bạn khó xây dựng được những liên kết sâu sắc."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_4",
+      "bodyText": "Sao Kim ở Nhà 4 tượng trưng cho tình yêu gia đình, sự gắn bó với cội nguồn và mong muốn tạo dựng một không gian sống thẩm mỹ. Bạn thường có xu hướng tìm kiếm sự bình yên trong tổ ấm, thích chăm sóc người thân và thường dồn nhiều tâm huyết để trang trí nhà cửa. Cần chú ý rằng việc quá khép mình trong vùng an toàn đôi khi có thể cản trở những trải nghiệm mới của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_5",
+      "bodyText": "Sao Kim ở Nhà 5 gắn liền với tình yêu lãng mạn, niềm đam mê nghệ thuật và khao khát thể hiện bản thân một cách rực rỡ. Bạn thường có xu hướng bị thu hút bởi sự sáng tạo, thích những cuộc vui chơi và tỏa sáng rạng ngời khi ở bên người mình yêu. Cần lưu ý rằng sự mong đợi quá nhiều vào tính kịch tính đôi khi có thể khiến bạn mau chán khi tình cảm bước vào giai đoạn ổn định."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_6",
+      "bodyText": "Sao Kim ở Nhà 6 biểu tượng cho sự tận tụy, cách thể hiện tình yêu thông qua những hành động chăm sóc và sự chú ý đến chi tiết. Bạn thường có xu hướng muốn giúp đỡ người khác, đánh giá cao môi trường làm việc hài hòa và luôn giữ gìn sức khỏe. Cần chú ý rằng việc soi xét những khuyết điểm nhỏ đôi khi có thể khiến bạn đặt ra tiêu chuẩn quá khắt khe cho đối phương."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_7",
+      "bodyText": "Sao Kim ở Nhà 7 đại diện cho khao khát mãnh liệt về sự đồng hành, hôn nhân và sự cân bằng trong các mối quan hệ. Bạn thường có xu hướng tỏa sáng khi có đối tác bên cạnh, rất giỏi ngoại giao và luôn biết cách duy trì sự hòa hợp. Cần chú ý rằng việc phụ thuộc quá mức vào người khác đôi khi có thể khiến bạn nhượng bộ những giới hạn quan trọng của bản thân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_8",
+      "bodyText": "Sao Kim ở Nhà 8 mang đến tình yêu sâu đậm, sức quyến rũ bí ẩn và khao khát những kết nối tâm hồn mãnh liệt. Bạn thường có xu hướng tìm kiếm sự chân thật tuyệt đối trong tình cảm, không ngại những thử thách và có khả năng chữa lành cho người khác. Cần chú ý rằng sự ghen tuông và ám ảnh kiểm soát đôi khi có thể tạo ra bầu không khí ngột ngạt trong mối quan hệ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_9",
+      "bodyText": "Sao Kim ở Nhà 9 tượng trưng cho tình yêu tự do, sự cuốn hút từ các nền văn hóa khác nhau và khao khát mở rộng tầm nhìn. Bạn thường có xu hướng bị thu hút bởi những người có triết lý sống độc đáo, thích đi du lịch và đánh giá cao sự trung thực. Cần lưu ý rằng xu hướng lảng tránh sự trói buộc đôi khi có thể khiến bạn ngại ngần trước những cam kết lâu dài."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_10",
+      "bodyText": "Sao Kim ở Nhà 10 biểu trưng cho sức hút trong sự nghiệp, khả năng ngoại giao tốt tại nơi làm việc và khao khát địa vị. Bạn thường có xu hướng xây dựng hình ảnh chuyên nghiệp, dễ nhận được sự ủng hộ từ cấp trên và thường chọn đối tác có nền tảng vững chắc. Cần chú ý rằng việc quá quan tâm đến danh tiếng đôi khi có thể khiến tình cảm của bạn thiếu đi sự chân thành sâu sắc."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_11",
+      "bodyText": "Sao Kim ở Nhà 11 mang lại tình bạn rộng mở, lý tưởng xã hội và khao khát một tình yêu dựa trên sự bình đẳng. Bạn thường có xu hướng gắn kết với những người có chung đam mê, cư xử thân thiện và trân trọng sự độc lập trong các mối quan hệ. Cần chú ý rằng thái độ xa cách về mặt cảm xúc đôi khi có thể khiến người yêu cảm thấy bạn giống một người bạn hơn là một người tình."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Venus_in_House_12",
+      "bodyText": "Sao Kim ở Nhà 12 đại diện cho tình yêu vô điều kiện, lòng trắc ẩn sâu sắc và khao khát những kết nối mang tính tâm linh. Bạn thường có xu hướng yêu một cách thầm lặng, sẵn sàng hi sinh vì đối phương và dễ dàng thấu hiểu những nỗi đau ẩn giấu. Cần chú ý rằng xu hướng lý tưởng hóa người yêu đôi khi có thể khiến bạn gặp ảo tưởng hoặc dễ bị lợi dụng."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_1",
+      "bodyText": "Sao Hỏa ở Nhà 1 biểu trưng cho năng lượng dồi dào, tinh thần tiên phong và khát khao khẳng định bản thân một cách mạnh mẽ. Bạn thường có xu hướng hành động trực diện, không ngại khó khăn và luôn toát ra phong thái của một chiến binh. Cần lưu ý rằng sự nóng vội và thiếu kiên nhẫn đôi khi có thể khiến bạn gây ra những xung đột không cần thiết với người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_2",
+      "bodyText": "Sao Hỏa ở Nhà 2 đại diện cho động lực kiếm tiền, sự kiên trì trong công việc và khát khao bảo vệ tài sản cá nhân. Bạn thường có xu hướng làm việc rất chăm chỉ để đạt được sự an toàn vật chất, tiêu tiền phóng khoáng và bảo vệ quyền lợi của mình một cách quyết liệt. Cần chú ý rằng sự cố chấp đôi khi có thể khiến bạn trở nên bảo thủ trước những phương pháp tài chính mới."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_3",
+      "bodyText": "Sao Hỏa ở Nhà 3 mang đến sự sắc sảo trong giao tiếp, tư duy tranh luận và khát khao thể hiện quan điểm cá nhân. Bạn thường có xu hướng nói năng thẳng thắn, phản ứng nhanh với thông tin và thích những cuộc trao đổi trí tuệ sôi nổi. Cần lưu ý rằng sự sắc bén quá mức đôi khi có thể khiến lời nói của bạn trở thành vũ khí làm tổn thương người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_4",
+      "bodyText": "Sao Hỏa ở Nhà 4 tượng trưng cho năng lượng tập trung vào gia đình, bản năng bảo vệ tổ ấm và khao khát làm chủ không gian riêng. Bạn thường có xu hướng dồn nhiều tâm huyết cho việc nhà, bảo vệ người thân mạnh mẽ nhưng cũng dễ xảy ra tranh cãi trong nội bộ. Cần chú ý rằng việc kìm nén sự tức giận đôi khi có thể khiến những cảm xúc tiêu cực bùng phát bất ngờ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_5",
+      "bodyText": "Sao Hỏa ở Nhà 5 gắn liền với niềm đam mê cháy bỏng, năng lượng sáng tạo và khát khao chiến thắng trong tình yêu hoặc thể thao. Bạn thường có xu hướng theo đuổi mục tiêu một cách lãng mạn, thích kịch tính và tận hưởng niềm vui một cách cuồng nhiệt. Cần lưu ý rằng sự bốc đồng đôi khi có thể khiến bạn lao vào những rủi ro không lường trước được."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_6",
+      "bodyText": "Sao Hỏa ở Nhà 6 biểu tượng cho tinh thần làm việc không mệt mỏi, sự hiệu quả và khát khao hoàn thiện các kỹ năng. Bạn thường có xu hướng cống hiến hết mình cho công việc, đòi hỏi sự chính xác cao và rất quan tâm đến việc rèn luyện thể chất. Cần chú ý rằng áp lực tự đặt ra đôi khi có thể khiến bạn dễ rơi vào trạng thái căng thẳng hoặc kiệt sức."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_7",
+      "bodyText": "Sao Hỏa ở Nhà 7 đại diện cho động lực tìm kiếm đối tác, sự nhiệt tình trong các mối quan hệ nhưng cũng tiềm ẩn nhiều cọ xát. Bạn thường có xu hướng chủ động trong giao tiếp, thích những người có cá tính mạnh và không ngại tranh luận để làm rõ vấn đề. Cần chú ý rằng sự cạnh tranh ngầm đôi khi có thể phá vỡ sự hòa hợp cần thiết trong hôn nhân hoặc hợp tác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_8",
+      "bodyText": "Sao Hỏa ở Nhà 8 mang đến ý chí sinh tồn mạnh mẽ, sức mạnh chuyển hóa và khát khao khám phá những góc khuất sâu thẳm. Bạn thường có xu hướng dồn toàn bộ tâm trí cho mục tiêu, sở hữu năng lượng bền bỉ và không lùi bước trước khủng hoảng. Cần chú ý rằng xu hướng kiểm soát và ghen tuông đôi khi có thể khiến bạn tự tạo ra những rào cản tâm lý nặng nề."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_9",
+      "bodyText": "Sao Hỏa ở Nhà 9 tượng trưng cho tinh thần phiêu lưu, lòng nhiệt huyết bảo vệ đức tin và khát khao khám phá những chân trời mới. Bạn thường có xu hướng hành động vì lý tưởng, thích tranh luận về triết học và luôn sẵn sàng xách balo lên để trải nghiệm. Cần lưu ý rằng sự cuồng tín đôi khi có thể khiến bạn cố gắng áp đặt quan điểm của mình lên người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_10",
+      "bodyText": "Sao Hỏa ở Nhà 10 biểu trưng cho tham vọng sự nghiệp, kỹ năng lãnh đạo và khát khao đạt được đỉnh cao danh vọng. Bạn thường có xu hướng làm việc với quyết tâm cao độ, không ngại đối đầu với thử thách để khẳng định năng lực của mình. Cần chú ý rằng sự độc đoán và tàn nhẫn trong công việc đôi khi có thể khiến bạn mất đi sự ủng hộ từ đồng nghiệp."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_11",
+      "bodyText": "Sao Hỏa ở Nhà 11 mang lại năng lượng hành động vì cộng đồng, lý tưởng xã hội và khát khao tạo ra những thay đổi tiến bộ. Bạn thường có xu hướng làm việc nhóm rất hiệu quả, đấu tranh cho những giá trị tập thể và khuyến khích bạn bè cùng nỗ lực. Cần chú ý rằng sự phản kháng mù quáng đôi khi có thể khiến bạn trở thành một kẻ nổi loạn vô lý trong mắt mọi người."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Mars_in_House_12",
+      "bodyText": "Sao Hỏa ở Nhà 12 đại diện cho năng lượng hành động thầm lặng, trực giác mạnh mẽ và khát khao đấu tranh vì những người yếu thế. Bạn thường có xu hướng làm việc tốt nhất khi ở một mình, thường che giấu động cơ thực sự và sử dụng sức mạnh tâm linh để vượt qua khó khăn. Cần chú ý rằng việc dồn nén cơn giận đôi khi có thể khiến bạn cảm thấy uất ức hoặc có những hành động tự hoại."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_1",
+      "bodyText": "Sao Mộc ở Nhà 1 biểu trưng cho sự lạc quan bẩm sinh, niềm tin mạnh mẽ vào bản thân và khát khao mở rộng tầm nhìn cá nhân. Bạn thường có xu hướng truyền năng lượng tích cực cho người khác, gặp nhiều cơ hội tốt nhờ thái độ cởi mở và sở hữu phong thái hào hiệp. Cần lưu ý rằng sự tự tin thái quá đôi khi có thể khiến bạn đánh giá thấp những rủi ro thực tế."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_2",
+      "bodyText": "Sao Mộc ở Nhà 2 đại diện cho khả năng thu hút tài chính, sự trân trọng những giá trị vật chất và khát khao tận hưởng cuộc sống sung túc. Bạn thường có xu hướng kiếm tiền một cách thuận lợi, đầu tư khôn ngoan và không ngại chi tiêu cho những thứ chất lượng. Cần chú ý rằng sự phung phí quá đà đôi khi có thể dẫn đến những khó khăn tài chính không đáng có."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_3",
+      "bodyText": "Sao Mộc ở Nhà 3 mang đến trí tuệ uyên bác, khả năng giao tiếp khích lệ và khát khao học hỏi thông qua môi trường xung quanh. Bạn thường có xu hướng tiếp thu thông tin nhanh nhạy, thích thảo luận triết lý và có mối quan hệ tốt đẹp với anh chị em. Cần lưu ý rằng việc quan tâm đến quá nhiều thứ đôi khi có thể khiến bạn thiếu đi sự chuyên sâu cần thiết."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_4",
+      "bodyText": "Sao Mộc ở Nhà 4 tượng trưng cho một tuổi thơ êm đềm, sự gắn kết mạnh mẽ với gia đình và khát khao tạo dựng một tổ ấm rộng lớn. Bạn thường có xu hướng tìm thấy sự bình yên nơi cội nguồn, nhận được nhiều sự hỗ trợ từ cha mẹ và thích cuộc sống an nhàn lúc tuổi già. Cần chú ý rằng sự tự mãn đôi khi có thể khiến bạn ngại ngần bước ra khỏi vùng an toàn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_5",
+      "bodyText": "Sao Mộc ở Nhà 5 gắn liền với niềm vui sáng tạo, sự may mắn trong tình yêu và khát khao thể hiện tài năng cá nhân. Bạn thường có xu hướng tiếp cận cuộc sống như một cuộc phiêu lưu lãng mạn, yêu thương nồng nhiệt và rất có duyên với nghệ thuật. Cần lưu ý rằng xu hướng thích kịch tính đôi khi có thể khiến bạn đưa ra những hứa hẹn mà mình không thể thực hiện."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_6",
+      "bodyText": "Sao Mộc ở Nhà 6 biểu tượng cho thái độ tích cực trong công việc, khả năng tổ chức tốt và khát khao cống hiến vì lợi ích chung. Bạn thường có xu hướng tìm thấy niềm vui trong những nhiệm vụ hàng ngày, quan hệ tốt với đồng nghiệp và quan tâm sâu sắc đến sức khỏe. Cần chú ý rằng việc ôm đồm quá nhiều việc đôi khi có thể khiến bạn rơi vào trạng thái quá tải."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_7",
+      "bodyText": "Sao Mộc ở Nhà 7 đại diện cho may mắn trong các mối quan hệ, sự công bằng và khát khao tìm kiếm đối tác chia sẻ chung tầm nhìn. Bạn thường có xu hướng thu hút những người có học thức hoặc đến từ nền văn hóa khác, coi trọng hôn nhân và rất giỏi thương lượng. Cần chú ý rằng mong muốn mọi thứ hoàn hảo đôi khi có thể khiến bạn dễ thất vọng về đối phương."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_8",
+      "bodyText": "Sao Mộc ở Nhà 8 mang đến sức mạnh phục hồi đáng kinh ngạc, sự thấu hiểu sâu sắc và khát khao khám phá những bí mật tâm linh. Bạn thường có xu hướng gặp thuận lợi trong việc quản lý tài chính chung, trực giác nhạy bén và không sợ hãi trước những biến cố lớn. Cần chú ý rằng sự lạc quan quá mức đôi khi có thể khiến bạn thiếu thận trọng trong các khoản đầu tư rủi ro."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_9",
+      "bodyText": "Sao Mộc ở Nhà 9 tượng trưng cho đức tin mạnh mẽ, sự thông thái và khát khao mở rộng chân trời tri thức thông qua những chuyến đi. Bạn thường có xu hướng tìm kiếm chân lý, đam mê nghiên cứu triết học, tôn giáo và dễ dàng truyền cảm hứng cho người khác. Cần lưu ý rằng sự tự tin vào lý tưởng của mình đôi khi có thể khiến bạn trở nên giáo điều và bảo thủ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_10",
+      "bodyText": "Sao Mộc ở Nhà 10 biểu trưng cho sự nghiệp thăng tiến, địa vị xã hội đáng nể và khát khao để lại một di sản có ý nghĩa. Bạn thường có xu hướng nhận được nhiều sự giúp đỡ từ những người có quyền lực, lãnh đạo bằng sự bao dung và luôn hướng tới những thành tựu lớn. Cần chú ý rằng việc quá tập trung vào danh vọng đôi khi có thể khiến bạn bỏ quên cuộc sống nội tâm."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_11",
+      "bodyText": "Sao Mộc ở Nhà 11 mang lại những tình bạn quý giá, lý tưởng xã hội cao đẹp và khát khao cải thiện cộng đồng. Bạn thường có xu hướng thu hút sự ủng hộ từ các nhóm hội, dễ dàng thực hiện hóa ước mơ và luôn giữ tinh thần bình đẳng. Cần chú ý rằng việc phân tán năng lượng cho quá nhiều mối quan hệ đôi khi có thể khiến bạn bỏ lỡ những tình cảm thực sự sâu sắc."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Jupiter_in_House_12",
+      "bodyText": "Sao Mộc ở Nhà 12 đại diện cho sự bảo vệ tâm linh vô hình, lòng trắc ẩn sâu sắc và khát khao tìm kiếm sự bình yên nội tâm. Bạn thường có xu hướng thấu cảm với nỗi đau của người khác, tìm thấy sức mạnh qua thiền định và có khả năng chữa lành đáng kinh ngạc. Cần chú ý rằng xu hướng trốn tránh thực tại đôi khi có thể khiến bạn gặp khó khăn trong việc đối mặt với những vấn đề cụ thể."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_1",
+      "bodyText": "Sao Thổ ở Nhà 1 biểu trưng cho vẻ ngoài nghiêm túc, tinh thần trách nhiệm cao và khát khao xây dựng một bản sắc cá nhân vững chắc. Bạn thường có xu hướng trải qua tuổi trẻ khá vất vả nhưng sẽ trưởng thành mạnh mẽ, làm việc kỷ luật và luôn thận trọng trước khi hành động. Cần lưu ý rằng sự khắt khe với bản thân đôi khi có thể khiến bạn trở nên thiếu tự tin hoặc u sầu."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_2",
+      "bodyText": "Sao Thổ ở Nhà 2 đại diện cho sự cẩn trọng về mặt tài chính, khả năng làm việc bền bỉ và khát khao tạo ra sự an toàn vật chất lâu dài. Bạn thường có xu hướng tiết kiệm, đánh giá cao những giá trị thực tế và tin rằng thành công chỉ đến từ nỗ lực không ngừng. Cần chú ý rằng nỗi sợ nghèo khó đôi khi có thể khiến bạn trở nên quá tằn tiện hoặc từ chối tận hưởng cuộc sống."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_3",
+      "bodyText": "Sao Thổ ở Nhà 3 mang đến tư duy logic, sự tập trung cao độ và khát khao giao tiếp một cách có hệ thống và chính xác. Bạn thường có xu hướng cẩn trọng trong lời nói, suy nghĩ sâu sắc và đôi khi gặp phải những trở ngại trong việc học hành thời niên thiếu. Cần lưu ý rằng sự hoài nghi đôi khi có thể khiến tư duy của bạn trở nên cứng nhắc và khó tiếp thu điều mới."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_4",
+      "bodyText": "Sao Thổ ở Nhà 4 tượng trưng cho tinh thần trách nhiệm với gia đình, những bài học từ tuổi thơ và khát khao xây dựng nền móng cuộc đời vững chãi. Bạn thường có xu hướng gắn bó với truyền thống, phải gánh vác nhiều nghĩa vụ và tìm kiếm sự ổn định từ bên trong. Cần chú ý rằng việc ôm giữ những tổn thương cũ đôi khi có thể ngăn cản bạn cảm nhận được tình yêu thương trọn vẹn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_5",
+      "bodyText": "Sao Thổ ở Nhà 5 gắn liền với thái độ nghiêm túc trong tình yêu, cấu trúc trong sáng tạo và khát khao để lại một di sản thông qua con cái hoặc nghệ thuật. Bạn thường có xu hướng thận trọng khi bước vào các mối quan hệ lãng mạn, thích những thú vui mang tính trí tuệ và tổ chức. Cần lưu ý rằng sự thiếu tự nhiên đôi khi có thể kìm hãm niềm vui bộc phát và sự lãng mạn của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_6",
+      "bodyText": "Sao Thổ ở Nhà 6 biểu tượng cho sự tận tâm với công việc, tính kỷ luật trong thói quen hàng ngày và khát khao đạt đến sự chuyên nghiệp. Bạn thường có xu hướng làm việc chăm chỉ, tổ chức xuất sắc và rất ý thức về các vấn đề liên quan đến sức khỏe. Cần chú ý rằng việc quá tập trung vào chi tiết đôi khi có thể khiến bạn trở nên căng thẳng và lo âu không cần thiết."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_7",
+      "bodyText": "Sao Thổ ở Nhà 7 đại diện cho thái độ nghiêm túc với các cam kết, những bài học thông qua đối tác và khát khao một mối quan hệ bền vững. Bạn thường có xu hướng tìm kiếm những người trưởng thành, có trách nhiệm và coi trọng sự chung thủy hơn là sự lãng mạn bề ngoài. Cần chú ý rằng nỗi sợ bị tổn thương đôi khi có thể tạo ra bức tường ngăn cách sự thân mật giữa bạn và người ấy."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_8",
+      "bodyText": "Sao Thổ ở Nhà 8 mang đến khả năng chịu đựng nghịch cảnh, sự cẩn trọng với các nguồn lực chung và khát khao kiểm soát những chuyển biến sâu sắc. Bạn thường có xu hướng đối mặt với những vấn đề tâm lý phức tạp, học cách buông bỏ và trưởng thành qua những mất mát. Cần chú ý rằng sự kìm nén cảm xúc đôi khi có thể khiến bạn trở nên cay nghiệt hoặc giữ trong lòng những nỗi sợ hãi mơ hồ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_9",
+      "bodyText": "Sao Thổ ở Nhà 9 tượng trưng cho tư duy triết học nghiêm ngặt, sự tìm kiếm chân lý một cách kỷ luật và khát khao thấu hiểu thế giới. Bạn thường có xu hướng tiếp cận kiến thức một cách cẩn trọng, tôn trọng các nguyên tắc đạo đức và học hỏi nhiều điều từ kinh nghiệm thực tế. Cần chú ý rằng sự cứng nhắc trong tư tưởng đôi khi có thể khiến bạn trở nên giáo điều và thiếu bao dung với các quan điểm khác biệt."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_10",
+      "bodyText": "Sao Thổ ở Nhà 10 biểu trưng cho tham vọng xây dựng sự nghiệp bền vững, khả năng chịu áp lực và khát khao được xã hội công nhận qua thành tựu thực chất. Bạn thường có xu hướng vươn lên bằng chính năng lực của mình, sẵn sàng nhận lấy trọng trách và rất coi trọng danh dự. Cần chú ý rằng việc quá ám ảnh bởi thành công đôi khi có thể khiến bạn đánh mất niềm vui trong cuộc sống cá nhân."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_11",
+      "bodyText": "Sao Thổ ở Nhà 11 mang lại sự nghiêm túc trong việc chọn bạn, tinh thần trách nhiệm với cộng đồng và khát khao thực hiện những mục tiêu dài hạn. Bạn thường có xu hướng gắn bó với những người lớn tuổi hoặc có uy tín, duy trì các mối quan hệ lâu bền và trung thành với lý tưởng. Cần chú ý rằng sự xa cách đôi khi có thể khiến bạn cảm thấy cô đơn dù đang ở giữa đám đông."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Saturn_in_House_12",
+      "bodyText": "Sao Thổ ở Nhà 12 đại diện cho những bài học nghiệp quả tiềm ẩn, sự kiểm soát nội tâm và khát khao tìm kiếm sự bình yên thông qua sự tĩnh lặng. Bạn thường có xu hướng giữ kín những nỗi sợ hãi, dành thời gian một mình để suy ngẫm và dần dần thấu hiểu những giới hạn của bản thân. Cần chú ý rằng sự tự cô lập đôi khi có thể khiến bạn chìm đắm trong cảm giác tội lỗi hoặc trầm cảm."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_1",
+      "bodyText": "Thiên Vương ở Nhà 1 biểu trưng cho vẻ ngoài độc đáo, cá tính nổi loạn và khát khao mãnh liệt về sự tự do thể hiện bản thân. Bạn thường có xu hướng phá vỡ các chuẩn mực, thích làm mọi thứ theo cách riêng và luôn mang đến những bất ngờ cho người khác. Cần lưu ý rằng sự bốc đồng và lập dị đôi khi có thể khiến bạn khó hòa nhập với những môi trường truyền thống."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_2",
+      "bodyText": "Thiên Vương ở Nhà 2 đại diện cho những biến động bất ngờ về tài chính, cách kiếm tiền sáng tạo và thái độ khác biệt đối với giá trị vật chất. Bạn thường có xu hướng thích những công việc liên quan đến công nghệ, không quá quan trọng việc tích trữ và sẵn sàng mạo hiểm. Cần chú ý rằng sự bất ổn trong thu nhập đôi khi có thể mang lại những căng thẳng không đáng có."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_3",
+      "bodyText": "Thiên Vương ở Nhà 3 mang đến tư duy đột phá, tốc độ suy nghĩ nhanh chóng và khát khao truyền đạt những ý tưởng tiến bộ. Bạn thường có xu hướng quan sát thế giới qua lăng kính độc đáo, giao tiếp một cách sắc sảo và rất thích những chủ đề mới lạ. Cần lưu ý rằng sự thiếu kiên nhẫn đôi khi có thể khiến bạn cắt ngang lời người khác hoặc bỏ dở những nghiên cứu sâu."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_4",
+      "bodyText": "Thiên Vương ở Nhà 4 tượng trưng cho một nền tảng gia đình khác biệt, sự thay đổi nơi ở đột ngột và khát khao giải phóng khỏi những ràng buộc quá khứ. Bạn thường có xu hướng muốn sống tự lập sớm, trang trí nhà cửa theo phong cách hiện đại và đánh giá cao sự tự do trong không gian cá nhân. Cần chú ý rằng sự bất an từ bên trong đôi khi có thể khiến bạn khó tìm thấy cảm giác thực sự thuộc về nơi nào đó."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_5",
+      "bodyText": "Thiên Vương ở Nhà 5 gắn liền với những mối tình lãng mạn bất ngờ, khả năng sáng tạo độc đáo và khát khao phá vỡ các nguyên tắc nghệ thuật truyền thống. Bạn thường có xu hướng bị thu hút bởi những người cá tính, thích trải nghiệm những điều mới lạ và thể hiện bản thân một cách vô cùng sáng tạo. Cần lưu ý rằng sự thiếu cam kết đôi khi có thể khiến những mối quan hệ của bạn nhanh chóng kết thúc."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_6",
+      "bodyText": "Thiên Vương ở Nhà 6 biểu tượng cho phương pháp làm việc sáng tạo, mong muốn thay đổi môi trường công sở và thái độ hiện đại đối với sức khỏe. Bạn thường có xu hướng thích thời gian làm việc linh hoạt, áp dụng công nghệ vào nhiệm vụ hàng ngày và không chịu được sự nhàm chán. Cần chú ý rằng sự căng thẳng thần kinh liên tục đôi khi có thể ảnh hưởng tiêu cực đến thể trạng của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_7",
+      "bodyText": "Thiên Vương ở Nhà 7 đại diện cho những mối quan hệ đối tác bất thường, sự độc lập trong hôn nhân và khát khao tìm kiếm một người bạn đời thông minh, phá cách. Bạn thường có xu hướng kết hôn hoặc chia tay một cách đột ngột, trân trọng không gian riêng tư và cần sự bình đẳng tuyệt đối. Cần chú ý rằng sự xa cách về mặt cảm xúc đôi khi có thể tạo ra rào cản lớn trong việc duy trì sự gắn kết lâu dài."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_8",
+      "bodyText": "Thiên Vương ở Nhà 8 mang đến sự thức tỉnh tâm linh đột ngột, thái độ cởi mở với những vấn đề nhạy cảm và khả năng tái sinh mạnh mẽ. Bạn thường có xu hướng tò mò về những lĩnh vực huyền bí, sẵn sàng thay đổi để vượt qua khủng hoảng và có thể gặp những bất ngờ về tài chính chung. Cần chú ý rằng sự bất an sâu thẳm đôi khi có thể khiến bạn hành xử một cách cực đoan."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_9",
+      "bodyText": "Thiên Vương ở Nhà 9 tượng trưng cho tư duy triết học tự do, những chuyến đi xa bất ngờ và khát khao khám phá những chân lý mới mẻ. Bạn thường có xu hướng thách thức các giáo điều cũ, quan tâm đến tương lai và dễ dàng tiếp thu kiến thức từ nhiều nền văn hóa. Cần chú ý rằng sự thay đổi lý tưởng liên tục đôi khi có thể khiến bạn thiếu đi một nền tảng đức tin vững chắc."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_10",
+      "bodyText": "Thiên Vương ở Nhà 10 biểu trưng cho con đường sự nghiệp khác thường, những thay đổi đột ngột về địa vị và khát khao trở thành người tiên phong. Bạn thường có xu hướng muốn đóng góp những sáng kiến tiến bộ, không chịu sự gò bó từ cấp trên và khao khát độc lập trong công việc. Cần chú ý rằng thái độ chống đối chính quyền đôi khi có thể gây cản trở cho sự thăng tiến của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_11",
+      "bodyText": "Thiên Vương ở Nhà 11 mang lại những nhóm bạn đa dạng, lý tưởng nhân đạo mạnh mẽ và khát khao mang lại sự đổi mới cho cộng đồng. Bạn thường có xu hướng tham gia các tổ chức tiến bộ, kết nối với những tâm hồn tự do và luôn hướng tới những giá trị bình đẳng. Cần chú ý rằng sự bốc đồng đôi khi có thể khiến bạn dễ dàng thay đổi bạn bè hoặc định hướng tập thể."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Uranus_in_House_12",
+      "bodyText": "Thiên Vương ở Nhà 12 đại diện cho trực giác lóe sáng, những giấc mơ kỳ lạ và khát khao giải phóng khỏi những tổn thương trong tiềm thức. Bạn thường có xu hướng nhận được những thông điệp tâm linh bất ngờ, thích làm việc một mình để nghiên cứu những điều bí ẩn và có khả năng thấu hiểu sâu sắc. Cần chú ý rằng việc kìm nén sự nổi loạn đôi khi có thể dẫn đến những cơn khủng hoảng tâm lý khó lý giải."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_1",
+      "bodyText": "Hải Vương ở Nhà 1 biểu trưng cho vẻ ngoài mộng mơ, sự nhạy cảm sâu sắc và khát khao hòa mình vào dòng chảy của cuộc sống. Bạn thường có xu hướng tiếp nhận năng lượng xung quanh như một miếng bọt biển, tỏa ra sự dịu dàng và sở hữu trực giác rất bén nhạy. Cần lưu ý rằng việc thiếu đi ranh giới cá nhân đôi khi có thể khiến bạn dễ bị người khác tác động và đánh mất chính mình."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_2",
+      "bodyText": "Hải Vương ở Nhà 2 đại diện cho thái độ không màng vật chất, kiếm tiền dựa trên trực giác hoặc nghệ thuật và khát khao những giá trị thiêng liêng. Bạn thường có xu hướng thích những món đồ mang ý nghĩa tinh thần, tin vào sự an bài của vũ trụ và sẵn sàng chia sẻ tài nguyên. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn rơi vào tình trạng lừa đảo hoặc thất thoát."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_3",
+      "bodyText": "Hải Vương ở Nhà 3 mang đến tư duy bằng hình ảnh, khả năng giao tiếp đầy chất thơ và khát khao truyền đạt những ý tưởng tâm linh. Bạn thường có xu hướng nắm bắt thông tin qua cảm nhận, thích học hỏi nghệ thuật và ăn nói vô cùng truyền cảm. Cần chú ý rằng sự đãng trí và thiếu tính logic đôi khi có thể khiến lời nói của bạn trở nên khó hiểu đối với người khác."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_4",
+      "bodyText": "Hải Vương ở Nhà 4 tượng trưng cho sự gắn bó tâm linh với gia đình, một không gian sống đầy tính nghệ thuật và khát khao tìm kiếm sự bình yên nơi tâm hồn. Bạn thường có xu hướng trân trọng những kỷ niệm đẹp, thích sống gần sông nước và luôn dành sự thấu cảm lớn cho cha mẹ. Cần chú ý rằng việc lý tưởng hóa quá khứ đôi khi có thể che khuất đi những vấn đề thực tế cần giải quyết."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_5",
+      "bodyText": "Hải Vương ở Nhà 5 gắn liền với sức sáng tạo vô biên, tình yêu lãng mạn như cổ tích và khát khao được đắm chìm trong niềm đam mê. Bạn thường có xu hướng bộc lộ tài năng qua âm nhạc hoặc diễn xuất, yêu thương một cách vô điều kiện và luôn tìm kiếm sự kỳ diệu. Cần chú ý rằng việc mù quáng trong tình yêu đôi khi có thể khiến bạn trao trái tim cho nhầm người và nhận lấy sự tổn thương."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_6",
+      "bodyText": "Hải Vương ở Nhà 6 biểu tượng cho khao khát phục vụ người khác bằng lòng trắc ẩn, làm việc dựa trên cảm hứng và sự nhạy cảm về thể chất. Bạn thường có xu hướng thích chăm sóc động vật, giỏi trong các công việc liên quan đến chữa lành và luôn muốn lan tỏa tình yêu thương. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn chểnh mảng trong công việc hàng ngày."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_7",
+      "bodyText": "Hải Vương ở Nhà 7 đại diện cho mong ước về một người bạn đời tâm giao, sự hi sinh trong các mối quan hệ và khát khao hòa hợp tâm hồn. Bạn thường có xu hướng bị thu hút bởi những người nhạy cảm, dễ dàng tha thứ và luôn cố gắng duy trì hòa bình. Cần chú ý rằng việc đặt đối tác lên bệ đỡ đôi khi có thể khiến bạn thất vọng khi đối diện với những khiếm khuyết của họ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_8",
+      "bodyText": "Hải Vương ở Nhà 8 mang đến khả năng ngoại cảm, sự thấu hiểu những điều sâu kín và khát khao những trải nghiệm thân mật mang tính tâm linh. Bạn thường có xu hướng thích khám phá những bí ẩn của tiềm thức, không sợ hãi cái chết và có sức mạnh chữa lành mãnh liệt. Cần chú ý rằng sự nhầm lẫn trong các vấn đề tài chính chung đôi khi có thể gây ra những rắc rối pháp lý."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_9",
+      "bodyText": "Hải Vương ở Nhà 9 tượng trưng cho đức tin bao la, khả năng lĩnh hội các triết lý trừu tượng và khát khao tìm kiếm ý nghĩa tối thượng. Bạn thường có xu hướng đam mê khám phá tôn giáo, tiếp thu kiến thức qua thiền định và luôn mang trong mình lòng khoan dung. Cần chú ý rằng sự cuồng tín hoặc tin tưởng mù quáng đôi khi có thể khiến bạn dễ bị dẫn dắt bởi những giáo phái không lành mạnh."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_10",
+      "bodyText": "Hải Vương ở Nhà 10 biểu trưng cho sự nghiệp gắn liền với nghệ thuật hoặc lòng nhân đạo, hình ảnh công chúng đầy bí ẩn và khát khao cống hiến cho xã hội. Bạn thường có xu hướng tỏa sáng trong những lĩnh vực sáng tạo, dẫn dắt bằng trực giác và luôn theo đuổi một lý tưởng cao đẹp. Cần chú ý rằng sự thiếu định hướng rõ ràng đôi khi có thể khiến sự nghiệp của bạn gặp nhiều bấp bênh."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_11",
+      "bodyText": "Hải Vương ở Nhà 11 mang lại những tình bạn dựa trên sự đồng điệu tâm hồn, lý tưởng hướng về cái đẹp và khát khao một thế giới đại đồng. Bạn thường có xu hướng tham gia các tổ chức từ thiện, dễ dàng hòa nhập với đám đông và luôn sẵn sàng giúp đỡ mọi người. Cần chú ý rằng sự thiếu ranh giới cá nhân đôi khi có thể khiến bạn dễ bị lợi dụng bởi những người bạn không chân thành."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Neptune_in_House_12",
+      "bodyText": "Hải Vương ở Nhà 12 đại diện cho sự kết nối mạnh mẽ với vũ trụ, thế giới tiềm thức phong phú và khát khao được giải phóng khỏi những nỗi đau thế gian. Bạn thường có xu hướng tìm thấy sức mạnh qua sự tĩnh lặng, sở hữu giấc mơ tiên tri và có khả năng chữa lành cho nhân loại. Cần chú ý rằng việc quá đắm chìm trong thế giới nội tâm đôi khi có thể khiến bạn hoàn toàn xa rời thực tại."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_1",
+      "bodyText": "Diêm Vương ở Nhà 1 biểu trưng cho vẻ ngoài đầy uy lực, ánh nhìn thấu suốt và khát khao kiểm soát mạnh mẽ đối với bản thân. Bạn thường có xu hướng tỏa ra năng lượng bí ẩn, có khả năng tái sinh ngoạn mục sau những biến cố và luôn muốn nắm quyền tự quyết. Cần lưu ý rằng sự quyết liệt quá mức đôi khi có thể khiến người khác cảm thấy bạn độc đoán hoặc đáng sợ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_2",
+      "bodyText": "Diêm Vương ở Nhà 2 đại diện cho khát khao mãnh liệt về sự an toàn tài chính, khả năng làm ra của cải từ số không và sức mạnh của sự kiên định. Bạn thường có xu hướng bám trụ vững vàng, rất giỏi trong việc phân bổ tài nguyên và coi trọng quyền lực vật chất. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở sự phát triển của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_3",
+      "bodyText": "Diêm Vương ở Nhà 3 mang đến tư duy sắc sảo, kỹ năng ngôn ngữ đầy sức mạnh và khát khao đào sâu để tìm ra chân lý. Bạn thường có xu hướng giao tiếp với cường độ cao, giỏi phân tích tâm lý người khác và thích nghiên cứu những chủ đề phức tạp. Cần lưu ý rằng sự sắc bén quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_4",
+      "bodyText": "Diêm Vương ở Nhà 4 tượng trưng cho những chuyển biến sâu sắc trong đời sống gia đình, sức mạnh nội tâm lớn lao và khát khao khám phá gốc rễ của bản thân. Bạn thường có xu hướng bảo vệ tổ ấm một cách quyết liệt, có khả năng chữa lành những tổn thương di truyền và rất kín tiếng về đời tư. Cần chú ý rằng việc kìm nén những cảm xúc đen tối đôi khi có thể dẫn đến sự bùng nổ tiêu cực."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_5",
+      "bodyText": "Diêm Vương ở Nhà 5 gắn liền với cường độ đam mê trong tình yêu, sức sáng tạo mãnh liệt và khát khao để lại dấu ấn không thể phai mờ. Bạn thường có xu hướng yêu hết mình, thể hiện tài năng một cách sâu sắc và rất quan tâm đến sự phát triển của con cái. Cần chú ý rằng sự ghen tuông hoặc ám ảnh quyền lực đôi khi có thể hủy hoại niềm vui tự nhiên trong cuộc sống của bạn."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_6",
+      "bodyText": "Diêm Vương ở Nhà 6 biểu tượng cho năng lực làm việc phi thường, khả năng biến đổi môi trường công sở và khát khao đạt đến sự hoàn hảo. Bạn thường có xu hướng cống hiến hết tâm sức cho nhiệm vụ, có khả năng phân tích chi tiết sắc bén và rất quan tâm đến việc tái tạo sức khỏe. Cần chú ý rằng sự ám ảnh về sự hoàn thiện đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng tột độ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_7",
+      "bodyText": "Diêm Vương ở Nhà 7 đại diện cho những mối quan hệ mang tính bước ngoặt, khao khát sự cam kết tuyệt đối và sức mạnh của sự đồng hành. Bạn thường có xu hướng bị thu hút bởi những người có quyền lực, trải qua nhiều bài học sâu sắc qua hôn nhân và đánh giá cao sự trung thành. Cần chú ý rằng những trò chơi quyền lực ngầm đôi khi có thể phá vỡ sự cân bằng và niềm tin giữa hai người."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_8",
+      "bodyText": "Diêm Vương ở Nhà 8 mang đến trực giác nhạy bén vô song, khả năng vượt qua những khủng hoảng tồi tệ nhất và khát khao thấu hiểu sinh tử. Bạn thường có xu hướng khám phá những góc khuất của tâm lý, cực kỳ mạnh mẽ trong nghịch cảnh và không sợ hãi đối mặt với cái chết. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy đau khổ."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_9",
+      "bodyText": "Diêm Vương ở Nhà 9 tượng trưng cho khát khao tìm kiếm sự thật tột cùng, sức mạnh của niềm tin và những thay đổi sâu sắc qua việc mở rộng tri thức. Bạn thường có xu hướng theo đuổi các triết lý sống một cách đam mê, thích nghiên cứu chuyên sâu và có khả năng truyền đạt ảnh hưởng lớn. Cần chú ý rằng sự cuồng tín đôi khi có thể khiến bạn áp đặt tư tưởng của mình lên người khác một cách cực đoan."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_10",
+      "bodyText": "Diêm Vương ở Nhà 10 biểu trưng cho tham vọng quyền lực tột độ, khả năng thay đổi cấu trúc tổ chức và khát khao đạt được đỉnh cao danh vọng. Bạn thường có xu hướng làm việc với quyết tâm thép, sẵn sàng vượt qua mọi chướng ngại để vươn lên và tạo ra ảnh hưởng lớn mạnh. Cần chú ý rằng sự tàn nhẫn và độc đoán trong công việc đôi khi có thể khiến bạn gặp phải nhiều kẻ thù."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_11",
+      "bodyText": "Diêm Vương ở Nhà 11 mang lại khả năng biến đổi các nhóm cộng đồng, lý tưởng xã hội mãnh liệt và khát khao tạo ra một tương lai hoàn toàn mới. Bạn thường có xu hướng thu hút những người bạn có sức ảnh hưởng, cống hiến hết mình cho các mục tiêu chung và không ngại phá bỏ những hệ thống cũ kỹ. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể mang lại những hậu quả khó lường."
+    },
+    {
+      "subjectType": "PlanetInHouse",
+      "subjectKey": "Pluto_in_House_12",
+      "bodyText": "Diêm Vương ở Nhà 12 đại diện cho quá trình dọn dẹp tiềm thức, sức mạnh chữa lành từ bên trong và khát khao đối mặt với những nỗi sợ hãi sâu kín nhất. Bạn thường có xu hướng nghiên cứu những điều huyền bí, tìm thấy sức mạnh qua sự tĩnh lặng và dần giải phóng bản thân khỏi những chấn thương tinh thần. Cần chú ý rằng việc che giấu những cảm xúc độc hại đôi khi có thể khiến bạn vô thức tự phá hoại cuộc sống của chính mình."
+    }
+  ]
+}

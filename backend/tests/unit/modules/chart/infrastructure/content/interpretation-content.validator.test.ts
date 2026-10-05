@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import { describe, expect, it } from 'vitest';
 
 import { enumerateMvpInterpretationSubjects } from '../../../../../../src/modules/chart/domain/interpretation/enumerate-mvp-subjects.js';
@@ -12,11 +9,29 @@ import {
 
 describe('InterpretationContentValidator', () => {
   const getSampleFileContent = () => {
-    const samplePath = path.resolve(
-      __dirname,
-      '../../../../../../prisma/content/interpretations.vi.sample.json',
-    );
-    return fs.readFileSync(samplePath, 'utf8');
+    return JSON.stringify({
+      language: 'vi',
+      version: '1.0',
+      status: 'Draft',
+      contentSource: 'Hybrid',
+      items: [
+        {
+          subjectType: 'PlanetInSign',
+          subjectKey: 'Sun_in_Aries',
+          bodyText: 'Sun in Aries body',
+        },
+        {
+          subjectType: 'AngleInSign',
+          subjectKey: 'Ascendant_in_Leo',
+          bodyText: 'Ascendant in Leo body',
+        },
+        {
+          subjectType: 'PlanetInHouse',
+          subjectKey: 'Moon_in_House_4',
+          bodyText: 'Moon in House 4 body',
+        },
+      ],
+    });
   };
 
   const getValidFullContent = () => {

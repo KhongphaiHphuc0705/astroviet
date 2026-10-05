@@ -48,6 +48,20 @@ async function main() {
       `Coverage: ${validationResult.coverage?.present || 0}/${validationResult.coverage?.expected || 252} present.`,
     );
 
+    if (validationResult.coverage?.missing?.length) {
+      const missingKeys = validationResult.coverage.missing.map(
+        (m) => `${m.subjectType}:${m.subjectKey}`,
+      );
+      console.error(`Missing keys (${missingKeys.length}):`);
+      console.error(missingKeys.join(', '));
+    }
+
+    const placeholderCount = validationResult.file
+      ? validationResult.file.items.filter((i) => i.bodyText.includes('[OWNER_CONTENT_REQUIRED]'))
+          .length
+      : (text.match(/\[OWNER_CONTENT_REQUIRED\]/g) || []).length;
+    console.error(`Placeholder count: ${placeholderCount}`);
+
     // Group issues by code
     const issueMap = new Map<string, number>();
     validationResult.issues.forEach((i) => {
@@ -75,6 +89,17 @@ async function main() {
   console.log(
     `Coverage: ${validationResult.coverage!.present}/${validationResult.coverage!.expected}`,
   );
+  if (validationResult.coverage?.missing?.length) {
+    const missingKeys = validationResult.coverage.missing.map(
+      (m) => `${m.subjectType}:${m.subjectKey}`,
+    );
+    console.log(`Missing keys (${missingKeys.length}): ${missingKeys.join(', ')}`);
+  }
+  const placeholderCount = validationResult.file
+    ? validationResult.file.items.filter((i) => i.bodyText.includes('[OWNER_CONTENT_REQUIRED]'))
+        .length
+    : (text.match(/\[OWNER_CONTENT_REQUIRED\]/g) || []).length;
+  console.log(`Placeholder count: ${placeholderCount}`);
 
   if (values['validate-only']) {
     console.log('Validate-only mode active. Skipping database seed.');
