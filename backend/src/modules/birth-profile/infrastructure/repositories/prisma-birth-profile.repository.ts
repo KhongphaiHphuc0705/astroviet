@@ -19,9 +19,11 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2003') {
           // Foreign key constraint failed
-          throw new InfrastructureError('Foreign key constraint failed: User does not exist.', {
-            cause: error,
-          });
+          throw new InfrastructureError(
+            'Foreign key constraint failed: User does not exist.',
+            undefined,
+            error as Error,
+          );
         }
       }
       throw new InfrastructureError('Failed to create birth profile', undefined, error as Error);
