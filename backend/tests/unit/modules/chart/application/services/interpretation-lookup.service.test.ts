@@ -301,9 +301,9 @@ describe('InterpretationLookupService', () => {
     });
   });
 
-  // ── lookup() — unpiinned (null) version ─────────────────────────────────
+  // ── lookup() — unpinned (null) version ─────────────────────────────────
 
-  describe('lookup() — unpiinned chart (null snapshot)', () => {
+  describe('lookup() — unpinned chart (null snapshot)', () => {
     it('should call resolveLatestVersion and use result', async () => {
       const chart = makeFullChartView(null); // unpinned
       vi.mocked(mockProvider.findPublishedVersions).mockResolvedValue(['1.0']);

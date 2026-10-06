@@ -203,4 +203,37 @@ describe('ChartBuilder', () => {
       }),
     ).rejects.toThrowError('Sun cannot be retrograde');
   });
+
+  describe('snapshotInterpretationVersion assignment', () => {
+    it('should assign snapshotInterpretationVersion if provided', async () => {
+      const provider = createMockEphemerisProvider();
+      const builder = new ChartBuilder(provider);
+
+      const input: ChartBuilderInput = {
+        id: 'test-id',
+        userId: 'user-id',
+        birthProfileId: 'profile-id',
+        engineInput: createEngineInput(true),
+        snapshotInterpretationVersion: '1.0',
+      };
+
+      const chart = await builder.build(input);
+      expect(chart.snapshotInterpretationVersion).toBe('1.0');
+    });
+
+    it('should assign null if snapshotInterpretationVersion is omitted', async () => {
+      const provider = createMockEphemerisProvider();
+      const builder = new ChartBuilder(provider);
+
+      const input: ChartBuilderInput = {
+        id: 'test-id',
+        userId: 'user-id',
+        birthProfileId: 'profile-id',
+        engineInput: createEngineInput(true),
+      };
+
+      const chart = await builder.build(input);
+      expect(chart.snapshotInterpretationVersion).toBeNull();
+    });
+  });
 });

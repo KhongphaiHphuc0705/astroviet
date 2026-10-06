@@ -84,6 +84,7 @@ describe('GetChartUseCase', () => {
     await expect(useCase.execute(command)).rejects.toMatchObject({
       message: 'Chart not found',
     });
+    expect(mockInterpretationLookupService.lookup).not.toHaveBeenCalled();
   });
 
   it('should throw AuthorizationError if the chart belongs to a different user', async () => {
@@ -99,6 +100,7 @@ describe('GetChartUseCase', () => {
       errorCode: ErrorCode.FORBIDDEN,
       message: 'You do not have access to this chart',
     });
+    expect(mockInterpretationLookupService.lookup).not.toHaveBeenCalled();
   });
 
   it('should throw AuthorizationError even if the requesting user is an admin accessing another users chart', async () => {
@@ -114,6 +116,7 @@ describe('GetChartUseCase', () => {
     await expect(useCase.execute(command)).rejects.toMatchObject({
       errorCode: ErrorCode.FORBIDDEN,
     });
+    expect(mockInterpretationLookupService.lookup).not.toHaveBeenCalled();
   });
 
   it('should propagate errors from the repository', async () => {
