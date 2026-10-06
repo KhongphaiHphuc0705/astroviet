@@ -42,7 +42,7 @@ export class PrismaChartRepository implements IChartRepository {
         }
       });
     } catch (error) {
-      throw new InfrastructureError('Failed to save chart', { cause: error as Error });
+      throw new InfrastructureError('Failed to save chart', undefined, error as Error);
     }
   }
 
@@ -69,7 +69,7 @@ export class PrismaChartRepository implements IChartRepository {
 
       return PrismaChartMapper.toDomain(record);
     } catch (error) {
-      throw new InfrastructureError(`Failed to find chart by ID: ${id}`, { cause: error });
+      throw new InfrastructureError(`Failed to find chart by ID: ${id}`, undefined, error as Error);
     }
   }
 
@@ -120,7 +120,7 @@ export class PrismaChartRepository implements IChartRepository {
         total,
       };
     } catch (error) {
-      throw new InfrastructureError('Failed to list charts', { cause: error });
+      throw new InfrastructureError('Failed to list charts', undefined, error as Error);
     }
   }
 
@@ -139,7 +139,11 @@ export class PrismaChartRepository implements IChartRepository {
 
       return result.count > 0;
     } catch (error) {
-      throw new InfrastructureError(`Failed to soft delete chart: ${id}`, { cause: error });
+      throw new InfrastructureError(
+        `Failed to soft delete chart: ${id}`,
+        undefined,
+        error as Error,
+      );
     }
   }
 }

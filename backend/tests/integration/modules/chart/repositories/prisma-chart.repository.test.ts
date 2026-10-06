@@ -225,7 +225,14 @@ describe('PrismaChartRepository Integration', () => {
         deletedAt: chart.deletedAt,
       });
 
-      await expect(repository.save(badChart)).rejects.toThrow(InfrastructureError);
+      let caughtError: any;
+      try {
+        await repository.save(badChart);
+      } catch (e) {
+        caughtError = e;
+      }
+      expect(caughtError).toBeInstanceOf(InfrastructureError);
+      expect(caughtError.details).toBeUndefined();
 
       const rawChart = await prisma.chart.findUnique({ where: { id: chart.id } });
       expect(rawChart).toBeNull();

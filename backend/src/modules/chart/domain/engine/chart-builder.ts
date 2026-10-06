@@ -30,6 +30,7 @@ export interface ChartBuilderInput {
   userId: string | null;
   birthProfileId: string | null;
   engineInput: EngineInput;
+  snapshotInterpretationVersion?: string | null;
 }
 
 export class ChartBuilder {
@@ -121,6 +122,7 @@ export class ChartBuilder {
         isHouseDataAvailable: houses.length === 12,
         calculationMetadata,
         warnings,
+        snapshotInterpretationVersion: input.snapshotInterpretationVersion ?? null,
         createdAt: new Date(),
         deletedAt: null,
       });

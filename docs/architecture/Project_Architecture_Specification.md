@@ -692,6 +692,8 @@ Theo REST API Spec Mục 14.7 và DB Spec Mục 3.3 (Quyết định 14.1) — k
 | **Redis** (future) | `ICacheProvider` (`shared/ports/`, dùng chung nhiều module) | `InMemoryCacheAdapter` (**MVP, đã chốt — Quyết định 22.2**) → `RedisCacheAdapter` (khi cần scale, thay qua Dependency Injection ở `composition-root.ts`, không đổi code gọi) | Dùng cho Rate Limit counter + cache Location/Interpretation/ReferenceData (Mục 16) |
 | **Email Service** (future — cho `email_verification_tokens`/`password_reset_tokens`) | `IEmailService` (`identity/domain/ports/`) | `SmtpEmailAdapter` hoặc `SendgridAdapter` | Chưa triển khai ở MVP (PRD không yêu cầu xác thực email) |
 
+> **Ghi chú về Integration Service (Application Layer):** External Services được orchestrate thông qua các Application Services. Ví dụ, `InterpretationLookupService` được sử dụng để tra cứu nội dung từ `IInterpretationContentProvider`, giải quyết phiên bản version-pinned, thay vì để Use Cases trực tiếp gọi tới Provider (áp dụng cho M4).
+
 ### 12.1 `IEphemerisProvider` — định nghĩa interface (Quyết định 22.1)
 
 Để việc chuyển từ `swisseph-wasm` sang native binding (nếu cần trong tương lai) **không đòi hỏi sửa Business Layer**, interface phải được thiết kế theo ngôn ngữ nghiệp vụ (Domain), không rò rỉ chi tiết kỹ thuật của `swisseph-wasm`, và **tổng quát đủ cho các loại Chart tương lai** (Transit/Synastry/Composite/Solar Return — Engine Spec Mục 9), không chỉ Natal Chart hiện tại:

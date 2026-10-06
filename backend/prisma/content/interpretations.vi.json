@@ -2,7 +2,7 @@
   "language": "vi",
   "version": "1.0",
   "status": "Published",
-  "contentSource": "HumanAuthored",
+  "contentSource": "Hybrid",
   "items": [
     {
       "subjectType": "PlanetInSign",
@@ -47,7 +47,7 @@
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Sun_in_Sagittarius",
-      "bodyText": "Mặt Trời ở Nhân Mã mang đến tinh thần lạc quan, yêu tự do và khát kho mở rộng tầm nhìn. Bạn thường có xu hướng thích khám phá, đam mê học hỏi triết lý và luôn hướng về những viễn cảnh tươi sáng. Cần lưu ý rằng sự thẳng thắn quá mức có thể khiến bạn đôi khi thiếu đi sự tinh tế trong giao tiếp."
+      "bodyText": "Mặt Trời ở Nhân Mã mang đến tinh thần lạc quan, yêu tự do và khát khao mở rộng tầm nhìn. Bạn thường có xu hướng thích khám phá, đam mê học hỏi triết lý và luôn hướng về những viễn cảnh tươi sáng. Cần lưu ý rằng sự thẳng thắn quá mức có thể khiến bạn đôi khi thiếu đi sự tinh tế trong giao tiếp."
     },
     {
       "subjectType": "PlanetInSign",
@@ -427,182 +427,182 @@
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Aries",
-      "bodyText": "Thiên Vương ở Bạch Dương biểu trưng cho sự đột phá, tinh thần tiên phong và khát khao tự do cá nhân mạnh mẽ. Bạn thường có xu hướng mang lại những ý tưởng táo bạo, thích thay đổi và không ngại phá vỡ các quy tắc cũ. Cần lưu ý rằng sự nổi loạn bốc đồng đôi khi có thể dẫn đến những quyết định thiếu suy nghĩ và gây ra xáo trộn không đáng có."
+      "bodyText": "Sao Thiên Vương ở Bạch Dương biểu trưng cho sự đột phá, tinh thần tiên phong và khát khao tự do cá nhân mạnh mẽ. Bạn thường có xu hướng mang lại những ý tưởng táo bạo, thích thay đổi và không ngại phá vỡ các quy tắc cũ. Cần lưu ý rằng sự nổi loạn bốc đồng đôi khi có thể dẫn đến những quyết định thiếu suy nghĩ và gây ra xáo trộn không đáng có."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Taurus",
-      "bodyText": "Thiên Vương ở Kim Ngưu đại diện cho sự thay đổi trong cấu trúc tài chính, giá trị vật chất và cách tiếp cận với sự ổn định. Bạn thường có xu hướng tìm kiếm những phương pháp sáng tạo để quản lý tài nguyên, thích sự độc lập và không muốn bị ràng buộc bởi thói quen cũ. Cần chú ý rằng sự cố chấp trước những thay đổi tất yếu đôi khi có thể khiến bạn gặp căng thẳng."
+      "bodyText": "Sao Thiên Vương ở Kim Ngưu đại diện cho sự thay đổi trong cấu trúc tài chính, giá trị vật chất và cách tiếp cận với sự ổn định. Bạn thường có xu hướng tìm kiếm những phương pháp sáng tạo để quản lý tài nguyên, thích sự độc lập và không muốn bị ràng buộc bởi thói quen cũ. Cần chú ý rằng sự cố chấp trước những thay đổi tất yếu đôi khi có thể khiến bạn gặp căng thẳng."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Gemini",
-      "bodyText": "Thiên Vương ở Song Tử mang đến tư duy khác biệt, sự đổi mới trong giao tiếp và khả năng tiếp cận kiến thức công nghệ cao. Bạn thường có xu hướng sáng tạo trong cách truyền đạt, thích khám phá thông tin mới và sở hữu bộ não cực kỳ linh hoạt. Cần lưu ý rằng việc thay đổi hướng đi quá nhanh đôi khi có thể khiến tư duy của bạn thiếu đi sự kiên định."
+      "bodyText": "Sao Thiên Vương ở Song Tử mang đến tư duy khác biệt, sự đổi mới trong giao tiếp và khả năng tiếp cận kiến thức công nghệ cao. Bạn thường có xu hướng sáng tạo trong cách truyền đạt, thích khám phá thông tin mới và sở hữu bộ não cực kỳ linh hoạt. Cần lưu ý rằng việc thay đổi hướng đi quá nhanh đôi khi có thể khiến tư duy của bạn thiếu đi sự kiên định."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Cancer",
-      "bodyText": "Thiên Vương ở Cự Giải tượng trưng cho sự thay đổi về quan niệm gia đình, cội nguồn và cách thể hiện cảm xúc. Bạn thường có xu hướng mang đến sự độc đáo cho không gian sống, thích phá vỡ những truyền thống gia đình cứng nhắc và tìm kiếm sự tự do tinh thần. Cần chú ý rằng sự xáo trộn cảm xúc đột ngột đôi khi có thể khiến bạn cảm thấy chơi vơi."
+      "bodyText": "Sao Thiên Vương ở Cự Giải tượng trưng cho sự thay đổi về quan niệm gia đình, cội nguồn và cách thể hiện cảm xúc. Bạn thường có xu hướng mang đến sự độc đáo cho không gian sống, thích phá vỡ những truyền thống gia đình cứng nhắc và tìm kiếm sự tự do tinh thần. Cần chú ý rằng sự xáo trộn cảm xúc đột ngột đôi khi có thể khiến bạn cảm thấy chơi vơi."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Leo",
-      "bodyText": "Thiên Vương ở Sư Tử gắn liền với sự nổi loạn trong sáng tạo, cách thể hiện bản thân và những thay đổi về nghệ thuật. Bạn thường có xu hướng thể hiện cá tính một cách độc nhất, thu hút sự chú ý bằng phong cách khác biệt và không chịu tuân theo bất kỳ khuôn mẫu nào. Cần lưu ý rằng cái tôi quá mức lập dị đôi khi có thể khiến bạn khó hòa nhập với tập thể."
+      "bodyText": "Sao Thiên Vương ở Sư Tử gắn liền với sự nổi loạn trong sáng tạo, cách thể hiện bản thân và những thay đổi về nghệ thuật. Bạn thường có xu hướng thể hiện cá tính một cách độc nhất, thu hút sự chú ý bằng phong cách khác biệt và không chịu tuân theo bất kỳ khuôn mẫu nào. Cần lưu ý rằng cái tôi quá mức lập dị đôi khi có thể khiến bạn khó hòa nhập với tập thể."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Virgo",
-      "bodyText": "Thiên Vương ở Xử Nữ biểu tượng cho sự đổi mới trong công việc, công nghệ y tế và phương pháp tổ chức cuộc sống. Bạn thường có xu hướng tìm ra những cách thức làm việc tối ưu hơn, áp dụng các kỹ thuật tiên tiến và thích sự hiệu quả. Cần chú ý rằng sự căng thẳng thần kinh do thay đổi môi trường làm việc đôi khi có thể ảnh hưởng đến sức khỏe của bạn."
+      "bodyText": "Sao Thiên Vương ở Xử Nữ biểu tượng cho sự đổi mới trong công việc, công nghệ y tế và phương pháp tổ chức cuộc sống. Bạn thường có xu hướng tìm ra những cách thức làm việc tối ưu hơn, áp dụng các kỹ thuật tiên tiến và thích sự hiệu quả. Cần chú ý rằng sự sự hối hả do thay đổi môi trường làm việc đôi khi có thể làm giảm đi sự cân bằng trong cuộc sống của bạn."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Libra",
-      "bodyText": "Thiên Vương ở Thiên Bình đại diện cho sự thay đổi về quan niệm hôn nhân, công lý xã hội và các mối quan hệ đối tác. Bạn thường có xu hướng tìm kiếm sự tự do trong tình yêu, đề cao tính công bằng độc đáo và thích những mối quan hệ ít ràng buộc. Cần chú ý rằng sự xa cách và thay đổi thái độ đột ngột đôi khi có thể phá vỡ những liên kết bền vững."
+      "bodyText": "Sao Thiên Vương ở Thiên Bình đại diện cho sự thay đổi về quan niệm hôn nhân, công lý xã hội và các mối quan hệ đối tác. Bạn thường có xu hướng tìm kiếm sự tự do trong tình yêu, đề cao tính công bằng độc đáo và thích những mối quan hệ ít ràng buộc. Cần chú ý rằng sự xa cách và thay đổi thái độ đột ngột đôi khi có thể phá vỡ những liên kết bền vững."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Scorpio",
-      "bodyText": "Thiên Vương ở Thiên Yết mang đến sự chuyển hóa sâu sắc, đột phá về mặt tâm lý và khát khao lật tẩy những bí mật. Bạn thường có xu hướng tiếp cận sự sống và cái chết với góc nhìn mới, không sợ hãi trước khủng hoảng và sở hữu trực giác sắc sảo. Cần chú ý rằng sự hủy diệt để tái sinh đôi khi có thể mang tính tàn phá đối với những nền tảng cũ."
+      "bodyText": "Sao Thiên Vương ở Thiên Yết mang đến sự chuyển hóa sâu sắc, đột phá về mặt tâm lý và khát khao lật tẩy những bí mật. Bạn thường có xu hướng tiếp cận sự sống và cái chết với góc nhìn mới, không sợ hãi trước khủng hoảng và sở hữu trực giác sắc sảo. Cần chú ý rằng sự hủy diệt để tái sinh đôi khi có thể mang tính tàn phá đối với những nền tảng cũ."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Sagittarius",
-      "bodyText": "Thiên Vương ở Nhân Mã tượng trưng cho sự đổi mới trong triết lý sống, tôn giáo và khao khát tự do khám phá thế giới. Bạn thường có xu hướng thách thức những niềm tin giáo điều, mang tư tưởng tiến bộ và thích những chuyến hành trình mang tính khai sáng. Cần lưu ý rằng sự cuồng tín vào những lý tưởng mới đôi khi có thể khiến bạn mất đi sự khách quan."
+      "bodyText": "Sao Thiên Vương ở Nhân Mã tượng trưng cho sự đổi mới trong triết lý sống, tôn giáo và khao khát tự do khám phá thế giới. Bạn thường có xu hướng thách thức những niềm tin giáo điều, mang tư tưởng tiến bộ và thích những chuyến hành trình mang tính khai sáng. Cần lưu ý rằng sự cuồng tín vào những lý tưởng mới đôi khi có thể khiến bạn mất đi sự khách quan."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Capricorn",
-      "bodyText": "Thiên Vương ở Ma Kết biểu trưng cho sự thay đổi trong cấu trúc xã hội, chính trị và cách tổ chức quyền lực. Bạn thường có xu hướng cải tổ các hệ thống cũ, mang tư duy thực tế nhưng vẫn đề cao sự tiến bộ và độc lập. Cần chú ý rằng sự xung đột giữa khát khao tự do và luật lệ cứng nhắc đôi khi có thể tạo ra những biến động lớn trong sự nghiệp."
+      "bodyText": "Sao Thiên Vương ở Ma Kết biểu trưng cho sự thay đổi trong cấu trúc xã hội, chính trị và cách tổ chức quyền lực. Bạn thường có xu hướng cải tổ các hệ thống cũ, mang tư duy thực tế nhưng vẫn đề cao sự tiến bộ và độc lập. Cần chú ý rằng sự xung đột giữa khát khao tự do và luật lệ cứng nhắc đôi khi có thể tạo ra những biến động lớn trong sự nghiệp."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Aquarius",
-      "bodyText": "Thiên Vương ở Bảo Bình mang lại đỉnh cao của sự sáng tạo khoa học, lý tưởng nhân đạo và sức mạnh cộng đồng. Bạn thường có xu hướng đi trước thời đại, hành động vì lợi ích chung và trân trọng những cá nhân có tư duy khác biệt. Cần chú ý rằng sự tách biệt về mặt cảm xúc đôi khi có thể khiến bạn trở nên lạnh lùng với những vấn đề nhỏ nhặt của con người."
+      "bodyText": "Sao Thiên Vương ở Bảo Bình mang lại đỉnh cao của sự sáng tạo khoa học, lý tưởng nhân đạo và sức mạnh cộng đồng. Bạn thường có xu hướng đi trước thời đại, hành động vì lợi ích chung và trân trọng những cá nhân có tư duy khác biệt. Cần chú ý rằng sự tách biệt về mặt cảm xúc đôi khi có thể khiến bạn trở nên lạnh lùng với những vấn đề nhỏ nhặt của con người."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Uranus_in_Pisces",
-      "bodyText": "Thiên Vương ở Song Ngư đại diện cho sự thức tỉnh tâm linh, thay đổi về tiềm thức và khả năng sáng tạo nghệ thuật kỳ ảo. Bạn thường có xu hướng kết nối với những ý tưởng siêu việt, dễ dàng cảm nhận năng lượng vô hình và mong muốn giải phóng những khuôn mẫu tâm lý cũ. Cần chú ý rằng việc thiếu kết nối với thực tại đôi khi có thể khiến bạn chìm đắm trong ảo mộng."
+      "bodyText": "Sao Thiên Vương ở Song Ngư đại diện cho sự thức tỉnh tâm linh, thay đổi về tiềm thức và khả năng sáng tạo nghệ thuật kỳ ảo. Bạn thường có xu hướng kết nối với những ý tưởng siêu việt, dễ dàng cảm nhận năng lượng vô hình và mong muốn giải phóng những khuôn mẫu tâm lý cũ. Cần chú ý rằng việc thiếu kết nối với thực tại đôi khi có thể khiến bạn chìm đắm trong ảo mộng."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Aries",
-      "bodyText": "Hải Vương ở Bạch Dương biểu trưng cho những giấc mơ về sự độc lập, tinh thần anh hùng và lý tưởng hóa sức mạnh cá nhân. Bạn thường có xu hướng tin vào khả năng dẫn dắt của trực giác, khát khao chinh phục bằng niềm tin thay vì bạo lực. Cần chú ý rằng sự ảo tưởng về sức mạnh của bản thân đôi khi có thể khiến bạn đưa ra những hành động bốc đồng."
+      "bodyText": "Sao Hải Vương ở Bạch Dương biểu trưng cho những giấc mơ về sự độc lập, tinh thần anh hùng và lý tưởng hóa sức mạnh cá nhân. Bạn thường có xu hướng tin vào khả năng dẫn dắt của trực giác, khát khao chinh phục bằng niềm tin thay vì bạo lực. Cần chú ý rằng sự ảo tưởng về sức mạnh của bản thân đôi khi có thể khiến bạn đưa ra những hành động bốc đồng."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Taurus",
-      "bodyText": "Hải Vương ở Kim Ngưu đại diện cho lý tưởng về vẻ đẹp tự nhiên, tài nguyên và khả năng chuyển hóa vật chất thành nghệ thuật. Bạn thường có xu hướng tìm kiếm sự thiêng liêng qua thiên nhiên, có cảm thụ tinh tế và thích cuộc sống bình yên, no đủ. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn dễ bị thất thoát hoặc lừa dối."
+      "bodyText": "Sao Hải Vương ở Kim Ngưu đại diện cho lý tưởng về vẻ đẹp tự nhiên, tài nguyên và khả năng chuyển hóa vật chất thành nghệ thuật. Bạn thường có xu hướng tìm kiếm sự thiêng liêng qua thiên nhiên, có cảm thụ tinh tế và thích cuộc sống bình yên, no đủ. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn dễ bị thất thoát hoặc lừa dối."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Gemini",
-      "bodyText": "Hải Vương ở Song Tử mang đến khả năng giao tiếp bằng trực giác, trí tưởng tượng ngôn từ phong phú và tư duy thơ ca. Bạn thường có xu hướng nhìn thế giới qua lăng kính đa chiều, dễ đồng cảm với nhiều luồng tư tưởng và học hỏi qua cảm nhận. Cần chú ý rằng sự thiếu rõ ràng trong giao tiếp đôi khi có thể dẫn đến những hiểu lầm hoặc thông tin sai lệch."
+      "bodyText": "Sao Hải Vương ở Song Tử mang đến khả năng giao tiếp bằng trực giác, trí tưởng tượng ngôn từ phong phú và tư duy thơ ca. Bạn thường có xu hướng nhìn thế giới qua lăng kính đa chiều, dễ đồng cảm với nhiều luồng tư tưởng và học hỏi qua cảm nhận. Cần chú ý rằng sự thiếu rõ ràng trong giao tiếp đôi khi có thể dẫn đến những hiểu lầm hoặc thông tin sai lệch."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Cancer",
-      "bodyText": "Hải Vương ở Cự Giải tượng trưng cho sự nhạy cảm sâu sắc, lý tưởng hóa tình cảm gia đình và cội nguồn. Bạn thường có xu hướng mong muốn bảo vệ người khác bằng tình yêu thương vô điều kiện, sở hữu trực giác mạnh mẽ về cảm xúc của người thân. Cần chú ý rằng sự đắm chìm trong quá khứ đôi khi có thể khiến bạn khó thoát khỏi những tổn thương cũ."
+      "bodyText": "Sao Hải Vương ở Cự Giải tượng trưng cho sự nhạy cảm sâu sắc, lý tưởng hóa tình cảm gia đình và cội nguồn. Bạn thường có xu hướng mong muốn bảo vệ người khác bằng tình yêu thương vô điều kiện, sở hữu trực giác mạnh mẽ về cảm xúc của người thân. Cần chú ý rằng sự đắm chìm trong quá khứ đôi khi có thể khiến bạn khó thoát khỏi những tổn thương cũ."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Leo",
-      "bodyText": "Hải Vương ở Sư Tử gắn liền với những giấc mơ huy hoàng, sự lãng mạn trong nghệ thuật và lý tưởng hóa sự công nhận. Bạn thường có xu hướng truyền tải thông điệp tâm linh qua các tác phẩm sáng tạo, khao khát yêu đương mãnh liệt và luôn muốn mang lại niềm vui. Cần chú ý rằng việc tìm kiếm ảo ảnh hào quang đôi khi có thể khiến bạn thất vọng khi đối mặt với thực tế."
+      "bodyText": "Sao Hải Vương ở Sư Tử gắn liền với những giấc mơ huy hoàng, sự lãng mạn trong nghệ thuật và lý tưởng hóa sự công nhận. Bạn thường có xu hướng truyền tải thông điệp tâm linh qua các tác phẩm sáng tạo, khao khát yêu đương mãnh liệt và luôn muốn mang lại niềm vui. Cần chú ý rằng việc tìm kiếm ảo ảnh hào quang đôi khi có thể khiến bạn thất vọng khi đối mặt với thực tế."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Virgo",
-      "bodyText": "Hải Vương ở Xử Nữ biểu tượng cho sự cống hiến thầm lặng, mong muốn chữa lành và lý tưởng hóa công việc phục vụ. Bạn thường có xu hướng tìm kiếm ý nghĩa thông qua việc giúp đỡ người khác, nhạy cảm với các vấn đề sức khỏe và có khả năng phân tích trực giác. Cần chú ý rằng sự cầu toàn kết hợp với sự mơ hồ đôi khi có thể khiến bạn dễ bị rối trí."
+      "bodyText": "Sao Hải Vương ở Xử Nữ biểu tượng cho sự cống hiến thầm lặng, mong muốn chữa lành và lý tưởng hóa công việc phục vụ. Bạn thường có xu hướng tìm kiếm ý nghĩa thông qua việc giúp đỡ người khác, nhạy cảm với các vấn đề sức khỏe và có khả năng phân tích trực giác. Cần chú ý rằng sự cầu toàn kết hợp với sự mơ hồ đôi khi có thể khiến bạn dễ bị rối trí."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Libra",
-      "bodyText": "Hải Vương ở Thiên Bình đại diện cho lý tưởng về tình yêu hoàn hảo, sự hòa hợp xã hội và khả năng cảm thụ nghệ thuật tinh tế. Bạn thường có xu hướng khao khát một mối quan hệ không tì vết, đề cao công lý và muốn xây dựng một thế giới bình yên. Cần chú ý rằng việc né tránh xung đột bằng mọi giá đôi khi có thể khiến bạn bỏ lỡ những vấn đề cốt lõi cần giải quyết."
+      "bodyText": "Sao Hải Vương ở Thiên Bình đại diện cho lý tưởng về tình yêu hoàn hảo, sự hòa hợp xã hội và khả năng cảm thụ nghệ thuật tinh tế. Bạn thường có xu hướng khao khát một mối quan hệ không tì vết, đề cao công lý và muốn xây dựng một thế giới bình yên. Cần chú ý rằng việc né tránh xung đột bằng mọi giá đôi khi có thể khiến bạn bỏ lỡ những vấn đề cốt lõi cần giải quyết."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Scorpio",
-      "bodyText": "Hải Vương ở Thiên Yết mang đến sự nhạy cảm với những điều huyền bí, trực giác sâu sắc và khao khát chuyển hóa tâm hồn. Bạn thường có xu hướng thích khám phá ranh giới giữa sự sống và cái chết, tìm kiếm sự gắn kết mãnh liệt và thấu hiểu chiều sâu tâm lý. Cần chú ý rằng sự ám ảnh và nỗi sợ hãi mơ hồ đôi khi có thể khiến bạn dễ vướng vào những suy nghĩ tiêu cực."
+      "bodyText": "Sao Hải Vương ở Thiên Yết mang đến sự nhạy cảm với những điều huyền bí, trực giác sâu sắc và khao khát chuyển hóa tâm hồn. Bạn thường có xu hướng thích khám phá ranh giới giữa sự sống và cái chết, tìm kiếm sự gắn kết mãnh liệt và thấu hiểu chiều sâu tâm lý. Cần chú ý rằng sự ám ảnh và nỗi sợ hãi mơ hồ đôi khi có thể khiến bạn dễ vướng vào những suy nghĩ tiêu cực."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Sagittarius",
-      "bodyText": "Hải Vương ở Nhân Mã tượng trưng cho đức tin bao la, lý tưởng hóa triết học và khao khát tìm kiếm sự thật tối thượng. Bạn thường có xu hướng nhìn đời với con mắt bao dung, thích mở rộng tầm nhìn qua tâm linh và luôn tin vào những phép màu. Cần chú ý rằng sự cuồng tín mù quáng đôi khi có thể khiến bạn dễ tin vào những giáo điều sai lệch."
+      "bodyText": "Sao Hải Vương ở Nhân Mã tượng trưng cho đức tin bao la, lý tưởng hóa triết học và khao khát tìm kiếm sự thật tối thượng. Bạn thường có xu hướng nhìn đời với con mắt bao dung, thích mở rộng tầm nhìn qua tâm linh và luôn tin vào những phép màu. Cần chú ý rằng sự cuồng tín mù quáng đôi khi có thể khiến bạn dễ tin vào những giáo điều sai lệch."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Capricorn",
-      "bodyText": "Hải Vương ở Ma Kết biểu trưng cho sự hòa quyện giữa cấu trúc và trực giác, mong muốn xây dựng những lý tưởng thành thực tế vững chắc. Bạn thường có xu hướng sử dụng trí tưởng tượng để phục vụ công việc, khao khát tạo ra trật tự cho những điều hỗn độn và có tinh thần trách nhiệm cao. Cần chú ý rằng sự bi quan và thất vọng đôi khi có thể làm suy giảm niềm tin của bạn."
+      "bodyText": "Sao Hải Vương ở Ma Kết biểu trưng cho sự hòa quyện giữa cấu trúc và trực giác, mong muốn xây dựng những lý tưởng thành thực tế vững chắc. Bạn thường có xu hướng sử dụng trí tưởng tượng để phục vụ công việc, khao khát tạo ra trật tự cho những điều hỗn độn và có tinh thần trách nhiệm cao. Cần chú ý rằng sự bi quan và thất vọng đôi khi có thể làm suy giảm niềm tin của bạn."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Aquarius",
-      "bodyText": "Hải Vương ở Bảo Bình mang lại những giấc mơ về sự bình đẳng, lý tưởng hóa cộng đồng và khao khát kết nối tâm linh đa dạng. Bạn thường có xu hướng tin vào sức mạnh của tập thể, trân trọng lòng nhân đạo và sẵn sàng hi sinh vì một tương lai tốt đẹp hơn. Cần chú ý rằng lý thuyết xa vời đôi khi có thể khiến bạn trở nên thiếu thực tế trong hành động cụ thể."
+      "bodyText": "Sao Hải Vương ở Bảo Bình mang lại những giấc mơ về sự bình đẳng, lý tưởng hóa cộng đồng và khao khát kết nối tâm linh đa dạng. Bạn thường có xu hướng tin vào sức mạnh của tập thể, trân trọng lòng nhân đạo và sẵn sàng hi sinh vì một tương lai tốt đẹp hơn. Cần chú ý rằng lý thuyết xa vời đôi khi có thể khiến bạn trở nên thiếu thực tế trong hành động cụ thể."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Neptune_in_Pisces",
-      "bodyText": "Hải Vương ở Song Ngư đại diện cho lòng trắc ẩn tuyệt đối, trực giác hòa quyện với vũ trụ và sức mạnh của tình yêu vô điều kiện. Bạn thường có xu hướng cảm nhận năng lượng một cách rõ rệt, dễ tha thứ và sở hữu tài năng nghệ thuật xuất chúng. Cần chú ý rằng việc thiếu ranh giới bảo vệ bản thân đôi khi có thể khiến bạn dễ bị lợi dụng bởi người khác."
+      "bodyText": "Sao Hải Vương ở Song Ngư đại diện cho lòng trắc ẩn tuyệt đối, trực giác hòa quyện với vũ trụ và sức mạnh của tình yêu vô điều kiện. Bạn thường có xu hướng cảm nhận năng lượng một cách rõ rệt, dễ tha thứ và sở hữu tài năng nghệ thuật xuất chúng. Cần chú ý rằng việc thiếu ranh giới bảo vệ bản thân đôi khi có thể khiến bạn dễ bị lợi dụng bởi người khác."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Aries",
-      "bodyText": "Diêm Vương ở Bạch Dương biểu trưng cho sự chuyển hóa qua hành động mãnh liệt, sức mạnh bản năng và khát khao phá vỡ giới hạn cá nhân. Bạn thường có xu hướng tìm kiếm sự tự do tuyệt đối, không ngần ngại đương đầu với thử thách để đạt được mục tiêu. Cần chú ý rằng sự quyết liệt quá mức đôi khi có thể biến thành thái độ áp đặt và gây tổn thương cho người khác."
+      "bodyText": "Sao Diêm Vương ở Bạch Dương biểu trưng cho sự chuyển hóa qua hành động mãnh liệt, sức mạnh bản năng và khát khao phá vỡ giới hạn cá nhân. Bạn thường có xu hướng tìm kiếm sự tự do tuyệt đối, không ngần ngại đương đầu với thử thách để đạt được mục tiêu. Cần chú ý rằng sự quyết liệt quá mức đôi khi có thể biến thành thái độ áp đặt và gây tổn thương cho người khác."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Taurus",
-      "bodyText": "Diêm Vương ở Kim Ngưu đại diện cho sự tái sinh giá trị vật chất, khao khát làm chủ tài nguyên và sức mạnh sự kiên định. Bạn thường có xu hướng bám trụ vững vàng trước những khủng hoảng, có khả năng biến không thành có và trân trọng sự an toàn. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở bước tiến của bạn."
+      "bodyText": "Sao Diêm Vương ở Kim Ngưu đại diện cho sự tái sinh giá trị vật chất, khao khát làm chủ tài nguyên và sức mạnh sự kiên định. Bạn thường có xu hướng bám trụ vững vàng trước những khủng hoảng, có khả năng biến không thành có và trân trọng sự an toàn. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở bước tiến của bạn."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Gemini",
-      "bodyText": "Diêm Vương ở Song Tử mang đến sức mạnh của ngôn từ, khả năng phân tích sâu sắc và khát khao chuyển hóa tư duy. Bạn thường có xu hướng sử dụng trí tuệ để tác động đến người khác, thích đào sâu chân lý và nhạy bén với thông tin. Cần chú ý rằng sự sắc sảo quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
+      "bodyText": "Sao Diêm Vương ở Song Tử mang đến sức mạnh của ngôn từ, khả năng phân tích sâu sắc và khát khao chuyển hóa tư duy. Bạn thường có xu hướng sử dụng trí tuệ để tác động đến người khác, thích đào sâu chân lý và nhạy bén với thông tin. Cần chú ý rằng sự sắc sảo quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Cancer",
-      "bodyText": "Diêm Vương ở Cự Giải tượng trưng cho sự thay đổi tận gốc rễ về mặt cảm xúc, sức mạnh gia đình và quá trình chữa lành tổn thương. Bạn thường có xu hướng bảo vệ quyết liệt những người thân yêu, khao khát sự an toàn tuyệt đối và sở hữu trực giác sâu thẳm. Cần chú ý rằng sự kìm nén cảm xúc quá lâu đôi khi có thể dẫn đến những phản ứng bùng nổ tiêu cực."
+      "bodyText": "Sao Diêm Vương ở Cự Giải tượng trưng cho sự thay đổi tận gốc rễ về mặt cảm xúc, sức mạnh gia đình và quá trình chữa lành tổn thương. Bạn thường có xu hướng bảo vệ quyết liệt những người thân yêu, khao khát sự an toàn tuyệt đối và sở hữu trực giác sâu thẳm. Cần chú ý rằng sự kìm nén cảm xúc quá lâu đôi khi có thể dẫn đến những phản ứng bùng nổ tiêu cực."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Leo",
-      "bodyText": "Diêm Vương ở Sư Tử gắn liền với khát khao quyền lực, sự biến đổi qua sáng tạo và mong muốn để lại di sản huy hoàng. Bạn thường có xu hướng thể hiện cái tôi mạnh mẽ, sẵn sàng dẫn dắt và có khả năng thay đổi thế giới bằng tài năng của mình. Cần chú ý rằng cái tôi quá lớn đôi khi có thể khiến bạn trở nên độc đoán và khó lòng chấp nhận thất bại."
+      "bodyText": "Sao Diêm Vương ở Sư Tử gắn liền với khát khao quyền lực, sự biến đổi qua sáng tạo và mong muốn để lại di sản huy hoàng. Bạn thường có xu hướng thể hiện cái tôi mạnh mẽ, sẵn sàng dẫn dắt và có khả năng thay đổi thế giới bằng tài năng của mình. Cần chú ý rằng cái tôi quá lớn đôi khi có thể khiến bạn trở nên độc đoán và khó lòng chấp nhận thất bại."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Virgo",
-      "bodyText": "Diêm Vương ở Xử Nữ biểu tượng cho sự chuyển hóa thông qua công việc, sức mạnh phân tích và khao khát hoàn thiện hệ thống. Bạn thường có xu hướng theo đuổi sự chính xác tuyệt đối, không ngừng cải tiến phương pháp và có năng lực phân loại chi tiết sắc bén. Cần chú ý rằng sự ám ảnh về tính hoàn hảo đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng và tự trừng phạt."
+      "bodyText": "Sao Diêm Vương ở Xử Nữ biểu tượng cho sự chuyển hóa thông qua công việc, sức mạnh phân tích và khao khát hoàn thiện hệ thống. Bạn thường có xu hướng theo đuổi sự chính xác tuyệt đối, không ngừng cải tiến phương pháp và có năng lực phân loại chi tiết sắc bén. Cần chú ý rằng sự ám ảnh về tính hoàn hảo đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng và tự trừng phạt."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Libra",
-      "bodyText": "Diêm Vương ở Thiên Bình đại diện cho sự tái sinh thông qua các mối quan hệ, khát khao công lý xã hội và sức mạnh của sự hợp tác. Bạn thường có xu hướng tìm kiếm những liên kết sâu sắc, cố gắng duy trì sự cân bằng quyền lực và không ngại đối mặt với xung đột để tìm ra chân lý. Cần chú ý rằng xu hướng thao túng ngầm đôi khi có thể phá vỡ sự hòa hợp mà bạn luôn tìm kiếm."
+      "bodyText": "Sao Diêm Vương ở Thiên Bình đại diện cho sự tái sinh thông qua các mối quan hệ, khát khao công lý xã hội và sức mạnh của sự hợp tác. Bạn thường có xu hướng tìm kiếm những liên kết sâu sắc, cố gắng duy trì sự cân bằng quyền lực và không ngại đối mặt với xung đột để tìm ra chân lý. Cần chú ý rằng xu hướng thao túng ngầm đôi khi có thể phá vỡ sự hòa hợp mà bạn luôn tìm kiếm."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Scorpio",
-      "bodyText": "Diêm Vương ở Thiên Yết mang đến sức mạnh chuyển hóa tối cao, khả năng đối mặt với phần tối của tâm hồn và khao khát tái sinh. Bạn thường có xu hướng tìm hiểu những điều bí ẩn, sở hữu ý chí kiên cường và khả năng phục hồi đáng kinh ngạc. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy những đau khổ không cần thiết."
+      "bodyText": "Sao Diêm Vương ở Thiên Yết mang đến sức mạnh chuyển hóa tối cao, khả năng đối mặt với phần tối của tâm hồn và khao khát tái sinh. Bạn thường có xu hướng tìm hiểu những điều bí ẩn, sở hữu ý chí kiên cường và khả năng phục hồi đáng kinh ngạc. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy những đau khổ không cần thiết."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Sagittarius",
-      "bodyText": "Diêm Vương ở Nhân Mã tượng trưng cho sự phá vỡ giáo điều, khao khát tìm kiếm sự thật và sức mạnh của niềm tin. Bạn thường có xu hướng thách thức các hệ thống triết học cũ, thích mở rộng tầm nhìn qua những trải nghiệm tâm linh và học thuật. Cần chú ý rằng sự cứng nhắc trong tư tưởng đôi khi có thể khiến bạn áp đặt lý tưởng của mình lên người khác."
+      "bodyText": "Sao Diêm Vương ở Nhân Mã tượng trưng cho sự phá vỡ giáo điều, khao khát tìm kiếm sự thật và sức mạnh của niềm tin. Bạn thường có xu hướng thách thức các hệ thống triết học cũ, thích mở rộng tầm nhìn qua những trải nghiệm tâm linh và học thuật. Cần chú ý rằng sự cứng nhắc trong tư tưởng đôi khi có thể khiến bạn áp đặt lý tưởng của mình lên người khác."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Capricorn",
-      "bodyText": "Diêm Vương ở Ma Kết biểu trưng cho sự chuyển hóa cấu trúc quyền lực, khát khao đạt được địa vị và khả năng chịu đựng áp lực lớn. Bạn thường có xu hướng làm việc với tinh thần trách nhiệm cao nhất, sẵn sàng phá bỏ những luật lệ lỗi thời để xây dựng nền móng mới. Cần chú ý rằng sự lạnh lùng và tham vọng quá mức đôi khi có thể khiến bạn trở nên vô cảm trước nhu cầu của người khác."
+      "bodyText": "Sao Diêm Vương ở Ma Kết biểu trưng cho sự chuyển hóa cấu trúc quyền lực, khát khao đạt được địa vị và khả năng chịu đựng áp lực lớn. Bạn thường có xu hướng làm việc với tinh thần trách nhiệm cao nhất, sẵn sàng phá bỏ những luật lệ lỗi thời để xây dựng nền móng mới. Cần chú ý rằng sự lạnh lùng và tham vọng quá mức đôi khi có thể khiến bạn trở nên vô cảm trước nhu cầu của người khác."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Aquarius",
-      "bodyText": "Diêm Vương ở Bảo Bình mang lại sức mạnh thay đổi xã hội, khao khát tự do tập thể và sự đột phá trong công nghệ. Bạn thường có xu hướng nhìn xa trông rộng, hành động vì lý tưởng nhân đạo và mong muốn phá bỏ các rào cản truyền thống. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể gây ra những hậu quả khó lường đối với cộng đồng."
+      "bodyText": "Sao Diêm Vương ở Bảo Bình mang lại sức mạnh thay đổi xã hội, khao khát tự do tập thể và sự đột phá trong công nghệ. Bạn thường có xu hướng nhìn xa trông rộng, hành động vì lý tưởng nhân đạo và mong muốn phá bỏ các rào cản truyền thống. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể gây ra những hậu quả khó lường đối với cộng đồng."
     },
     {
       "subjectType": "PlanetInSign",
       "subjectKey": "Pluto_in_Pisces",
-      "bodyText": "Diêm Vương ở Song Ngư đại diện cho sự tái sinh về mặt tâm linh, khát khao hòa tan bản ngã và sức mạnh của lòng trắc ẩn sâu sắc. Bạn thường có xu hướng kết nối mạnh mẽ với tiềm thức, sử dụng tình yêu thương để chữa lành và dễ dàng thấu cảm nỗi đau của vạn vật. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn dễ bị thao túng hoặc lạc lối."
+      "bodyText": "Sao Diêm Vương ở Song Ngư đại diện cho sự tái sinh về mặt tâm linh, khát khao hòa tan bản ngã và sức mạnh của lòng trắc ẩn sâu sắc. Bạn thường có xu hướng kết nối mạnh mẽ với tiềm thức, sử dụng tình yêu thương để chữa lành và dễ dàng thấu cảm nỗi đau của vạn vật. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn dễ bị thao túng hoặc lạc lối."
     },
     {
       "subjectType": "AngleInSign",
@@ -972,7 +972,7 @@
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Jupiter_in_House_2",
-      "bodyText": "Sao Mộc ở Nhà 2 đại diện cho khả năng thu hút tài chính, sự trân trọng những giá trị vật chất và khát khao tận hưởng cuộc sống sung túc. Bạn thường có xu hướng kiếm tiền một cách thuận lợi, đầu tư khôn ngoan và không ngại chi tiêu cho những thứ chất lượng. Cần chú ý rằng sự phung phí quá đà đôi khi có thể dẫn đến những khó khăn tài chính không đáng có."
+      "bodyText": "Sao Mộc ở Nhà 2 đại diện cho khả năng thu hút tài chính, sự trân trọng những giá trị vật chất và khát khao tận hưởng cuộc sống sung túc. Bạn thường có xu hướng kiếm tiền một cách thuận lợi, đầu tư khôn ngoan và không ngại chi tiêu cho những thứ chất lượng. Cần chú ý rằng sự phung phí quá đà đôi khi có thể khiến việc quản lý tài sản trở nên kém hiệu quả."
     },
     {
       "subjectType": "PlanetInHouse",
@@ -1082,187 +1082,187 @@
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Saturn_in_House_12",
-      "bodyText": "Sao Thổ ở Nhà 12 đại diện cho những bài học nghiệp quả tiềm ẩn, sự kiểm soát nội tâm và khát khao tìm kiếm sự bình yên thông qua sự tĩnh lặng. Bạn thường có xu hướng giữ kín những nỗi sợ hãi, dành thời gian một mình để suy ngẫm và dần dần thấu hiểu những giới hạn của bản thân. Cần chú ý rằng sự tự cô lập đôi khi có thể khiến bạn chìm đắm trong cảm giác tội lỗi hoặc trầm cảm."
+      "bodyText": "Sao Thổ ở Nhà 12 đại diện cho những bài học nghiệp quả tiềm ẩn, sự kiểm soát nội tâm và khát khao tìm kiếm sự bình yên thông qua sự tĩnh lặng. Bạn thường có xu hướng giữ kín những nỗi sợ hãi, dành thời gian một mình để suy ngẫm và dần dần thấu hiểu những giới hạn của bản thân. Cần chú ý rằng sự tự cô lập đôi khi có thể khiến bạn chìm đắm trong cảm giác tội lỗi hoặc cảm giác u buồn hoặc mệt mỏi về tinh thần."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_1",
-      "bodyText": "Thiên Vương ở Nhà 1 biểu trưng cho vẻ ngoài độc đáo, cá tính nổi loạn và khát khao mãnh liệt về sự tự do thể hiện bản thân. Bạn thường có xu hướng phá vỡ các chuẩn mực, thích làm mọi thứ theo cách riêng và luôn mang đến những bất ngờ cho người khác. Cần lưu ý rằng sự bốc đồng và lập dị đôi khi có thể khiến bạn khó hòa nhập với những môi trường truyền thống."
+      "bodyText": "Sao Thiên Vương ở Nhà 1 biểu trưng cho vẻ ngoài độc đáo, cá tính nổi loạn và khát khao mãnh liệt về sự tự do thể hiện bản thân. Bạn thường có xu hướng phá vỡ các chuẩn mực, thích làm mọi thứ theo cách riêng và luôn mang đến những bất ngờ cho người khác. Cần lưu ý rằng sự bốc đồng và lập dị đôi khi có thể khiến bạn khó hòa nhập với những môi trường truyền thống."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_2",
-      "bodyText": "Thiên Vương ở Nhà 2 đại diện cho những biến động bất ngờ về tài chính, cách kiếm tiền sáng tạo và thái độ khác biệt đối với giá trị vật chất. Bạn thường có xu hướng thích những công việc liên quan đến công nghệ, không quá quan trọng việc tích trữ và sẵn sàng mạo hiểm. Cần chú ý rằng sự bất ổn trong thu nhập đôi khi có thể mang lại những căng thẳng không đáng có."
+      "bodyText": "Sao Thiên Vương ở Nhà 2 đại diện cho những biến động bất ngờ về tài chính, cách kiếm tiền sáng tạo và thái độ khác biệt đối với giá trị vật chất. Bạn thường có xu hướng thích những công việc liên quan đến công nghệ, không quá quan trọng việc tích trữ và sẵn sàng mạo hiểm. Cần chú ý rằng sự bất ổn trong thu nhập đôi khi có thể mang lại những căng thẳng không đáng có."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_3",
-      "bodyText": "Thiên Vương ở Nhà 3 mang đến tư duy đột phá, tốc độ suy nghĩ nhanh chóng và khát khao truyền đạt những ý tưởng tiến bộ. Bạn thường có xu hướng quan sát thế giới qua lăng kính độc đáo, giao tiếp một cách sắc sảo và rất thích những chủ đề mới lạ. Cần lưu ý rằng sự thiếu kiên nhẫn đôi khi có thể khiến bạn cắt ngang lời người khác hoặc bỏ dở những nghiên cứu sâu."
+      "bodyText": "Sao Thiên Vương ở Nhà 3 mang đến tư duy đột phá, tốc độ suy nghĩ nhanh chóng và khát khao truyền đạt những ý tưởng tiến bộ. Bạn thường có xu hướng quan sát thế giới qua lăng kính độc đáo, giao tiếp một cách sắc sảo và rất thích những chủ đề mới lạ. Cần lưu ý rằng sự thiếu kiên nhẫn đôi khi có thể khiến bạn cắt ngang lời người khác hoặc bỏ dở những nghiên cứu sâu."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_4",
-      "bodyText": "Thiên Vương ở Nhà 4 tượng trưng cho một nền tảng gia đình khác biệt, sự thay đổi nơi ở đột ngột và khát khao giải phóng khỏi những ràng buộc quá khứ. Bạn thường có xu hướng muốn sống tự lập sớm, trang trí nhà cửa theo phong cách hiện đại và đánh giá cao sự tự do trong không gian cá nhân. Cần chú ý rằng sự bất an từ bên trong đôi khi có thể khiến bạn khó tìm thấy cảm giác thực sự thuộc về nơi nào đó."
+      "bodyText": "Sao Thiên Vương ở Nhà 4 tượng trưng cho một nền tảng gia đình khác biệt, sự thay đổi nơi ở đột ngột và khát khao giải phóng khỏi những ràng buộc quá khứ. Bạn thường có xu hướng muốn sống tự lập sớm, trang trí nhà cửa theo phong cách hiện đại và đánh giá cao sự tự do trong không gian cá nhân. Cần chú ý rằng sự bất an từ bên trong đôi khi có thể khiến bạn khó tìm thấy cảm giác thực sự thuộc về nơi nào đó."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_5",
-      "bodyText": "Thiên Vương ở Nhà 5 gắn liền với những mối tình lãng mạn bất ngờ, khả năng sáng tạo độc đáo và khát khao phá vỡ các nguyên tắc nghệ thuật truyền thống. Bạn thường có xu hướng bị thu hút bởi những người cá tính, thích trải nghiệm những điều mới lạ và thể hiện bản thân một cách vô cùng sáng tạo. Cần lưu ý rằng sự thiếu cam kết đôi khi có thể khiến những mối quan hệ của bạn nhanh chóng kết thúc."
+      "bodyText": "Sao Thiên Vương ở Nhà 5 gắn liền với những mối tình lãng mạn bất ngờ, khả năng sáng tạo độc đáo và khát khao phá vỡ các nguyên tắc nghệ thuật truyền thống. Bạn thường có xu hướng bị thu hút bởi những người cá tính, thích trải nghiệm những điều mới lạ và thể hiện bản thân một cách vô cùng sáng tạo. Cần lưu ý rằng sự thiếu cam kết đôi khi có thể khiến những mối quan hệ của bạn nhanh chóng kết thúc."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_6",
-      "bodyText": "Thiên Vương ở Nhà 6 biểu tượng cho phương pháp làm việc sáng tạo, mong muốn thay đổi môi trường công sở và thái độ hiện đại đối với sức khỏe. Bạn thường có xu hướng thích thời gian làm việc linh hoạt, áp dụng công nghệ vào nhiệm vụ hàng ngày và không chịu được sự nhàm chán. Cần chú ý rằng sự căng thẳng thần kinh liên tục đôi khi có thể ảnh hưởng tiêu cực đến thể trạng của bạn."
+      "bodyText": "Sao Thiên Vương ở Nhà 6 biểu tượng cho phương pháp làm việc sáng tạo, mong muốn thay đổi môi trường công sở và thái độ hiện đại đối với sức khỏe. Bạn thường có xu hướng thích thời gian làm việc linh hoạt, áp dụng công nghệ vào nhiệm vụ hàng ngày và không chịu được sự nhàm chán. Cần chú ý rằng sự căng thẳng thần kinh liên tục đôi khi có thể ảnh hưởng tiêu cực đến thể trạng của bạn."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_7",
-      "bodyText": "Thiên Vương ở Nhà 7 đại diện cho những mối quan hệ đối tác bất thường, sự độc lập trong hôn nhân và khát khao tìm kiếm một người bạn đời thông minh, phá cách. Bạn thường có xu hướng kết hôn hoặc chia tay một cách đột ngột, trân trọng không gian riêng tư và cần sự bình đẳng tuyệt đối. Cần chú ý rằng sự xa cách về mặt cảm xúc đôi khi có thể tạo ra rào cản lớn trong việc duy trì sự gắn kết lâu dài."
+      "bodyText": "Sao Thiên Vương ở Nhà 7 đại diện cho những mối quan hệ đối tác bất thường, sự độc lập trong hôn nhân và khát khao tìm kiếm một người bạn đời thông minh, phá cách. Bạn thường có xu hướng trải qua những thay đổi bất ngờ trong các mối quan hệ, trân trọng không gian riêng tư và cần sự bình đẳng tuyệt đối. Cần chú ý rằng sự xa cách về mặt cảm xúc đôi khi có thể tạo ra rào cản lớn trong việc duy trì sự gắn kết lâu dài."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_8",
-      "bodyText": "Thiên Vương ở Nhà 8 mang đến sự thức tỉnh tâm linh đột ngột, thái độ cởi mở với những vấn đề nhạy cảm và khả năng tái sinh mạnh mẽ. Bạn thường có xu hướng tò mò về những lĩnh vực huyền bí, sẵn sàng thay đổi để vượt qua khủng hoảng và có thể gặp những bất ngờ về tài chính chung. Cần chú ý rằng sự bất an sâu thẳm đôi khi có thể khiến bạn hành xử một cách cực đoan."
+      "bodyText": "Sao Thiên Vương ở Nhà 8 mang đến sự thức tỉnh tâm linh đột ngột, thái độ cởi mở với những vấn đề nhạy cảm và khả năng tái sinh mạnh mẽ. Bạn thường có xu hướng tò mò về những lĩnh vực huyền bí, sẵn sàng thay đổi để vượt qua khủng hoảng và có thể gặp những bất ngờ về tài chính chung. Cần chú ý rằng sự bất an sâu thẳm đôi khi có thể khiến bạn hành xử một cách cực đoan."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_9",
-      "bodyText": "Thiên Vương ở Nhà 9 tượng trưng cho tư duy triết học tự do, những chuyến đi xa bất ngờ và khát khao khám phá những chân lý mới mẻ. Bạn thường có xu hướng thách thức các giáo điều cũ, quan tâm đến tương lai và dễ dàng tiếp thu kiến thức từ nhiều nền văn hóa. Cần chú ý rằng sự thay đổi lý tưởng liên tục đôi khi có thể khiến bạn thiếu đi một nền tảng đức tin vững chắc."
+      "bodyText": "Sao Thiên Vương ở Nhà 9 tượng trưng cho tư duy triết học tự do, những chuyến đi xa bất ngờ và khát khao khám phá những chân lý mới mẻ. Bạn thường có xu hướng thách thức các giáo điều cũ, quan tâm đến tương lai và dễ dàng tiếp thu kiến thức từ nhiều nền văn hóa. Cần chú ý rằng sự thay đổi lý tưởng liên tục đôi khi có thể khiến bạn thiếu đi một nền tảng đức tin vững chắc."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_10",
-      "bodyText": "Thiên Vương ở Nhà 10 biểu trưng cho con đường sự nghiệp khác thường, những thay đổi đột ngột về địa vị và khát khao trở thành người tiên phong. Bạn thường có xu hướng muốn đóng góp những sáng kiến tiến bộ, không chịu sự gò bó từ cấp trên và khao khát độc lập trong công việc. Cần chú ý rằng thái độ chống đối chính quyền đôi khi có thể gây cản trở cho sự thăng tiến của bạn."
+      "bodyText": "Sao Thiên Vương ở Nhà 10 biểu trưng cho con đường sự nghiệp khác thường, những thay đổi đột ngột về địa vị và khát khao trở thành người tiên phong. Bạn thường có xu hướng muốn đóng góp những sáng kiến tiến bộ, không chịu sự gò bó từ cấp trên và khao khát độc lập trong công việc. Cần chú ý rằng thái độ chống đối chính quyền đôi khi có thể gây cản trở cho sự thăng tiến của bạn."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_11",
-      "bodyText": "Thiên Vương ở Nhà 11 mang lại những nhóm bạn đa dạng, lý tưởng nhân đạo mạnh mẽ và khát khao mang lại sự đổi mới cho cộng đồng. Bạn thường có xu hướng tham gia các tổ chức tiến bộ, kết nối với những tâm hồn tự do và luôn hướng tới những giá trị bình đẳng. Cần chú ý rằng sự bốc đồng đôi khi có thể khiến bạn dễ dàng thay đổi bạn bè hoặc định hướng tập thể."
+      "bodyText": "Sao Thiên Vương ở Nhà 11 mang lại những nhóm bạn đa dạng, lý tưởng nhân đạo mạnh mẽ và khát khao mang lại sự đổi mới cho cộng đồng. Bạn thường có xu hướng tham gia các tổ chức tiến bộ, kết nối với những tâm hồn tự do và luôn hướng tới những giá trị bình đẳng. Cần chú ý rằng sự bốc đồng đôi khi có thể khiến bạn dễ dàng thay đổi bạn bè hoặc định hướng tập thể."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Uranus_in_House_12",
-      "bodyText": "Thiên Vương ở Nhà 12 đại diện cho trực giác lóe sáng, những giấc mơ kỳ lạ và khát khao giải phóng khỏi những tổn thương trong tiềm thức. Bạn thường có xu hướng nhận được những thông điệp tâm linh bất ngờ, thích làm việc một mình để nghiên cứu những điều bí ẩn và có khả năng thấu hiểu sâu sắc. Cần chú ý rằng việc kìm nén sự nổi loạn đôi khi có thể dẫn đến những cơn khủng hoảng tâm lý khó lý giải."
+      "bodyText": "Sao Thiên Vương ở Nhà 12 đại diện cho trực giác lóe sáng, những giấc mơ kỳ lạ và khát khao giải phóng khỏi những tổn thương trong tiềm thức. Bạn thường có xu hướng nhận được những thông điệp tâm linh bất ngờ, thích làm việc một mình để nghiên cứu những điều bí ẩn và có khả năng thấu hiểu sâu sắc. Cần chú ý rằng việc kìm nén sự nổi loạn đôi khi có thể dẫn đến những cơn khủng hoảng tâm lý khó lý giải."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_1",
-      "bodyText": "Hải Vương ở Nhà 1 biểu trưng cho vẻ ngoài mộng mơ, sự nhạy cảm sâu sắc và khát khao hòa mình vào dòng chảy của cuộc sống. Bạn thường có xu hướng tiếp nhận năng lượng xung quanh như một miếng bọt biển, tỏa ra sự dịu dàng và sở hữu trực giác rất bén nhạy. Cần lưu ý rằng việc thiếu đi ranh giới cá nhân đôi khi có thể khiến bạn dễ bị người khác tác động và đánh mất chính mình."
+      "bodyText": "Sao Hải Vương ở Nhà 1 biểu trưng cho vẻ ngoài mộng mơ, sự nhạy cảm sâu sắc và khát khao hòa mình vào dòng chảy của cuộc sống. Bạn thường có xu hướng tiếp nhận năng lượng xung quanh như một miếng bọt biển, tỏa ra sự dịu dàng và sở hữu trực giác rất bén nhạy. Cần lưu ý rằng việc thiếu đi ranh giới cá nhân đôi khi có thể khiến bạn dễ bị người khác tác động và đánh mất chính mình."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_2",
-      "bodyText": "Hải Vương ở Nhà 2 đại diện cho thái độ không màng vật chất, kiếm tiền dựa trên trực giác hoặc nghệ thuật và khát khao những giá trị thiêng liêng. Bạn thường có xu hướng thích những món đồ mang ý nghĩa tinh thần, tin vào sự an bài của vũ trụ và sẵn sàng chia sẻ tài nguyên. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn rơi vào tình trạng lừa đảo hoặc thất thoát."
+      "bodyText": "Sao Hải Vương ở Nhà 2 đại diện cho thái độ không màng vật chất, kiếm tiền dựa trên trực giác hoặc nghệ thuật và khát khao những giá trị thiêng liêng. Bạn thường có xu hướng thích những món đồ mang ý nghĩa tinh thần, tin vào sự an bài của vũ trụ và sẵn sàng chia sẻ tài nguyên. Cần chú ý rằng sự mơ hồ trong quản lý tài chính đôi khi có thể khiến bạn rơi vào tình trạng lừa đảo hoặc thất thoát."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_3",
-      "bodyText": "Hải Vương ở Nhà 3 mang đến tư duy bằng hình ảnh, khả năng giao tiếp đầy chất thơ và khát khao truyền đạt những ý tưởng tâm linh. Bạn thường có xu hướng nắm bắt thông tin qua cảm nhận, thích học hỏi nghệ thuật và ăn nói vô cùng truyền cảm. Cần chú ý rằng sự đãng trí và thiếu tính logic đôi khi có thể khiến lời nói của bạn trở nên khó hiểu đối với người khác."
+      "bodyText": "Sao Hải Vương ở Nhà 3 mang đến tư duy bằng hình ảnh, khả năng giao tiếp đầy chất thơ và khát khao truyền đạt những ý tưởng tâm linh. Bạn thường có xu hướng nắm bắt thông tin qua cảm nhận, thích học hỏi nghệ thuật và ăn nói vô cùng truyền cảm. Cần chú ý rằng sự đãng trí và thiếu tính logic đôi khi có thể khiến lời nói của bạn trở nên khó hiểu đối với người khác."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_4",
-      "bodyText": "Hải Vương ở Nhà 4 tượng trưng cho sự gắn bó tâm linh với gia đình, một không gian sống đầy tính nghệ thuật và khát khao tìm kiếm sự bình yên nơi tâm hồn. Bạn thường có xu hướng trân trọng những kỷ niệm đẹp, thích sống gần sông nước và luôn dành sự thấu cảm lớn cho cha mẹ. Cần chú ý rằng việc lý tưởng hóa quá khứ đôi khi có thể che khuất đi những vấn đề thực tế cần giải quyết."
+      "bodyText": "Sao Hải Vương ở Nhà 4 tượng trưng cho sự gắn bó tâm linh với gia đình, một không gian sống đầy tính nghệ thuật và khát khao tìm kiếm sự bình yên nơi tâm hồn. Bạn thường có xu hướng trân trọng những kỷ niệm đẹp, thích sống gần sông nước và luôn dành sự thấu cảm lớn cho cha mẹ. Cần chú ý rằng việc lý tưởng hóa quá khứ đôi khi có thể che khuất đi những vấn đề thực tế cần giải quyết."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_5",
-      "bodyText": "Hải Vương ở Nhà 5 gắn liền với sức sáng tạo vô biên, tình yêu lãng mạn như cổ tích và khát khao được đắm chìm trong niềm đam mê. Bạn thường có xu hướng bộc lộ tài năng qua âm nhạc hoặc diễn xuất, yêu thương một cách vô điều kiện và luôn tìm kiếm sự kỳ diệu. Cần chú ý rằng việc mù quáng trong tình yêu đôi khi có thể khiến bạn trao trái tim cho nhầm người và nhận lấy sự tổn thương."
+      "bodyText": "Sao Hải Vương ở Nhà 5 gắn liền với sức sáng tạo vô biên, tình yêu lãng mạn như cổ tích và khát khao được đắm chìm trong niềm đam mê. Bạn thường có xu hướng bộc lộ tài năng qua âm nhạc hoặc diễn xuất, yêu thương một cách vô điều kiện và luôn tìm kiếm sự kỳ diệu. Cần chú ý rằng việc mù quáng trong tình yêu đôi khi có thể khiến bạn trao trái tim cho nhầm người và nhận lấy sự tổn thương."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_6",
-      "bodyText": "Hải Vương ở Nhà 6 biểu tượng cho khao khát phục vụ người khác bằng lòng trắc ẩn, làm việc dựa trên cảm hứng và sự nhạy cảm về thể chất. Bạn thường có xu hướng thích chăm sóc động vật, giỏi trong các công việc liên quan đến chữa lành và luôn muốn lan tỏa tình yêu thương. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn chểnh mảng trong công việc hàng ngày."
+      "bodyText": "Sao Hải Vương ở Nhà 6 biểu tượng cho khao khát phục vụ người khác bằng lòng trắc ẩn, làm việc dựa trên cảm hứng và sự nhạy cảm về thể chất. Bạn thường có xu hướng thích chăm sóc động vật, giỏi trong các công việc liên quan đến chữa lành và luôn muốn lan tỏa tình yêu thương. Cần chú ý rằng việc trốn tránh thực tại đôi khi có thể khiến bạn chểnh mảng trong công việc hàng ngày."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_7",
-      "bodyText": "Hải Vương ở Nhà 7 đại diện cho mong ước về một người bạn đời tâm giao, sự hi sinh trong các mối quan hệ và khát khao hòa hợp tâm hồn. Bạn thường có xu hướng bị thu hút bởi những người nhạy cảm, dễ dàng tha thứ và luôn cố gắng duy trì hòa bình. Cần chú ý rằng việc đặt đối tác lên bệ đỡ đôi khi có thể khiến bạn thất vọng khi đối diện với những khiếm khuyết của họ."
+      "bodyText": "Sao Hải Vương ở Nhà 7 đại diện cho mong ước về một người bạn đời tâm giao, sự hi sinh trong các mối quan hệ và khát khao hòa hợp tâm hồn. Bạn thường có xu hướng bị thu hút bởi những người nhạy cảm, dễ dàng tha thứ và luôn cố gắng duy trì hòa bình. Cần chú ý rằng việc đặt đối tác lên bệ đỡ đôi khi có thể khiến bạn thất vọng khi đối diện với những khiếm khuyết của họ."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_8",
-      "bodyText": "Hải Vương ở Nhà 8 mang đến khả năng ngoại cảm, sự thấu hiểu những điều sâu kín và khát khao những trải nghiệm thân mật mang tính tâm linh. Bạn thường có xu hướng thích khám phá những bí ẩn của tiềm thức, không sợ hãi cái chết và có sức mạnh chữa lành mãnh liệt. Cần chú ý rằng sự nhầm lẫn trong các vấn đề tài chính chung đôi khi có thể gây ra những rắc rối pháp lý."
+      "bodyText": "Sao Hải Vương ở Nhà 8 mang đến khả năng ngoại cảm, sự thấu hiểu những điều sâu kín và khát khao những trải nghiệm thân mật mang tính tâm linh. Bạn thường có xu hướng thích khám phá những bí ẩn của tiềm thức, không sợ hãi cái chết và có sức mạnh chữa lành mãnh liệt. Cần chú ý rằng sự nhầm lẫn trong các vấn đề tài chính chung đôi khi có thể gây ra những rắc rối pháp lý."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_9",
-      "bodyText": "Hải Vương ở Nhà 9 tượng trưng cho đức tin bao la, khả năng lĩnh hội các triết lý trừu tượng và khát khao tìm kiếm ý nghĩa tối thượng. Bạn thường có xu hướng đam mê khám phá tôn giáo, tiếp thu kiến thức qua thiền định và luôn mang trong mình lòng khoan dung. Cần chú ý rằng sự cuồng tín hoặc tin tưởng mù quáng đôi khi có thể khiến bạn dễ bị dẫn dắt bởi những giáo phái không lành mạnh."
+      "bodyText": "Sao Hải Vương ở Nhà 9 tượng trưng cho đức tin bao la, khả năng lĩnh hội các triết lý trừu tượng và khát khao tìm kiếm ý nghĩa tối thượng. Bạn thường có xu hướng đam mê khám phá tôn giáo, tiếp thu kiến thức qua thiền định và luôn mang trong mình lòng khoan dung. Cần chú ý rằng sự cuồng tín hoặc tin tưởng mù quáng đôi khi có thể khiến bạn dễ bị dẫn dắt bởi những giáo phái không lành mạnh."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_10",
-      "bodyText": "Hải Vương ở Nhà 10 biểu trưng cho sự nghiệp gắn liền với nghệ thuật hoặc lòng nhân đạo, hình ảnh công chúng đầy bí ẩn và khát khao cống hiến cho xã hội. Bạn thường có xu hướng tỏa sáng trong những lĩnh vực sáng tạo, dẫn dắt bằng trực giác và luôn theo đuổi một lý tưởng cao đẹp. Cần chú ý rằng sự thiếu định hướng rõ ràng đôi khi có thể khiến sự nghiệp của bạn gặp nhiều bấp bênh."
+      "bodyText": "Sao Hải Vương ở Nhà 10 biểu trưng cho sự nghiệp gắn liền với nghệ thuật hoặc lòng nhân đạo, hình ảnh công chúng đầy bí ẩn và khát khao cống hiến cho xã hội. Bạn thường có xu hướng tỏa sáng trong những lĩnh vực sáng tạo, dẫn dắt bằng trực giác và luôn theo đuổi một lý tưởng cao đẹp. Cần chú ý rằng sự thiếu định hướng rõ ràng đôi khi có thể khiến sự nghiệp của bạn gặp nhiều bấp bênh."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_11",
-      "bodyText": "Hải Vương ở Nhà 11 mang lại những tình bạn dựa trên sự đồng điệu tâm hồn, lý tưởng hướng về cái đẹp và khát khao một thế giới đại đồng. Bạn thường có xu hướng tham gia các tổ chức từ thiện, dễ dàng hòa nhập với đám đông và luôn sẵn sàng giúp đỡ mọi người. Cần chú ý rằng sự thiếu ranh giới cá nhân đôi khi có thể khiến bạn dễ bị lợi dụng bởi những người bạn không chân thành."
+      "bodyText": "Sao Hải Vương ở Nhà 11 mang lại những tình bạn dựa trên sự đồng điệu tâm hồn, lý tưởng hướng về cái đẹp và khát khao một thế giới đại đồng. Bạn thường có xu hướng tham gia các tổ chức từ thiện, dễ dàng hòa nhập với đám đông và luôn sẵn sàng giúp đỡ mọi người. Cần chú ý rằng sự thiếu ranh giới cá nhân đôi khi có thể khiến bạn dễ bị lợi dụng bởi những người bạn không chân thành."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Neptune_in_House_12",
-      "bodyText": "Hải Vương ở Nhà 12 đại diện cho sự kết nối mạnh mẽ với vũ trụ, thế giới tiềm thức phong phú và khát khao được giải phóng khỏi những nỗi đau thế gian. Bạn thường có xu hướng tìm thấy sức mạnh qua sự tĩnh lặng, sở hữu giấc mơ tiên tri và có khả năng chữa lành cho nhân loại. Cần chú ý rằng việc quá đắm chìm trong thế giới nội tâm đôi khi có thể khiến bạn hoàn toàn xa rời thực tại."
+      "bodyText": "Sao Hải Vương ở Nhà 12 đại diện cho sự kết nối mạnh mẽ với vũ trụ, thế giới tiềm thức phong phú và khát khao được giải phóng khỏi những nỗi đau thế gian. Bạn thường có xu hướng tìm thấy sức mạnh qua sự tĩnh lặng, sở hữu giấc mơ tiên tri và có khả năng chữa lành cho nhân loại. Cần chú ý rằng việc quá đắm chìm trong thế giới nội tâm đôi khi có thể khiến bạn hoàn toàn xa rời thực tại."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_1",
-      "bodyText": "Diêm Vương ở Nhà 1 biểu trưng cho vẻ ngoài đầy uy lực, ánh nhìn thấu suốt và khát khao kiểm soát mạnh mẽ đối với bản thân. Bạn thường có xu hướng tỏa ra năng lượng bí ẩn, có khả năng tái sinh ngoạn mục sau những biến cố và luôn muốn nắm quyền tự quyết. Cần lưu ý rằng sự quyết liệt quá mức đôi khi có thể khiến người khác cảm thấy bạn độc đoán hoặc đáng sợ."
+      "bodyText": "Sao Diêm Vương ở Nhà 1 biểu trưng cho vẻ ngoài đầy uy lực, ánh nhìn thấu suốt và khát khao kiểm soát mạnh mẽ đối với bản thân. Bạn thường có xu hướng tỏa ra năng lượng bí ẩn, có khả năng tái sinh ngoạn mục sau những biến cố và luôn muốn nắm quyền tự quyết. Cần lưu ý rằng sự quyết liệt quá mức đôi khi có thể khiến người khác cảm thấy bạn độc đoán hoặc đáng sợ."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_2",
-      "bodyText": "Diêm Vương ở Nhà 2 đại diện cho khát khao mãnh liệt về sự an toàn tài chính, khả năng làm ra của cải từ số không và sức mạnh của sự kiên định. Bạn thường có xu hướng bám trụ vững vàng, rất giỏi trong việc phân bổ tài nguyên và coi trọng quyền lực vật chất. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở sự phát triển của bạn."
+      "bodyText": "Sao Diêm Vương ở Nhà 2 đại diện cho khát khao mãnh liệt về sự an toàn tài chính, khả năng làm ra của cải từ số không và sức mạnh của sự kiên định. Bạn thường có xu hướng bám trụ vững vàng, rất giỏi trong việc phân bổ tài nguyên và coi trọng quyền lực vật chất. Cần chú ý rằng lòng tham hoặc sự cố chấp giữ lại những thứ đã cũ đôi khi có thể cản trở sự phát triển của bạn."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_3",
-      "bodyText": "Diêm Vương ở Nhà 3 mang đến tư duy sắc sảo, kỹ năng ngôn ngữ đầy sức mạnh và khát khao đào sâu để tìm ra chân lý. Bạn thường có xu hướng giao tiếp với cường độ cao, giỏi phân tích tâm lý người khác và thích nghiên cứu những chủ đề phức tạp. Cần lưu ý rằng sự sắc bén quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
+      "bodyText": "Sao Diêm Vương ở Nhà 3 mang đến tư duy sắc sảo, kỹ năng ngôn ngữ đầy sức mạnh và khát khao đào sâu để tìm ra chân lý. Bạn thường có xu hướng giao tiếp với cường độ cao, giỏi phân tích tâm lý người khác và thích nghiên cứu những chủ đề phức tạp. Cần lưu ý rằng sự sắc bén quá mức đôi khi có thể khiến bạn sử dụng lời nói như một vũ khí mang tính hủy diệt."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_4",
-      "bodyText": "Diêm Vương ở Nhà 4 tượng trưng cho những chuyển biến sâu sắc trong đời sống gia đình, sức mạnh nội tâm lớn lao và khát khao khám phá gốc rễ của bản thân. Bạn thường có xu hướng bảo vệ tổ ấm một cách quyết liệt, có khả năng chữa lành những tổn thương di truyền và rất kín tiếng về đời tư. Cần chú ý rằng việc kìm nén những cảm xúc đen tối đôi khi có thể dẫn đến sự bùng nổ tiêu cực."
+      "bodyText": "Sao Diêm Vương ở Nhà 4 tượng trưng cho những chuyển biến sâu sắc trong đời sống gia đình, sức mạnh nội tâm lớn lao và khát khao khám phá gốc rễ của bản thân. Bạn thường có xu hướng bảo vệ tổ ấm một cách quyết liệt, có khả năng chữa lành những tổn thương di truyền và rất kín tiếng về đời tư. Cần chú ý rằng việc kìm nén những cảm xúc đen tối đôi khi có thể dẫn đến sự bùng nổ tiêu cực."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_5",
-      "bodyText": "Diêm Vương ở Nhà 5 gắn liền với cường độ đam mê trong tình yêu, sức sáng tạo mãnh liệt và khát khao để lại dấu ấn không thể phai mờ. Bạn thường có xu hướng yêu hết mình, thể hiện tài năng một cách sâu sắc và rất quan tâm đến sự phát triển của con cái. Cần chú ý rằng sự ghen tuông hoặc ám ảnh quyền lực đôi khi có thể hủy hoại niềm vui tự nhiên trong cuộc sống của bạn."
+      "bodyText": "Sao Diêm Vương ở Nhà 5 gắn liền với cường độ đam mê trong tình yêu, sức sáng tạo mãnh liệt và khát khao để lại dấu ấn không thể phai mờ. Bạn thường có xu hướng yêu hết mình, thể hiện tài năng một cách sâu sắc và rất quan tâm đến sự phát triển của con cái. Cần chú ý rằng sự ghen tuông hoặc ám ảnh quyền lực đôi khi có thể hủy hoại niềm vui tự nhiên trong cuộc sống của bạn."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_6",
-      "bodyText": "Diêm Vương ở Nhà 6 biểu tượng cho năng lực làm việc phi thường, khả năng biến đổi môi trường công sở và khát khao đạt đến sự hoàn hảo. Bạn thường có xu hướng cống hiến hết tâm sức cho nhiệm vụ, có khả năng phân tích chi tiết sắc bén và rất quan tâm đến việc tái tạo sức khỏe. Cần chú ý rằng sự ám ảnh về sự hoàn thiện đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng tột độ."
+      "bodyText": "Sao Diêm Vương ở Nhà 6 biểu tượng cho năng lực làm việc phi thường, khả năng biến đổi môi trường công sở và khát khao đạt đến sự hoàn hảo. Bạn thường có xu hướng cống hiến hết tâm sức cho nhiệm vụ, có khả năng phân tích chi tiết sắc bén và rất quan tâm đến việc tái tạo sức khỏe. Cần chú ý rằng sự ám ảnh về sự hoàn thiện đôi khi có thể khiến bạn rơi vào trạng thái căng thẳng tột độ."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_7",
-      "bodyText": "Diêm Vương ở Nhà 7 đại diện cho những mối quan hệ mang tính bước ngoặt, khao khát sự cam kết tuyệt đối và sức mạnh của sự đồng hành. Bạn thường có xu hướng bị thu hút bởi những người có quyền lực, trải qua nhiều bài học sâu sắc qua hôn nhân và đánh giá cao sự trung thành. Cần chú ý rằng những trò chơi quyền lực ngầm đôi khi có thể phá vỡ sự cân bằng và niềm tin giữa hai người."
+      "bodyText": "Sao Diêm Vương ở Nhà 7 đại diện cho những mối quan hệ mang tính bước ngoặt, khao khát sự cam kết tuyệt đối và sức mạnh của sự đồng hành. Bạn thường có xu hướng bị thu hút bởi những người có quyền lực, trải qua nhiều bài học sâu sắc qua hôn nhân và đánh giá cao sự trung thành. Cần chú ý rằng những trò chơi quyền lực ngầm đôi khi có thể phá vỡ sự cân bằng và niềm tin giữa hai người."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_8",
-      "bodyText": "Diêm Vương ở Nhà 8 mang đến trực giác nhạy bén vô song, khả năng vượt qua những khủng hoảng tồi tệ nhất và khát khao thấu hiểu sinh tử. Bạn thường có xu hướng khám phá những góc khuất của tâm lý, cực kỳ mạnh mẽ trong nghịch cảnh và không sợ hãi đối mặt với cái chết. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy đau khổ."
+      "bodyText": "Sao Diêm Vương ở Nhà 8 mang đến trực giác nhạy bén vô song, khả năng vượt qua những khủng hoảng tồi tệ nhất và khát khao thấu hiểu sinh tử. Bạn thường có xu hướng khám phá những góc khuất của tâm lý, cực kỳ mạnh mẽ trong nghịch cảnh và không sợ hãi đối mặt với cái chết. Cần chú ý rằng sự đa nghi và khao khát kiểm soát tuyệt đối đôi khi có thể khiến bạn tự chuốc lấy đau khổ."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_9",
-      "bodyText": "Diêm Vương ở Nhà 9 tượng trưng cho khát khao tìm kiếm sự thật tột cùng, sức mạnh của niềm tin và những thay đổi sâu sắc qua việc mở rộng tri thức. Bạn thường có xu hướng theo đuổi các triết lý sống một cách đam mê, thích nghiên cứu chuyên sâu và có khả năng truyền đạt ảnh hưởng lớn. Cần chú ý rằng sự cuồng tín đôi khi có thể khiến bạn áp đặt tư tưởng của mình lên người khác một cách cực đoan."
+      "bodyText": "Sao Diêm Vương ở Nhà 9 tượng trưng cho khát khao tìm kiếm sự thật tột cùng, sức mạnh của niềm tin và những thay đổi sâu sắc qua việc mở rộng tri thức. Bạn thường có xu hướng theo đuổi các triết lý sống một cách đam mê, thích nghiên cứu chuyên sâu và có khả năng truyền đạt ảnh hưởng lớn. Cần chú ý rằng sự cuồng tín đôi khi có thể khiến bạn áp đặt tư tưởng của mình lên người khác một cách cực đoan."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_10",
-      "bodyText": "Diêm Vương ở Nhà 10 biểu trưng cho tham vọng quyền lực tột độ, khả năng thay đổi cấu trúc tổ chức và khát khao đạt được đỉnh cao danh vọng. Bạn thường có xu hướng làm việc với quyết tâm thép, sẵn sàng vượt qua mọi chướng ngại để vươn lên và tạo ra ảnh hưởng lớn mạnh. Cần chú ý rằng sự tàn nhẫn và độc đoán trong công việc đôi khi có thể khiến bạn gặp phải nhiều kẻ thù."
+      "bodyText": "Sao Diêm Vương ở Nhà 10 biểu trưng cho tham vọng quyền lực tột độ, khả năng thay đổi cấu trúc tổ chức và khát khao đạt được đỉnh cao danh vọng. Bạn thường có xu hướng làm việc với quyết tâm thép, sẵn sàng vượt qua mọi chướng ngại để vươn lên và tạo ra ảnh hưởng lớn mạnh. Cần chú ý rằng sự tàn nhẫn và độc đoán trong công việc đôi khi có thể khiến bạn gặp phải nhiều kẻ thù."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_11",
-      "bodyText": "Diêm Vương ở Nhà 11 mang lại khả năng biến đổi các nhóm cộng đồng, lý tưởng xã hội mãnh liệt và khát khao tạo ra một tương lai hoàn toàn mới. Bạn thường có xu hướng thu hút những người bạn có sức ảnh hưởng, cống hiến hết mình cho các mục tiêu chung và không ngại phá bỏ những hệ thống cũ kỹ. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể mang lại những hậu quả khó lường."
+      "bodyText": "Sao Diêm Vương ở Nhà 11 mang lại khả năng biến đổi các nhóm cộng đồng, lý tưởng xã hội mãnh liệt và khát khao tạo ra một tương lai hoàn toàn mới. Bạn thường có xu hướng thu hút những người bạn có sức ảnh hưởng, cống hiến hết mình cho các mục tiêu chung và không ngại phá bỏ những hệ thống cũ kỹ. Cần chú ý rằng sự cực đoan trong cải cách đôi khi có thể mang lại những hậu quả khó lường."
     },
     {
       "subjectType": "PlanetInHouse",
       "subjectKey": "Pluto_in_House_12",
-      "bodyText": "Diêm Vương ở Nhà 12 đại diện cho quá trình dọn dẹp tiềm thức, sức mạnh chữa lành từ bên trong và khát khao đối mặt với những nỗi sợ hãi sâu kín nhất. Bạn thường có xu hướng nghiên cứu những điều huyền bí, tìm thấy sức mạnh qua sự tĩnh lặng và dần giải phóng bản thân khỏi những chấn thương tinh thần. Cần chú ý rằng việc che giấu những cảm xúc độc hại đôi khi có thể khiến bạn vô thức tự phá hoại cuộc sống của chính mình."
+      "bodyText": "Sao Diêm Vương ở Nhà 12 đại diện cho quá trình dọn dẹp tiềm thức, sức mạnh chữa lành từ bên trong và khát khao đối mặt với những nỗi sợ hãi sâu kín nhất. Bạn thường có xu hướng nghiên cứu những điều huyền bí, tìm thấy sức mạnh qua sự tĩnh lặng và dần giải phóng bản thân khỏi những chấn thương tinh thần. Cần chú ý rằng việc che giấu những cảm xúc độc hại đôi khi có thể khiến bạn vô thức tự phá hoại cuộc sống của chính mình."
     }
   ]
 }

@@ -9,6 +9,10 @@ import { IChartRepository } from '../../domain/ports/chart-repository.port.js';
 import { HouseSystem, PlanetName, ChartType } from '../../domain/types/chart.types.js';
 import { EngineInput, EngineInputBirthData } from '../../domain/value-objects/engine-input.vo.js';
 import { mapChartDomainErrorToAppError } from '../errors/map-domain-error.js';
+import {
+  InterpretationLookupService,
+  InterpretationResult,
+} from '../services/interpretation-lookup.service.js';
 
 export interface CreateNatalChartCommand {
   requestingUserId: string | null; // null = Guest
@@ -27,14 +31,20 @@ export interface CreateNatalChartCommand {
   save: boolean;
 }
 
+export interface CreateNatalChartResult {
+  chart: Chart;
+  interpretation: InterpretationResult;
+}
+
 export class CreateNatalChartUseCase {
   constructor(
     private readonly getBirthProfileSnapshotUseCase: GetBirthProfileSnapshotUseCase,
     private readonly chartBuilder: ChartBuilder,
     private readonly chartRepository: IChartRepository,
+    private readonly interpretationLookupService: InterpretationLookupService,
   ) {}
 
-  async execute(command: CreateNatalChartCommand): Promise<Chart> {
+  async execute(command: CreateNatalChartCommand): Promise<CreateNatalChartResult> {
     // 1. Input-mode invariant (birthProfileId XOR birthData)
     const hasProfileId = !!command.birthProfileId;
     const hasBirthData = !!command.birthData;
@@ -103,6 +113,10 @@ export class CreateNatalChartUseCase {
       chartType: ChartType.Natal,
     });
 
+    // 5a. Resolve latest interpretation version
+    const interpretationVersion = await this.interpretationLookupService.resolveLatestVersion();
+
+    // 5b. Build chart
     let chart: Chart;
     try {
       chart = await this.chartBuilder.build({
@@ -110,6 +124,7 @@ export class CreateNatalChartUseCase {
         userId: command.requestingUserId,
         birthProfileId: command.birthProfileId ?? null,
         engineInput,
+        snapshotInterpretationVersion: interpretationVersion,
       });
     } catch (error) {
       if (error instanceof Error) {
@@ -118,11 +133,15 @@ export class CreateNatalChartUseCase {
       throw error;
     }
 
+    // 5c. Lookup interpretation
+    const interpretation = await this.interpretationLookupService.lookup(chart);
+
     // 6. Persistence branch
     if (command.save) {
       await this.chartRepository.save(chart);
     }
 
-    return chart;
+    // 7. Return Result
+    return { chart, interpretation };
   }
 }
