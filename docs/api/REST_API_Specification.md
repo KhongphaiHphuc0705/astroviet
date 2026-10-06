@@ -579,6 +579,7 @@ Theo đúng phạm vi MVP đã chốt ở PRD Mục 3.1 (In-scope) và 8.3 (MoSC
 | angles | list\<AngleResponse\> | ✔ | ✘ | Rỗng nếu `isHouseDataAvailable=false` |
 | aspects | list\<AspectResponse\> | ✔ | ✘ | — |
 | patterns | list\<PatternResponse\> | ✔ | ✘ | — |
+| interpretationVersion | string | ✔ | ✔ | Phiên bản nội dung diễn giải tại thời điểm tính/lưu lá số (ví dụ `"1.0"`, `null` nếu bank rỗng) |
 | interpretations | list\<InterpretationResponse\> | ✔ | ✘ | Nhúng sẵn (Quyết định 14.1/14.9) — không phải endpoint riêng. Nếu `isHouseDataAvailable=false`, không chứa phần tử `PlanetInHouse`/`Angle` |
 | warnings | list\<Warning\> | ✔ | ✘ | Mảng rỗng nếu không có cảnh báo. Xem cấu trúc `Warning` ở Mục 5.8 (Quyết định 14.12) |
 | calculatedAt | datetime | ✔ | ✘ | — |
