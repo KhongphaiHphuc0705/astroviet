@@ -18,7 +18,7 @@ registry.registerPath({
   security: [{ bearerAuth: [] }, {}],
   summary: 'Create a natal chart',
   description:
-    'Calculate a natal chart. If the user is a Guest (unauthenticated), the chart will not be saved (save=false is required). For authenticated users, save defaults to true.',
+    'Calculate a natal chart. If the user is a Guest (unauthenticated), the chart will not be saved (save=false is required). For authenticated users, save defaults to true. The response includes the calculated chart and its full astrological interpretations (M5).',
   request: {
     query: createNatalChartQuerySchema,
     body: {
@@ -99,7 +99,8 @@ registry.registerPath({
   tags,
   security: [{ bearerAuth: [] }],
   summary: 'Get a chart by ID',
-  description: 'Retrieve a specific chart by its ID.',
+  description:
+    'Retrieve a specific chart by its ID, including its pinned astrological interpretations.',
   request: {
     params: chartIdSchema,
   },
