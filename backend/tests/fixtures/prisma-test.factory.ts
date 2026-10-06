@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
+import { enumerateMvpInterpretationSubjects } from '../../src/modules/chart/domain/interpretation/enumerate-mvp-subjects.js';
 import { User, RefreshToken } from '../../src/modules/identity/domain/entities/index.js';
 
 // Using random UUIDs to simulate database values
@@ -142,5 +143,30 @@ export class PrismaTestFactory {
 
     const prismaProfile = await this.prisma.birthProfile.create({ data });
     return prismaProfile;
+  }
+
+  async createInterpretationContents({
+    version,
+    status = 'Published',
+  }: {
+    version: string;
+    status?: string;
+  }): Promise<void> {
+    const subjects = enumerateMvpInterpretationSubjects();
+    const data = subjects.map((subject) => ({
+      id: generateUuid(),
+      subject_type: subject.subjectType,
+      subject_key: subject.subjectKey,
+      language: 'vi',
+      body_text: `fixture:${version}:${subject.subjectKey}`,
+      tone: null,
+      version,
+      status,
+      content_source: 'Hybrid',
+      created_at: new Date(),
+      updated_at: new Date(),
+    }));
+
+    await this.prisma.interpretationContent.createMany({ data });
   }
 }
