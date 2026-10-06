@@ -27,12 +27,7 @@ async function main() {
 
   if (!fs.existsSync(filePath)) {
     console.error(`Error: File not found at ${filePath}`);
-    console.error(
-      'Note: Production content (interpretations.vi.json) is a Content Owner dependency and is not checked into the repository.',
-    );
-    console.error(
-      'You can test with the sample file: npm run prisma:seed:content -- --file prisma/content/interpretations.vi.sample.json',
-    );
+    console.error('Make sure the interpretations file exists before running the seed.');
     process.exit(1);
   }
 

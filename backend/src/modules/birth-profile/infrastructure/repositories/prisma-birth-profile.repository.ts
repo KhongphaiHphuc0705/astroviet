@@ -24,7 +24,7 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
           });
         }
       }
-      throw new InfrastructureError('Failed to create birth profile', { cause: error });
+      throw new InfrastructureError('Failed to create birth profile', undefined, error as Error);
     }
   }
 
@@ -40,7 +40,11 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
 
       return PrismaBirthProfileMapper.toDomain(record);
     } catch (error) {
-      throw new InfrastructureError('Failed to find birth profile by id', { cause: error });
+      throw new InfrastructureError(
+        'Failed to find birth profile by id',
+        undefined,
+        error as Error,
+      );
     }
   }
 
@@ -74,7 +78,11 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
       const items = records.map(PrismaBirthProfileMapper.toDomain);
       return { items, total };
     } catch (error) {
-      throw new InfrastructureError('Failed to list birth profiles by user id', { cause: error });
+      throw new InfrastructureError(
+        'Failed to list birth profiles by user id',
+        undefined,
+        error as Error,
+      );
     }
   }
 
@@ -102,9 +110,9 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
       }
       // If constraint violation happens
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2010') {
-        throw new InfrastructureError('Database constraint violation', { cause: error });
+        throw new InfrastructureError('Database constraint violation', undefined, error as Error);
       }
-      throw new InfrastructureError('Failed to update birth profile', { cause: error });
+      throw new InfrastructureError('Failed to update birth profile', undefined, error as Error);
     }
   }
 
@@ -123,7 +131,11 @@ export class PrismaBirthProfileRepository implements IBirthProfileRepository {
 
       return result.count > 0;
     } catch (error) {
-      throw new InfrastructureError('Failed to soft delete birth profile', { cause: error });
+      throw new InfrastructureError(
+        'Failed to soft delete birth profile',
+        undefined,
+        error as Error,
+      );
     }
   }
 }

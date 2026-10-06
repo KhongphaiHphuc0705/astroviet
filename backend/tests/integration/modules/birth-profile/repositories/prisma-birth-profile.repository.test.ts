@@ -87,7 +87,14 @@ describe('PrismaBirthProfileRepository Integration', () => {
 
       const domainProfile = PrismaBirthProfileMapper.toDomain(profileData as any);
 
-      await expect(repository.create(domainProfile)).rejects.toThrow(InfrastructureError);
+      let caughtError: any;
+      try {
+        await repository.create(domainProfile);
+      } catch (e) {
+        caughtError = e;
+      }
+      expect(caughtError).toBeInstanceOf(InfrastructureError);
+      expect(caughtError.details).toBeUndefined();
     });
   });
 
