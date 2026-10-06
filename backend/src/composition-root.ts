@@ -22,6 +22,7 @@ import {
   createBirthProfileRoutes,
   createLocationRoutes,
 } from './modules/birth-profile/presentation/index.js';
+import { InterpretationLookupService } from './modules/chart/application/services/interpretation-lookup.service.js';
 import { ChartBuilder } from './modules/chart/domain/engine/chart-builder.js';
 import {
   CreateNatalChartUseCase,
@@ -32,6 +33,7 @@ import {
 import { initializeEphemerisProvider } from './modules/chart/infrastructure/adapters/initialize-ephemeris-provider.js';
 import { SwissEphemerisAdapter } from './modules/chart/infrastructure/adapters/swiss-ephemeris.adapter.js';
 import { PrismaChartRepository } from './modules/chart/infrastructure/repositories/prisma-chart.repository.js';
+import { PrismaInterpretationContentProvider } from './modules/chart/infrastructure/repositories/prisma-interpretation-content.provider.js';
 import { ChartController } from './modules/chart/presentation/controllers/chart.controller.js';
 import { createChartRoutes } from './modules/chart/presentation/routes/chart.routes.js';
 import { LoginUserUseCase } from './modules/identity/application/use-cases/login-user.usecase.js';
@@ -143,12 +145,19 @@ export async function bootstrapApplication(overrides?: AppOverrides) {
 
   const chartBuilder = new ChartBuilder(ephemerisProvider);
 
+  const interpretationContentProvider = new PrismaInterpretationContentProvider(prisma);
+  const interpretationLookupService = new InterpretationLookupService(
+    interpretationContentProvider,
+    logger,
+  );
+
   const createNatalChartUseCase = new CreateNatalChartUseCase(
     getBirthProfileSnapshotUseCase,
     chartBuilder,
     chartRepository,
+    interpretationLookupService,
   );
-  const getChartUseCase = new GetChartUseCase(chartRepository);
+  const getChartUseCase = new GetChartUseCase(chartRepository, interpretationLookupService);
   const listChartsUseCase = new ListChartsUseCase(chartRepository);
   const deleteChartUseCase = new DeleteChartUseCase(chartRepository);
 

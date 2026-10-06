@@ -40,7 +40,7 @@ export class ChartController {
       save,
     };
 
-    const chart = await this.createNatalChartUseCase.execute(command);
+    const { chart } = await this.createNatalChartUseCase.execute(command);
 
     res.status(save ? 201 : 200).json(ChartResponseMapper.toResponse(chart));
   };
@@ -48,7 +48,10 @@ export class ChartController {
   public getHandler = async (req: Request, res: Response): Promise<void> => {
     const user = getCurrentUser(req); // bắt buộc auth — route đã áp requireAuth()
     const { id } = req.params as unknown as ChartIdParams;
-    const chart = await this.getChartUseCase.execute({ chartId: id, requestingUserId: user.sub });
+    const { chart } = await this.getChartUseCase.execute({
+      chartId: id,
+      requestingUserId: user.sub,
+    });
     res.status(200).json(ChartResponseMapper.toResponse(chart));
   };
 

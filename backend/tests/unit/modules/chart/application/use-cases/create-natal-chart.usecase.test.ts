@@ -2,6 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GetBirthProfileSnapshotUseCase } from '../../../../../../src/modules/birth-profile/index.js';
 import {
+  InterpretationLookupService,
+  InterpretationResult,
+} from '../../../../../../src/modules/chart/application/services/interpretation-lookup.service.js';
+import {
   CreateNatalChartUseCase,
   CreateNatalChartCommand,
 } from '../../../../../../src/modules/chart/application/use-cases/create-natal-chart.usecase.js';
@@ -28,6 +32,7 @@ describe('CreateNatalChartUseCase', () => {
   let mockGetBirthProfileSnapshotUseCase: GetBirthProfileSnapshotUseCase;
   let mockChartBuilder: ChartBuilder;
   let mockChartRepository: IChartRepository;
+  let mockInterpretationLookupService: InterpretationLookupService;
 
   const validBirthData = {
     placeName: 'Hanoi',
@@ -53,6 +58,11 @@ describe('CreateNatalChartUseCase', () => {
   // Dummy chart to return from builder
   const dummyChart = {} as Chart;
 
+  const dummyInterpretationResult: InterpretationResult = {
+    version: '1.0',
+    items: [],
+  };
+
   beforeEach(() => {
     mockGetBirthProfileSnapshotUseCase = {
       execute: vi.fn().mockResolvedValue(validSnapshot),
@@ -69,10 +79,16 @@ describe('CreateNatalChartUseCase', () => {
       softDelete: vi.fn(),
     };
 
+    mockInterpretationLookupService = {
+      resolveLatestVersion: vi.fn().mockResolvedValue('1.0'),
+      lookup: vi.fn().mockResolvedValue(dummyInterpretationResult),
+    } as unknown as InterpretationLookupService;
+
     useCase = new CreateNatalChartUseCase(
       mockGetBirthProfileSnapshotUseCase,
       mockChartBuilder,
       mockChartRepository,
+      mockInterpretationLookupService,
     );
   });
 
@@ -117,7 +133,7 @@ describe('CreateNatalChartUseCase', () => {
       };
 
       const result = await useCase.execute(command);
-      expect(result).toBe(dummyChart);
+      expect(result).toEqual({ chart: dummyChart, interpretation: dummyInterpretationResult });
       expect(mockGetBirthProfileSnapshotUseCase.execute).toHaveBeenCalledWith({
         birthProfileId: 'profile-1',
         requestingUserId: 'user-1',
@@ -134,7 +150,7 @@ describe('CreateNatalChartUseCase', () => {
       };
 
       const result = await useCase.execute(command);
-      expect(result).toBe(dummyChart);
+      expect(result).toEqual({ chart: dummyChart, interpretation: dummyInterpretationResult });
       expect(mockGetBirthProfileSnapshotUseCase.execute).not.toHaveBeenCalled();
     });
   });
@@ -149,7 +165,10 @@ describe('CreateNatalChartUseCase', () => {
         save: false,
       };
 
-      await expect(useCase.execute(command)).resolves.toBe(dummyChart);
+      await expect(useCase.execute(command)).resolves.toEqual({
+        chart: dummyChart,
+        interpretation: dummyInterpretationResult,
+      });
     });
 
     it('should throw AuthenticationError if Guest attempts to save a chart', async () => {
@@ -186,7 +205,10 @@ describe('CreateNatalChartUseCase', () => {
         save: true,
       };
 
-      await expect(useCase.execute(command)).resolves.toBe(dummyChart);
+      await expect(useCase.execute(command)).resolves.toEqual({
+        chart: dummyChart,
+        interpretation: dummyInterpretationResult,
+      });
       expect(mockChartRepository.save).toHaveBeenCalledTimes(1);
     });
   });
@@ -323,7 +345,7 @@ describe('CreateNatalChartUseCase', () => {
       };
 
       const result = await useCase.execute(command);
-      expect(result).toBe(dummyChart);
+      expect(result).toEqual({ chart: dummyChart, interpretation: dummyInterpretationResult });
       expect(mockChartRepository.save).not.toHaveBeenCalled();
     });
 
@@ -337,7 +359,7 @@ describe('CreateNatalChartUseCase', () => {
       };
 
       const result = await useCase.execute(command);
-      expect(result).toBe(dummyChart);
+      expect(result).toEqual({ chart: dummyChart, interpretation: dummyInterpretationResult });
       expect(mockChartRepository.save).toHaveBeenCalledTimes(1);
       expect(mockChartRepository.save).toHaveBeenCalledWith(dummyChart);
     });
