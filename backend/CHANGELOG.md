@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-07 (Sprint 4)
+
+### Added
+
+- **Interpretation Engine**: Integrated an interpretation lookup service to map planetary and angle positions into localized text.
+- **Content Bank Validation**: Added validation, seeder, and provider to seed and query real interpretation data from `interpretations.vi.json`.
+- **API Enrichment**: `ChartResponse` now dynamically embeds up to 21 human-authored interpretation paragraphs (`PlanetInSign`, `PlanetInHouse`, `AngleInSign`).
+- **Regression Hardening**: Achieved 97% overall coverage; protected all legacy layers via strict architectural ESLint boundary rules; fully decoupled identity, birth-profile and chart domains.
+
+### Changed
+
+- Bumped version to `0.4.0` closing Sprint 4 Interpretation Engine & M6.
+- Updated `REST_API_Specification.md` reflecting decision to inline interpretations into chart response and remove `/interpretations` standalone endpoint.
+- Resolved previous Known Gaps: G-01 (interpretations now populated).
+
+### Known Gaps (deferred — see Sprint 4 Known Gaps Registry)
+
+- **Pattern Interpretations**: Stubbed pattern calculator keeps `chart_patterns` empty; interpretations for Grand Trine/T-Square intentionally deferred.
+- **Unknown Birth Time Logic**: Fallback logic retains `PlanetInSign` but omits `PlanetInHouse` without providing explicit interpretation adjustments.
+
 ## [0.3.0] - 2026-09-13 (Sprint 3)
 
 ### Added

@@ -949,7 +949,9 @@ Client              API Server         Astrology Engine        Database
   │◀─────────────────────────────────────┤                          │
 ```
 
-### 12.4 Generate Interpretation
+### 12.4 Generate Interpretation (ĐÃ LOẠI BỎ)
+
+> **Lưu ý:** Sơ đồ này chỉ còn mang tính chất tham khảo lịch sử. Endpoint `GET /charts/{id}/interpretations` đã bị loại bỏ theo Quyết định 14.9. Nội dung diễn giải giờ đây được nhúng sẵn vào trong `ChartResponse` (xem Mục 12.2 và 12.3).
 
 ```
 Client                 API Server           Interpretation Engine     Content Store
