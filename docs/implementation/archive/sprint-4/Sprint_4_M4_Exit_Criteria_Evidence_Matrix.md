@@ -1,8 +1,8 @@
-# Sprint 4 M4 — Exit Criteria Evidence Matrix (bản đã review)
+# Sprint 4 M4 — Exit Criteria Evidence Matrix (v2 — đã đóng)
 
 **Vị trí đề xuất:** `docs/implementation/archive/sprint-4/Sprint_4_M4_Exit_Criteria_Evidence_Matrix.md` (thay bản 24 dòng hiện có trong repo)
 **Phạm vi:** Sprint 4 M4 — Interpretation Application Layer (kèm Task 3: gộp tồn đọng M3/M1)
-**Commit được review:** `171a5ca` (HEAD `dev`); chuỗi M4 tính từ `db4a008`: `ac22076` → `c071007` → `9c5cda0` → `ff83892` → `292bce1` → `171a5ca`
+**Commit được review:** v1 `171a5ca`; **v2 `c66dd15` (HEAD, CI run #247 Success)**; chuỗi M4 tính từ `db4a008`: `ac22076` → `c071007` → `9c5cda0` → `ff83892` → `292bce1` → `171a5ca`
 
 **Đối chiếu với:** `Sprint_4_M4_Interpretation_Application_Layer_Plan.md` v1.1 (Mục 28 Acceptance, Mục 29 Exit Criteria, Mục 31 Evidence Matrix)
 
@@ -90,3 +90,34 @@
 - [ ] Thay bản ma trận M4 trong `archive/sprint-4/` bằng bản này
 - [ ] Owner quyết định phần C5 còn lại (KG-M3-14) — không chặn
 - [ ] Chạy CI trên commit bổ sung; khi có CI xanh trên đúng HEAD thì không cần log thêm (log seed đã đủ)
+
+
+---
+
+## 6. Cập nhật v2 — đóng M4 (commit `c66dd15`, CI run #247)
+
+### 6.0 Kết luận v2
+
+**`PASS WITH KNOWN GAPS` — M4 ĐÓNG.** CI backend run #247 trên đúng HEAD `c66dd15` **Success** (1m 55s); annotation vẫn chỉ có 3 warning `jwt-token.adapter.ts` có từ Sprint trước.
+
+### 6.1 Gap của v1 đã xử lý
+
+| Gap | Kết quả | Bằng chứng |
+|---|---|---|
+| KG-M4-01 (test Create/Get) | **ĐÓNG (còn ca nhỏ)** | [C-run] `create-natal-chart.usecase.test.ts` **22 test pass** (thêm 5 ca): `build` nhận version đã resolve; thứ tự `resolve → build → lookup → save`; `lookup` lỗi thì `save` không được gọi; guard thiếu input thì service không được gọi; `save=false` vẫn `lookup`. `get-chart.usecase.test.ts` thêm 3 assertion `lookup` không được gọi (không tìm thấy; sai chủ sở hữu; admin truy cập chart người khác) |
+| KG-M4-02 (builder) | **ĐÓNG** | [C-run] `chart-builder.test.ts` 8 test pass, thêm 2 ca: `'1.0'` → chart mang `'1.0'`; bỏ qua → `null` |
+| KG-M4-05 (tài liệu, chính tả) | **ĐÓNG** | `unpinned` đã sửa; Architecture Spec có ghi chú về `InterpretationLookupService` |
+| KG-M4-04 (ma trận quá lạc quan) | **ĐÓNG** | Ma trận trong repo đã thay bằng bản review |
+| KG-M3-14 (văn phong còn lại) | **ĐÓNG theo quyết định owner** | Owner quyết định giữ nguyên nội dung `1.0` như đã seed, không sửa thêm (2026-10-06) |
+
+[C-run] tổng cộng 7 file / 79 test pass cho `application/` và `chart-builder`; `eslint` trên `src/modules/chart` và `tests/unit/modules/chart` exit 0.
+
+### 6.2 Ca nhỏ còn lại (không chặn, ghi nhận)
+
+- Create: chưa có ca "service trả version `null` thì `build` nhận `null`" và ca guard Guest+`save` cho service (chỉ guard thiếu input được test).
+- Get: chưa có ca "lỗi từ service được truyền lên".
+- KG-M4-03 (hai lần `findPublishedVersions` khi bank rỗng) và KG-M4-06 (trạng thái trung gian đến M5) giữ nguyên là chấp nhận.
+
+### 6.3 Gap kế thừa chuyển sang Known Gaps Registry của Sprint 4
+
+KG-M1-05 (`prisma migrate diff` chưa có log), KG-S4-06 (Moon khi thiếu giờ sinh), KG-S4-08 (`preferred_language`), KG-M3-01 (CLI ngoài `typecheck`), KG-M2-03 (mock `as any` ở test M2).

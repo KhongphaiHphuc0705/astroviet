@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { InterpretationResult } from '../../../../../../src/modules/chart/application/services/interpretation-lookup.service.js';
 import { Angle } from '../../../../../../src/modules/chart/domain/entities/angle.entity.js';
 import { Aspect } from '../../../../../../src/modules/chart/domain/entities/aspect.entity.js';
 import { Chart } from '../../../../../../src/modules/chart/domain/entities/chart.entity.js';
@@ -106,8 +107,7 @@ describe('ChartResponseMapper', () => {
   it('should map Chart to ChartResponse correctly with isHouseDataAvailable = false', () => {
     // using reconstitute to bypass domain invariant checks that expect 10 planets etc for tests
     const chart = Chart.reconstitute({ ...mockChartProps, isHouseDataAvailable: false });
-
-    const response = ChartResponseMapper.toResponse(chart);
+    const response = ChartResponseMapper.toResponse(chart, { version: null, items: [] });
 
     expect(response.id).toBe('123e4567-e89b-12d3-a456-426614174000');
     expect(response.chartType).toBe(ChartType.Natal);
@@ -157,12 +157,78 @@ describe('ChartResponseMapper', () => {
         involvedPlanets: [PlanetName.Sun, PlanetName.Moon, PlanetName.Jupiter],
       },
     ]);
-    expect(response.interpretations).toEqual([]); // D-2 gap
+    expect(response.interpretations).toEqual([]);
+    expect(response.interpretationVersion).toBeNull();
     expect(response.warnings.length).toBe(1);
     expect(response.warnings[0]?.code).toBe('W1');
     expect(response.warnings[0]?.message).toBe('Warning 1');
     expect(response.warnings[0]?.severity).toBe('warning');
     expect(response.calculatedAt).toBe('2023-01-01T00:00:00.000Z');
     expect(response.engineVersion).toBe('1.0.0');
+  });
+
+  it('should map interpretations and interpretationVersion correctly, filtering out internal fields and preserving order', () => {
+    const chart = Chart.reconstitute({ ...mockChartProps, isHouseDataAvailable: true });
+
+    const interpretation: InterpretationResult = {
+      version: '1.0',
+      items: [
+        {
+          id: 'int-1', // internal
+          subjectType: 'PlanetInSign',
+          subjectKey: 'Sun_in_Aries',
+          language: 'vi',
+          bodyText: 'Mặt Trời Bạch Dương...',
+          tone: null,
+          version: '1.0', // internal
+          status: 'Published', // internal
+          contentSource: 'Hybrid', // internal
+          createdAt: dummyDate,
+          updatedAt: dummyDate,
+        } as any,
+        {
+          id: 'int-2',
+          subjectType: 'PlanetInHouse',
+          subjectKey: 'Sun_in_House_1',
+          language: 'vi',
+          bodyText: 'Mặt Trời nhà 1...',
+          tone: 'casual',
+          version: '1.0',
+          status: 'Published',
+          contentSource: 'Hybrid',
+          createdAt: dummyDate,
+          updatedAt: dummyDate,
+        } as any,
+      ],
+    };
+
+    const response = ChartResponseMapper.toResponse(chart, interpretation);
+
+    expect(response.interpretationVersion).toBe('1.0');
+    expect(response.interpretations).toEqual([
+      {
+        subjectType: 'PlanetInSign',
+        subjectKey: 'Sun_in_Aries',
+        language: 'vi',
+        bodyText: 'Mặt Trời Bạch Dương...',
+        tone: null,
+      },
+      {
+        subjectType: 'PlanetInHouse',
+        subjectKey: 'Sun_in_House_1',
+        language: 'vi',
+        bodyText: 'Mặt Trời nhà 1...',
+        tone: 'casual',
+      },
+    ]);
+
+    // Check that there are strictly 5 keys
+    expect(Object.keys(response.interpretations[0]!)).toEqual([
+      'subjectType',
+      'subjectKey',
+      'language',
+      'bodyText',
+      'tone',
+    ]);
   });
 });

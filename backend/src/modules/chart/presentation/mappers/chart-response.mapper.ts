@@ -1,6 +1,7 @@
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 
+import { InterpretationResult } from '../../application/services/interpretation-lookup.service.js';
 import { Angle } from '../../domain/entities/angle.entity.js';
 import { Aspect } from '../../domain/entities/aspect.entity.js';
 import { Chart } from '../../domain/entities/chart.entity.js';
@@ -67,7 +68,7 @@ const interpretationResponseSchema = z
     bodyText: z.string(),
     tone: z.string().nullable().optional(),
   })
-  .openapi('InterpretationResponse'); // đúng REST API Spec §5.5, dù runtime luôn rỗng (D-2)
+  .openapi('InterpretationResponse');
 
 export const chartResponseSchema = z
   .object({
@@ -80,7 +81,8 @@ export const chartResponseSchema = z
     angles: z.array(angleResponseSchema),
     aspects: z.array(aspectResponseSchema),
     patterns: z.array(patternResponseSchema),
-    interpretations: z.array(interpretationResponseSchema), // D-2 — luôn rỗng runtime, schema vẫn đúng contract
+    interpretations: z.array(interpretationResponseSchema),
+    interpretationVersion: z.string().nullable(),
     warnings: z.array(warningSchema),
     calculatedAt: z.string().datetime(),
     engineVersion: z.string(),
@@ -88,7 +90,10 @@ export const chartResponseSchema = z
   .openapi('ChartResponse');
 
 export class ChartResponseMapper {
-  static toResponse(chart: Chart): z.infer<typeof chartResponseSchema> {
+  static toResponse(
+    chart: Chart,
+    interpretation: InterpretationResult,
+  ): z.infer<typeof chartResponseSchema> {
     return {
       id: chart.id,
       chartType: chart.chartType,
@@ -128,7 +133,14 @@ export class ChartResponseMapper {
         patternType: pattern.patternType,
         involvedPlanets: pattern.involvedPlanets as string[],
       })),
-      interpretations: [], // D-2: Known Gap — Interpretation module chưa tồn tại (Sprint 3)
+      interpretations: interpretation.items.map((item) => ({
+        subjectType: item.subjectType,
+        subjectKey: item.subjectKey,
+        language: item.language,
+        bodyText: item.bodyText,
+        tone: item.tone,
+      })),
+      interpretationVersion: interpretation.version,
       warnings: chart.warnings.map((warning: Warning) => ({
         code: warning.code,
         message: warning.message,

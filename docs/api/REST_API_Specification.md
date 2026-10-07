@@ -579,7 +579,8 @@ Theo đúng phạm vi MVP đã chốt ở PRD Mục 3.1 (In-scope) và 8.3 (MoSC
 | angles | list\<AngleResponse\> | ✔ | ✘ | Rỗng nếu `isHouseDataAvailable=false` |
 | aspects | list\<AspectResponse\> | ✔ | ✘ | — |
 | patterns | list\<PatternResponse\> | ✔ | ✘ | — |
-| interpretations | list\<InterpretationResponse\> | ✔ | ✘ | Nhúng sẵn (Quyết định 14.1/14.9) — không phải endpoint riêng. Nếu `isHouseDataAvailable=false`, không chứa phần tử `PlanetInHouse`/`Angle` |
+| interpretationVersion | string | ✔ | ✔ | Phiên bản đã ghim khi tạo chart; chart cũ chưa ghim dùng Published mới nhất lúc request; null khi chưa có nội dung. |
+| interpretations | list\<InterpretationResponse\> | ✔ | ✘ | Nhúng sẵn (Quyết định 14.1/14.9) — không phải endpoint riêng. Nếu `isHouseDataAvailable=false`, không chứa phần tử `PlanetInHouse`/`AngleInSign` |
 | warnings | list\<Warning\> | ✔ | ✘ | Mảng rỗng nếu không có cảnh báo. Xem cấu trúc `Warning` ở Mục 5.8 (Quyết định 14.12) |
 | calculatedAt | datetime | ✔ | ✘ | — |
 | engineVersion | string | ✔ | ✘ | — |
@@ -651,11 +652,11 @@ Theo đúng phạm vi MVP đã chốt ở PRD Mục 3.1 (In-scope) và 8.3 (MoSC
 
 | Field | Type | Required | Nullable | Example |
 |---|---|---|---|---|
-| subjectType | string | ✔ | ✘ | `"PlanetInSign"` |
-| subjectKey | string | ✔ | ✘ | `"Venus_in_Leo"` |
+| subjectType | string | ✔ | ✘ | Giá trị MVP: `PlanetInSign`, `PlanetInHouse`, `AngleInSign` |
+| subjectKey | string | ✔ | ✘ | Ngữ pháp: `{Planet}_in_{Sign/House}` hoặc `{Angle}_in_{Sign}` (ví dụ `"Venus_in_Leo"`, `"Ascendant_in_Aries"`) |
 | language | string | ✔ | ✘ | `"vi"` |
-| bodyText | string | ✔ | ✘ | — |
-| tone | string | ✘ | ✔ | `"Encouraging"` |
+| bodyText | string | ✔ | ✘ | Nội dung văn bản diễn giải hoàn thiện |
+| tone | string | ✘ | ✔ | Trong MVP luôn trả về `null` |
 
 ### 5.6 Article DTOs
 
@@ -1101,8 +1102,10 @@ components:
 
 **✅ Quyết định cuối cùng:** Phương án 1 — **Soft delete BirthProfile, Chart giữ nguyên dưới dạng snapshot độc lập**, không phụ thuộc runtime vào BirthProfile gốc. Đã áp dụng vào `DELETE /birth-profiles/{id}` (Mục 4.3) và ghi chú `PATCH /birth-profiles/{id}` — sửa BirthProfile không ảnh hưởng Chart đã tính trước đó.
 
-### 14.9 Interpretation cho Chart transient (`save=false`)
-**✅ Quyết định cuối cùng:** Hợp nhất với 14.1 — `POST /charts/natal` **luôn trả kèm `interpretations`** trong cùng response, bất kể `save=true` hay `save=false`. Endpoint `GET /charts/{chartId}/interpretations` riêng biệt đã được **loại bỏ hoàn toàn** khỏi Mục 4 (không còn là resource độc lập ở Mục 3).
+### 14.9 Interpretation cho Chart transient (`save=false`) và cấu trúc DTO diễn giải (MVP)
+**✅ Quyết định cuối cùng:** 
+- Hợp nhất với 14.1 — `POST /charts/natal` **luôn trả kèm `interpretations`** trong cùng response, bất kể `save=true` hay `save=false`. Endpoint `GET /charts/{chartId}/interpretations` riêng biệt đã được **loại bỏ hoàn toàn** khỏi Mục 4 (không còn là resource độc lập ở Mục 3).
+- Cấu trúc `InterpretationResponse` ở phiên bản MVP chỉ bao gồm các `subjectType`: `PlanetInSign`, `PlanetInHouse`, và `AngleInSign`. Tham số `tone` sẽ luôn trả về `null`.
 
 ### 14.10 Timezone lịch sử theo `date` cụ thể khi tra cứu Location
 **✅ Quyết định cuối cùng:** Đã chốt — thêm query param **`date` bắt buộc** vào `GET /locations/search` (Mục 4.6), server trả `historicalTimezoneId` chính xác theo `date` được truyền, không phải timezone hiện tại của địa danh.
