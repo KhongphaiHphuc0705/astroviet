@@ -9,21 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Interpretation Engine**: Integrated an interpretation lookup service to map planetary and angle positions into localized text.
-- **Content Bank Validation**: Added validation, seeder, and provider to seed and query real interpretation data from `interpretations.vi.json`.
-- **API Enrichment**: `ChartResponse` now dynamically embeds up to 21 human-authored interpretation paragraphs (`PlanetInSign`, `PlanetInHouse`, `AngleInSign`).
-- **Regression Hardening**: Achieved 97% overall coverage; protected all legacy layers via strict architectural ESLint boundary rules; fully decoupled identity, birth-profile and chart domains.
+- **Interpretation Engine**: Integrated `InterpretationLookupService` and `deriveInterpretationSubjects` to map planetary and angle positions into localized text.
+- **Content Bank Validation & Data**: Added `languages` and `interpretation_contents` tables (migration `20261004120000_init_interpretation_content_bank`), validator/seeder/CLI `prisma:seed:content`, seeding 252 items for `vi` v`1.0` (`Hybrid`).
+- **API Enrichment**: `interpretationVersion` (nullable) and `interpretations` array have data in `ChartResponse` (additive); properly handled `AngleInSign`.
 
 ### Changed
 
 - Bumped version to `0.4.0` closing Sprint 4 Interpretation Engine & M6.
-- Updated `REST_API_Specification.md` reflecting decision to inline interpretations into chart response and remove `/interpretations` standalone endpoint.
-- Resolved previous Known Gaps: G-01 (interpretations now populated).
+- Updated `REST_API_Specification.md` (§5.4/§5.5/§12.4/§14.9) reflecting decision to inline interpretations into chart response and remove `/interpretations` standalone endpoint.
+- Corrected `InfrastructureError` to pass `cause` properly in chart and birth-profile repositories (no longer leaking into `details`).
+- Updated `CHANGELOG`/`README.md` sprint status.
 
 ### Known Gaps (deferred — see Sprint 4 Known Gaps Registry)
 
-- **Pattern Interpretations**: Stubbed pattern calculator keeps `chart_patterns` empty; interpretations for Grand Trine/T-Square intentionally deferred.
-- **Unknown Birth Time Logic**: Fallback logic retains `PlanetInSign` but omits `PlanetInHouse` without providing explicit interpretation adjustments.
+- **KG-S4-06**: Unknown birth time computes at 12:00 without engine warning (Moon may be inaccurate near sign boundary).
+- **KG-S4-08**: `users.preferred_language` documented but missing in schema/code.
+- **KG-M1-05**: Drift index/FK needs verification via `prisma migrate diff`.
+- **KG-M3-14**: Financial/health tone in `bodyText` kept as seed (`Hybrid`).
 
 ## [0.3.0] - 2026-09-13 (Sprint 3)
 

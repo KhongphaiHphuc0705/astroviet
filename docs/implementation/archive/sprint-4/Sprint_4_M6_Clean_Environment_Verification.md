@@ -53,8 +53,16 @@ npm run generate:openapi
 
 ## 4. Run Application & Execute End-to-End Smoke Test
 
-Started the server using `npm run build` and `node dist/server.js`, then executed `run-smoke-test.js` to hit live endpoints:
+Started the server using `npm run build` and `cross-env DEBUG=prisma:query node dist/server.js`, then executed `npx tsx scripts/run-smoke-test.ts` to hit live endpoints on port 3000:
 
+**Server Query Log (Excerpt for POST /charts/natal):**
+```
+prisma:query SELECT "astrology"."birth_profiles"."id", "astrology"."birth_profiles"."user_id", ...
+prisma:query SELECT "content"."interpretation_contents"."id", ... FROM "content"."interpretation_contents" WHERE "content"."interpretation_contents"."status" = $1
+```
+*(Số lượng query chỉ là 2: 1 lấy BirthProfile, 1 lấy toàn bộ nội dung diễn giải đã Published)*
+
+**Script Output:**
 ```bash
 --- Registering User ---
 Got Access Token: eyJhbGciOiJIUzI1NiIs...
@@ -66,6 +74,15 @@ Interpretation Version: 1.0
 Interpretations Count: 21
 Sample Interpretation: Sun_in_Taurus
 Sample Text: Mặt Trời ở Kim Ngưu đại diện cho sự ổn định, kiên ...
+--- Getting Natal Chart (GET /charts/:id) ---
+GET Chart ID: 3f049e28-bab9-43b4-9ee6-c5a9576911c2
+GET Interpretation Version: 1.0
+GET Interpretations Count: 21
+--- Getting Non-Existent Chart (404) ---
+GET 404 handled correctly
+--- Creating Natal Chart (Unknown Time, save=false) ---
+Unknown Time Chart Houses length: 0
+Unknown Time Interpretations length: 10
 SUCCESS
 ```
 
@@ -73,5 +90,6 @@ SUCCESS
 The fully integrated stack behaves as intended in a completely clean environment:
 - **Migrations & Seeds**: Works without manual intervention.
 - **Server Boot**: Successfully binds and connects to PostgreSQL.
-- **API Flow**: Auth -> Birth Profile -> Natal Chart Generation runs flawlessly.
-- **Interpretations**: The actual localized Vietnamese text is correctly mapped and rendered without the `[OWNER_CONTENT_REQUIRED]` placeholders or `fixture:` strings.
+- **API Flow**: Auth -> Birth Profile -> Natal Chart Generation runs flawlessly, including GET /charts/:id and 404 handler.
+- **Missing Birth Time**: Accurately calculates planets without houses, yielding precisely 10 interpretations.
+- **Interpretations**: The actual localized Vietnamese text is correctly mapped and rendered.
