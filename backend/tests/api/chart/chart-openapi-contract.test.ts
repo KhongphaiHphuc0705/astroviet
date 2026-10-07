@@ -1,28 +1,16 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-
 import { describe, it, expect, beforeAll } from 'vitest';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { generateOpenApiDocument } from '../../../src/docs/openapi.js';
+import '../../../src/modules/chart/presentation/openapi/chart.openapi.js';
 
-describe('OpenAPI Contract for Chart Interpretations (O-M5-1)', () => {
+describe('OpenAPI Contract for Chart Interpretations', () => {
   let openapiObj: any;
 
   beforeAll(() => {
-    // openapi.json is generated at backend/openapi.json
-    const openapiPath = path.resolve(__dirname, '../../../openapi.json');
-    if (!fs.existsSync(openapiPath)) {
-      throw new Error(
-        `openapi.json not found at ${openapiPath}. Run npm run generate:openapi first.`,
-      );
-    }
-    const content = fs.readFileSync(openapiPath, 'utf8');
-    openapiObj = JSON.parse(content);
+    openapiObj = generateOpenApiDocument();
   });
 
-  it('should define InterpretationResponse with exactly 5 properties (subjectType, subjectKey, language, bodyText, tone)', () => {
+  it('should define InterpretationResponse with exactly 5 properties and correct required fields', () => {
     const interpretationSchema = openapiObj.components.schemas.InterpretationResponse;
     expect(interpretationSchema).toBeDefined();
 
@@ -34,6 +22,13 @@ describe('OpenAPI Contract for Chart Interpretations (O-M5-1)', () => {
       'subjectType',
       'tone',
     ]);
+
+    expect(interpretationSchema.required.sort()).toEqual([
+      'bodyText',
+      'language',
+      'subjectKey',
+      'subjectType',
+    ]);
   });
 
   it('should define tone as nullable', () => {
@@ -41,7 +36,6 @@ describe('OpenAPI Contract for Chart Interpretations (O-M5-1)', () => {
     const toneProp = interpretationSchema.properties.tone;
     // OpenAPI 3.0 uses nullable: true
     // Some Zod-to-OpenAPI implementations represent this differently (e.g. type: ['string', 'null'])
-    // We check either one.
     const isNullable =
       toneProp.nullable === true ||
       (Array.isArray(toneProp.type) && toneProp.type.includes('null'));

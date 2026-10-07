@@ -94,27 +94,43 @@ describe('Chart Interpretation API', () => {
     expect(body.interpretationVersion).toBe('1.0');
     expect(body.interpretations.length).toBe(21); // 10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse
 
+    const planetsOrder = [
+      'Sun',
+      'Moon',
+      'Mercury',
+      'Venus',
+      'Mars',
+      'Jupiter',
+      'Saturn',
+      'Uranus',
+      'Neptune',
+      'Pluto',
+    ];
+
     // Check order and types
     for (let i = 0; i < 10; i++) {
       expect(body.interpretations[i].subjectType).toBe('PlanetInSign');
+      expect(body.interpretations[i].subjectKey).toContain(planetsOrder[i]);
     }
     expect(body.interpretations[10].subjectType).toBe('AngleInSign');
     expect(body.interpretations[10].subjectKey).toContain('Ascendant');
     for (let i = 11; i < 21; i++) {
       expect(body.interpretations[i].subjectType).toBe('PlanetInHouse');
+      expect(body.interpretations[i].subjectKey).toContain(planetsOrder[i - 11]);
     }
 
-    // Check no internal fields (already enforced by strict safeParse but explicit check)
-    const firstItem = body.interpretations[0];
-    expect(Object.keys(firstItem).sort()).toEqual([
-      'bodyText',
-      'language',
-      'subjectKey',
-      'subjectType',
-      'tone',
-    ]);
-    expect(firstItem.bodyText).toContain('fixture:1.0:');
-    expect(firstItem.tone).toBeNull();
+    // Check keys and values for all items
+    for (const item of body.interpretations) {
+      expect(Object.keys(item).sort()).toEqual([
+        'bodyText',
+        'language',
+        'subjectKey',
+        'subjectType',
+        'tone',
+      ]);
+      expect(item.bodyText).toContain('fixture:1.0:');
+      expect(item.tone).toBeNull();
+    }
   });
 
   it('C: should handle missing birth time (no houses/angles)', async () => {
@@ -140,11 +156,28 @@ describe('Chart Interpretation API', () => {
     const body = response.body;
 
     expect(body.isHouseDataAvailable).toBe(false);
+    expect(body.houses).toEqual([]);
+    expect(body.angles).toEqual([]);
     expect(body.interpretationVersion).toBe('1.0');
     expect(body.interpretations.length).toBe(10); // Only PlanetInSign
 
-    for (const item of body.interpretations) {
+    const planetsOrder = [
+      'Sun',
+      'Moon',
+      'Mercury',
+      'Venus',
+      'Mars',
+      'Jupiter',
+      'Saturn',
+      'Uranus',
+      'Neptune',
+      'Pluto',
+    ];
+    for (let i = 0; i < 10; i++) {
+      const item = body.interpretations[i];
       expect(item.subjectType).toBe('PlanetInSign');
+      expect(item.subjectKey).toContain(planetsOrder[i]);
+      expect(item.subjectKey).toContain('_in_');
     }
   });
 
@@ -221,6 +254,10 @@ describe('Chart Interpretation API', () => {
     expect(getRes.status).toBe(200);
     expect(getRes.body.interpretationVersion).toBe('2.0');
     expect(getRes.body.interpretations[0].bodyText).toContain('fixture:2.0:');
+
+    // Check DB to ensure it was not backfilled (still null)
+    const chartInDb = await prisma.chart.findUnique({ where: { id: chartId } });
+    expect(chartInDb?.snapshot_interpretation_version).toBeNull();
   });
 
   it('G: should return pinned version with empty array if content is removed', async () => {
