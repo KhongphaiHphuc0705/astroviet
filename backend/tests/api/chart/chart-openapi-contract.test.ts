@@ -53,6 +53,7 @@ describe('OpenAPI Contract for Chart Interpretations', () => {
       versionProp.nullable === true ||
       (Array.isArray(versionProp.type) && versionProp.type.includes('null'));
     expect(isNullable).toBe(true);
+    expect(chartResponseSchema.required).toContain('interpretationVersion');
   });
 
   it('should include interpretations array in ChartResponse', () => {

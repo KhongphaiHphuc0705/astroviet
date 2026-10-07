@@ -131,6 +131,10 @@ describe('Chart Interpretation API', () => {
       expect(item.bodyText).toContain('fixture:1.0:');
       expect(item.tone).toBeNull();
     }
+
+    // Check DB to ensure the version was correctly pinned
+    const chartInDb = await prisma.chart.findUnique({ where: { id: body.id } });
+    expect(chartInDb?.snapshot_interpretation_version).toBe('1.0');
   });
 
   it('C: should handle missing birth time (no houses/angles)', async () => {
