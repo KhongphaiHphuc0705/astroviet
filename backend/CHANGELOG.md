@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **KG-S4-06**: Unknown birth time computes at 12:00 without engine warning (Moon may be inaccurate near sign boundary).
 - **KG-S4-08**: `users.preferred_language` documented but missing in schema/code.
-- **KG-M1-05**: Drift index/FK needs verification via `prisma migrate diff`.
+- **KG-M1-05**: Chưa có log xác minh \`prisma migrate diff\` và \`prisma:seed\` (dự kiến chỉ drift đã được tài liệu hóa).
 - **KG-M3-14**: Financial/health tone in `bodyText` kept as seed (`Hybrid`).
 
 ## [0.3.0] - 2026-09-13 (Sprint 3)
