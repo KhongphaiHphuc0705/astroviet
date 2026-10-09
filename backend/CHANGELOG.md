@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-07 (Sprint 4)
+
+### Added
+
+- **Interpretation Engine**: Integrated `InterpretationLookupService` and `deriveInterpretationSubjects` to map planetary and angle positions into localized text.
+- **Content Bank Validation & Data**: Added `languages` and `interpretation_contents` tables (migration `20261004120000_init_interpretation_content_bank`), validator/seeder/CLI `prisma:seed:content`, seeding 252 items for `vi` v`1.0` (`Hybrid`).
+- **API Enrichment**: `interpretationVersion` (nullable) and `interpretations` array have data in `ChartResponse` (additive); properly handled `AngleInSign`.
+
+### Changed
+
+- Bumped version to `0.4.0` closing Sprint 4 Interpretation Engine & M6.
+- Updated `REST_API_Specification.md` (§5.4/§5.5/§12.4/§14.9) reflecting decision to inline interpretations into chart response and remove `/interpretations` standalone endpoint.
+- Corrected `InfrastructureError` to pass `cause` properly in chart and birth-profile repositories (no longer leaking into `details`).
+- Updated `CHANGELOG`/`README.md` sprint status.
+
+### Known Gaps (deferred — see Sprint 4 Known Gaps Registry)
+
+- **KG-S4-06**: Unknown birth time computes at 12:00 without engine warning (Moon may be inaccurate near sign boundary).
+- **KG-S4-08**: `users.preferred_language` documented but missing in schema/code.
+- **KG-M1-05**: Chưa có log xác minh \`prisma migrate diff\` và \`prisma:seed\` (dự kiến chỉ drift đã được tài liệu hóa).
+- **KG-M3-14**: Financial/health tone in `bodyText` kept as seed (`Hybrid`).
+
 ## [0.3.0] - 2026-09-13 (Sprint 3)
 
 ### Added

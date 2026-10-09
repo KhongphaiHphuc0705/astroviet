@@ -653,7 +653,7 @@ Theo đúng phạm vi MVP đã chốt ở PRD Mục 3.1 (In-scope) và 8.3 (MoSC
 | Field | Type | Required | Nullable | Example |
 |---|---|---|---|---|
 | subjectType | string | ✔ | ✘ | Giá trị MVP: `PlanetInSign`, `PlanetInHouse`, `AngleInSign` |
-| subjectKey | string | ✔ | ✘ | Ngữ pháp: `{Planet}_in_{Sign/House}` hoặc `{Angle}_in_{Sign}` (ví dụ `"Venus_in_Leo"`, `"Ascendant_in_Aries"`) |
+| subjectKey | string | ✔ | ✘ | Ngữ pháp: `{Planet}_in_{Sign}`, `{Planet}_in_House_{n}` hoặc `Ascendant_in_{Sign}` (ví dụ `"Venus_in_Leo"`, `"Ascendant_in_Aries"`) |
 | language | string | ✔ | ✘ | `"vi"` |
 | bodyText | string | ✔ | ✘ | Nội dung văn bản diễn giải hoàn thiện |
 | tone | string | ✘ | ✔ | Trong MVP luôn trả về `null` |
@@ -949,7 +949,9 @@ Client              API Server         Astrology Engine        Database
   │◀─────────────────────────────────────┤                          │
 ```
 
-### 12.4 Generate Interpretation
+### 12.4 Generate Interpretation (ĐÃ LOẠI BỎ)
+
+> **Lưu ý:** Sơ đồ này chỉ còn mang tính chất tham khảo lịch sử. Endpoint `GET /charts/{id}/interpretations` đã bị loại bỏ theo Quyết định 14.9. Nội dung diễn giải giờ đây được nhúng sẵn vào trong `ChartResponse` (xem Mục 12.2 và 12.3).
 
 ```
 Client                 API Server           Interpretation Engine     Content Store

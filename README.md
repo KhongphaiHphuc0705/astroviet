@@ -274,11 +274,11 @@ npm run typecheck
 Current implementation roadmap
 
 - ✅ Sprint 0 — Infrastructure
-- 🚧 Sprint 1 — Identity Module
-- ⏳ Sprint 2 — Birth Profile
-- ⏳ Sprint 3 — Chart Engine
-- ⏳ Sprint 4 — Interpretation Engine
-- ⏳ Sprint 5 — Knowledge Base
+- ✅ Sprint 1 — Identity Module
+- ✅ Sprint 2 — Birth Profile
+- ✅ Sprint 3 — Chart Engine
+- ✅ Sprint 4 — Interpretation Engine
+- 🚧 Sprint 5 — Knowledge Base
 - ⏳ Sprint 6 — Production Readiness
 
 ---
