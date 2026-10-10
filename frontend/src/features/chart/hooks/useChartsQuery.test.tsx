@@ -10,6 +10,7 @@ import { server } from "@test/msw-server";
 
 import type { ListChartsResponse } from "../api/types";
 
+import { chartKeys } from "./query-keys";
 import { useChartsQuery } from "./useChartsQuery";
 
 const mockResponsePage1: ListChartsResponse = {
@@ -29,18 +30,23 @@ const mockResponsePage2: ListChartsResponse = {
 describe("useChartsQuery", () => {
   const createWrapper = () => {
     const queryClient = createQueryClient();
-    return function Wrapper({ children }: { children: ReactNode }) {
-      return (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      );
+    return {
+      queryClient,
+      Wrapper: function Wrapper({ children }: { children: ReactNode }) {
+        return (
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        );
+      },
     };
   };
 
-  it("keeps previous data while fetching new page", async () => {
+  it("keeps previous data while fetching new page, verifies params sent and query key used", async () => {
+    let capturedUrlStr: string | null = null;
     server.use(
       http.get("*/api/v1/charts", async ({ request }) => {
+        capturedUrlStr = request.url;
         const url = new URL(request.url);
         if (url.searchParams.get("page") === "2") {
           return HttpResponse.json(mockResponsePage2);
@@ -49,11 +55,12 @@ describe("useChartsQuery", () => {
       }),
     );
 
+    const { Wrapper, queryClient } = createWrapper();
     const { result, rerender } = renderHook(
       (props: { page: number }) =>
         useChartsQuery({ page: props.page, pageSize: 20 }),
       {
-        wrapper: createWrapper(),
+        wrapper: Wrapper,
         initialProps: { page: 1 },
       },
     );
@@ -64,6 +71,14 @@ describe("useChartsQuery", () => {
 
     expect(result.current.data?.page).toBe(1);
     expect(result.current.isPlaceholderData).toBe(false);
+
+    // verify key and params
+    const url1 = new URL(capturedUrlStr!);
+    expect(url1.searchParams.get("page")).toBe("1");
+    expect(url1.searchParams.get("pageSize")).toBe("20");
+    expect(
+      queryClient.getQueryData(chartKeys.list({ page: 1, pageSize: 20 })),
+    ).toBeDefined();
 
     // change page
     rerender({ page: 2 });
@@ -76,6 +91,12 @@ describe("useChartsQuery", () => {
       expect(result.current.data?.page).toBe(2);
       expect(result.current.isPlaceholderData).toBe(false);
     });
+
+    const url2 = new URL(capturedUrlStr!);
+    expect(url2.searchParams.get("page")).toBe("2");
+    expect(
+      queryClient.getQueryData(chartKeys.list({ page: 2, pageSize: 20 })),
+    ).toBeDefined();
   });
 
   it("returns ApiError on failure", async () => {
@@ -91,10 +112,11 @@ describe("useChartsQuery", () => {
       }),
     );
 
+    const { Wrapper } = createWrapper();
     const { result } = renderHook(
       () => useChartsQuery({ page: 1, pageSize: 20 }),
       {
-        wrapper: createWrapper(),
+        wrapper: Wrapper,
       },
     );
 
