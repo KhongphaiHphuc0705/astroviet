@@ -36,6 +36,9 @@ describe("createNatalChart", () => {
       }),
     );
 
+    const result = await createNatalChart("profile-1", "Placidus");
+    expect(result.id).toBe(mockChart.id);
+
     const url = new URL(capturedUrlStr!);
     expect(url.searchParams.get("save")).toBe("true");
     expect(capturedBody).toStrictEqual({
