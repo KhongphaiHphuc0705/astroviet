@@ -11,12 +11,7 @@ import {
   KNOWN_INTERPRETATION_SUBJECT_TYPES,
 } from "../types";
 
-import {
-  chartFull,
-  chartNoHouses,
-  chartFullWithInterpretations,
-  chartSummaryFixtures,
-} from "./fixtures";
+import { chartFull, chartNoHouses, chartSummaryFixtures } from "./fixtures";
 
 describe("Chart Fixtures Contract", () => {
   it("chartFull has exactly the expected top-level keys", () => {
@@ -92,15 +87,10 @@ describe("Chart Fixtures Contract", () => {
     });
   });
 
-  it("validates interpretations derived fixture", () => {
-    expect(chartFull.interpretations).toEqual([]);
-    expect(chartFull.interpretationVersion).toBeNull();
-
-    expect(chartFullWithInterpretations.interpretationVersion).toBe("1.0");
-    expect(chartFullWithInterpretations.interpretations.length).toBeGreaterThan(
-      0,
-    );
-    chartFullWithInterpretations.interpretations.forEach((interp) => {
+  it("validates interpretations", () => {
+    expect(chartFull.interpretationVersion).toBe("1.0");
+    expect(chartFull.interpretations.length).toBeGreaterThan(0);
+    chartFull.interpretations.forEach((interp) => {
       expect(KNOWN_INTERPRETATION_SUBJECT_TYPES as readonly string[]).toContain(
         interp.subjectType,
       );

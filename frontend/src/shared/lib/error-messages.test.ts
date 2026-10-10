@@ -143,4 +143,27 @@ describe("error-messages", () => {
       expect(reportErrorSpy).not.toHaveBeenCalled();
     });
   });
+
+  describe("Chart error codes (Sprint F4)", () => {
+    it("INVALID_DATETIME → message tiếng Việt", () => {
+      expect(getErrorMessage("INVALID_DATETIME")).toBe(
+        "Ngày giờ sinh không hợp lệ.",
+      );
+      expect(isKnownBusinessError("INVALID_DATETIME")).toBe(true);
+    });
+
+    it("UNRESOLVABLE_TIMEZONE → message tiếng Việt", () => {
+      expect(getErrorMessage("UNRESOLVABLE_TIMEZONE")).toBe(
+        "Không thể xác định múi giờ cho địa điểm này.",
+      );
+      expect(isKnownBusinessError("UNRESOLVABLE_TIMEZONE")).toBe(true);
+    });
+
+    it("INVALID_COORDINATES → message tiếng Việt", () => {
+      expect(getErrorMessage("INVALID_COORDINATES")).toBe(
+        "Tọa độ địa lý không hợp lệ.",
+      );
+      expect(isKnownBusinessError("INVALID_COORDINATES")).toBe(true);
+    });
+  });
 });
