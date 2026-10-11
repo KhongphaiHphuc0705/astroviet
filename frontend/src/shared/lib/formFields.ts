@@ -113,7 +113,8 @@ export function useSelectField<
   TFieldValues extends FieldValues,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TTransformedValues extends FieldValues | undefined = any,
 >(
   name: FieldPath<TFieldValues>,
   control: Control<TFieldValues, TContext, TTransformedValues>,

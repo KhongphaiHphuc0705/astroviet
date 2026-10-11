@@ -57,7 +57,7 @@ const COUNTRY_OPTIONS = [
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function FormFoundationDemo() {
-  const form = useZodForm(demoSchema, {
+  const form = useZodForm<DemoFormValues>(demoSchema, {
     defaultValues: {
       displayName: "",
       contactEmail: "",
