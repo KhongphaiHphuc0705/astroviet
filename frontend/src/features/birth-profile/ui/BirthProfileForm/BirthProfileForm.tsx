@@ -31,7 +31,7 @@ export function BirthProfileForm({
     () => defaultValues?.birthTime?.slice(0, 5) ?? "",
   );
 
-  const form = useZodForm(birthProfileFormSchema, {
+  const form = useZodForm<BirthProfileFormValues>(birthProfileFormSchema, {
     defaultValues: defaultValues ?? {
       label: "",
       fullName: "",

@@ -1,5 +1,4 @@
 import { render, act } from "@testing-library/react";
-import React from "react";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";

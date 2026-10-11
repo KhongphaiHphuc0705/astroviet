@@ -45,9 +45,11 @@ describe("queryClient", () => {
 
       expect(onError).toBeDefined();
 
-      const testError = { errorCode: "SOME_UNKNOWN_ERROR" };
+      const testError = Object.assign(new Error("Unknown error"), {
+        errorCode: "SOME_UNKNOWN_ERROR",
+      });
       if (onError) {
-        onError(testError, null, null, null);
+        (onError as (err: unknown) => void)(testError);
       }
 
       expect(reportErrorSpy).toHaveBeenCalledWith(
@@ -68,9 +70,11 @@ describe("queryClient", () => {
       const defaultOptions = queryClient.getDefaultOptions();
       const onError = defaultOptions.mutations?.onError;
 
-      const testError = { errorCode: "INVALID_CREDENTIALS" };
+      const testError = Object.assign(new Error("Invalid credentials"), {
+        errorCode: "INVALID_CREDENTIALS",
+      });
       if (onError) {
-        onError(testError, null, null, null);
+        (onError as (err: unknown) => void)(testError);
       }
 
       expect(reportErrorSpy).not.toHaveBeenCalled();

@@ -26,6 +26,14 @@ const ERROR_MESSAGES: Record<string, string> = {
     "Thông tin nơi sinh không hợp lệ. Vui lòng tìm và chọn lại nơi sinh.",
   INVALID_BIRTH_TIME:
     "Giờ sinh không hợp lệ. Vui lòng nhập giờ từ 00:00 đến 23:59.",
+
+  // Chart — Sprint F4 M1
+  INVALID_DATETIME:
+    "Ngày hoặc giờ sinh của hồ sơ này không thể dùng để tính lá số (ví dụ giờ sinh không tồn tại do đổi múi giờ). Vui lòng kiểm tra lại hồ sơ.",
+  UNRESOLVABLE_TIMEZONE:
+    "Không xác định được múi giờ của nơi sinh. Vui lòng chọn lại nơi sinh trong hồ sơ.",
+  INVALID_COORDINATES:
+    "Toạ độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
 };
 
 export function getErrorMessage(errorCode: string): string {
