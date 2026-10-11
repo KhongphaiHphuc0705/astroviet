@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { type BirthProfile } from "@features/birth-profile/api/types";
 import { useBirthProfilesQuery } from "@features/birth-profile/hooks/useBirthProfilesQuery";
 import { useDeleteBirthProfileMutation } from "@features/birth-profile/hooks/useDeleteBirthProfileMutation";
+import {
+  CalculateChartDialog,
+  type CalculateChartTarget,
+} from "@features/chart";
 import { Alert } from "@shared/ui/Alert";
 import { Button } from "@shared/ui/Button";
 import { Card } from "@shared/ui/Card";
@@ -32,6 +36,8 @@ export default function BirthProfilesPage() {
   const [deletingProfile, setDeletingProfile] = useState<BirthProfile | null>(
     null,
   );
+  const [calculateTarget, setCalculateTarget] =
+    useState<CalculateChartTarget | null>(null);
   const navigate = useNavigate();
 
   const deleteMutation = useDeleteBirthProfileMutation();
@@ -114,9 +120,23 @@ export default function BirthProfilesPage() {
               </div>
               <Stack
                 direction="horizontal"
-                className="mt-auto justify-end border-t border-subtle pt-4"
+                className="mt-auto flex-wrap justify-end border-t border-subtle pt-4"
                 gap="2"
               >
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() =>
+                    setCalculateTarget({
+                      id: profile.id,
+                      displayName: profile.fullName ?? profile.label,
+                      isBirthTimeKnown: profile.isBirthTimeKnown,
+                    })
+                  }
+                  aria-label={`Tính lá số cho hồ sơ ${profile.fullName ?? profile.label}`}
+                >
+                  Tính lá số
+                </Button>
                 <Button
                   as={Link}
                   to={`/app/profiles/${profile.id}/edit`}
@@ -229,6 +249,13 @@ export default function BirthProfilesPage() {
           </Stack>
         </div>
       </Modal>
+
+      {calculateTarget && (
+        <CalculateChartDialog
+          target={calculateTarget}
+          onClose={() => setCalculateTarget(null)}
+        />
+      )}
     </Container>
   );
 }

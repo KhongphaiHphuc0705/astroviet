@@ -475,4 +475,196 @@ describe("BirthProfilesPage", () => {
 
     expect(await screen.findByTestId("new-profile-page")).toBeInTheDocument();
   });
+
+  describe("Group P: Calculate Chart Action Integration (F4-M3.2)", () => {
+    it("P1: renders 'Tính lá số' button on each profile card", async () => {
+      const profile1 = mockBirthProfile({ id: "1", fullName: "Profile 1" });
+      const profile2 = mockBirthProfile({ id: "2", fullName: "Profile 2" });
+
+      server.use(
+        mockListBirthProfiles(() =>
+          HttpResponse.json({
+            items: [profile1, profile2],
+            total: 2,
+            page: 1,
+            pageSize: 10,
+          }),
+        ),
+      );
+
+      renderWithProviders(<BirthProfilesPage />);
+
+      expect(
+        await screen.findByRole("button", {
+          name: "Tính lá số cho hồ sơ Profile 1",
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", {
+          name: "Tính lá số cho hồ sơ Profile 2",
+        }),
+      ).toBeInTheDocument();
+    });
+
+    it("P2: opens CalculateChartDialog with correct profile name when clicked", async () => {
+      const profile = mockBirthProfile({
+        id: "1",
+        fullName: "Nguyễn Văn A",
+      });
+
+      server.use(
+        mockListBirthProfiles(() =>
+          HttpResponse.json({
+            items: [profile],
+            total: 1,
+            page: 1,
+            pageSize: 10,
+          }),
+        ),
+      );
+
+      renderWithProviders(<BirthProfilesPage />);
+
+      const user = userEvent.setup();
+      const calcBtn = await screen.findByRole("button", {
+        name: "Tính lá số cho hồ sơ Nguyễn Văn A",
+      });
+      await user.click(calcBtn);
+
+      expect(
+        await screen.findByRole("heading", { name: "Tính lá số" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /Chọn hệ nhà để tính lá số cho hồ sơ “Nguyễn Văn A”\./,
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("radio", { name: /Placidus/ })).toBeChecked();
+    });
+
+    it("P3: displays unknown time notice in dialog when profile has isBirthTimeKnown: false", async () => {
+      const profile = mockBirthProfile({
+        id: "1",
+        fullName: "Không Rõ Giờ",
+        isBirthTimeKnown: false,
+        birthTime: null,
+      });
+
+      server.use(
+        mockListBirthProfiles(() =>
+          HttpResponse.json({
+            items: [profile],
+            total: 1,
+            page: 1,
+            pageSize: 10,
+          }),
+        ),
+      );
+
+      renderWithProviders(<BirthProfilesPage />);
+
+      const user = userEvent.setup();
+      const calcBtn = await screen.findByRole("button", {
+        name: "Tính lá số cho hồ sơ Không Rõ Giờ",
+      });
+      await user.click(calcBtn);
+
+      expect(
+        await screen.findByRole("heading", { name: "Tính lá số" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Hồ sơ này chưa có giờ sinh"),
+      ).toBeInTheDocument();
+    });
+
+    it("P4: preserves existing 'Sửa' and 'Xóa' actions functionality alongside new button", async () => {
+      const profile = mockBirthProfile({ id: "1", fullName: "Hồ Sơ Cũ" });
+
+      server.use(
+        mockListBirthProfiles(() =>
+          HttpResponse.json({
+            items: [profile],
+            total: 1,
+            page: 1,
+            pageSize: 10,
+          }),
+        ),
+      );
+
+      renderWithProviders(<BirthProfilesPage />);
+
+      expect(
+        await screen.findByRole("button", {
+          name: "Tính lá số cho hồ sơ Hồ Sơ Cũ",
+        }),
+      ).toBeInTheDocument();
+
+      const editLink = screen.getByRole("link", {
+        name: "Sửa hồ sơ Hồ Sơ Cũ",
+      });
+      expect(editLink).toHaveAttribute("href", "/app/profiles/1/edit");
+
+      const deleteBtn = screen.getByRole("button", {
+        name: "Xóa hồ sơ Hồ Sơ Cũ",
+      });
+      const user = userEvent.setup();
+      await user.click(deleteBtn);
+
+      expect(
+        await screen.findByRole("heading", { name: "Xóa hồ sơ" }),
+      ).toBeInTheDocument();
+    });
+
+    it("P5: closes dialog on Cancel and resets to Placidus upon reopening", async () => {
+      const profile = mockBirthProfile({ id: "1", fullName: "Profile Reset" });
+
+      server.use(
+        mockListBirthProfiles(() =>
+          HttpResponse.json({
+            items: [profile],
+            total: 1,
+            page: 1,
+            pageSize: 10,
+          }),
+        ),
+      );
+
+      renderWithProviders(<BirthProfilesPage />);
+
+      const user = userEvent.setup();
+      const calcBtn = await screen.findByRole("button", {
+        name: "Tính lá số cho hồ sơ Profile Reset",
+      });
+      await user.click(calcBtn);
+
+      // Select Whole Sign
+      const wholeSignRadio = await screen.findByRole("radio", {
+        name: /Whole Sign/,
+      });
+      await user.click(wholeSignRadio);
+      expect(wholeSignRadio).toBeChecked();
+
+      // Click Cancel
+      const cancelBtn = screen.getByRole("button", { name: "Hủy" });
+      await user.click(cancelBtn);
+
+      await waitFor(() => {
+        expect(
+          screen.queryByRole("heading", { name: "Tính lá số" }),
+        ).not.toBeInTheDocument();
+      });
+
+      // Reopen dialog
+      await user.click(calcBtn);
+
+      expect(
+        await screen.findByRole("heading", { name: "Tính lá số" }),
+      ).toBeInTheDocument();
+      // Should reset to Placidus
+      expect(screen.getByRole("radio", { name: /Placidus/ })).toBeChecked();
+      expect(
+        screen.getByRole("radio", { name: /Whole Sign/ }),
+      ).not.toBeChecked();
+    });
+  });
 });
