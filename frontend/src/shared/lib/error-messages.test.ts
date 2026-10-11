@@ -144,26 +144,51 @@ describe("error-messages", () => {
     });
   });
 
-  describe("Chart error codes (Sprint F4)", () => {
-    it("INVALID_DATETIME → message tiếng Việt", () => {
+  describe("Chart error codes (Sprint F4 M1)", () => {
+    it("INVALID_DATETIME → message tiếng Việt, không reportError", () => {
       expect(getErrorMessage("INVALID_DATETIME")).toBe(
-        "Ngày giờ sinh không hợp lệ.",
+        "Ngày hoặc giờ sinh của hồ sơ này không thể dùng để tính lá số (ví dụ giờ sinh không tồn tại do đổi múi giờ). Vui lòng kiểm tra lại hồ sơ.",
       );
       expect(isKnownBusinessError("INVALID_DATETIME")).toBe(true);
+      expect(reportErrorSpy).not.toHaveBeenCalled();
     });
 
-    it("UNRESOLVABLE_TIMEZONE → message tiếng Việt", () => {
+    it("UNRESOLVABLE_TIMEZONE → message tiếng Việt, không reportError", () => {
       expect(getErrorMessage("UNRESOLVABLE_TIMEZONE")).toBe(
-        "Không thể xác định múi giờ cho địa điểm này.",
+        "Không xác định được múi giờ của nơi sinh. Vui lòng chọn lại nơi sinh trong hồ sơ.",
       );
       expect(isKnownBusinessError("UNRESOLVABLE_TIMEZONE")).toBe(true);
+      expect(reportErrorSpy).not.toHaveBeenCalled();
     });
 
-    it("INVALID_COORDINATES → message tiếng Việt", () => {
+    it("INVALID_COORDINATES → message tiếng Việt, không reportError", () => {
       expect(getErrorMessage("INVALID_COORDINATES")).toBe(
-        "Tọa độ địa lý không hợp lệ.",
+        "Toạ độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
       );
       expect(isKnownBusinessError("INVALID_COORDINATES")).toBe(true);
+      expect(reportErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it("unmapped internal codes → fallback + reportError được gọi", () => {
+      const internalCodes = [
+        "CHART_CALCULATION_FAILED",
+        "EPHEMERIS_PROVIDER_ERROR",
+        "DATA_INTEGRITY_ERROR",
+        "EXACTLY_ONE_SOURCE_REQUIRED",
+      ];
+
+      for (const code of internalCodes) {
+        reportErrorSpy.mockClear();
+        expect(getErrorMessage(code)).toBe(
+          "Đã có lỗi xảy ra, vui lòng thử lại.",
+        );
+        expect(isKnownBusinessError(code)).toBe(false);
+        expect(reportErrorSpy).toHaveBeenCalledTimes(1);
+        expect(reportErrorSpy).toHaveBeenCalledWith(
+          expect.any(Error),
+          "error-messages",
+        );
+      }
     });
   });
 });

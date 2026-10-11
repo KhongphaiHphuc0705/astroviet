@@ -59,12 +59,7 @@ describe("getChart", () => {
   });
 
   it("rejects with ApiError on 422", async () => {
-    server.use(
-      chartDomainError(
-        mockGetChart as unknown as Parameters<typeof chartDomainError>[0],
-        "INVALID_DATETIME",
-      ),
-    );
+    server.use(chartDomainError(mockGetChart, "INVALID_DATETIME"));
     const promise = getChart("123");
     await expect(promise).rejects.toThrow(ApiError);
     await expect(promise).rejects.toMatchObject({

@@ -10,7 +10,6 @@ import {
   chartNotFound,
   chartDomainError,
   mockCreateNatalChart,
-  mockGetChart,
   problemDetails,
 } from "./mocks/handlers";
 
@@ -65,9 +64,7 @@ describe("createNatalChart", () => {
   });
 
   it("rejects with ApiError on 404", async () => {
-    server.use(
-      chartNotFound(mockCreateNatalChart as unknown as typeof mockGetChart),
-    );
+    server.use(chartNotFound(mockCreateNatalChart));
     const promise = createNatalChart("profile-1", "Placidus");
     await expect(promise).rejects.toThrow(ApiError);
     await expect(promise).rejects.toMatchObject({

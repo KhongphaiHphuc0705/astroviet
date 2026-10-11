@@ -50,26 +50,29 @@ export function listChartsSuccess(
   return mockListCharts(() => HttpResponse.json(response, { status: 200 }));
 }
 
+export type ChartMockEndpoint =
+  typeof mockGetChart | typeof mockCreateNatalChart | typeof mockListCharts;
+
 export function chartNotFound(
-  mockFn: typeof mockGetChart = mockGetChart,
+  mockFn: ChartMockEndpoint = mockGetChart,
 ): RequestHandler {
   return mockFn(() => problemDetails(404, "RESOURCE_NOT_FOUND"));
 }
 
 export function chartForbidden(
-  mockFn: typeof mockGetChart = mockGetChart,
+  mockFn: ChartMockEndpoint = mockGetChart,
 ): RequestHandler {
   return mockFn(() => problemDetails(403, "FORBIDDEN"));
 }
 
 export function chartMalformedRequest(
-  mockFn: typeof mockGetChart = mockGetChart,
+  mockFn: ChartMockEndpoint = mockGetChart,
 ): RequestHandler {
   return mockFn(() => problemDetails(400, "MALFORMED_REQUEST"));
 }
 
 export function chartDomainError(
-  mockFn: typeof mockCreateNatalChart,
+  mockFn: ChartMockEndpoint,
   errorCode: string,
 ): RequestHandler {
   return mockFn(() => problemDetails(422, errorCode));

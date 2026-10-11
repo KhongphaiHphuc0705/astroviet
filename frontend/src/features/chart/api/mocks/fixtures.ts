@@ -1,5 +1,8 @@
 // CAPTURED
-// Nguồn: local backend (engine: chart-engine-v0.2.0+swisseph-wasm-0.1.0)
+// Ngày chụp: 2026-10-10
+// Commit: 9f0ff70
+// Lệnh chụp: POST /api/v1/charts/natal?save=true (local backend)
+// Engine: chart-engine-v0.2.0+swisseph-wasm-0.1.0
 import type { ChartResponse, ChartSummary } from "../types";
 
 export const chartFull: ChartResponse = {
@@ -738,24 +741,10 @@ export const chartNoHouses: ChartResponse = {
   engineVersion: "chart-engine-v0.2.0+swisseph-wasm-0.1.0",
 };
 
-export const chartFullWithInterpretations: ChartResponse = {
-  ...chartFull,
-  interpretationVersion: "1.0",
-  interpretations: [
-    {
-      subjectType: "PlanetInSign",
-      subjectKey: "Sun_Capricorn",
-      language: "vi",
-      bodyText: "Mặt trời ở Ma Kết...",
-      tone: null,
-    },
-  ],
-};
-
 export const chartSummaryFixtures: ChartSummary[] = [
   {
     id: chartFull.id,
-    birthProfileId: "profile-1",
+    birthProfileId: "b1a2c3d4-e5f6-4a1b-8c2d-3e4f5a6b7c8d",
     birthProfileLabel: null,
     houseSystem: chartFull.houseSystem,
     calculatedAt: chartFull.calculatedAt,
