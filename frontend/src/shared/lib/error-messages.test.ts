@@ -163,7 +163,7 @@ describe("error-messages", () => {
 
     it("INVALID_COORDINATES → message tiếng Việt, không reportError", () => {
       expect(getErrorMessage("INVALID_COORDINATES")).toBe(
-        "Toạ độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
+        "Tọa độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
       );
       expect(isKnownBusinessError("INVALID_COORDINATES")).toBe(true);
       expect(reportErrorSpy).not.toHaveBeenCalled();
