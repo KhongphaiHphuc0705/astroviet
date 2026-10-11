@@ -156,7 +156,7 @@ const PARTIAL_DATA_CODES = new Set<ChartIssueCode>([
 interface IntermediatePlanet {
   readonly inputIndex: number;
   readonly vm: PlanetVM;
-  readonly rawHouse: number | null;
+  readonly rawHouse: unknown;
 }
 
 interface IntermediateAngle {
@@ -193,78 +193,93 @@ function compareRank(
   return 0;
 }
 
-export function toChartViewModel(dto: ChartResponse): ChartViewModel {
-  // Step 1: Structural Validation
+function validateStructure(dto: unknown): asserts dto is ChartResponse {
   if (dto === null || typeof dto !== "object") {
     throw new ChartViewModelError("DTO must be a non-null object", "dto");
   }
 
-  if (typeof dto.id !== "string" || dto.id.length === 0) {
+  const candidate = dto as Record<string, unknown>;
+
+  if (typeof candidate.id !== "string" || candidate.id.length === 0) {
     throw new ChartViewModelError("Invalid or missing chart id", "id");
   }
 
-  if (typeof dto.isHouseDataAvailable !== "boolean") {
+  if (typeof candidate.isHouseDataAvailable !== "boolean") {
     throw new ChartViewModelError(
       "isHouseDataAvailable must be a boolean",
       "isHouseDataAvailable",
     );
   }
 
-  if (typeof dto.calculatedAt !== "string" || dto.calculatedAt.length === 0) {
+  if (
+    typeof candidate.calculatedAt !== "string" ||
+    candidate.calculatedAt.length === 0
+  ) {
     throw new ChartViewModelError(
       "Invalid or missing calculatedAt",
       "calculatedAt",
     );
   }
 
-  if (typeof dto.engineVersion !== "string" || dto.engineVersion.length === 0) {
+  if (
+    typeof candidate.engineVersion !== "string" ||
+    candidate.engineVersion.length === 0
+  ) {
     throw new ChartViewModelError(
       "Invalid or missing engineVersion",
       "engineVersion",
     );
   }
 
-  if (!Array.isArray(dto.planets)) {
+  if (!Array.isArray(candidate.planets)) {
     throw new ChartViewModelError("planets must be an array", "planets");
   }
 
-  if (!Array.isArray(dto.houses)) {
+  if (!Array.isArray(candidate.houses)) {
     throw new ChartViewModelError("houses must be an array", "houses");
   }
 
-  if (!Array.isArray(dto.angles)) {
+  if (!Array.isArray(candidate.angles)) {
     throw new ChartViewModelError("angles must be an array", "angles");
   }
 
-  if (!Array.isArray(dto.aspects)) {
+  if (!Array.isArray(candidate.aspects)) {
     throw new ChartViewModelError("aspects must be an array", "aspects");
   }
 
-  if (!Array.isArray(dto.warnings)) {
+  if (!Array.isArray(candidate.warnings)) {
     throw new ChartViewModelError("warnings must be an array", "warnings");
   }
+}
 
-  const issues: ChartIssue[] = [];
-
-  // Step 2: Planets
+function buildPlanets(
+  rawPlanets: unknown[],
+  issues: ChartIssue[],
+): {
+  intermediatePlanets: IntermediatePlanet[];
+  keptPlanetKeys: Set<string>;
+} {
   const intermediatePlanets: IntermediatePlanet[] = [];
   const seenPlanetNames = new Set<string>();
 
-  for (let i = 0; i < dto.planets.length; i++) {
-    const p = dto.planets[i];
+  for (let i = 0; i < rawPlanets.length; i++) {
+    const p = rawPlanets[i];
     if (p === null || typeof p !== "object") {
       issues.push({ code: "ENTRY_DROPPED", subject: `planet:${i}` });
       continue;
     }
 
-    const hasValidName = typeof p.name === "string" && p.name.length > 0;
+    const candidate = p as Record<string, unknown>;
+    const hasValidName =
+      typeof candidate.name === "string" && candidate.name.length > 0;
     const hasValidLongitude =
-      typeof p.longitude === "number" &&
-      Number.isFinite(p.longitude) &&
-      p.longitude >= 0 &&
-      p.longitude < 360;
-    const hasValidSign = typeof p.sign === "string" && p.sign.length > 0;
-    const hasValidRetrograde = typeof p.isRetrograde === "boolean";
+      typeof candidate.longitude === "number" &&
+      Number.isFinite(candidate.longitude) &&
+      candidate.longitude >= 0 &&
+      candidate.longitude < 360;
+    const hasValidSign =
+      typeof candidate.sign === "string" && candidate.sign.length > 0;
+    const hasValidRetrograde = typeof candidate.isRetrograde === "boolean";
 
     if (
       !hasValidName ||
@@ -272,64 +287,69 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
       !hasValidSign ||
       !hasValidRetrograde
     ) {
-      const subjectKey = hasValidName ? p.name : `${i}`;
+      const subjectKey = hasValidName ? (candidate.name as string) : `${i}`;
       issues.push({ code: "ENTRY_DROPPED", subject: `planet:${subjectKey}` });
       continue;
     }
 
-    const planetLabel = resolvePlanet(p.name);
+    const planetName = candidate.name as string;
+    const longitude = candidate.longitude as number;
+    const signName = candidate.sign as string;
+    const isRetrograde = candidate.isRetrograde as boolean;
+
+    const planetLabel = resolvePlanet(planetName);
     if (!planetLabel.known) {
-      issues.push({ code: "UNKNOWN_VALUE", subject: `planet:${p.name}` });
+      issues.push({ code: "UNKNOWN_VALUE", subject: `planet:${planetName}` });
     }
 
-    const signLabel = resolveSign(p.sign);
+    const signLabel = resolveSign(signName);
     if (!signLabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `planet:${p.name}.sign:${p.sign}`,
+        subject: `planet:${planetName}.sign:${signName}`,
       });
     }
 
-    if (seenPlanetNames.has(p.name)) {
-      issues.push({ code: "DUPLICATE_ENTITY", subject: `planet:${p.name}` });
+    if (seenPlanetNames.has(planetName)) {
+      issues.push({
+        code: "DUPLICATE_ENTITY",
+        subject: `planet:${planetName}`,
+      });
     }
-    seenPlanetNames.add(p.name);
+    seenPlanetNames.add(planetName);
 
     let degreeLabel: string | null = null;
     if (
-      typeof p.degreeInSign === "number" &&
-      Number.isFinite(p.degreeInSign) &&
-      p.degreeInSign >= 0 &&
-      p.degreeInSign < 30
+      typeof candidate.degreeInSign === "number" &&
+      Number.isFinite(candidate.degreeInSign) &&
+      candidate.degreeInSign >= 0 &&
+      candidate.degreeInSign < 30
     ) {
-      degreeLabel = formatDegreeMinute(p.degreeInSign);
+      degreeLabel = formatDegreeMinute(candidate.degreeInSign);
     } else {
       issues.push({
         code: "VALUE_OUT_OF_RANGE",
-        subject: `planet:${p.name}.degreeInSign`,
+        subject: `planet:${planetName}.degreeInSign`,
       });
     }
 
-    const ariaLabel = p.isRetrograde
+    const ariaLabel = isRetrograde
       ? `${planetLabel.labelVi}, ${RETROGRADE_LABEL_VI.toLowerCase()}`
       : planetLabel.labelVi;
 
-    const rawHouse =
-      typeof p.house === "number" || p.house === null ? p.house : null;
-
     intermediatePlanets.push({
       inputIndex: i,
-      rawHouse,
+      rawHouse: candidate.house,
       vm: {
-        key: p.name,
+        key: planetName,
         nameVi: planetLabel.labelVi,
         glyph: planetLabel.glyph,
         known: planetLabel.known,
-        longitude: p.longitude,
+        longitude,
         sign: signLabel,
         degreeLabel,
-        houseNumber: null, // will be resolved in Step 3
-        isRetrograde: p.isRetrograde,
+        houseNumber: null,
+        isRetrograde,
         ariaLabel,
       },
     });
@@ -348,11 +368,20 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
     }
   }
 
-  // Step 3: Houses & houseDataAvailable
+  return { intermediatePlanets, keptPlanetKeys };
+}
+
+function buildHouses(
+  rawHouses: unknown[],
+  isHouseDataAvailable: boolean,
+  issues: ChartIssue[],
+): {
+  housesVM: HouseVM[];
+  effectiveHouseDataAvailable: boolean;
+} {
   let effectiveHouseDataAvailable = false;
   const housesVM: HouseVM[] = [];
 
-  const rawHouses = dto.houses;
   const validHousesList: {
     number: number;
     cuspDegree: number;
@@ -362,26 +391,27 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
 
   for (let i = 0; i < rawHouses.length; i++) {
     const h = rawHouses[i];
-    if (
-      h !== null &&
-      typeof h === "object" &&
-      typeof h.number === "number" &&
-      Number.isInteger(h.number) &&
-      h.number >= 1 &&
-      h.number <= 12 &&
-      typeof h.cuspDegree === "number" &&
-      Number.isFinite(h.cuspDegree) &&
-      h.cuspDegree >= 0 &&
-      h.cuspDegree < 360 &&
-      typeof h.signOnCusp === "string" &&
-      h.signOnCusp.length > 0
-    ) {
-      validHousesList.push({
-        number: h.number,
-        cuspDegree: h.cuspDegree,
-        signOnCusp: h.signOnCusp,
-        inputIndex: i,
-      });
+    if (h !== null && typeof h === "object") {
+      const candidate = h as Record<string, unknown>;
+      if (
+        typeof candidate.number === "number" &&
+        Number.isInteger(candidate.number) &&
+        candidate.number >= 1 &&
+        candidate.number <= 12 &&
+        typeof candidate.cuspDegree === "number" &&
+        Number.isFinite(candidate.cuspDegree) &&
+        candidate.cuspDegree >= 0 &&
+        candidate.cuspDegree < 360 &&
+        typeof candidate.signOnCusp === "string" &&
+        candidate.signOnCusp.length > 0
+      ) {
+        validHousesList.push({
+          number: candidate.number,
+          cuspDegree: candidate.cuspDegree,
+          signOnCusp: candidate.signOnCusp,
+          inputIndex: i,
+        });
+      }
     }
   }
 
@@ -390,7 +420,7 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
     rawHouses.length === 12 &&
     new Set(validHousesList.map((h) => h.number)).size === 12;
 
-  if (dto.isHouseDataAvailable) {
+  if (isHouseDataAvailable) {
     if (has12DistinctNumbers) {
       effectiveHouseDataAvailable = true;
       validHousesList.sort((a, b) => a.number - b.number);
@@ -427,12 +457,20 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
     }
   }
 
-  // Populate houseNumber on planets
-  const planetsVM: PlanetVM[] = intermediatePlanets.map((item) => {
+  return { housesVM, effectiveHouseDataAvailable };
+}
+
+function resolvePlanetHouseNumbers(
+  intermediatePlanets: IntermediatePlanet[],
+  effectiveHouseDataAvailable: boolean,
+  issues: ChartIssue[],
+): PlanetVM[] {
+  return intermediatePlanets.map((item) => {
     let resolvedHouseNumber: number | null = null;
     if (effectiveHouseDataAvailable) {
       if (item.rawHouse !== null && item.rawHouse !== undefined) {
         if (
+          typeof item.rawHouse === "number" &&
           Number.isInteger(item.rawHouse) &&
           item.rawHouse >= 1 &&
           item.rawHouse <= 12
@@ -445,6 +483,13 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
           });
         }
       }
+    } else {
+      if (item.rawHouse !== null && item.rawHouse !== undefined) {
+        issues.push({
+          code: "VALUE_OUT_OF_RANGE",
+          subject: `planet:${item.vm.key}.house`,
+        });
+      }
     }
 
     return {
@@ -452,74 +497,89 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
       houseNumber: resolvedHouseNumber,
     };
   });
+}
 
-  // Step 4: Angles
+function buildAngles(
+  rawAngles: unknown[],
+  issues: ChartIssue[],
+): {
+  anglesVM: AngleVM[];
+  hasAngles: boolean;
+  ascendantLongitude: number | null;
+} {
   const intermediateAngles: IntermediateAngle[] = [];
   const seenAngleTypes = new Set<string>();
 
-  for (let i = 0; i < dto.angles.length; i++) {
-    const a = dto.angles[i];
+  for (let i = 0; i < rawAngles.length; i++) {
+    const a = rawAngles[i];
     if (a === null || typeof a !== "object") {
       issues.push({ code: "ENTRY_DROPPED", subject: `angle:${i}` });
       continue;
     }
 
-    const hasValidType = typeof a.type === "string" && a.type.length > 0;
+    const candidate = a as Record<string, unknown>;
+    const hasValidType =
+      typeof candidate.type === "string" && candidate.type.length > 0;
     const hasValidLongitude =
-      typeof a.longitude === "number" &&
-      Number.isFinite(a.longitude) &&
-      a.longitude >= 0 &&
-      a.longitude < 360;
-    const hasValidSign = typeof a.sign === "string" && a.sign.length > 0;
+      typeof candidate.longitude === "number" &&
+      Number.isFinite(candidate.longitude) &&
+      candidate.longitude >= 0 &&
+      candidate.longitude < 360;
+    const hasValidSign =
+      typeof candidate.sign === "string" && candidate.sign.length > 0;
 
     if (!hasValidType || !hasValidLongitude || !hasValidSign) {
-      const subjectKey = hasValidType ? a.type : `${i}`;
+      const subjectKey = hasValidType ? (candidate.type as string) : `${i}`;
       issues.push({ code: "ENTRY_DROPPED", subject: `angle:${subjectKey}` });
       continue;
     }
 
-    const angleLabel = resolveAngle(a.type);
+    const angleType = candidate.type as string;
+    const longitude = candidate.longitude as number;
+    const signName = candidate.sign as string;
+
+    const angleLabel = resolveAngle(angleType);
     if (!angleLabel.known) {
-      issues.push({ code: "UNKNOWN_VALUE", subject: `angle:${a.type}` });
+      issues.push({ code: "UNKNOWN_VALUE", subject: `angle:${angleType}` });
     }
 
-    const signLabel = resolveSign(a.sign);
+    const signLabel = resolveSign(signName);
     if (!signLabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `angle:${a.type}.sign:${a.sign}`,
+        subject: `angle:${angleType}.sign:${signName}`,
       });
     }
 
-    if (seenAngleTypes.has(a.type)) {
-      issues.push({ code: "DUPLICATE_ENTITY", subject: `angle:${a.type}` });
+    if (seenAngleTypes.has(angleType)) {
+      issues.push({ code: "DUPLICATE_ENTITY", subject: `angle:${angleType}` });
     }
-    seenAngleTypes.add(a.type);
+    seenAngleTypes.add(angleType);
 
     let degreeLabel: string | null = null;
     if (
-      typeof a.degreeInSign === "number" &&
-      Number.isFinite(a.degreeInSign) &&
-      a.degreeInSign >= 0 &&
-      a.degreeInSign < 30
+      typeof candidate.degreeInSign === "number" &&
+      Number.isFinite(candidate.degreeInSign) &&
+      candidate.degreeInSign >= 0 &&
+      candidate.degreeInSign < 30
     ) {
-      degreeLabel = formatDegreeMinute(a.degreeInSign);
+      degreeLabel = formatDegreeMinute(candidate.degreeInSign);
     } else {
       issues.push({
         code: "VALUE_OUT_OF_RANGE",
-        subject: `angle:${a.type}.degreeInSign`,
+        subject: `angle:${angleType}.degreeInSign`,
       });
     }
 
     intermediateAngles.push({
       inputIndex: i,
       vm: {
-        key: a.type,
+        key: angleType,
         known: angleLabel.known,
         shortLabel: angleLabel.shortLabel,
         labelVi: angleLabel.labelVi,
         ariaLabel: angleLabel.ariaLabel,
-        longitude: a.longitude,
+        longitude,
         sign: signLabel,
         degreeLabel,
       },
@@ -537,26 +597,37 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
   const ascendantAngle = anglesVM.find((a) => a.key === "Ascendant");
   const ascendantLongitude = ascendantAngle ? ascendantAngle.longitude : null;
 
-  // Step 5: Aspects
+  return { anglesVM, hasAngles, ascendantLongitude };
+}
+
+function buildAspects(
+  rawAspects: unknown[],
+  keptPlanetKeys: Set<string>,
+  issues: ChartIssue[],
+): AspectVM[] {
   const intermediateAspects: IntermediateAspect[] = [];
   const aspectKeyCounts = new Map<string, number>();
 
-  for (let i = 0; i < dto.aspects.length; i++) {
-    const asp = dto.aspects[i];
+  for (let i = 0; i < rawAspects.length; i++) {
+    const asp = rawAspects[i];
     if (asp === null || typeof asp !== "object") {
       issues.push({ code: "ENTRY_DROPPED", subject: `aspect:${i}` });
       continue;
     }
 
+    const candidate = asp as Record<string, unknown>;
     const hasValidPlanetA =
-      typeof asp.planetA === "string" && asp.planetA.length > 0;
+      typeof candidate.planetA === "string" && candidate.planetA.length > 0;
     const hasValidPlanetB =
-      typeof asp.planetB === "string" && asp.planetB.length > 0;
+      typeof candidate.planetB === "string" && candidate.planetB.length > 0;
     const hasValidType =
-      typeof asp.aspectType === "string" && asp.aspectType.length > 0;
+      typeof candidate.aspectType === "string" &&
+      candidate.aspectType.length > 0;
     const hasValidOrb =
-      typeof asp.orb === "number" && Number.isFinite(asp.orb) && asp.orb >= 0;
-    const hasValidApplying = typeof asp.isApplying === "boolean";
+      typeof candidate.orb === "number" &&
+      Number.isFinite(candidate.orb) &&
+      candidate.orb >= 0;
+    const hasValidApplying = typeof candidate.isApplying === "boolean";
 
     if (
       !hasValidPlanetA ||
@@ -565,57 +636,64 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
       !hasValidOrb ||
       !hasValidApplying
     ) {
-      const subjectKey = `${asp?.planetA ?? ""}:${asp?.aspectType ?? ""}:${asp?.planetB ?? ""}`;
+      const subjectKey = `${String(candidate.planetA ?? "")}:${String(candidate.aspectType ?? "")}:${String(candidate.planetB ?? "")}`;
       issues.push({ code: "ENTRY_DROPPED", subject: `aspect:${subjectKey}` });
       continue;
     }
 
-    const planetALabel = resolvePlanet(asp.planetA);
+    const planetAName = candidate.planetA as string;
+    const planetBName = candidate.planetB as string;
+    const aspectTypeName = candidate.aspectType as string;
+    const orb = candidate.orb as number;
+    const isApplying = candidate.isApplying as boolean;
+    const rawNature = candidate.nature;
+
+    const planetALabel = resolvePlanet(planetAName);
     if (!planetALabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `aspect.planetA:${asp.planetA}`,
+        subject: `aspect.planetA:${planetAName}`,
       });
     }
 
-    const planetBLabel = resolvePlanet(asp.planetB);
+    const planetBLabel = resolvePlanet(planetBName);
     if (!planetBLabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `aspect.planetB:${asp.planetB}`,
+        subject: `aspect.planetB:${planetBName}`,
       });
     }
 
-    const typeLabel = resolveAspectType(asp.aspectType);
+    const typeLabel = resolveAspectType(aspectTypeName);
     if (!typeLabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `aspect.type:${asp.aspectType}`,
+        subject: `aspect.type:${aspectTypeName}`,
       });
     }
 
-    const natureLabel = resolveAspectNature(asp.nature);
+    const natureLabel = resolveAspectNature(rawNature);
     if (!natureLabel.known) {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `aspect.nature:${String(asp.nature)}`,
+        subject: `aspect.nature:${String(rawNature)}`,
       });
     }
 
-    if (!keptPlanetKeys.has(asp.planetA)) {
+    if (!keptPlanetKeys.has(planetAName)) {
       issues.push({
         code: "ASPECT_ENDPOINT_MISSING",
-        subject: `aspect:${asp.planetA}:${asp.aspectType}:${asp.planetB}.missing:${asp.planetA}`,
+        subject: `aspect:${planetAName}:${aspectTypeName}:${planetBName}.missing:${planetAName}`,
       });
     }
-    if (!keptPlanetKeys.has(asp.planetB)) {
+    if (!keptPlanetKeys.has(planetBName)) {
       issues.push({
         code: "ASPECT_ENDPOINT_MISSING",
-        subject: `aspect:${asp.planetA}:${asp.aspectType}:${asp.planetB}.missing:${asp.planetB}`,
+        subject: `aspect:${planetAName}:${aspectTypeName}:${planetBName}.missing:${planetBName}`,
       });
     }
 
-    const baseKey = `${asp.planetA}:${asp.aspectType}:${asp.planetB}`;
+    const baseKey = `${planetAName}:${aspectTypeName}:${planetBName}`;
     const count = (aspectKeyCounts.get(baseKey) ?? 0) + 1;
     aspectKeyCounts.set(baseKey, count);
     const key = count === 1 ? baseKey : `${baseKey}#${count}`;
@@ -623,8 +701,8 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
       issues.push({ code: "DUPLICATE_ENTITY", subject: `aspect:${baseKey}` });
     }
 
-    const orbLabel = formatDegreeMinute(asp.orb);
-    const applyingLabelVi = asp.isApplying
+    const orbLabel = formatDegreeMinute(orb);
+    const applyingLabelVi = isApplying
       ? APPLYING_LABEL_VI
       : SEPARATING_LABEL_VI;
 
@@ -636,9 +714,9 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
         planetB: planetBLabel,
         type: typeLabel,
         nature: natureLabel,
-        orb: asp.orb,
+        orb,
         orbLabel,
-        isApplying: asp.isApplying,
+        isApplying,
         applyingLabelVi,
       },
     });
@@ -684,32 +762,73 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
     return a.inputIndex - b.inputIndex;
   });
 
-  const aspectsVM = intermediateAspects.map((item) => item.vm);
+  return intermediateAspects.map((item) => item.vm);
+}
 
-  // Step 6: Warnings
+function buildWarnings(
+  rawWarnings: unknown[],
+  issues: ChartIssue[],
+): ChartWarningVM[] {
   const warningsVM: ChartWarningVM[] = [];
-  for (const w of dto.warnings) {
-    if (w === null || typeof w !== "object") continue;
+  for (let i = 0; i < rawWarnings.length; i++) {
+    const w = rawWarnings[i];
+    if (w === null || typeof w !== "object") {
+      issues.push({ code: "ENTRY_DROPPED", subject: `warning:${i}` });
+      continue;
+    }
+
+    const candidate = w as Record<string, unknown>;
+    if (typeof candidate.code !== "string" || candidate.code.length === 0) {
+      issues.push({ code: "ENTRY_DROPPED", subject: `warning:${i}` });
+      continue;
+    }
 
     let severity: "info" | "warning" = "warning";
-    if (w.severity === "info" || w.severity === "warning") {
-      severity = w.severity;
+    if (candidate.severity === "info" || candidate.severity === "warning") {
+      severity = candidate.severity;
     } else {
       issues.push({
         code: "UNKNOWN_VALUE",
-        subject: `warning:${String(w.code)}.severity:${String(w.severity)}`,
+        subject: `warning:${candidate.code}.severity:${String(candidate.severity)}`,
       });
     }
 
-    const warningLabel = resolveWarningCode(w.code);
+    const warningLabel = resolveWarningCode(candidate.code);
     warningsVM.push({
-      code: String(w.code),
+      code: candidate.code,
       severity,
       labelVi: warningLabel.labelVi,
     });
   }
+  return warningsVM;
+}
 
-  // Step 7: Meta
+export function toChartViewModel(dto: ChartResponse): ChartViewModel {
+  validateStructure(dto);
+
+  const issues: ChartIssue[] = [];
+
+  const { intermediatePlanets, keptPlanetKeys } = buildPlanets(
+    dto.planets,
+    issues,
+  );
+  const { housesVM, effectiveHouseDataAvailable } = buildHouses(
+    dto.houses,
+    dto.isHouseDataAvailable,
+    issues,
+  );
+  const planetsVM = resolvePlanetHouseNumbers(
+    intermediatePlanets,
+    effectiveHouseDataAvailable,
+    issues,
+  );
+  const { anglesVM, hasAngles, ascendantLongitude } = buildAngles(
+    dto.angles,
+    issues,
+  );
+  const aspectsVM = buildAspects(dto.aspects, keptPlanetKeys, issues);
+  const warningsVM = buildWarnings(dto.warnings, issues);
+
   const houseSystemLabel = resolveHouseSystem(dto.houseSystem);
   if (!houseSystemLabel.known) {
     issues.push({
@@ -718,7 +837,6 @@ export function toChartViewModel(dto: ChartResponse): ChartViewModel {
     });
   }
 
-  // Step 8: Flags
   const partialData = issues.some((issue) =>
     PARTIAL_DATA_CODES.has(issue.code),
   );

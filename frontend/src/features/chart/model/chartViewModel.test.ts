@@ -639,4 +639,467 @@ describe("Chart ViewModel and Canonical Ordering (F4-M2.3)", () => {
       expect(vm.aspects).toHaveLength(5);
     });
   });
+
+  describe("Group G: Defensive edge cases, structural checks & complete branch coverage (R-1, R-2)", () => {
+    it.each([
+      ["dto is null", () => null as unknown as ChartResponse, "dto"],
+      [
+        "dto is string primitive",
+        () => "not-an-object" as unknown as ChartResponse,
+        "dto",
+      ],
+      [
+        "id missing or not string",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          delete d.id;
+        },
+        "id",
+      ],
+      [
+        "id is empty string",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.id = "";
+        },
+        "id",
+      ],
+      [
+        "isHouseDataAvailable not boolean",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.isHouseDataAvailable = "yes";
+        },
+        "isHouseDataAvailable",
+      ],
+      [
+        "calculatedAt missing",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          delete d.calculatedAt;
+        },
+        "calculatedAt",
+      ],
+      [
+        "calculatedAt is empty string",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.calculatedAt = "";
+        },
+        "calculatedAt",
+      ],
+      [
+        "engineVersion missing",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          delete d.engineVersion;
+        },
+        "engineVersion",
+      ],
+      [
+        "engineVersion is empty string",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.engineVersion = "";
+        },
+        "engineVersion",
+      ],
+      [
+        "planets is not array",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.planets = null;
+        },
+        "planets",
+      ],
+      [
+        "houses is not array",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.houses = "not-an-array";
+        },
+        "houses",
+      ],
+      [
+        "angles is not array",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.angles = {};
+        },
+        "angles",
+      ],
+      [
+        "aspects is not array",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.aspects = 123;
+        },
+        "aspects",
+      ],
+      [
+        "warnings is not array",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (d: any) => {
+          d.warnings = false;
+        },
+        "warnings",
+      ],
+    ])(
+      "G1: rejects %s throwing ChartViewModelError on path '%s'",
+      (_, mutator, expectedPath) => {
+        let input: ChartResponse;
+        if (typeof mutator === "function" && mutator.length === 0) {
+          input = (mutator as () => ChartResponse)();
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          input = makeDto(mutator as (copy: any) => void);
+        }
+
+        expect(() => toChartViewModel(input)).toThrowError(ChartViewModelError);
+        try {
+          toChartViewModel(input);
+        } catch (err) {
+          expect(err).toBeInstanceOf(ChartViewModelError);
+          expect((err as ChartViewModelError).path).toBe(expectedPath);
+        }
+      },
+    );
+
+    it("G2.1: drops angle with missing or empty type", () => {
+      const dto = makeDto((d) => {
+        d.angles = [
+          { type: "", longitude: 100, sign: "Cancer", degreeInSign: 10 },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.angles).toHaveLength(0);
+      expect(vm.issues).toContainEqual({
+        code: "ENTRY_DROPPED",
+        subject: "angle:0",
+      });
+    });
+
+    it("G2.2: drops angle with out-of-range longitude", () => {
+      const dto = makeDto((d) => {
+        d.angles = [
+          {
+            type: "Ascendant",
+            longitude: -1,
+            sign: "Cancer",
+            degreeInSign: 10,
+          },
+          {
+            type: "Midheaven",
+            longitude: 360,
+            sign: "Cancer",
+            degreeInSign: 10,
+          },
+          {
+            type: "Descendant",
+            longitude: Number.NaN,
+            sign: "Cancer",
+            degreeInSign: 10,
+          },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.angles).toHaveLength(0);
+      expect(vm.issues).toContainEqual({
+        code: "ENTRY_DROPPED",
+        subject: "angle:Ascendant",
+      });
+      expect(vm.issues).toContainEqual({
+        code: "ENTRY_DROPPED",
+        subject: "angle:Midheaven",
+      });
+      expect(vm.issues).toContainEqual({
+        code: "ENTRY_DROPPED",
+        subject: "angle:Descendant",
+      });
+    });
+
+    it("G2.3: drops angle with missing or empty sign", () => {
+      const dto = makeDto((d) => {
+        d.angles = [
+          {
+            type: "Ascendant",
+            longitude: 100,
+            sign: "",
+            degreeInSign: 10,
+          },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.angles).toHaveLength(0);
+      expect(vm.issues).toContainEqual({
+        code: "ENTRY_DROPPED",
+        subject: "angle:Ascendant",
+      });
+    });
+
+    it("G2.4: flags unknown angle type, unknown sign, duplicate angle and out-of-range degreeInSign", () => {
+      const dto = makeDto((d) => {
+        d.angles = [
+          {
+            type: "Vertex",
+            longitude: 100,
+            sign: "Ophiuchus",
+            degreeInSign: 32,
+          },
+          {
+            type: "Vertex",
+            longitude: 100,
+            sign: "Cancer",
+            degreeInSign: -1,
+          },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.angles).toHaveLength(2);
+      expect(vm.angles[0]?.known).toBe(false);
+      expect(vm.angles[0]?.degreeLabel).toBeNull();
+      expect(vm.issues).toContainEqual({
+        code: "UNKNOWN_VALUE",
+        subject: "angle:Vertex",
+      });
+      expect(vm.issues).toContainEqual({
+        code: "UNKNOWN_VALUE",
+        subject: "angle:Vertex.sign:Ophiuchus",
+      });
+      expect(vm.issues).toContainEqual({
+        code: "DUPLICATE_ENTITY",
+        subject: "angle:Vertex",
+      });
+      expect(vm.issues).toContainEqual({
+        code: "VALUE_OUT_OF_RANGE",
+        subject: "angle:Vertex.degreeInSign",
+      });
+    });
+
+    it("G3.1: flags unknown signOnCusp on house", () => {
+      const dto = makeDto((d) => {
+        d.houses[0].signOnCusp = "MysticSign";
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.houses[0]?.sign.known).toBe(false);
+      expect(vm.issues).toContainEqual({
+        code: "UNKNOWN_VALUE",
+        subject: "house:1.sign:MysticSign",
+      });
+    });
+
+    it("G3.2: sorts unknown keys alphabetically in compareRank", () => {
+      const dto = makeDto((d) => {
+        d.planets.push(
+          {
+            name: "ZetaPlanet",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+            isRetrograde: false,
+            house: 1,
+          },
+          {
+            name: "AlphaPlanet",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+            isRetrograde: false,
+            house: 1,
+          },
+        );
+        d.angles = [
+          {
+            type: "ZetaAngle",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+          },
+          {
+            type: "AlphaAngle",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+          },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      const unknownPlanets = vm.planets.filter(
+        (p) => p.key === "AlphaPlanet" || p.key === "ZetaPlanet",
+      );
+      expect(unknownPlanets[0]?.key).toBe("AlphaPlanet");
+      expect(unknownPlanets[1]?.key).toBe("ZetaPlanet");
+
+      expect(vm.angles[0]?.key).toBe("AlphaAngle");
+      expect(vm.angles[1]?.key).toBe("ZetaAngle");
+    });
+
+    it("G3.3: drops planet without valid name using index subject", () => {
+      const dto = makeDto((d) => {
+        d.planets.push({
+          name: "",
+          longitude: 10,
+          sign: "Aries",
+          degreeInSign: 10,
+          isRetrograde: false,
+        });
+      });
+      const vm = toChartViewModel(dto);
+      expect(
+        vm.issues.some(
+          (i) => i.code === "ENTRY_DROPPED" && i.subject === "planet:10",
+        ),
+      ).toBe(true);
+    });
+
+    it("G4.1: drops invalid warning entries and flags unknown severity", () => {
+      const dto = makeDto((d) => {
+        d.warnings = [
+          null,
+          { notCode: "invalid" },
+          { code: "", severity: "warning" },
+          { code: 123, severity: "warning" },
+          { code: "HOUSE_SYSTEM_NOT_CONVERGING", severity: "critical_level" },
+        ];
+      });
+      const vm = toChartViewModel(dto);
+      expect(
+        vm.issues.filter(
+          (i) => i.code === "ENTRY_DROPPED" && i.subject.startsWith("warning:"),
+        ),
+      ).toHaveLength(4);
+      expect(vm.flags.partialData).toBe(true);
+
+      expect(vm.warnings).toHaveLength(1);
+      expect(vm.warnings[0]?.code).toBe("HOUSE_SYSTEM_NOT_CONVERGING");
+      expect(vm.warnings[0]?.severity).toBe("warning");
+      expect(vm.issues).toContainEqual({
+        code: "UNKNOWN_VALUE",
+        subject: "warning:HOUSE_SYSTEM_NOT_CONVERGING.severity:critical_level",
+      });
+    });
+
+    it("G4.2: flags planets[].house with invalid type (string '5') as VALUE_OUT_OF_RANGE", () => {
+      const dto = makeDto((d) => {
+        d.planets[0].house = "5";
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.planets[0]?.houseNumber).toBeNull();
+      expect(vm.issues).toContainEqual({
+        code: "VALUE_OUT_OF_RANGE",
+        subject: `planet:${vm.planets[0]?.key}.house`,
+      });
+    });
+
+    it("G4.3: flags planet having house value when isHouseDataAvailable is false", () => {
+      const dto = structuredClone(chartNoHouses);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (dto.planets[0] as any).house = 5;
+      const vm = toChartViewModel(dto);
+      expect(vm.planets[0]?.houseNumber).toBeNull();
+      expect(vm.issues).toContainEqual({
+        code: "VALUE_OUT_OF_RANGE",
+        subject: `planet:${vm.planets[0]?.key}.house`,
+      });
+    });
+
+    it("G4.4: ignores null elements in houses array during filtering", () => {
+      const dto = makeDto((d) => {
+        d.houses.push(null);
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.flags.houseDataAvailable).toBe(false);
+      expect(vm.issues).toContainEqual({
+        code: "HOUSE_FLAG_CONTRADICTION",
+        subject: "houses",
+      });
+    });
+
+    it("G4.5: drops aspect with invalid fields like negative orb or missing planetA", () => {
+      const dto = makeDto((d) => {
+        d.aspects.push(
+          {
+            planetA: "Sun",
+            planetB: "Moon",
+            aspectType: "Trine",
+            orb: -1,
+            isApplying: true,
+            nature: "Harmonious",
+          },
+          {
+            planetB: "Moon",
+            aspectType: "Trine",
+            orb: 1.0,
+            isApplying: true,
+            nature: "Harmonious",
+          },
+          {
+            planetA: "Sun",
+            planetB: "Moon",
+            orb: 1.0,
+            isApplying: true,
+            nature: "Harmonious",
+          },
+          {
+            planetA: "Sun",
+            aspectType: "Trine",
+            orb: 1.0,
+            isApplying: true,
+            nature: "Harmonious",
+          },
+        );
+      });
+      const vm = toChartViewModel(dto);
+      expect(
+        vm.issues.some(
+          (i) =>
+            i.code === "ENTRY_DROPPED" && i.subject === "aspect:Sun:Trine:Moon",
+        ),
+      ).toBe(true);
+      expect(
+        vm.issues.some(
+          (i) =>
+            i.code === "ENTRY_DROPPED" && i.subject === "aspect::Trine:Moon",
+        ),
+      ).toBe(true);
+    });
+
+    it("G4.6: exercises both branch directions of compareRank for unknown keys", () => {
+      const dto = makeDto((d) => {
+        d.planets.push(
+          {
+            name: "BetaPlanet",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+            isRetrograde: false,
+            house: 1,
+          },
+          {
+            name: "AlphaPlanet",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+            isRetrograde: false,
+            house: 1,
+          },
+          {
+            name: "GammaPlanet",
+            longitude: 10,
+            sign: "Aries",
+            degreeInSign: 10,
+            isRetrograde: false,
+            house: 1,
+          },
+        );
+      });
+      const vm = toChartViewModel(dto);
+      const filtered = vm.planets
+        .filter((p) =>
+          ["AlphaPlanet", "BetaPlanet", "GammaPlanet"].includes(p.key),
+        )
+        .map((p) => p.key);
+      expect(filtered).toEqual(["AlphaPlanet", "BetaPlanet", "GammaPlanet"]);
+    });
+  });
 });

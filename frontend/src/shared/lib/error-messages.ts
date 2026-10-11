@@ -33,7 +33,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   UNRESOLVABLE_TIMEZONE:
     "Không xác định được múi giờ của nơi sinh. Vui lòng chọn lại nơi sinh trong hồ sơ.",
   INVALID_COORDINATES:
-    "Toạ độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
+    "Tọa độ nơi sinh không hợp lệ. Vui lòng chọn lại nơi sinh trong hồ sơ.",
 };
 
 export function getErrorMessage(errorCode: string): string {
