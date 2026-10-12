@@ -1,12 +1,22 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { lazy, Suspense } from "react";
+import {
+  createMemoryRouter,
+  Outlet,
+  type RouteObject,
+  RouterProvider,
+} from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { chartFull } from "@features/chart/api/mocks/fixtures";
+import { getChartSuccess } from "@features/chart/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
+import { server } from "@test/msw-server";
+import { AppLayout } from "@widgets/app-layout";
 
-import { routesConfig } from "./router";
+import { routesConfig, SuspenseFallback } from "./router";
 
 const FakeErrorComponent = () => {
   throw new Error("Fake error for testing ErrorBoundary");
@@ -115,5 +125,110 @@ describe("Router Integration Tests", () => {
     ).toBeInTheDocument();
 
     consoleSpy.mockRestore();
+  });
+
+  it("R1: Protected chart detail route (/app/charts/:chartId) renders in AppLayout when authenticated", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    server.use(getChartSuccess(chartFull));
+
+    renderRouter(`/app/charts/${chartFull.id}`);
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: "Lá số sinh" },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("navigation", { name: /điều hướng chính/i }).length,
+    ).toBeGreaterThan(0);
+  });
+
+  it("R2: Protected chart route redirects to /login when unauthenticated", async () => {
+    useAuthStore.setState({ status: "unauthenticated" });
+    renderRouter(`/app/charts/${chartFull.id}`);
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("R3: Invalid chartId format (/app/charts/not-a-uuid) renders not-found state without GET request", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    renderRouter("/app/charts/not-a-uuid");
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: "Lá số sinh" },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Không tìm thấy lá số")).toBeInTheDocument();
+  });
+
+  it("R4: /app/charts without ID falls back to NotFoundPage", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    renderRouter("/app/charts");
+
+    expect(
+      await screen.findByText("Không tìm thấy trang bạn yêu cầu.", undefined, {
+        timeout: 5000,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("R5: Suspense fallback xuất hiện trước khi trang lazy tải", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    let resolveComponent: (value: { default: () => React.JSX.Element }) => void;
+    const DeferredComponent = lazy(
+      () =>
+        new Promise<{ default: () => React.JSX.Element }>((resolve) => {
+          resolveComponent = resolve;
+        }),
+    );
+
+    const testRoutesConfig: RouteObject[] = [
+      {
+        path: "/app",
+        element: (
+          <AppLayout>
+            <Suspense fallback={<SuspenseFallback />}>
+              <Outlet />
+            </Suspense>
+          </AppLayout>
+        ),
+        children: [
+          {
+            path: "charts-lazy-test",
+            element: <DeferredComponent />,
+          },
+        ],
+      },
+    ];
+
+    const router = createMemoryRouter(testRoutesConfig, {
+      initialEntries: ["/app/charts-lazy-test"],
+    });
+    render(
+      <QueryClientProvider client={createQueryClient()}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+    );
+
+    expect(screen.getByText("Đang tải trang...")).toBeInTheDocument();
+    resolveComponent!({ default: () => <h1>Đã tải xong</h1> });
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: "Đã tải xong" },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
   });
 });

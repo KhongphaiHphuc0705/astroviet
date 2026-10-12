@@ -1,5 +1,10 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, Outlet, useRouteError } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  type RouteObject,
+  useRouteError,
+} from "react-router-dom";
 
 import { GuestRoute } from "@app/routing/GuestRoute";
 import { ProtectedRoute } from "@app/routing/ProtectedRoute";
@@ -31,7 +36,7 @@ const BirthProfileEditPage = lazy(
 );
 const ChartDetailPage = lazy(() => import("@pages/app/charts/detail/page"));
 
-const SuspenseFallback = () => (
+export const SuspenseFallback = () => (
   <div className="flex min-h-[50vh] items-center justify-center">
     <Spinner size="lg" label="Đang tải trang..." />
   </div>
@@ -163,6 +168,6 @@ export const routesConfig = [
       },
     ],
   },
-];
+] satisfies RouteObject[];
 
 export const router = createBrowserRouter(routesConfig);
