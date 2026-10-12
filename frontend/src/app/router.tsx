@@ -29,6 +29,7 @@ const BirthProfileCreatePage = lazy(
 const BirthProfileEditPage = lazy(
   () => import("@pages/app/profiles/edit/page"),
 );
+const ChartDetailPage = lazy(() => import("@pages/app/charts/detail/page"));
 
 const SuspenseFallback = () => (
   <div className="flex min-h-[50vh] items-center justify-center">
@@ -129,6 +130,10 @@ export const routesConfig = [
               {
                 path: "profiles/:id/edit",
                 element: <BirthProfileEditPage />,
+              },
+              {
+                path: "charts/:chartId",
+                element: <ChartDetailPage />,
               },
             ],
           },
