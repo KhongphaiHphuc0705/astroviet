@@ -4,6 +4,8 @@ export type {
   CalculateChartTarget,
 } from "./ui/CalculateChartDialog";
 export { ChartViewerSkeleton } from "./ui/ChartViewerSkeleton";
+export { ChartViewerShell } from "./ui/ChartViewerShell";
+export type { ChartViewerShellProps } from "./ui/ChartViewerShell";
 export { useChartQuery } from "./hooks/useChartQuery";
 export { isValidChartId } from "./api/isValidChartId";
 export { toChartViewModel, ChartViewModelError } from "./model/chartViewModel";

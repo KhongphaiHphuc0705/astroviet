@@ -1,18 +1,31 @@
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import {
+  ChartViewerShell,
   ChartViewerSkeleton,
+  ChartViewModelError,
   isValidChartId,
+  toChartViewModel,
   useChartQuery,
 } from "@features/chart";
 import type { ApiError } from "@shared/api/client";
 import { getErrorMessage } from "@shared/lib/error-messages";
+import { reportError } from "@shared/lib/report-error";
 import { Button } from "@shared/ui/Button";
 import { Container } from "@shared/ui/Container";
 import { EmptyState } from "@shared/ui/EmptyState";
 
 type ChartViewErrorKind = "not-found" | "forbidden" | "connection" | "server";
+
+type ChartViewKind =
+  | "loading"
+  | "not-found"
+  | "forbidden"
+  | "connection"
+  | "server"
+  | "invalid-data"
+  | "ready";
 
 function classifyChartError(error: ApiError | null): ChartViewErrorKind {
   if (!error) return "server";
@@ -37,9 +50,80 @@ export default function ChartDetailPage() {
   const isValidId = isValidChartId(chartId);
   const query = useChartQuery(chartId);
 
+  const mapping = useMemo(() => {
+    if (!query.data) return null;
+    try {
+      return { ok: true as const, vm: toChartViewModel(query.data) };
+    } catch (error) {
+      if (error instanceof ChartViewModelError) {
+        return { ok: false as const, error };
+      }
+      throw error;
+    }
+  }, [query.data]);
+
+  useEffect(() => {
+    if (mapping && !mapping.ok) {
+      reportError(mapping.error, "chart-view-model");
+    }
+  }, [mapping]);
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = "Lá số sinh — AstroViet";
+    return () => {
+      document.title = previousTitle;
+    };
+  }, []);
+
+  let viewKind: ChartViewKind;
+  if (!isValidId) {
+    viewKind = "not-found";
+  } else if (mapping) {
+    viewKind = mapping.ok ? "ready" : "invalid-data";
+  } else if (query.isLoading) {
+    viewKind = "loading";
+  } else if (query.isError) {
+    viewKind = classifyChartError(query.error);
+  } else {
+    viewKind = "loading";
+  }
+
+  useEffect(() => {
+    if (viewKind !== "loading") {
+      headingRef.current?.focus();
+    }
+  }, [viewKind, chartId]);
+
   let content: React.ReactNode;
 
-  if (!isValidId) {
+  if (viewKind === "loading") {
+    content = <ChartViewerSkeleton />;
+  } else if (viewKind === "ready" && mapping?.ok) {
+    content = <ChartViewerShell vm={mapping.vm} />;
+  } else if (viewKind === "invalid-data") {
+    content = (
+      <EmptyState
+        variant="danger"
+        title="Dữ liệu lá số không hợp lệ"
+        description="Lá số được tải về nhưng không thể hiển thị. Vui lòng thử lại sau."
+        action={
+          <div className="flex gap-3">
+            <Button
+              variant="primary"
+              onClick={() => query.refetch()}
+              isLoading={query.isFetching}
+            >
+              Thử lại
+            </Button>
+            <Button as={Link} to="/app/profiles">
+              Về danh sách hồ sơ
+            </Button>
+          </div>
+        }
+      />
+    );
+  } else if (viewKind === "not-found" || viewKind === "forbidden") {
     content = (
       <EmptyState
         title="Không tìm thấy lá số"
@@ -51,69 +135,42 @@ export default function ChartDetailPage() {
         }
       />
     );
-  } else if (query.data) {
+  } else if (viewKind === "connection") {
     content = (
-      <div data-testid="chart-ready-view" className="space-y-4">
-        {/* Placeholder for M3.4 ChartViewerShell */}
-        <p className="text-body-base text-subtle">Lá số: {query.data.id}</p>
-      </div>
+      <EmptyState
+        variant="danger"
+        title="Không thể kết nối"
+        description="Không thể tải lá số. Vui lòng kiểm tra kết nối mạng và thử lại."
+        action={
+          <Button
+            variant="primary"
+            onClick={() => query.refetch()}
+            isLoading={query.isFetching}
+          >
+            Thử lại
+          </Button>
+        }
+      />
     );
-  } else if (query.isLoading) {
-    content = <ChartViewerSkeleton />;
-  } else if (query.isError) {
-    const errorKind = classifyChartError(query.error);
-
-    if (errorKind === "not-found" || errorKind === "forbidden") {
-      content = (
-        <EmptyState
-          title="Không tìm thấy lá số"
-          description="Lá số này không tồn tại hoặc bạn không có quyền xem."
-          action={
-            <Button as={Link} to="/app/profiles">
-              Về danh sách hồ sơ
-            </Button>
-          }
-        />
-      );
-    } else if (errorKind === "connection") {
-      content = (
-        <EmptyState
-          variant="danger"
-          title="Không thể kết nối"
-          description="Không thể tải lá số. Vui lòng kiểm tra kết nối mạng và thử lại."
-          action={
-            <Button
-              variant="primary"
-              onClick={() => query.refetch()}
-              isLoading={query.isFetching}
-            >
-              Thử lại
-            </Button>
-          }
-        />
-      );
-    } else {
-      content = (
-        <EmptyState
-          variant="danger"
-          title="Không thể tải lá số"
-          description={getErrorMessage(
-            query.error?.errorCode ?? "INTERNAL_SERVER_ERROR",
-          )}
-          action={
-            <Button
-              variant="primary"
-              onClick={() => query.refetch()}
-              isLoading={query.isFetching}
-            >
-              Thử lại
-            </Button>
-          }
-        />
-      );
-    }
   } else {
-    content = <ChartViewerSkeleton />;
+    content = (
+      <EmptyState
+        variant="danger"
+        title="Không thể tải lá số"
+        description={getErrorMessage(
+          query.error?.errorCode ?? "INTERNAL_SERVER_ERROR",
+        )}
+        action={
+          <Button
+            variant="primary"
+            onClick={() => query.refetch()}
+            isLoading={query.isFetching}
+          >
+            Thử lại
+          </Button>
+        }
+      />
+    );
   }
 
   return (
