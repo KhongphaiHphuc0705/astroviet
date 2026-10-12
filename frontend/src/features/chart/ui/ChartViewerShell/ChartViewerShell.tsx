@@ -18,13 +18,13 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <dt className="text-body-sm text-subtle">Hệ nhà</dt>
-            <dd className="text-body-base text-foreground font-medium">
+            <dd className="text-body-base font-medium text-primary">
               {vm.meta.houseSystem.labelVi}
             </dd>
           </div>
           <div>
             <dt className="text-body-sm text-subtle">Tính lúc</dt>
-            <dd className="text-body-base text-foreground font-medium">
+            <dd className="text-body-base font-medium text-primary">
               <time dateTime={vm.meta.calculatedAt}>
                 {formatCalculatedAt(vm.meta.calculatedAt)}
               </time>

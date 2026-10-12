@@ -3,8 +3,8 @@
 ## Calculate Flow & Chart Viewer Shell
 
 **Vị trí lưu:** `docs/implementation/archive/sprint-f4/Sprint_F4_M3_Exit_Criteria_Evidence_Matrix.md`  
-**Phạm vi:** F4-M3.0 → M3.5 (Tasks 1–5: `CalculateChartDialog`, Profile card action, Chart detail route/states, `ChartViewerShell` + ViewModel integration, Integration & Quality gates).  
-**Commit được đánh giá:** HEAD `dev`. Ngày review: 2026-10-12.  
+**Commit được đánh giá:** `0b01399` (commit hoàn tất Task 5 / M3). Ngày review: 2026-10-12.  
+**CI Run kiểm chứng:** [CI Run #233 (commit 0b01399)](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38195719922/job/114637784103)  
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` owner cung cấp.  
 **Trạng thái:** `VERIFIED` · `PARTIALLY VERIFIED` · `UNVERIFIED` · `ACCEPTED GAP` · `NOT APPLICABLE`.
 
@@ -98,14 +98,30 @@
 | KG-M3-08  | `index.html` còn `<html lang="en">` trong khi giao diện tiếng Việt                            | Deferred (S4.9 a11y)                                  |
 | KG-M3-09  | Sidebar/drawer chưa có mục danh sách lá số; `/app/charts` (không ID) rơi vào `NotFoundPage`   | Deferred (S4.11)                                      |
 | KG-M3-10  | Định dạng ngày hiển thị `formatCalculatedAt` phụ thuộc múi giờ người dùng                     | Accepted                                              |
+| KG-M3-11  | E2E chưa được xác minh do chưa có test nào chạm Backend thật cho luồng này                    | Known Gap — Cần smoke test thủ công với Backend thật  |
+| KG-M3-12  | `getErrorMessage` gọi trực tiếp trong render ở trạng thái server gây `reportError` lặp        | Đã giải quyết qua F-1: `useMemo` theo `query.error`   |
+| KG-M3-13  | Token Tailwind `text-foreground` không tồn tại trong tokens/config                            | Đã giải quyết qua F-2: đổi sang `text-primary`        |
 
 ---
 
-## 5. Việc đóng hồ sơ M3
+## 5. Kế hoạch Smoke Test thủ công với Backend thật (Bổ sung cho E2E)
+
+Do môi trường sandbox và CI hiện tại chưa có E2E chạm Backend thật cho luồng tính lá số mới của M3, các kịch bản smoke test thủ công sau cần được kiểm tra khi chạy tích hợp toàn diện:
+
+1. **Tính lá số từ hồ sơ có đầy đủ ngày & giờ sinh**: Tạo hồ sơ có giờ sinh → bấm "Tính lá số" → chọn Placidus / Whole Sign → kiểm tra điều hướng đúng `/app/charts/:chartId` và hiển thị đầy đủ các cung, nhà, hành tinh.
+2. **Tính lá số từ hồ sơ chưa rõ giờ sinh (`isBirthTimeKnown: false`)**: Bấm "Tính lá số" → kiểm tra notice giờ sinh trong dialog hiển thị ("có thể ảnh hưởng đến độ chính xác...") → submit thành công → viewer hiển thị `HouseDataNotice` ("Dữ liệu Nhà và các góc chưa khả dụng") mà không bị lỗi.
+3. **ID trong response dẫn tới đúng trang**: Đảm bảo ID được chuyển tiếp từ payload `POST /api/v1/charts/natal` sang URL điều hướng mà không lấy nhầm `birthProfileId`.
+4. **Kiểm tra Responsive thẻ hồ sơ trên 320px**: Kiểm tra layout thẻ hồ sơ trên viewport hẹp (320px) với cả 3 nút hành động ("Tính lá số", "Sửa", "Xóa") không bị tràn hay vỡ giao diện nhờ `flex-wrap`.
+5. **Guard phím Esc & nút đóng khi đang tính**: Nhấn Esc hoặc click overlay trong lúc request tính toán đang pending đảm bảo dialog không bị đóng ngang làm mất trạng thái.
+
+---
+
+## 6. Việc đóng hồ sơ M3
 
 1. [x] Hoàn tất triển khai Task 1: `CalculateChartDialog` + tests (commit `1b45202`).
 2. [x] Hoàn tất triển khai Task 2: Profile Card "Tính lá số" action + tests (commit `67037ca`).
 3. [x] Hoàn tất triển khai Task 3: Chart Detail Route & Page States + tests (commit `3c0e112`).
 4. [x] Hoàn tất triển khai Task 4: View Model Integration, `ChartViewerShell`, `HouseDataNotice`, title/focus lifecycle + tests (commit `d17efa6`).
 5. [x] Hoàn tất triển khai Task 5: Router regression tests (R1–R5), integration tests (I1–I3), Grep gates, full quality gates exit 0.
-6. [x] Lập và lưu trữ Evidence Matrix tại `docs/implementation/archive/sprint-f4/Sprint_F4_M3_Exit_Criteria_Evidence_Matrix.md`.
+6. [x] Xử lý phản hồi review F-1 (`useMemo` cho `getErrorMessage` ở trang chart) và F-2 (loại bỏ token `text-foreground`).
+7. [x] Lập và lưu trữ Evidence Matrix tại `docs/implementation/archive/sprint-f4/Sprint_F4_M3_Exit_Criteria_Evidence_Matrix.md`.

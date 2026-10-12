@@ -62,6 +62,11 @@ export default function ChartDetailPage() {
     }
   }, [query.data]);
 
+  const serverErrorMessage = useMemo(() => {
+    if (!query.error) return "";
+    return getErrorMessage(query.error.errorCode);
+  }, [query.error]);
+
   useEffect(() => {
     if (mapping && !mapping.ok) {
       reportError(mapping.error, "chart-view-model");
@@ -157,9 +162,7 @@ export default function ChartDetailPage() {
       <EmptyState
         variant="danger"
         title="Không thể tải lá số"
-        description={getErrorMessage(
-          query.error?.errorCode ?? "INTERNAL_SERVER_ERROR",
-        )}
+        description={serverErrorMessage}
         action={
           <Button
             variant="primary"
@@ -178,7 +181,7 @@ export default function ChartDetailPage() {
       <div>
         <Link
           to="/app/profiles"
-          className="hover:text-foreground inline-flex items-center text-body-sm text-subtle"
+          className="inline-flex items-center text-body-sm text-subtle hover:text-primary"
         >
           ← Hồ sơ sinh
         </Link>

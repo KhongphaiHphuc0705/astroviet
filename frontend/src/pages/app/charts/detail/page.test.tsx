@@ -167,6 +167,8 @@ describe("ChartDetailPage", () => {
     });
 
     it("S6: renders server error state with mapped message and retry button on 500 error", async () => {
+      const reportErrorSpy = vi.spyOn(reportErrorModule, "reportError");
+
       server.use(
         mockGetChart(() => {
           return HttpResponse.json(
@@ -193,6 +195,7 @@ describe("ChartDetailPage", () => {
       expect(
         screen.getByRole("button", { name: "Thử lại" }),
       ).toBeInTheDocument();
+      expect(reportErrorSpy).toHaveBeenCalledTimes(1);
     });
 
     it("S7: keeps displaying chart data and does not flash error when background refetch fails", async () => {
