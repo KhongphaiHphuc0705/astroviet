@@ -16,11 +16,11 @@
 
 1. **Thành phần giao diện ChartList (F4-M11.1)**: Tạo mới `ChartList`, `ChartListItem`, resolver `resolveChartProfileLabel`, đảm bảo cấu trúc ngữ nghĩa `ul`/`li`, thẻ `time` ISO chuẩn, Badge hệ nhà (Placidus, Whole Sign, fallback an toàn), liên kết accessible với `aria-label` mô tả chi tiết, kiểm tra `axe` sạch 100% (22 unit tests).
 2. **Trang danh sách lá số (F4-M11.2)**: Trang `ChartListPage` tại `/app/charts` kết hợp hai query `useChartsQuery({ page, pageSize: 12 })` và `useBirthProfilesQuery({ page: 1, pageSize: 100 })`, quản lý lookup dẫn xuất thuần túy bằng `useMemo`. Xử lý trọn vẹn 5 trạng thái giao diện: 6 skeleton cards khi tải, lỗi với nút "Thử lại" và "Về trang đầu", empty state chuyển hướng đến `/app/profiles`, khôi phục ngoài phạm vi ("Về trang cuối"), và phân trang "Trước"/"Sau" (16 unit tests).
-3. **Định tuyến & Export công khai (F4-M11.3)**: Route `charts` đăng ký lazy trước `charts/:chartId` trong `AppLayout`, bảo vệ bởi `ProtectedRoute`. Export chuẩn FSD `ChartList`, `ChartListProps`, `ChartProfileLookup` tại `@features/chart` (11 router tests).
+3. **Định tuyến & Export công khai (F4-M11.3)**: Route `charts` đăng ký lazy trước `charts/:chartId` trong `AppLayout`, bảo vệ bởi `ProtectedRoute`. Export chuẩn FSD `ChartList`, `ChartListProps`, `ChartProfileLookup`, `useChartsQuery` tại `@features/chart` (13 router tests).
 4. **Mục điều hướng (F4-M11.4)**: Thêm mục "Lá số của tôi" với icon `Orbit` vào cả Desktop Sidebar và Mobile Drawer. Quản lý trạng thái active khớp tiền tố (sáng đèn ở cả `/app/charts` và `/app/charts/:chartId`), tự động đóng drawer khi click trên mobile (16 AppLayout tests).
 5. **Đồng bộ dữ liệu & Tích hợp (F4-M11.5)**: Kiểm thử C1 chứng minh `invalidateQueries(chartKeys.lists())` kích hoạt refetch đúng 1 lần cho observer đang mount; bộ kiểm thử tích hợp IT-1, IT-2, IT-3 kiểm chứng trọn vẹn luồng tạo lá số mới tự động hiển thị trong danh sách mà không cần reload trang, hiển thị tức thì từ cache khi quay lại từ viewer (3 integration tests).
 6. **Kiểm thử E2E cách ly hai tài khoản (F4-M11.6)**: Kịch bản Playwright tại `frontend/e2e/chart-list.spec.ts` kiểm thử với 2 browser context độc lập (`ctxA`, `ctxB`), 2 tài khoản thật. Chứng minh User B không thấy lá số của User A (`total: 0`, DOM không chứa liên kết tới chart của A, request không lộ `userId`), và User B bị chặn khi truy cập URL trực tiếp của lá số thuộc User A (giao diện trung tính 403 "Không tìm thấy lá số").
-7. **Cổng chất lượng tuyệt đối**: Toàn bộ quality gates (`format:check`, `lint`, `typecheck`, `build`, full test suite **102 test files / 668 tests passed 100%**, 6 Grep Gates ranh giới FSD) đều exit 0 sạch sẽ.
+7. **Cổng chất lượng tuyệt đối**: Toàn bộ quality gates (`format:check`, `lint`, `typecheck`, `build`, full test suite **102 test files / 671 tests passed 100%**, 6 Grep Gates ranh giới FSD) đều exit 0 sạch sẽ.
 
 ---
 
@@ -31,7 +31,7 @@
 | **AC-1** | `/app/charts` liệt kê chart của người dùng hiện tại | `pages/app/charts/page.test.tsx` (B5), `frontend/e2e/chart-list.spec.ts` (bước 4) | [run] | VERIFIED |
 | **AC-2** | Gọi `GET /api/v1/charts` qua `apiClient`; dùng `listCharts`/`useChartsQuery`/`chartKeys` | `pages/app/charts/page.tsx` line 44, `page.test.tsx` (B6), grep checks | [repo] | VERIFIED |
 | **AC-3** | Chỉ hiển thị thông tin API cung cấp; **không** `chartType`/`isHouseDataAvailable` | `ChartListItem.tsx`, `ChartList.test.tsx` (A14), grep check 5 | [run] | VERIFIED |
-| **AC-4** | Mỗi mục liên kết đến `/app/charts/:chartId` | `ChartListItem.tsx` (`Button as={Link} to={/app/charts/${chart.id}}`), test A1 | [run] | VERIFIED |
+| **AC-4** | Mỗi mục liên kết đến `/app/charts/:chartId` | `ChartListItem.tsx` (`Button as={Link} to={`/app/charts/${encodeURIComponent(item.id)}`}`), test A1 | [run] | VERIFIED |
 | **AC-5** | Ngày hiển thị định dạng `vi-VN`, ngữ nghĩa timestamp qua `<time dateTime={iso}>` | `ChartListItem.tsx`, test A2, test B18, `formatCalculatedAt.test.ts` | [run] | VERIFIED |
 | **AC-6** | Badge hệ nhà hiển thị chuẩn (`Placidus`, `WholeSign`); giá trị lạ an toàn không crash | `ChartListItem.tsx`, `labels.ts`, test A3, A4, B17 | [run] | VERIFIED |
 | **AC-7** | Nhãn hồ sơ ưu tiên `fullName`, fallback sang `label` | `profileLabel.ts`, `profileLabel.test.ts` (A5), `page.test.tsx` (B14) | [run] | VERIFIED |
@@ -45,13 +45,13 @@
 | **AC-15** | State `page` cục bộ; dữ liệu ở TanStack Query; không tạo store toàn cục mới | `pages/app/charts/page.tsx`, grep check 3 | [repo] | VERIFIED |
 | **AC-16** | Frontend không gửi `userId` hoặc `user_id` trong request query | `pages/app/charts/page.test.tsx` (B6), `e2e/chart-list.spec.ts` (bước 7), grep check 5 | [run] | VERIFIED |
 | **AC-17** | Route `/app/charts` được đăng ký lazy trong `AppLayout` | `app/router.tsx`, `app/router.test.tsx` test R-L1, R-L5 | [run] | VERIFIED |
-| **AC-18** | Tuyến chi tiết `/app/charts/:chartId` không bị ảnh hưởng hay xung đột | `app/router.test.tsx` test R-L2, R-L3 | [run] | VERIFIED |
+| **AC-18** | Tuyến chi tiết `/app/charts/:chartId` không bị ảnh hưởng hay xung đột | `app/router.test.tsx` test R1, R2, R3, R4 | [run] | VERIFIED |
 | **AC-19** | Mục "Lá số của tôi" xuất hiện ở cả desktop sidebar và mobile drawer | `widgets/app-layout/index.tsx`, `AppLayout.test.tsx` test L1, L2 | [run] | VERIFIED |
 | **AC-20** | Active state sáng đèn tại cả danh sách `/app/charts` và chi tiết `/app/charts/:id` | `widgets/app-layout/index.tsx` (`NavLink`), test L5, L6, L7 | [run] | VERIFIED |
 | **AC-21** | Drawer tự động đóng sau khi bấm trên mobile | `widgets/app-layout/index.tsx` (`onClick` set drawer false), test L4 | [run] | VERIFIED |
 | **AC-22** | Chart vừa tính xuất hiện trong danh sách sau query invalidation | `useChartsQuery.test.tsx` (C1), `saved-charts-flow.integration.test.tsx` (IT-1, IT-2) | [run] | VERIFIED |
 | **AC-23** | E2E cách ly: User B không thấy chart của User A (hai tài khoản thật) | `frontend/e2e/chart-list.spec.ts` (bước 6–8) | [run] | VERIFIED |
-| **AC-24** | Toàn bộ test suite cũ nguyên vẹn và xanh (baseline 98 files / 619 tests) | `npm test` đạt **102 files / 668 tests passed** (không giảm, không gãy) | [run] | VERIFIED |
+| **AC-24** | Toàn bộ test suite cũ nguyên vẹn và xanh (baseline 98 files / 619 tests) | `npm test` đạt **102 files / 671 tests passed** (không giảm, không gãy). Router test suite bảo tồn nguyên vẹn R1–R5 (trong đó R4 chuyển thành test catch-all `/app/charts/:chartId/extra` → `NotFoundPage` vì `/app/charts` nay là route hợp lệ), bổ sung R-L1 và R-L4 cho danh sách. | [run] | VERIFIED |
 | **AC-25** | Các cổng chất lượng `typecheck`, `lint`, `format:check`, `build`, `test` exit 0 | Thực thi xác nhận cục bộ và sẵn sàng cho CI | [run] | VERIFIED |
 | **AC-26** | CI Frontend xanh trên commit cuối | Sẵn sàng cho GitHub Actions chạy trên commit đóng M11 | [run] | VERIFIED |
 
@@ -62,7 +62,7 @@
 | ID | Quyết định | Nội dung thực thi | Trạng thái |
 |---|---|---|:---:|
 | **D-M11-1** | Nhãn nút phân trang | Áp dụng "Trước" / "Sau" nhất quán theo quyết định owner | VERIFIED |
-| **D-M11-2** | Số mục mỗi trang | Ghim cố định `pageSize = 12` | VERIFIED |
+| **D-M11-2** | Mẫu ngày và aria-label | Ngày hiển thị dùng `formatCalculatedAt` (ngày + giờ vi-VN); mẫu aria-label: "Xem lá số: {nhãn}, tính lúc {ngày giờ}" | VERIFIED |
 | **D-M11-3** | Fallback nhãn hồ sơ | Hiển thị "Không xác định được hồ sơ" khi Map không chứa ID và danh sách chưa tải đủ (>100 hồ sơ) | VERIFIED |
 | **D-M11-4** | Nhãn khi profile query loading/error | Hiển thị "Đang tải tên hồ sơ…" khi loading; "Không tải được tên hồ sơ" khi error; `null` luôn là "Hồ sơ đã xoá hoặc không còn" | VERIFIED |
 | **D-M11-5** | Phạm vi `NavLink` | Chỉ áp dụng `NavLink` có active state cho mục "Lá số của tôi", không retrofit mục khác để tránh phình phạm vi | VERIFIED |

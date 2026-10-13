@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useBirthProfilesQuery } from "@features/birth-profile/hooks/useBirthProfilesQuery";
-import { useChartsQuery } from "@features/chart/hooks/useChartsQuery";
 import {
   ChartList,
   type ChartProfileLookup,
-} from "@features/chart/ui/ChartList";
+  useChartsQuery,
+} from "@features/chart";
 import { Alert } from "@shared/ui/Alert";
 import { Button } from "@shared/ui/Button";
 import { Container } from "@shared/ui/Container";

@@ -132,35 +132,7 @@ describe("Router Integration Tests", () => {
     consoleSpy.mockRestore();
   });
 
-  it("R-L1: Authenticated /app/charts renders ChartListPage in AppLayout with h1 'Lá số của tôi'", async () => {
-    useAuthStore.setState({ status: "authenticated" });
-    server.use(
-      mockListCharts(() =>
-        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 12 }),
-      ),
-      mockListBirthProfiles(() =>
-        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 100 }),
-      ),
-    );
-
-    renderRouter("/app/charts");
-
-    expect(
-      await screen.findByRole(
-        "heading",
-        {
-          level: 1,
-          name: "Lá số của tôi",
-        },
-        { timeout: 5000 },
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByRole("navigation", { name: /điều hướng chính/i }).length,
-    ).toBeGreaterThan(0);
-  });
-
-  it("R-L2: Protected chart detail route (/app/charts/:chartId) renders in AppLayout when authenticated", async () => {
+  it("R1: Protected chart detail route (/app/charts/:chartId) renders in AppLayout when authenticated", async () => {
     useAuthStore.setState({ status: "authenticated" });
     server.use(getChartSuccess(chartFull));
 
@@ -178,7 +150,20 @@ describe("Router Integration Tests", () => {
     ).toBeGreaterThan(0);
   });
 
-  it("R-L3: Invalid chartId format (/app/charts/not-a-uuid) renders not-found state without GET request, does not match chart list", async () => {
+  it("R2: Protected chart route redirects to /login when unauthenticated", async () => {
+    useAuthStore.setState({ status: "unauthenticated" });
+    renderRouter(`/app/charts/${chartFull.id}`);
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("R3: Invalid chartId format (/app/charts/not-a-uuid) renders not-found state without GET request, does not match chart list", async () => {
     useAuthStore.setState({ status: "authenticated" });
     renderRouter("/app/charts/not-a-uuid");
 
@@ -195,20 +180,18 @@ describe("Router Integration Tests", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("R-L4: Unauthenticated /app/charts redirects to /login", async () => {
-    useAuthStore.setState({ status: "unauthenticated" });
-    renderRouter("/app/charts");
+  it("R4: Unknown deep route under charts (/app/charts/:chartId/extra) falls back to NotFoundPage", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    renderRouter(`/app/charts/${chartFull.id}/extra`);
 
     expect(
-      await screen.findByRole(
-        "heading",
-        { name: /đăng nhập/i },
-        { timeout: 5000 },
-      ),
+      await screen.findByText("Không tìm thấy trang bạn yêu cầu.", undefined, {
+        timeout: 5000,
+      }),
     ).toBeInTheDocument();
   });
 
-  it("R-L5: Suspense fallback xuất hiện trước khi trang lazy tải", async () => {
+  it("R5: Suspense fallback xuất hiện trước khi trang lazy tải", async () => {
     useAuthStore.setState({ status: "authenticated" });
     let resolveComponent: (value: { default: () => React.JSX.Element }) => void;
     const DeferredComponent = lazy(
@@ -252,6 +235,47 @@ describe("Router Integration Tests", () => {
       await screen.findByRole(
         "heading",
         { name: "Đã tải xong" },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("R-L1: Authenticated /app/charts renders ChartListPage in AppLayout with h1 'Lá số của tôi'", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    server.use(
+      mockListCharts(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 12 }),
+      ),
+      mockListBirthProfiles(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 100 }),
+      ),
+    );
+
+    renderRouter("/app/charts");
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        {
+          level: 1,
+          name: "Lá số của tôi",
+        },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("navigation", { name: /điều hướng chính/i }).length,
+    ).toBeGreaterThan(0);
+  });
+
+  it("R-L4: Unauthenticated /app/charts redirects to /login", async () => {
+    useAuthStore.setState({ status: "unauthenticated" });
+    renderRouter("/app/charts");
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
         { timeout: 5000 },
       ),
     ).toBeInTheDocument();

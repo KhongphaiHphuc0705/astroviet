@@ -629,4 +629,58 @@ describe("ChartListPage", () => {
     expect(await screen.findByText("Koch")).toBeInTheDocument();
     expect(screen.queryByText("Placidus")).not.toBeInTheDocument();
   });
+
+  it("B18: renders stable formatted date and time dateTime attribute across re-renders", async () => {
+    const fixedIso = "2026-03-29T10:30:00.000Z";
+    server.use(
+      mockListCharts(() =>
+        HttpResponse.json({
+          items: [
+            {
+              ...createMockChart("c-1", "p-1"),
+              calculatedAt: fixedIso,
+            },
+          ],
+          total: 1,
+          page: 1,
+          pageSize: 12,
+        }),
+      ),
+      mockListBirthProfiles(() =>
+        HttpResponse.json({
+          items: [
+            {
+              id: "p-1",
+              fullName: "Nguyễn Văn A",
+              birthDate: "1990-01-01",
+              birthTime: "12:00",
+              cityName: "Hà Nội",
+              latitude: 21.0285,
+              longitude: 105.8542,
+              timezone: "Asia/Ho_Chi_Minh",
+              createdAt: "2026-01-01T00:00:00.000Z",
+              updatedAt: "2026-01-01T00:00:00.000Z",
+            },
+          ],
+          total: 1,
+          page: 1,
+          pageSize: 100,
+        }),
+      ),
+    );
+
+    const { rerender } = renderWithProviders(<ChartListPage />);
+
+    const timeElement = await screen.findByText(/2026/);
+    expect(timeElement.tagName.toLowerCase()).toBe("time");
+    expect(timeElement).toHaveAttribute("dateTime", fixedIso);
+    const initialText = timeElement.textContent;
+
+    // Rerender and ensure formatCalculatedAt output and dateTime attribute remain stable
+    rerender(<ChartListPage />);
+    const timeElementAfter = screen.getByText(/2026/);
+    expect(timeElementAfter.tagName.toLowerCase()).toBe("time");
+    expect(timeElementAfter).toHaveAttribute("dateTime", fixedIso);
+    expect(timeElementAfter.textContent).toBe(initialText);
+  });
 });
