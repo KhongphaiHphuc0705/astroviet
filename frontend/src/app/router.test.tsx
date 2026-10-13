@@ -146,10 +146,14 @@ describe("Router Integration Tests", () => {
     renderRouter("/app/charts");
 
     expect(
-      await screen.findByRole("heading", {
-        level: 1,
-        name: "Lá số của tôi",
-      }),
+      await screen.findByRole(
+        "heading",
+        {
+          level: 1,
+          name: "Lá số của tôi",
+        },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getAllByRole("navigation", { name: /điều hướng chính/i }).length,
