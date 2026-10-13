@@ -1,6 +1,13 @@
-import { Menu, X, LayoutDashboard, Settings, IdCard } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Settings,
+  IdCard,
+  Orbit,
+} from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { useUiStore } from "@shared/stores/uiStore";
 import { Container } from "@shared/ui/Container";
@@ -83,6 +90,17 @@ export function AppLayout({ children, headerActions }: AppLayoutProps) {
               <IdCard size={20} className="shrink-0" />
               {!sidebarCollapsed && <span>Hồ sơ sinh</span>}
             </Link>
+            <NavLink
+              to="/app/charts"
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised ${
+                  isActive ? "bg-surface-raised font-medium" : ""
+                }`
+              }
+            >
+              <Orbit size={20} className="shrink-0" />
+              {!sidebarCollapsed && <span>Lá số của tôi</span>}
+            </NavLink>
             <a
               href="/"
               className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
@@ -156,6 +174,18 @@ export function AppLayout({ children, headerActions }: AppLayoutProps) {
                 <IdCard size={20} />
                 <span>Hồ sơ sinh</span>
               </Link>
+              <NavLink
+                to="/app/charts"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised ${
+                    isActive ? "bg-surface-raised font-medium" : ""
+                  }`
+                }
+                onClick={() => setMobileDrawerOpen(false)}
+              >
+                <Orbit size={20} />
+                <span>Lá số của tôi</span>
+              </NavLink>
               <a
                 href="/"
                 className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-surface-raised"
