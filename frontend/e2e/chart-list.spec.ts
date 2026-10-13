@@ -221,9 +221,8 @@ test.describe("Chart List Two-Account Isolation Flow", () => {
       pageB.getByText("Lá số này không tồn tại hoặc bạn không có quyền xem."),
     ).toBeVisible();
 
-    // Ensure User A's chart content is not displayed
-    await expect(
-      pageB.getByRole("heading", { name: "Lá số sinh" }),
-    ).not.toBeVisible();
+    // Ensure User A's profile name and chart data are not displayed
+    await expect(pageB.getByText("Hồ sơ A")).not.toBeVisible();
+    await expect(pageB.getByText("Placidus")).not.toBeVisible();
   });
 });
