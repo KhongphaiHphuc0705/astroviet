@@ -6,6 +6,8 @@ export type {
 export { ChartViewerSkeleton } from "./ui/ChartViewerSkeleton";
 export { ChartViewerShell } from "./ui/ChartViewerShell";
 export type { ChartViewerShellProps } from "./ui/ChartViewerShell";
+export { ChartList } from "./ui/ChartList";
+export type { ChartListProps, ChartProfileLookup } from "./ui/ChartList";
 export { useChartQuery } from "./hooks/useChartQuery";
 export { isValidChartId } from "./api/isValidChartId";
 export { toChartViewModel, ChartViewModelError } from "./model/chartViewModel";

@@ -34,6 +34,7 @@ const BirthProfileCreatePage = lazy(
 const BirthProfileEditPage = lazy(
   () => import("@pages/app/profiles/edit/page"),
 );
+const ChartListPage = lazy(() => import("@pages/app/charts/page"));
 const ChartDetailPage = lazy(() => import("@pages/app/charts/detail/page"));
 
 export const SuspenseFallback = () => (
@@ -135,6 +136,10 @@ export const routesConfig = [
               {
                 path: "profiles/:id/edit",
                 element: <BirthProfileEditPage />,
+              },
+              {
+                path: "charts",
+                element: <ChartListPage />,
               },
               {
                 path: "charts/:chartId",
