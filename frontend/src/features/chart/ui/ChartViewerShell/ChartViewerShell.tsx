@@ -1,7 +1,12 @@
+import { useMediaQuery } from "@shared/hooks/useMediaQuery";
+import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { Alert } from "@shared/ui/Alert";
 import { Card } from "@shared/ui/Card";
 
 import type { ChartViewModel } from "../../model/chartViewModel";
+import { AspectTable } from "../AspectTable";
+import { HouseTable } from "../HouseTable";
+import { PlanetTable } from "../PlanetTable";
 
 import { formatCalculatedAt } from "./formatCalculatedAt";
 import { HouseDataNotice } from "./HouseDataNotice";
@@ -12,6 +17,10 @@ export interface ChartViewerShellProps {
 }
 
 export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
+  const isTable = useMediaQuery("(min-width: 640px)");
+  const layout = isTable ? "table" : "cards";
+  const density = usePreferenceStore((s) => s.densityMode);
+
   return (
     <div className={className ?? "space-y-6"} data-testid="chart-viewer-shell">
       <Card className="p-4 sm:p-6">
@@ -39,10 +48,6 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         </dl>
       </Card>
 
-      {!vm.flags.houseDataAvailable && (
-        <HouseDataNotice warnings={vm.warnings} />
-      )}
-
       {vm.flags.partialData && (
         <Alert
           variant="warning"
@@ -55,10 +60,28 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         data-testid="chart-visualization-placeholder"
         className="border-dashed p-8 text-center text-subtle"
       >
-        <p>
-          Biểu đồ tròn và các bảng hành tinh, nhà, góc chiếu sẽ xuất hiện ở đây.
-        </p>
+        <p>Biểu đồ tròn sẽ xuất hiện ở đây.</p>
       </Card>
+
+      <PlanetTable
+        planets={vm.planets}
+        houseDataAvailable={vm.flags.houseDataAvailable}
+        layout={layout}
+        density={density}
+      />
+
+      <HouseTable
+        houses={vm.houses}
+        angles={vm.angles}
+        houseDataAvailable={vm.flags.houseDataAvailable}
+        hasAngles={vm.flags.hasAngles}
+        houseSystemLabel={vm.meta.houseSystem.labelVi}
+        unavailableContent={<HouseDataNotice warnings={vm.warnings} />}
+        layout={layout}
+        density={density}
+      />
+
+      <AspectTable aspects={vm.aspects} layout={layout} density={density} />
     </div>
   );
 }

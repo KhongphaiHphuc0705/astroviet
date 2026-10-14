@@ -263,7 +263,7 @@ describe("ChartDetailPage", () => {
       expect(
         screen.getByRole("heading", { name: "Lá số sinh", level: 1 }),
       ).toBeInTheDocument();
-      expect(screen.getByText("Placidus")).toBeInTheDocument();
+      expect(screen.getAllByText("Placidus").length).toBeGreaterThanOrEqual(1);
       expect(screen.getByText(chartFull.engineVersion)).toBeInTheDocument();
 
       const timeElement = screen.getByText((_, element) => {
