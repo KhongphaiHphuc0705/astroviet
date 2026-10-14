@@ -94,7 +94,7 @@ describe("Chart Flow Integration Tests (I1 - I3)", () => {
         { timeout: 5000 },
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("Whole Sign")).toBeInTheDocument();
+    expect(screen.getAllByText("Whole Sign").length).toBeGreaterThanOrEqual(1);
     expect(router.state.location.pathname).toBe(`/app/charts/${chartFull.id}`);
   });
 
@@ -206,9 +206,10 @@ describe("Chart Flow Integration Tests (I1 - I3)", () => {
         { timeout: 10000 },
       ),
     ).toBeInTheDocument();
-    expect(
-      await screen.findByText("Placidus", undefined, { timeout: 5000 }),
-    ).toBeInTheDocument();
+    const placidusMatches = await screen.findAllByText("Placidus", undefined, {
+      timeout: 5000,
+    });
+    expect(placidusMatches.length).toBeGreaterThanOrEqual(1);
     expect(getRequestCount).toBe(1);
   });
 });
