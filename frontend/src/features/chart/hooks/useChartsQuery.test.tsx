@@ -8,7 +8,7 @@ import { ApiError } from "@shared/api/client";
 import { createQueryClient } from "@shared/api/queryClient";
 import { server } from "@test/msw-server";
 
-import type { ListChartsResponse } from "../api/types";
+import type { ChartSummary, ListChartsResponse } from "../api/types";
 
 import { chartKeys } from "./query-keys";
 import { useChartsQuery } from "./useChartsQuery";
@@ -128,5 +128,66 @@ describe("useChartsQuery", () => {
     expect((result.current.error as ApiError).errorCode).toBe(
       "MALFORMED_REQUEST",
     );
+  });
+
+  it("C1: invalidateQueries(chartKeys.lists()) causes mounted observer for {page: 1, pageSize: 12} to refetch exactly once and update with newly available data", async () => {
+    let getRequestCount = 0;
+    const initialItem: ChartSummary = {
+      id: "chart-1",
+      birthProfileId: "profile-1",
+      birthProfileLabel: null,
+      houseSystem: "Placidus",
+      calculatedAt: "2026-10-10T10:00:00Z",
+    };
+    const newItem: ChartSummary = {
+      id: "chart-2",
+      birthProfileId: "profile-2",
+      birthProfileLabel: null,
+      houseSystem: "WholeSign",
+      calculatedAt: "2026-10-11T10:00:00Z",
+    };
+
+    let serverItems: ChartSummary[] = [initialItem];
+
+    server.use(
+      http.get("*/api/v1/charts", () => {
+        getRequestCount++;
+        return HttpResponse.json({
+          items: serverItems,
+          total: serverItems.length,
+          page: 1,
+          pageSize: 12,
+        });
+      }),
+    );
+
+    const { Wrapper, queryClient } = createWrapper();
+    const { result } = renderHook(
+      () => useChartsQuery({ page: 1, pageSize: 12 }),
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(result.current.data?.total).toBe(1);
+    expect(result.current.data?.items).toHaveLength(1);
+    expect(result.current.data?.items[0]?.id).toBe("chart-1");
+    expect(getRequestCount).toBe(1);
+
+    // Simulate new chart added on server
+    serverItems = [newItem, initialItem];
+
+    // Invalidate queries matching chartKeys.lists()
+    await queryClient.invalidateQueries({ queryKey: chartKeys.lists() });
+
+    await waitFor(() => {
+      expect(result.current.data?.total).toBe(2);
+    });
+
+    expect(result.current.data?.items).toHaveLength(2);
+    expect(result.current.data?.items[0]?.id).toBe("chart-2");
+    expect(getRequestCount).toBe(2);
   });
 });

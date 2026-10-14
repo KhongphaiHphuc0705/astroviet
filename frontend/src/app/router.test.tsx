@@ -1,5 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
+import { HttpResponse } from "msw";
 import { lazy, Suspense } from "react";
 import {
   createMemoryRouter,
@@ -9,8 +10,12 @@ import {
 } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { mockListBirthProfiles } from "@features/birth-profile/api/mocks/handlers";
 import { chartFull } from "@features/chart/api/mocks/fixtures";
-import { getChartSuccess } from "@features/chart/api/mocks/handlers";
+import {
+  getChartSuccess,
+  mockListCharts,
+} from "@features/chart/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
 import { server } from "@test/msw-server";
@@ -158,7 +163,7 @@ describe("Router Integration Tests", () => {
     ).toBeInTheDocument();
   });
 
-  it("R3: Invalid chartId format (/app/charts/not-a-uuid) renders not-found state without GET request", async () => {
+  it("R3: Invalid chartId format (/app/charts/not-a-uuid) renders not-found state without GET request, does not match chart list", async () => {
     useAuthStore.setState({ status: "authenticated" });
     renderRouter("/app/charts/not-a-uuid");
 
@@ -170,11 +175,14 @@ describe("Router Integration Tests", () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByText("Không tìm thấy lá số")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 1, name: "Lá số của tôi" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("R4: /app/charts without ID falls back to NotFoundPage", async () => {
+  it("R4: Unknown deep route under charts (/app/charts/:chartId/extra) falls back to NotFoundPage", async () => {
     useAuthStore.setState({ status: "authenticated" });
-    renderRouter("/app/charts");
+    renderRouter(`/app/charts/${chartFull.id}/extra`);
 
     expect(
       await screen.findByText("Không tìm thấy trang bạn yêu cầu.", undefined, {
@@ -227,6 +235,47 @@ describe("Router Integration Tests", () => {
       await screen.findByRole(
         "heading",
         { name: "Đã tải xong" },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("R-L1: Authenticated /app/charts renders ChartListPage in AppLayout with h1 'Lá số của tôi'", async () => {
+    useAuthStore.setState({ status: "authenticated" });
+    server.use(
+      mockListCharts(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 12 }),
+      ),
+      mockListBirthProfiles(() =>
+        HttpResponse.json({ items: [], total: 0, page: 1, pageSize: 100 }),
+      ),
+    );
+
+    renderRouter("/app/charts");
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        {
+          level: 1,
+          name: "Lá số của tôi",
+        },
+        { timeout: 5000 },
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("navigation", { name: /điều hướng chính/i }).length,
+    ).toBeGreaterThan(0);
+  });
+
+  it("R-L4: Unauthenticated /app/charts redirects to /login", async () => {
+    useAuthStore.setState({ status: "unauthenticated" });
+    renderRouter("/app/charts");
+
+    expect(
+      await screen.findByRole(
+        "heading",
+        { name: /đăng nhập/i },
         { timeout: 5000 },
       ),
     ).toBeInTheDocument();

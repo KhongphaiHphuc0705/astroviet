@@ -7,7 +7,6 @@ import { renderWithProviders } from "@test/render";
 
 import { AppLayout } from "./index";
 
-// Helper: render AppLayout with a destination route for navigation tests
 function renderWithRoute(initialEntries = ["/"]) {
   return renderWithProviders(
     <Routes>
@@ -15,6 +14,10 @@ function renderWithRoute(initialEntries = ["/"]) {
       <Route
         path="/app/profiles"
         element={<div data-testid="profiles-page">Profiles Page</div>}
+      />
+      <Route
+        path="/app/charts"
+        element={<div data-testid="charts-page">Charts Page</div>}
       />
     </Routes>,
     { initialEntries },
@@ -136,5 +139,101 @@ describe("AppLayout", () => {
 
     // Route should have changed
     expect(screen.getByTestId("profiles-page")).toBeInTheDocument();
+  });
+
+  // L1: Desktop nav contains "Lá số của tôi" link
+  it("L1: renders Lá số của tôi link in desktop nav landmark", () => {
+    renderWithProviders(<AppLayout>Dashboard Content</AppLayout>);
+
+    const desktopNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính",
+    });
+    const link = desktopNav.querySelector('a[href="/app/charts"]');
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveTextContent("Lá số của tôi");
+  });
+
+  // L2: Mobile nav contains "Lá số của tôi" link
+  it("L2: renders Lá số của tôi link in mobile nav landmark", () => {
+    renderWithProviders(<AppLayout>Dashboard Content</AppLayout>);
+
+    const mobileNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính (Mobile)",
+    });
+    const link = mobileNav.querySelector('a[href="/app/charts"]');
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveTextContent("Lá số của tôi");
+  });
+
+  // L3: Clicking desktop "Lá số của tôi" navigates to /app/charts
+  it("L3: navigates to /app/charts when clicking desktop Lá số của tôi link", () => {
+    renderWithRoute(["/"]);
+
+    const desktopNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính",
+    });
+    const link = desktopNav.querySelector('a[href="/app/charts"]')!;
+    fireEvent.click(link);
+
+    expect(screen.getByTestId("charts-page")).toBeInTheDocument();
+  });
+
+  // L4: Clicking mobile "Lá số của tôi" navigates and closes drawer
+  it("L4: navigates to /app/charts and closes drawer when clicking mobile Lá số của tôi link", () => {
+    renderWithRoute(["/"]);
+
+    fireEvent.click(screen.getByLabelText("Menu"));
+    expect(useUiStore.getState().mobileDrawerOpen).toBe(true);
+
+    const mobileNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính (Mobile)",
+    });
+    const link = mobileNav.querySelector('a[href="/app/charts"]')!;
+    fireEvent.click(link);
+
+    expect(useUiStore.getState().mobileDrawerOpen).toBe(false);
+    expect(screen.getByTestId("charts-page")).toBeInTheDocument();
+  });
+
+  // L5: Link has aria-current="page" and active class when at /app/charts
+  it("L5: sets aria-current='page' and active styles on Lá số của tôi link at /app/charts", () => {
+    renderWithProviders(<AppLayout>Dashboard Content</AppLayout>, {
+      initialEntries: ["/app/charts"],
+    });
+
+    const desktopNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính",
+    });
+    const link = desktopNav.querySelector('a[href="/app/charts"]')!;
+    expect(link).toHaveAttribute("aria-current", "page");
+    expect(link).toHaveClass("bg-surface-raised", "font-medium");
+  });
+
+  // L6: Link has aria-current="page" and active class when at /app/charts/:uuid (prefix match)
+  it("L6: sets aria-current='page' on Lá số của tôi link at /app/charts/<uuid> due to prefix match", () => {
+    renderWithProviders(<AppLayout>Dashboard Content</AppLayout>, {
+      initialEntries: ["/app/charts/a9d7dcb2-68ed-4b67-b6ee-c62690009f24"],
+    });
+
+    const desktopNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính",
+    });
+    const link = desktopNav.querySelector('a[href="/app/charts"]')!;
+    expect(link).toHaveAttribute("aria-current", "page");
+    expect(link).toHaveClass("bg-surface-raised", "font-medium");
+  });
+
+  // L7: Link does NOT have aria-current when at /app/profiles
+  it("L7: does not set aria-current on Lá số của tôi link when at /app/profiles", () => {
+    renderWithProviders(<AppLayout>Dashboard Content</AppLayout>, {
+      initialEntries: ["/app/profiles"],
+    });
+
+    const desktopNav = screen.getByRole("navigation", {
+      name: "Điều hướng chính",
+    });
+    const link = desktopNav.querySelector('a[href="/app/charts"]')!;
+    expect(link).not.toHaveAttribute("aria-current");
+    expect(link).not.toHaveClass("font-medium");
   });
 });
