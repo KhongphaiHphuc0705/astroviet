@@ -263,7 +263,8 @@ describe("ChartDetailPage", () => {
       expect(
         screen.getByRole("heading", { name: "Lá số sinh", level: 1 }),
       ).toBeInTheDocument();
-      expect(screen.getByText("Placidus")).toBeInTheDocument();
+      // "Placidus" appears in exactly 2 places: metadata DL and HouseTable header badge
+      expect(screen.getAllByText("Placidus")).toHaveLength(2);
       expect(screen.getByText(chartFull.engineVersion)).toBeInTheDocument();
 
       const timeElement = screen.getByText((_, element) => {

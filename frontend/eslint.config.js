@@ -30,6 +30,13 @@ export default tseslint.config(
       ...reactPlugin.configs["jsx-runtime"].rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...jsxA11yPlugin.configs.recommended.rules,
+      "jsx-a11y/no-redundant-roles": [
+        "error",
+        {
+          ul: ["list"],
+          ol: ["list"],
+        },
+      ],
       "no-console": ["error", { allow: ["warn", "error"] }],
       "react-hooks/exhaustive-deps": "error",
       "import/order": [
