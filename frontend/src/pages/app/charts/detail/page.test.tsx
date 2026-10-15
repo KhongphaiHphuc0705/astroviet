@@ -275,9 +275,7 @@ describe("ChartDetailPage", () => {
       });
       expect(timeElement).toBeInTheDocument();
 
-      expect(
-        screen.getByTestId("chart-visualization-placeholder"),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("chart-wheel")).toBeInTheDocument();
       expect(
         screen.queryByText("Dữ liệu Nhà và các góc chưa khả dụng"),
       ).not.toBeInTheDocument();
@@ -301,9 +299,7 @@ describe("ChartDetailPage", () => {
       expect(
         screen.queryByText(/Hồ sơ này chưa có giờ sinh/i),
       ).not.toBeInTheDocument();
-      expect(
-        screen.getByTestId("chart-visualization-placeholder"),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("chart-wheel")).toBeInTheDocument();
     });
 
     it("V3: appends backend cause message when HOUSE_SYSTEM_NOT_CONVERGING warning exists", async () => {
