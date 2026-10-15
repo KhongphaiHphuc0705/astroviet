@@ -41,6 +41,15 @@ export function AspectTable({
   const headingId = useId();
   const cellPadding = getTableCellPadding(density);
 
+  const resolvedFilterPlanet: GlyphLabel | undefined = filterPlanetKey
+    ? (filterPlanet ?? {
+        key: filterPlanetKey,
+        labelVi: filterPlanetKey,
+        glyph: null,
+        known: false,
+      })
+    : undefined;
+
   const displayedAspects = filterPlanetKey
     ? aspects.filter(
         (a) =>
@@ -59,9 +68,12 @@ export function AspectTable({
       </h2>
 
       <div aria-live="polite" className="min-h-[2rem]">
-        {filterPlanetKey && filterPlanet && (
+        {filterPlanetKey && resolvedFilterPlanet && (
           <div className="mb-3">
-            <AspectFilterChip planet={filterPlanet} onClear={onClearFilter} />
+            <AspectFilterChip
+              planet={resolvedFilterPlanet}
+              onClear={onClearFilter}
+            />
           </div>
         )}
       </div>
@@ -70,8 +82,8 @@ export function AspectTable({
         <EmptyState title="Không tìm thấy góc chiếu nào trong phạm vi orb hiện tại" />
       ) : displayedAspects.length === 0 ? (
         <p className="py-6 text-center text-body-sm italic text-subtle">
-          Không có góc chiếu nào của {filterPlanet?.labelVi ?? filterPlanetKey}{" "}
-          trong dữ liệu
+          Không có góc chiếu nào của {resolvedFilterPlanet?.labelVi} trong dữ
+          liệu
         </p>
       ) : layout === "table" ? (
         <div className="overflow-x-auto">
@@ -162,7 +174,10 @@ export function AspectTable({
           </table>
         </div>
       ) : (
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          role="list"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {displayedAspects.map((aspect, index) => {
             const isSelected = selectedKey === aspect.key;
             const buttonLabel = `Chọn góc chiếu ${aspect.type.labelVi} giữa ${aspect.planetA.labelVi} và ${aspect.planetB.labelVi}`;

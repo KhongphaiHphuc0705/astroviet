@@ -23,17 +23,6 @@ export function useMediaQuery(query: string): boolean {
         return () => {
           mediaQueryList.removeEventListener("change", callback);
         };
-      } else if (
-        typeof (
-          mediaQueryList as unknown as {
-            addListener?: (fn: () => void) => void;
-          }
-        ).addListener === "function"
-      ) {
-        mediaQueryList.addListener(callback);
-        return () => {
-          mediaQueryList.removeListener(callback);
-        };
       }
 
       return () => {};

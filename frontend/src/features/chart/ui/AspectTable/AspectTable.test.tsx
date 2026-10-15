@@ -202,6 +202,23 @@ describe("AspectTable (nhóm A)", () => {
     expect(firstCard).toHaveTextContent(firstAspect.applyingLabelVi);
   });
 
+  it("A10: uses key as fallback label for chip when filterPlanet is omitted to avoid silent filtering", () => {
+    const onClear = vi.fn();
+    render(
+      <AspectTable
+        aspects={fullVM.aspects}
+        filterPlanetKey="Sun"
+        onClearFilter={onClear}
+      />,
+    );
+
+    // Verify chip renders with fallback label Sun instead of silently filtering
+    expect(
+      screen.getByRole("button", { name: "Xóa bộ lọc theo Sun" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Đang lọc: Sun")).toBeInTheDocument();
+  });
+
   it("passes axe accessibility checks across table, cards, empty, filtered, and selected states", async () => {
     const { container: tableContainer } = render(
       <AspectTable

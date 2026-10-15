@@ -29,7 +29,8 @@ describe("ChartViewerShell", () => {
     render(<ChartViewerShell vm={vm} />);
 
     expect(screen.getByText("Hệ nhà")).toBeInTheDocument();
-    expect(screen.getAllByText("Placidus").length).toBeGreaterThanOrEqual(1);
+    // "Placidus" appears in exactly 2 places: metadata DL and HouseTable header badge
+    expect(screen.getAllByText("Placidus")).toHaveLength(2);
     expect(screen.getByText("Tính lúc")).toBeInTheDocument();
     expect(screen.getByText(chartFull.engineVersion)).toBeInTheDocument();
 

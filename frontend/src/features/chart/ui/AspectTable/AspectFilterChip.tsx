@@ -34,7 +34,7 @@ export function AspectFilterChip({
       onClick={onClear}
       aria-label={`Xóa bộ lọc theo ${planet.labelVi}`}
       className={cn(
-        "inline-flex min-h-[32px] items-center gap-1.5 rounded-full border border-subtle bg-surface-raised px-3 py-1 text-body-sm font-medium text-primary transition-colors",
+        "px-3.5 inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-subtle bg-surface-raised py-1.5 text-body-sm font-medium text-primary transition-colors",
         "hover:bg-surface-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-focus active:scale-[0.98]",
         className,
       )}

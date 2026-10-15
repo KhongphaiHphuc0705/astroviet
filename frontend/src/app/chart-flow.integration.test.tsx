@@ -94,7 +94,8 @@ describe("Chart Flow Integration Tests (I1 - I3)", () => {
         { timeout: 5000 },
       ),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("Whole Sign").length).toBeGreaterThanOrEqual(1);
+    // "Whole Sign" appears in exactly 2 places: metadata DL and HouseTable header badge
+    expect(screen.getAllByText("Whole Sign")).toHaveLength(2);
     expect(router.state.location.pathname).toBe(`/app/charts/${chartFull.id}`);
   });
 
@@ -206,10 +207,11 @@ describe("Chart Flow Integration Tests (I1 - I3)", () => {
         { timeout: 10000 },
       ),
     ).toBeInTheDocument();
+    // "Placidus" appears in exactly 2 places: metadata DL and HouseTable header badge
     const placidusMatches = await screen.findAllByText("Placidus", undefined, {
       timeout: 5000,
     });
-    expect(placidusMatches.length).toBeGreaterThanOrEqual(1);
+    expect(placidusMatches).toHaveLength(2);
     expect(getRequestCount).toBe(1);
   });
 });
