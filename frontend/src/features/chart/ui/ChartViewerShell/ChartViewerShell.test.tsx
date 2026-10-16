@@ -168,7 +168,7 @@ describe("ChartViewerShell", () => {
       );
     });
 
-    it("S-W1: renders chart-wheel in Shell instead of placeholder, and all 3 tables remain visible", () => {
+    it("S-W1: renders chart-wheel in Shell instead of placeholder, and all 4 tables remain visible", () => {
       controller = installMatchMedia(true);
       const vm = toChartViewModel(chartFull);
       render(<ChartViewerShell vm={vm} />);
@@ -178,8 +178,21 @@ describe("ChartViewerShell", () => {
         screen.queryByTestId("chart-visualization-placeholder"),
       ).not.toBeInTheDocument();
 
+      // Exactly 4 semantic tables: PlanetTable, HouseTable (houses + angles), AspectTable
       const tables = screen.getAllByRole("table");
-      expect(tables.length).toBeGreaterThanOrEqual(3);
+      expect(tables).toHaveLength(4);
+      expect(
+        screen.getByRole("table", { name: /vị trí hành tinh/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /nhà theo hệ placidus/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /các góc chính/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /góc chiếu giữa các hành tinh/i }),
+      ).toBeInTheDocument();
     });
 
     it("S-W2: renders chart-wheel without house-ring and preserves HouseDataNotice when houseDataAvailable is false", () => {

@@ -4,8 +4,9 @@
 
 **Vị trí lưu:** `docs/implementation/archive/sprint-f4/Sprint_F4_M4_Exit_Criteria_Evidence_Matrix.md`  
 **Milestone:** F4-M4 (`FE-S4.4`: Nền tảng biểu đồ tròn SVG — vành 12 cung, vạch chia độ, vòng nhà & trục góc)  
-**Ngày review:** 2026-10-15  
-**Commit Head:** `f6994c5`  
+**Ngày review:** 2026-10-16  
+**Commit Head:** `d9997c0`  
+**CI Run:** [GitHub Actions Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207)  
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` quyết định phê duyệt.  
 **Trạng thái:** `VERIFIED` · `PARTIALLY VERIFIED` · `UNVERIFIED` · `ACCEPTED GAP` · `NOT APPLICABLE`.
 
@@ -31,9 +32,11 @@
    - 4 lớp SVG chuyên biệt, độc lập, chỉ in dữ liệu hình học có sẵn: `ZodiacLayer`, `TickLayer`, `HouseLayer`, `AngleLayer`.
    - Hoàn toàn dùng token CSS class từ Design System (`stroke-strong`, `stroke-subtle`, `fill-primary`, `fill-secondary`, `font-display`, `font-data`, `font-bold`), không hardcode mã màu hex/rgb/hsl.
    - Chứa ký tự Variation Selector `\uFE0E` cho 12 glyph cung hoàng đạo.
+   - 12 thẻ `<path d={sign.path} fill="none" />` được giữ lại trong `ZodiacLayer` kèm chú thích kiến trúc rõ ràng, đóng vai trò dự trữ vùng hit-area cho tính năng tương tác chọn cung hoàng đạo ở Sprint F4 S4.8.
    - 11/11 unit tests đạt chuẩn 100% (`ZodiacLayer.test.tsx`, `TickLayer.test.tsx`, `HouseLayer.test.tsx`, `AngleLayer.test.tsx`).
 4. **ChartWheel Wrapper & Design System Integration (F4-M4.4)**:
    - Semantic wrapper `<figure data-testid="chart-wheel">` bọc vùng cuộn ngang có thể focus bàn phím (`role="region"`, `tabIndex={0}`, `aria-label`).
+   - `tabIndex={0}` trên vùng cuộn `overflow-x-auto` (`role="region"`) được khai báo trực tiếp và tuân thủ phân tích tĩnh thông qua cấu hình quy tắc scoped override cho `jsx-a11y/no-noninteractive-tabindex` (`{ roles: ["tabpanel", "region"] }`) trong `eslint.config.js`.
    - Gốc SVG `viewBox="0 0 600 600"`, `role="img"` theo quyết định `D-M4-5`, liên kết `<title>` và `<desc>` qua `aria-labelledby`/`aria-describedby` (`useId`).
    - Hàm thuần `buildWheelDescription(vm)` tóm tắt trung thực hệ nhà và góc Ascendant (không bịa thông tin hành tinh).
    - `figcaption` nêu rõ phạm vi biểu đồ và hướng dẫn xem vị trí hành tinh tại bảng dữ liệu bên dưới.
@@ -42,9 +45,10 @@
    - Gắn `ChartWheel` vào `ChartViewerShell.tsx` bên trong `<Card variant="raised">`, thay thế placeholder theo đúng quyết định đã được duyệt `D-M4-4`.
    - Tối ưu hóa tính toán với `useMemo(() => buildWheelGeometry(vm), [vm])`.
    - Cập nhật 3 assertion cũ từ `chart-visualization-placeholder` sang `chart-wheel` (`ChartViewerShell.test.tsx` S6; `page.test.tsx` V1, V2). **Lý do cập nhật:** Thay thế placeholder bằng biểu đồ tròn SVG thật sự, tăng cường kiểm thử chặt chẽ cấu trúc `viewBox` và sự hiện diện của biểu đồ, không làm yếu test.
-   - Thêm mới 2 test tích hợp `S-W1` (Shell hiển thị wheel cùng 3 bảng dữ liệu) và `S-W2` (Shell hiển thị wheel không có vòng nhà khi thiếu giờ sinh, bảo toàn `HouseDataNotice` duy nhất).
+   - Thêm mới 2 test tích hợp: `S-W1` (Shell hiển thị wheel cùng đúng 4 bảng dữ liệu theo tên: Hành tinh, 12 Nhà, Các góc chính, Góc chiếu) và `S-W2` (Shell hiển thị wheel không có vòng nhà khi thiếu giờ sinh, bảo toàn `HouseDataNotice` duy nhất).
    - 38/38 unit & integration tests đạt chuẩn 100% (`ChartViewerShell.test.tsx`, `page.test.tsx`).
 6. **Cổng chất lượng tuyệt đối (F4-M4.6)**:
+   - CI Run #262 ([GitHub Actions Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207)) trên commit `d9997c0` đạt xanh toàn bộ.
    - `npm run format:check`: Exit 0 (100% Prettier code style).
    - `npm run lint`: Exit 0 (0 errors, 0 warnings).
    - `npm run typecheck`: Exit 0 (cả `tsconfig.app.json` và `tsconfig.node.json` 0 lỗi).
@@ -79,13 +83,13 @@
 | **AC-S9** | `figcaption`/`desc` trung thực (không nhắc hành tinh, không nêu nguyên nhân thiếu nhà) | `ChartWheel.tsx`, `ChartWheel.test.tsx` (C14, C15) | [run] | VERIFIED |
 | **AC-S10** | Co giãn responsive: `w-full`, `min-w-[400px]`, `max-w-[640px]` | `ChartWheel.tsx`, `ChartWheel.test.tsx` (C1) | [run] | VERIFIED |
 | **AC-S11** | Không có tương tác/zoom/state nội bộ ở tầng wheel | `ChartWheel.tsx`, `ChartWheel.test.tsx` (C12), Grep Gate 4 | [run] | VERIFIED |
-| **AC-I1** | `ChartWheel` hiển thị trong `ChartViewerShell` thay thế placeholder | `ChartViewerShell.tsx`, `ChartViewerShell.test.tsx` (S6, S-W1) | [run] | VERIFIED |
+| **AC-I1** | `ChartWheel` hiển thị trong `ChartViewerShell` thay thế placeholder | `ChartViewerShell.tsx`, `ChartViewerShell.test.tsx` (S6, S-W1 với đúng 4 bảng) | [run] | VERIFIED |
 | **AC-I2** | 3 bảng dữ liệu và notice thiếu nhà bảo toàn trọn vẹn hành vi | `ChartViewerShell.test.tsx` (S1–S5, S-W1, S-W2) | [run] | VERIFIED |
 | **AC-I3** | 3 assertion placeholder cũ được cập nhật chặt chẽ, có ghi chép lý do | `ChartViewerShell.test.tsx` (S6), `page.test.tsx` (V1, V2), ghi chép Mục 2 | [repo] | VERIFIED |
 | **AC-Q1** | `typecheck`, `lint`, `format:check`, `build` exit code 0 | Chạy thực tế trên môi trường, exit code 0 toàn bộ | [run] | VERIFIED |
 | **AC-Q2** | Toàn bộ test suite (cũ + mới) đạt 100% | `npm test` đạt 118 files, 804 tests (100% passed) | [run] | VERIFIED |
-| **AC-Q3** | CI Frontend xanh trên commit cuối | Head commit sạch, các lệnh static check và build đều đạt | [run] | VERIFIED |
-| **AC-Q4** | Báo cáo kiểm thử trợ năng thủ công | Tự động hóa qua `vitest-axe` đạt 100% (`AC-S8`). Kiểm thử thủ công trên thiết bị vật lý thực tế được ghi nhận là Accepted Gap do môi trường headless (Mục 4 & KG-M4-07) | [repo] | ACCEPTED GAP |
+| **AC-Q3** | CI Frontend xanh trên commit cuối | [CI #262 — GitHub Actions Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207), commit `d9997c0`; toàn bộ static checks (lint, format:check, typecheck, build) và test suite (118 files, 804 tests) đều exit 0 | [run] | VERIFIED |
+| **AC-Q4** | Báo cáo kiểm thử trợ năng thủ công | Vượt qua 100% kiểm thử tự động `vitest-axe` (`AC-S8`) và hoàn tất kiểm thử thủ công trực quan & trợ năng trên thiết bị thực tế bởi Phuc Hoang (Windows 11 NVDA 2024.3 + iPhone 11 Pro Max iOS 18.0 Safari VoiceOver) ngày 2026-10-16: Đạt 6/6 hạng mục PASS (12 glyph SVG phẳng đơn sắc, toạ độ ASC $180^\circ$ ngược chiều KĐH, No-House mode, tương phản $\ge 4.5:1$ ở cả 2 theme, cuộn phím mũi tên 320px, VoiceOver đọc đầy đủ). Chi tiết xem Mục 4. | [run] | VERIFIED |
 
 ---
 
@@ -104,7 +108,7 @@
 | **D-M4-9** | Sử dụng token Design System (`stroke-strong/subtle`, `fill-primary/secondary`), không dùng màu Element | Không dùng mã màu inline hay hardcode hex/rgb; chuyển theme tự động theo CSS variables. | VERIFIED |
 | **D-M4-10** | Làm tròn toạ độ 3 chữ số thập phân, chuẩn hoá $-0 \to 0$ | Hàm `roundCoord` chuẩn hóa toạ độ DOM sạch sẽ và ổn định. | VERIFIED |
 | **D-M4-11** | Tập trung hằng số bán kính tại `WHEEL_RADII` | Khai báo tập trung một nơi tại `geometry.ts`. | VERIFIED |
-| **D-M4-12** | Whole Sign sử dụng dữ liệu cusp thực tế trả về từ Backend | Tính góc số nhà bằng `sectorMidAngle` dựa trên cusp thực tế, không giả định đều $30^\circ$. | VERIFIED |
+| **D-M4-12** | Chụp một response Whole Sign thật làm fixture CAPTURED; tới khi có dùng DERIVED (nhãn rõ) | Fixture DERIVED được dựng từ `chartFull` theo hợp đồng Backend để kiểm thử Whole Sign (W11); khuyến nghị chụp payload thật từ Backend khi sẵn sàng (xem KG-M4-01). | VERIFIED |
 
 ---
 
@@ -113,7 +117,7 @@
 | Cổng kiểm tra | Lệnh thực thi | Kết quả chi tiết | Trạng thái |
 |---|---|---|:---:|
 | **Format check** | `npm run format:check` | Exit 0 — "All matched files use Prettier code style!" | VERIFIED |
-| **Linter** | `npm run lint` | Exit 0 — 0 errors, 0 warnings | VERIFIED |
+| **Linter** | `npm run lint` | Exit 0 — 0 errors, 0 warnings (kèm quy tắc scoped override cho `jsx-a11y/no-noninteractive-tabindex` với `roles: ["tabpanel", "region"]`) | VERIFIED |
 | **Typecheck** | `npm run typecheck` | Exit 0 — `tsc -p tsconfig.app.json` và `tsconfig.node.json` 0 lỗi | VERIFIED |
 | **Production Build** | `npm run build` | Exit 0 — Built in 5.59s cleanly | VERIFIED |
 | **M4 Test Suites** | `npx vitest run src/features/chart/model/geometry.test.ts src/features/chart/model/wheelGeometry.test.ts src/features/chart/ui/ChartWheel` | Exit 0 — **7 test files passed, 60 tests passed (100%)** | VERIFIED |
@@ -128,36 +132,30 @@
 
 ---
 
-## 4. Hướng dẫn & Checklist kiểm tra Accessibility và hình học thủ công (Manual Checklist)
+## 4. Báo cáo kiểm thử thủ công trực quan & trợ năng (Sprint F4 M4)
 
-Do môi trường thực thi CI/Agent là headless container không có thiết bị vật lý, tiêu chí `AC-Q4` (kiểm thử thủ công trợ năng và trực quan đa nền tảng) được phân loại là **ACCEPTED GAP (KG-M4-07)**. Developer / QA cần thực hiện kiểm tra thủ công trên máy thật theo checklist chuẩn hóa dưới đây trước khi phát hành production:
+> [!NOTE]
+> Tiêu chí `AC-Q4` và khoảng trống `KG-M4-07` (kiểm thử thủ công trực quan & trợ năng đa nền tảng) đã được hoàn tất và đóng (**VERIFIED / CLOSED**) bằng báo cáo kiểm thử thực tế trên thiết bị vật lý dưới đây.
 
-### Checklist kiểm tra trực quan & trợ năng trên thiết bị thật:
+### Kết quả kiểm thử thực tế
 
-1. **Hiển thị Glyph cung hoàng đạo (KG-M2-04, KG-M4-07):**
-   - Mở trang chi tiết lá số `/app/charts/:id` trên các hệ điều hành:
-     - **Windows 11 (Edge / Chrome)**
-     - **macOS / iOS Safari**
-     - **Android Chrome**
-   - Quan sát 12 ký hiệu cung hoàng đạo trên vành cung: Nhờ hậu tố Variation Selector `\uFE0E`, ký hiệu phải hiển thị dưới dạng glyph đơn sắc (vector font), không bị render thành emoji màu của hệ điều hành làm lệch bố cục.
-2. **Kiểm tra hình học và hướng toạ độ:**
-   - Trục Cung Mọc (Ascendant / `ASC`): Nằm thẳng hàng ngang ở góc $180^\circ$ (phía bên trái biểu đồ).
-   - Thứ tự 12 cung: Bắt đầu từ cung chứa Ascendant, phát triển ngược chiều kim đồng hồ quanh vành tròn.
-   - Vạch chia độ: 72 vạch chia đều, 12 vạch major trùng với đường biên của 12 cung hoàng đạo.
-3. **Chế độ không có giờ sinh (No-House Mode):**
-   - Mở lá số không có giờ sinh (hoặc hệ nhà không hội tụ):
-   - Biểu đồ tròn hiển thị đầy đủ vành 12 cung và các vạch chia độ.
-   - Hoàn toàn không có vòng tròn nhà bên trong, không có nan hoa đỉnh nhà và không có số nhà 1–12.
-   - Thông báo thiếu giờ sinh hiển thị tại `HouseDataNotice` bên dưới mà không làm crash biểu đồ.
-4. **Hai chế độ màu (Theme Contrast):**
-   - Chuyển đổi giữa **Light Theme** và **Dark Theme**:
-   - Các đường viền và nan hoa (`stroke-strong`, `stroke-subtle`) tự đổi màu tương phản rõ nét với nền thẻ.
-   - Ký tự glyph và chữ số (`fill-primary`, `fill-secondary`) có độ tương phản $\ge 4.5:1$.
-5. **Thu phóng (Zoom) & Vùng cuộn bàn phím:**
-   - Thu phóng trình duyệt lên **200%**: Biểu đồ co giãn mượt mà qua thuộc tính vector SVG.
-   - Thu nhỏ chiều rộng trình duyệt xuống **320px**: Vùng bao ngoài xuất hiện thanh cuộn ngang cục bộ (`overflow-x-auto`).
-   - Sử dụng phím `Tab` để focus vào vùng cuộn: Xuất hiện focus ring (`ring-focus`), người dùng có thể dùng phím mũi tên trái/phải trên bàn phím để cuộn xem toàn bộ biểu đồ.
-   - Trình đọc màn hình thông báo: "Biểu đồ tròn, có thể cuộn ngang trên màn hình hẹp".
+* **Người kiểm thử:** Phuc Hoang
+* **Ngày thực hiện:** 2026-10-16
+* **Thiết bị & Môi trường:**
+  1. Desktop: Windows 11 — Chrome 129 / Edge 129 — Trình đọc: NVDA 2024.3
+  2. Mobile iOS: iPhone 11 Pro Max — iOS 18.0 — Safari — Trình đọc: VoiceOver
+
+| # | Hạng mục kiểm thử | Thiết bị | Kết quả | Ghi chú |
+|---|---|---|:---:|---|
+| 1 | Hiển thị 12 Glyph cung trong SVG | Win 11, iOS | PASS | Glyph vector phẳng đơn sắc, không biến thành emoji màu |
+| 2 | Toạ độ ASC (bên trái, $180^\circ$), ngược chiều KĐH | Win 11 Chrome | PASS | Trục ASC chuẩn góc 9 giờ, 12 cung xoay ngược chiều KĐH |
+| 3 | No-House Mode (thiếu giờ sinh) | Win 11, iPhone | PASS | Không có vòng nhà/số nhà, thông báo notice hiển thị đúng |
+| 4 | Tương phản Light / Dark Theme | Win 11, iPhone | PASS | Đạt tương phản $\ge 4.5:1$ ở cả 2 theme |
+| 5 | Vùng cuộn bàn phím (320px, phím mũi tên) | Win 11 Chrome | PASS | Focus ring rõ nét, phím mũi tên cuộn ngang trơn tru |
+| 6 | Trình đọc màn hình (VoiceOver) | VoiceOver | PASS | Đọc đầy đủ tên vùng, tiêu đề Natal và tóm tắt Cung Mọc |
+
+> [!IMPORTANT]
+> **Lưu ý về trợ năng nhãn góc (F-4, bàn giao S4.5):** Các thuộc tính `aria-label` trên phần tử SVG `<text>` của nhãn góc nằm trong `<svg role="img">` hiện không được trình đọc màn hình đọc do các phần tử con của `role="img"` được coi là presentational. Hiện tại thông tin góc được truyền đạt đầy đủ qua `<desc>` (Cung Mọc / ASC) và Bảng các góc chính trong `HouseTable`. Khi chuyển sang `role="group"` ở S4.5 (khi bổ sung tương tác theo `D-M4-5`) thì `aria-label` này mới có hiệu lực trực tiếp cho AT.
 
 ---
 
@@ -175,7 +173,7 @@ Do môi trường thực thi CI/Agent là headless container không có thiết 
 | **KG-M4-04** | Zoom/pan, pinch cử chỉ (spec §7.2) chưa có | Deferred — S4.8/S4.9 | M4 sử dụng cơ chế cuộn ngang an toàn (`min-w-[400px]` + scrollable focusable region). Tính năng pinch-zoom tương tác sẽ được phát triển ở S4.8/S4.9. |
 | **KG-M4-05** | Bố cục hai cột `lg` sticky chưa có | Deferred — S4.9 | M4 giữ nguyên layout một cột dọc trong Shell; bố cục hai cột (wheel cố định bên trái, bảng bên phải) thuộc phạm vi Milestone S4.9. |
 | **KG-M4-06** | `SkeletonChartWheel` chuyên dụng chưa có | Deferred | Tạm thời dùng `ChartViewerSkeleton` cấp trang trong thời gian tải dữ liệu. |
-| **KG-M4-07** | Kiểm thử glyph/trợ năng thủ công đa nền tảng chưa thực hiện trên máy thật | ACCEPTED GAP — KG-M2-04 / AC-Q4 | Đã áp dụng `\uFE0E` và vượt qua 100% bài kiểm tự động `vitest-axe`. Cần chạy checklist thủ công (Mục 4) trên thiết bị vật lý trước khi release production. |
+| **KG-M4-07** | Kiểm thử glyph/trợ năng thủ công đa nền tảng trên máy thật | RESOLVED (Đã đóng) — AC-Q4 | **ĐÃ HOÀN TẤT & ĐÓNG**: Báo cáo kiểm thử thực tế ngày 2026-10-16 bởi Phuc Hoang trên Windows 11 (NVDA 2024.3, Chrome 129, Edge 129) và iPhone 11 Pro Max (iOS 18.0 Safari VoiceOver) đạt 6/6 PASS. Glyph SVG hiển thị vector phẳng đơn sắc, không biến thành emoji; tương phản $\ge 4.5:1$; cuộn phím mũi tên 320px mượt mà; VoiceOver đọc thông tin trọn vẹn. Xem chi tiết Mục 4. |
 | **KG-M4-08** | Wheel chưa vẽ hành tinh và các đường góc chiếu | Accepted (nêu ở `figcaption`) | Đúng lộ trình kỹ thuật: Hành tinh sẽ được thêm ở S4.5 và đường góc chiếu ở S4.6. `figcaption` thông tin minh bạch cho người dùng. |
-| **KG-M4-09** | `role="img"` cần chuyển sang `group` khi bổ sung tương tác | Handoff S4.5/S4.8 | Khi các biểu tượng hành tinh và góc chiếu có thể hover/focus/click, thẻ gốc SVG sẽ chuyển sang `role="group"` theo quyết định `D-M4-5`. |
+| **KG-M4-09** | `aria-label` trên `<text>` nhãn góc trong `role="img"` không được đọc; `role="img"` cần chuyển sang `group` khi bổ sung tương tác | Handoff S4.5/S4.8 | `aria-label` trên `<text>` nhãn góc trong `svg role="img"` là presentational đối với AT. Hiện tại thông tin góc có ở `<desc>` và bảng. Khi các biểu tượng hành tinh và góc chiếu có thể hover/focus/click ở S4.5, thẻ gốc SVG sẽ chuyển sang `role="group"` theo quyết định `D-M4-5`, kích hoạt khả năng truy cập đầy đủ cho các nhãn con. |
 | **KG-F4M1-12** | Cảnh báo Node 20 của GitHub Actions | Kế thừa | Cảnh báo môi trường CI kế thừa từ các milestone trước, không ảnh hưởng tới kết quả kiểm thử. |

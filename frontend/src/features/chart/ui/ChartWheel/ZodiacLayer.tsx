@@ -42,6 +42,7 @@ export function ZodiacLayer({
       {/* 12 zodiac sign cells */}
       {signs.map((sign) => (
         <g key={sign.key} data-sign={sign.key}>
+          {/* Đường bao ô cung (arcPath): hiện fill="none" không stroke để dành làm vùng hit-area / tương tác chọn cung cho S4.8 */}
           <path d={sign.path} fill="none" />
           <line
             x1={sign.boundary.x1}

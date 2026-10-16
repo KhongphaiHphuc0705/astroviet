@@ -37,6 +37,12 @@ export default tseslint.config(
           ol: ["list"],
         },
       ],
+      "jsx-a11y/no-noninteractive-tabindex": [
+        "error",
+        {
+          roles: ["tabpanel", "region"],
+        },
+      ],
       "no-console": ["error", { allow: ["warn", "error"] }],
       "react-hooks/exhaustive-deps": "error",
       "import/order": [

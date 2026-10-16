@@ -58,11 +58,9 @@ export function ChartWheel({ vm, geometry, className }: ChartWheelProps) {
   return (
     <figure data-testid="chart-wheel" className={className}>
       <div
-        ref={(el) => {
-          if (el) el.tabIndex = 0;
-        }}
         role="region"
         aria-label="Biểu đồ tròn, có thể cuộn ngang trên màn hình hẹp"
+        tabIndex={0}
         className="overflow-x-auto rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         <svg
