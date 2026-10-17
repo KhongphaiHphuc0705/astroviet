@@ -8,6 +8,7 @@ import {
   sectorMidAngle,
   toScreenAngle,
   WHEEL_CENTER,
+  WHEEL_MIN_DISPLAY_PX,
   WHEEL_RADII,
   WHEEL_VIEWBOX_SIZE,
 } from "./geometry";
@@ -173,6 +174,7 @@ describe("geometry primitives (M4.1: G1 - G10)", () => {
     it("exports layout constants with correct values", () => {
       expect(WHEEL_VIEWBOX_SIZE).toBe(600);
       expect(WHEEL_CENTER).toBe(300);
+      expect(WHEEL_MIN_DISPLAY_PX).toBe(400);
       expect(WHEEL_RADII.signOuter).toBe(260);
       expect(WHEEL_RADII.signInner).toBe(225);
       expect(WHEEL_RADII.tickOuter).toBe(225);
@@ -180,6 +182,11 @@ describe("geometry primitives (M4.1: G1 - G10)", () => {
       expect(WHEEL_RADII.houseOuter).toBe(215);
       expect(WHEEL_RADII.houseInner).toBe(175);
       expect(WHEEL_RADII.angleLabel).toBe(282);
+      expect(WHEEL_RADII.planetMarkerOuter).toBe(175);
+      expect(WHEEL_RADII.planetMarkerInner).toBe(168);
+      expect(WHEEL_RADII.planetLaneA).toBe(141);
+      expect(WHEEL_RADII.planetLaneB).toBe(146);
+      expect(WHEEL_RADII.planetZoneInner).toBe(114);
     });
   });
 });

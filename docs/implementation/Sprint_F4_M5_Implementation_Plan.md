@@ -3,7 +3,7 @@
 
 **Phiên bản:** v1.0 (bản nháp để owner duyệt) · **Ngày audit:** 2026-10-17 · **Repo:** `KhongphaiHphuc0705/astroviet`, nhánh `dev`, HEAD `398d68b`
 **Phạm vi tài liệu:** chỉ lập kế hoạch. Không có file nào trong repo bị sửa; không cài dependency vào repo.
-**Vị trí đề xuất khi commit:** `docs/implementation/Sprint_F4_S4.5_Implementation_Plan.md` (blueprint tạm thời, xoá khi S4.5 đóng — theo quy ước đã chốt; chỉ Evidence Matrix được lưu archive).
+**Vị trí đề xuất khi commit:** `docs/implementation/Sprint_F4_S4_M5_Implementation_Plan.md` (blueprint tạm thời, xoá khi S4.5 đóng — theo quy ước đã chốt; chỉ Evidence Matrix được lưu archive).
 
 **Quy ước trạng thái:** `VERIFIED` (đã đọc mã/chạy lệnh trong audit) · `PARTIALLY VERIFIED` · `UNVERIFIED` · `BLOCKED` · `DEFERRED` · `NOT APPLICABLE`.
 **Nguồn bằng chứng:** `[repo]` đọc mã/tài liệu · `[run]` chạy lệnh thực tế trong sandbox · `[proto]` prototype tạm ngoài repo (không phải kết quả nghiệm thu) · `[owner]` quyết định của owner.
@@ -21,9 +21,9 @@ Kết quả audit có **bốn phát hiện làm thay đổi thiết kế** so v�
 3. **Mâu thuẫn trợ năng đã hẹn từ M4.** `D-M4-5`/`KG-M4-09` hẹn đổi `svg role="img"` → `role="group"` "ở S4.5/S4.8"; F4 plan §a11y (dòng 425) mô tả `role="button"` — nhưng prompt S4.5 cấm ngữ nghĩa tương tác. Cần chốt: S4.5 đổi sang `group` + từng hành tinh `role="img"` (không tương tác); `button` để S4.8.
 4. **Vị trí vạch đánh dấu:** F4 plan §18 ghi "vạch nhỏ trên vòng chia độ" (`r 215–225`). Đường nối từ đó vào vùng nhãn sẽ **cắt vòng nhà** (số nhà ở `r=195`, 12 đường đỉnh nhà). Đề xuất đặt vạch ở **mép trong vòng nhà** (`r 175→168`).
 
-**Thiết kế đề xuất (tóm tắt):** thuật toán *cluster-merge spreading* theo từng "tier": **Tier A** (glyph + `℞` + độ nguyên `D°`, một làn) nếu mọi nhãn dời ≤ ngưỡng; nếu không, **Tier B** (chỉ glyph + `℞`, một làn, không giới hạn dời, đảm bảo xếp được). Chữ luôn ≥ 16 đơn vị viewBox ⇒ ≥ 10,67 CSS px tại khung tối thiểu 400 px. Mọi tier chọn theo **toàn biểu đồ** (không trộn), tất định, không ngẫu nhiên, không thư viện mới.
+**Thiết kế đề xuất (tóm tắt):** thuật toán *cluster-merge spreading* theo từng "tier": **Tier A** (glyph + `℞` + độ nguyên `D°`, một làn) nếu mọi nhãn dời $\le 30.0^\circ$ (tính theo độ lệch cực đại quanh tâm); nếu không, **Tier B** (chỉ glyph + `℞`, một làn, không giới hạn dời, độ vẫn có ở aria/bảng). Chữ luôn $\ge 16$ đơn vị viewBox $\Rightarrow \ge 10.67\text{ CSS px}$ tại khung tối thiểu 400px. Mọi tier chọn theo **toàn biểu đồ** (không trộn), tất định, không ngẫu nhiên, không thư viện mới.
 
-**Trạng thái kết luận: `CONDITIONALLY READY`** — 6 quyết định bắt buộc (D-S45-02, 03, 04, 07, 08, 09) cần owner xác nhận trước khi viết mã (cộng 3 quyết định cho chore và 4 khuyến nghị, Mục 32); không có blocker kỹ thuật.
+**Trạng thái kết luận: `APPROVED & READY`** — Toàn bộ 6 quyết định bắt buộc (D-S45-02, 03, 04, 07, 08, 09) và các nguyên tắc triển khai đã được Owner chính thức phê duyệt; Task S4.5.0 đã hoàn tất; sẵn sàng triển khai mã nguồn từ S4.5.1.
 
 ---
 
@@ -57,6 +57,16 @@ Kết quả audit có **bốn phát hiện làm thay đổi thiết kế** so v�
 8. Chữ ≥ 10 CSS px tại kích thước hiển thị tối thiểu được hỗ trợ.
 9. Unit test thuật toán + component test SVG/aria.
 10. **Chore S4.5.0** (do owner bàn giao từ review M4): xem Mục 26.
+
+### 3.1 Ràng buộc thực thi bắt buộc (Implementation Constraints)
+
+1. **Bảo toàn vị trí thật (True Positions):** Toạ độ vạch marker luôn ở vị trí góc thật của hành tinh (`r = 175 → 168`); chỉ có vị trí hộp nhãn mới được phép dịch dời để chống va chạm. Không bao giờ dời marker để xử lý va chạm nhãn.
+2. **Dàn nhãn tất định (Deterministic Layout):** Thuật toán dàn nhãn phải thuần túy, tất định 100%, không phụ thuộc thứ tự mảng đầu vào và không sử dụng bất kỳ yếu tố ngẫu nhiên/thời gian nào.
+3. **Xử lý biên $0^\circ/360^\circ$ tuần hoàn (Circular Adjacency):** Xử lý $0^\circ$ và $360^\circ$ như các vị trí kề cận trên một vòng tròn đóng.
+4. **Cỡ chữ hiển thị $\ge 10\text{ CSS px}$:** Tuyệt đối không thu nhỏ cỡ chữ dưới 10 CSS px tại kích thước biểu đồ tối thiểu được hỗ trợ (400px).
+5. **Không cài đặt hành vi tương tác:** Tuyệt đối không gắn `role="button"`, `tabIndex`, hover, click, hay chọn hành tinh trong S4.5 (phạm vi riêng của S4.8).
+6. **Bảo toàn ranh giới S4.6 & bán kính hub:** Giữ việc vẽ đường góc chiếu ở S4.6 và áp dụng ràng buộc bán kính hub aspect tối đa $\le 108$ (vùng nhãn hành tinh chiếm `[114, 167)`).
+7. **Bất biến hợp đồng dữ liệu:** Không thay đổi hay mở rộng View Model (`ChartViewModel`) và hợp đồng tính toán Backend để phục vụ các quyết định này.
 
 ---
 
@@ -182,7 +192,7 @@ Thứ tự vẽ SVG: `Zodiac → Tick → House → Angle → Planet` (hành tin
 | Nguồn | `PlanetVM.glyph` (từ `PLANET_LABELS`), đúng UI Spec §5.1 và Design System §2 (glyph Unicode là nguồn duy nhất cho biểu tượng domain; cấm trộn Lucide) |
 | Định danh ổn định | `data-planet={id}` (id = `key`, hậu tố `#2`… khi trùng) |
 | Kết xuất | `<text textAnchor="middle" dominantBaseline="central" fontSize={18} className="fill-primary font-display" aria-hidden>`; **cùng mẫu** `ZodiacLayer` |
-| `U+FE0E` | thêm vào **nguồn** `PLANET_LABELS` cho **Venus (♀ U+2640) và Mars (♂ U+2642)** — hai ký tự có biến thể emoji; các hành tinh còn lại không cần. Sửa ở nguồn để bảng và wheel nhất quán. **UNVERIFIED:** cần đối chiếu `emoji-variation-sequences.txt` của Unicode trước khi chốt danh sách; F4 plan §18 yêu cầu `U+FE0E` cho glyph hành tinh |
+| `U+FE0E` | thêm vào **nguồn** `PLANET_LABELS` cho **Venus (♀ U+2640) và Mars (♂ U+2642)** — **ĐÃ XÁC MINH UNICODE**: Dữ liệu Unicode `emoji-data.txt` (2024-05-01) liệt kê U+2640 và U+2642 là Emoji (E4.0) có chuỗi Variation Sequence `\uFE0E` chuẩn. Kiểm chứng bằng Python `emoji 2.16.0` xác nhận trong 10 glyph hành tinh, **chỉ ♀ và ♂ là emoji**, còn `℞` và 8 glyph khác thì không. Sửa ở nguồn để bảng và wheel nhất quán. Kiểm thử trực quan trên trình duyệt thật vẫn là bước bắt buộc (22.4 #1) |
 | Fallback khi `glyph === null` | hiển thị 2 ký tự đầu của `nameVi` (font UI), vẫn có aria đầy đủ; test có ca `known=false` |
 | Kích thước | glyph 18 đơn vị (≥ 12 px tại 400 px); hộp ước lượng `w = 1,1 × 18 = 19,8`, `h = 18` (hệ số 1,1 bảo thủ vì font fallback không đo được) |
 | Tương phản | token `fill-primary` (M4 đã đo tương phản ≥ 4,5:1 cho cùng token ở cả 2 theme — nhưng **chưa có số đo cụ thể**, xem Mục 22.4 và Phụ lục A) |
@@ -203,15 +213,10 @@ Thứ tự vẽ SVG: `Zodiac → Tick → House → Angle → Planet` (hành tin
 | Nhãn | hộp (glyph + `℞` + độ) tại `(r_lane, θ_label)` | **có** — chỉ nhãn bị dời |
 | Leader | đoạn thẳng marker → mép nhãn | sinh ra từ hai thứ trên |
 
-**Quyết định D-S45-02 (cần owner duyệt) — vị trí marker.**
-
-| Phương án | Mô tả | Đánh giá |
-|---|---|---|
-| **A (F4 plan §18 nguyên văn)** | vạch trên vòng chia độ `r 225–215` | leader từ đó vào vùng nhãn (`r<167`) phải **cắt vòng nhà** (số nhà `r=195`, đường đỉnh nhà) ⇒ rối; trùng vị trí 72 vạch chia độ |
-| **B (đề xuất)** | vạch trên **mép trong vòng nhà**, `r 175→168` | leader ngắn, không cắt số nhà; UI Spec dòng 844 ("vòng trong = vị trí hành tinh, line nối tới vị trí chính xác") vẫn thoả |
-| C | chấm tròn tại `r=170` | mất khả năng đọc hướng; không hơn B |
-
-Hệ quả của B: khi **không có nhà** (không có vòng `r=175`), marker "lơ lửng". Giải pháp tối thiểu: `PlanetLayer` vẽ một vòng mảnh `stroke-subtle` tại `r=175` **chỉ khi** `hasHouses=false` (một `<circle>`; không phải thiết kế lại wheel). Cần owner xem trực quan — **chưa kiểm được bằng mắt trong sandbox** (UNVERIFIED).
+**Quyết định D-S45-02 (ĐÃ DUYỆT / APPROVED) — Vị trí marker:**
+Duyệt Phương án B: Đặt vạch đánh dấu vị trí hành tinh thật (true planet marker) tại mép trong vòng nhà theo quy ước toạ độ S4.4 và dải bán kính `r = 175 → 168`.
+- **Làm rõ quan trọng về baseline**: Trong repo hiện **chưa có bất kỳ baseline nào**. Đây là một vòng tròn mảnh mới (`stroke-subtle`) tại `r = 175`, **chỉ vẽ khi không có dữ liệu nhà** (`hasHouses === false`), đóng vai trò neo các vạch marker thật không bị lơ lửng. Chi tiết này là một sự chủ ý sai khác so với câu chữ của F4 plan §18 ("trên vòng chia độ"), và hiện chưa được kiểm chứng trực quan bằng mắt trên thiết bị thật (UNVERIFIED).
+- **Ràng buộc bất biến**: Tuyệt đối không dời các vạch marker thật để giải quyết va chạm nhãn. Chỉ có hộp nhãn mới được phép dời vị trí.
 
 **Hằng số mới (thêm vào `WHEEL_RADII`, cộng thêm, không đổi giá trị cũ):** `planetMarkerOuter: 175`, `planetMarkerInner: 168`, `planetLaneA: 141`, `planetLaneB: 146` (khởi điểm — hiệu chỉnh bằng test chứa góc ở Mục 18), `planetZoneInner: 114`.
 
@@ -262,15 +267,24 @@ Marker và leader **không** nằm trong đầu ra của thuật toán dàn nhã
 7. **Chuyển về góc màn hình:** `labelAngle = normalizeLongitude(q)`; `center = polarToCartesian(C, C, r, labelAngle)`.
 8. **Kiểm chứng độc lập:** (a) không cặp hộp (đã đệm `PAD`) nào giao nhau theo kiểm AABB chính xác; (b) cả 4 góc mọi hộp nằm trong vành `[planetZoneInner, planetMarkerOuter)`; (c) thứ tự cyclic của `labelAngle` bằng thứ tự cyclic của `trueAngle` (⇒ các leader của một làn không cắt nhau). Vi phạm → coi tier đó **thất bại**.
 
-### 12.3 Tier (chọn theo *toàn biểu đồ*, không trộn)
+### 12.3 Tier (chọn theo *toàn biểu đồ*, không trộn) — Quyết định D-S45-09 (ĐÃ DUYỆT / APPROVED)
+
+**Quy tắc đo ngưỡng $30.0^\circ$ chuẩn xác:**
+- Độ lệch ($\text{displacement}_i$) của một nhãn hành tinh là góc ngắn nhất giữa góc tâm hộp nhãn ($\theta_{\text{label}, i}$) và góc thật ($\theta_{\text{true}, i}$), tính theo độ quanh tâm wheel trên kết quả đã đặt xong:
+  $$\text{displacement}_i = \min\left( | \theta_{\text{label}, i} - \theta_{\text{true}, i} |, 360^\circ - | \theta_{\text{label}, i} - \theta_{\text{true}, i} | \right)$$
+- Sử dụng giá trị lớn nhất trên mọi nhãn:
+  $$\text{maxDisplacement} = \max_i (\text{displacement}_i)$$
+- **Tier A** được chọn khi $\text{maxDisplacement} \le 30.0^\circ$ (dung sai so sánh $1\times 10^{-6}$) VÀ vượt qua toàn bộ bước kiểm chứng độc lập (bước 8: AABB không giao nhau, nằm trọn trong vành, bảo toàn thứ tự cyclic). Nếu không, biểu đồ tự động chuyển sang **Tier B**.
+- **Tính bất biến tỷ lệ (Scale-invariance):** Ngưỡng là góc hình học nên không đổi theo cỡ hiển thị; tại làn bán kính $r \approx 141$, góc $30^\circ$ tương đương cung tròn khoảng $49\text{ px}$ ở khung hiển thị 400px ($141 \times \frac{\pi}{6} \times \frac{400}{600}$) và khoảng $79\text{ px}$ ở khung hiển thị 640px ($141 \times \frac{\pi}{6} \times \frac{640}{600}$).
+- **Kiểm thử bắt buộc:** Ca $29.9^\circ$ (Tier A) so với $30.1^\circ$ (Tier B), cụm dày (stellium), và cụm vắt qua $0^\circ$. Đo kích thước tối thiểu bằng hằng số toán học kết hợp kiểm thủ công (DevTools Computed Style), do jsdom không đo được layout.
 
 | Tier | Đơn vị nhãn | Làn | Điều kiện chấp nhận |
 |---|---|---|---|
-| **A** | glyph + `℞` (nếu có) + độ nguyên `D°` (xếp dọc) | `planetLaneA` | bước 8 đạt **và** `max|labelAngle − trueAngle| ≤ MAX_DISPLACEMENT_A_DEG` (**tạm 30°**, hiệu chỉnh ở S4.5.2) |
+| **A** | glyph + `℞` (nếu có) + độ nguyên `D°` (xếp dọc) | `planetLaneA` | bước 8 đạt **và** $\text{maxDisplacement} \le 30.0^\circ$ |
 | **B** | glyph + `℞`; **bỏ dòng độ trên wheel** (độ vẫn có trong aria và bảng) | `planetLaneB` | bước 8 đạt; **không giới hạn dời** — luôn khả thi khi `Σ footprint < 360°` (14 thân thể ≈ 220°) |
 | **Cuối** | `overflow`: chỉ vẽ marker + aria, không vẽ chữ nhãn | — | chỉ khi Tier B vẫn thất bại (không xảy ra với ≤ 14 thân thể); ghi chú trong `figcaption` |
 
-Lý do chọn tier toàn cục: tránh một lá số có nhãn độ ở vài hành tinh và không có ở vài hành tinh khác (khó đọc, khó kiểm thử).
+Lý do chọn tier toàn cục: tránh một lá số có nhãn độ ở vài hành tinh và không có ở vài hành tinh khác (khó đọc, khó kiểm thử). Đánh đổi UX này đã được Owner chính thức phê duyệt.
 
 ### 12.4 Độ phức tạp và tính tất định
 
@@ -356,12 +370,13 @@ Dung sai: so sánh góc `toBeCloseTo(x, 3)` (khớp `roundCoord` 3 chữ số).
 
 **Hợp đồng đã kiểm:** wheel và bảng đều đọc `PlanetVM.degreeLabel` ⇐ `formatDegreeMinute(degreeInSign)`: `D°MM′`, **cắt xuống phút** (D-M2-1/2), không làm tròn ⇒ **không có "nhớ" qua biên cung**; `29°59′59″` hiển thị `29°59′`, không bao giờ `30°00′` (trừ lỗi biên dưới đây).
 
-**Quyết định D-S45-04 (cần owner duyệt) — định dạng trên wheel.**
+**Quyết định D-S45-04 (ĐÃ DUYỆT / APPROVED) — Định dạng nhãn độ trên wheel:**
+Hiển thị nhãn độ dạng `D°`, được suy ra từ chuỗi `degreeLabel` có sẵn qua hàm thuần `formatDegreeOnly`. Tuyệt đối không thay đổi hay mở rộng View Model. Giữ định dạng nhất quán với Bảng Hành tinh (Planet Table) và bảo toàn đầy đủ biểu diễn trợ năng (accessible representation) khi nhãn độ trên wheel bị ẩn đi ở Tier B.
 
 | Phương án | Mô tả | Tác động |
 |---|---|---|
 | 1 | `D°MM′` đầy đủ (dùng nguyên `degreeLabel`) | không đổi VM; **gần như luôn rơi xuống Tier B** với lá số có cụm (xem 12.6) |
-| **2 (đề xuất)** | **độ nguyên `D°`**, suy ra từ `degreeLabel` bằng hàm thuần `formatDegreeOnly()` trong `format.ts` (cắt phần trước `°`) | **không sửa VM**; cùng nguồn chuỗi với bảng ⇒ nhất quán *theo cấu trúc* (độ trên wheel = phần độ của bảng); nhiều lá số đạt Tier A |
+| **2 (ĐÃ CHỌN)** | **độ nguyên `D°`**, suy ra từ `degreeLabel` bằng hàm thuần `formatDegreeOnly()` trong `format.ts` (cắt phần trước `°`) | **không sửa VM**; cùng nguồn chuỗi với bảng ⇒ nhất quán *theo cấu trúc* (độ trên wheel = phần độ của bảng); nhiều lá số đạt Tier A |
 | 3 | thêm `PlanetVM.degreeInSign: number` | sửa hợp đồng VM, có thể làm vỡ `toEqual` của test VM; không cần thiết |
 
 Quy tắc: không lặp glyph cung trên nhãn (glyph cung đã ở vành ngoài; aria có tên cung). Dòng độ đặt **dưới** glyph, căn giữa; `℞` ở **trên-phải** glyph ⇒ không chạm dòng độ. Khi nhãn bị dời, dòng độ đi theo nhãn (cùng hộp). Dữ liệu thiên văn không bị đổi: chỉ cắt chuỗi.
@@ -449,7 +464,10 @@ interface PlanetLayerProps {
 
 ## 20. Accessibility
 
-**Quyết định D-S45-07 (cần owner duyệt):** đổi gốc `<svg role="img">` → **`role="group"`** (giữ `aria-labelledby`/`aria-describedby`), mỗi hành tinh là `<g role="img" aria-label="…">`. Lý do: dưới `role="img"` mọi phần tử con là *presentational* ⇒ tên hành tinh không bao giờ được đọc (chính là `KG-M4-09`); yêu cầu "tên truy cập ổn định cho từng hành tinh" của prompt không đạt được nếu không đổi. **Không** thêm `role="button"`, `tabIndex`, `onClick` (S4.8).
+**Quyết định D-S45-07 (ĐÃ DUYỆT & XÁC NHẬN / APPROVED) — Ngữ nghĩa trợ năng SVG:**
+Đổi thẻ gốc `<svg role="img">` sang **`role="group"`** (giữ nguyên `aria-labelledby`/`aria-describedby`), và mỗi biểu diễn hành tinh không tương tác là `<g role="img" aria-label="…">`.
+- **Xác nhận làm rõ cốt lõi**: Khái niệm *"planet SVG group"* trong quyết định được thống nhất bắt buộc phải hiểu là **thẻ gốc `<svg>` đổi sang `role="group"`**. Nếu chỉ đổi nhóm `<g>` hành tinh bên trong thành `role="group"` trong khi thẻ gốc `<svg>` bên ngoài vẫn giữ `role="img"`, thì theo quy chuẩn accessibility W3C/ARIA, toàn bộ cây con của một `role="img"` đều bị xem là presentational và tên/aria của từng hành tinh vẫn **hoàn toàn không được trình đọc màn hình đọc**. Việc đổi gốc `<svg>` sang `role="group"` cho phép các nhóm con `<g role="img" aria-label="...">` được công nhận là các node trợ năng độc lập.
+- **Ràng buộc tương tác**: Tuyệt đối **không** thêm `role="button"`, `tabIndex`, `onClick` hay bất kỳ hành vi hover/select nào tại S4.5 (các tính năng tương tác được dành riêng cho S4.8).
 
 | Yêu cầu | Thiết kế |
 |---|---|
@@ -807,23 +825,23 @@ Chỉ dùng script **có thật** (`frontend/package.json`): `lint`, `format:che
 
 ## 32. Known Gaps / Decisions Required
 
-### 32.1 Quyết định cần owner (đề xuất mặc định in đậm)
+### 32.1 Quyết định kỹ thuật (Đã được Owner chính thức phê duyệt)
 
-| ID | Nội dung | Mặc định đề xuất | Bắt buộc trước mã? |
-|---|---|---|---|
-| D-S45-02 | Vị trí marker | **B**: mép trong vòng nhà `r 175→168` + baseline khi không có nhà (lệch F4 plan §18 chữ nghĩa "trên vòng chia độ") | Có |
-| D-S45-03 | Phối hợp bán kính với S4.6: vùng nhãn `[114, 167)` ⇒ hub aspect ≤ 108 (F4 plan ghi 110) | **chấp nhận**, chốt hub ≤ 108 khi lập plan S4.6 | Có |
-| D-S45-04 | Nhãn độ trên wheel | **`D°` suy ra từ `degreeLabel`** (không sửa VM) | Có |
-| D-S45-07 | `svg role="group"` + từng hành tinh `role="img"` (không tương tác) | **Đồng ý** | Có |
-| D-S45-08 | Thêm `U+FE0E` cho Venus/Mars ở `PLANET_LABELS` (đổi cả bảng) | **Đồng ý** (sau khi đối chiếu danh sách biến thể emoji của Unicode) | Có |
-| D-S45-09 | Tier B bỏ nhãn độ trên wheel khi cụm dày; ngưỡng A tạm 30° | **Đồng ý**; đây là đánh đổi UX cần xem trực quan | Có |
-| D-S45-10 | Copy mới của `figcaption`/`<desc>` | soạn trong S4.5.4, owner duyệt | Không |
-| D-S45-12 | Sửa biên `formatDegreeMinute` (`29.99999999999 → 30°00′`) | **kẹp** ở `29°59′` cho miền độ-trong-cung; thuộc hợp đồng M2 | Không (KG-S45-01 nếu hoãn) |
-| D-S45-13 | Một file (`labelLayout.ts`) hay hai (`+ planetGeometry.ts`) | **hai file** (mirror D-M4-8) | Không |
-| D-S45-14 | `role="img"` cho `<text>` nhãn góc (đóng KG-M4-09) | **Đồng ý** | Không |
-| D-C1 | `lint-staged`/typecheck | **`npm run typecheck` toàn dự án nếu đo ≤ 10 s**, nếu không chuyển `pre-push` | Có (cho S4.5.0b) |
-| D-C2 | Giấy phép: README gốc ghi **MIT**, không tìm thấy file `LICENSE` ở độ sâu ≤ 3 | owner quyết giấy phép thực tế rồi mới sửa README + thêm `LICENSE`; **không** nằm trong chore nếu chưa quyết | Không |
-| D-C3 | Quy ước *Evidence commit* (Mục 26, S4.5.0) | **đồng ý** | Có (cho S4.5.0a) |
+| ID | Nội dung | Quyết định đã chốt | Trạng thái phê duyệt |
+|---|---|---|:---:|
+| **D-S45-02** | Vị trí marker hành tinh | **Phương án B:** Đặt tại mép trong vòng nhà `r 175→168` theo toạ độ thật; vẽ baseline mảnh tại `r=175` khi `!hasHouses` (repo chưa có baseline nào); không dời marker khi va chạm | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-03** | Phối hợp bán kính với S4.6 | Vùng nhãn hành tinh `[114, 167)` và chốt bán kính hub aspect tối đa $\le 108$ (chủ ý thay thế con số 110 ở plan cũ) | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-04** | Nhãn độ trên wheel | **Độ nguyên `D°`**, suy ra từ `degreeLabel` có sẵn qua hàm thuần `formatDegreeOnly`; tuyệt đối không sửa hay mở rộng ViewModel | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-07** | Ngữ nghĩa trợ năng SVG | **Thẻ gốc `<svg role="group">`** và mỗi biểu diễn hành tinh là `<g role="img" aria-label="...">` (xác nhận: bắt buộc đổi gốc `<svg>` sang `group` để con không bị presentational); không có `button`/`tabIndex` | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-08** | Thêm `U+FE0E` cho Venus/Mars ở `PLANET_LABELS` | Thêm `\uFE0E` cho Venus (♀) và Mars (♂). **Đã xác minh qua Unicode emoji-data.txt và Python emoji 2.16.0**: chỉ ♀ và ♂ là emoji trong 10 glyph | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-09** | Chính sách cụm dày & ngưỡng $30.0^\circ$ | **Duyệt Tier B**: Ẩn nhãn độ trên wheel khi cụm dày; độ lệch đo theo góc ngắn nhất giữa tâm hộp nhãn và góc thật quanh tâm wheel, Tier A khi $\text{maxDisplacement} \le 30.0^\circ$ | **ĐÃ DUYỆT (APPROVED)** |
+| **D-S45-10** | Copy mới của `figcaption`/`<desc>` | Soạn trong S4.5.4 theo tiêu chuẩn trợ năng | Chờ duyệt ở S4.5.4 |
+| **D-S45-12** | Sửa biên `formatDegreeMinute` (`29.99999999999 → 30°00′`) | Test đặc trưng ở S4.5.3; kẹp tại `29°59′` cho miền độ-trong-cung | Khuyến nghị duyệt |
+| **D-S45-13** | Một file (`labelLayout.ts`) hay hai (`+ planetGeometry.ts`) | **Hai file** (mirror D-M4-8: tách thuật toán dàn nhãn thuần khỏi mô hình ViewModel) | **ĐÃ CHỌN** |
+| **D-S45-14** | `role="img"` cho `<text>` nhãn góc (đóng KG-M4-09) | Thêm `role="img"` cho thẻ `<text>` trong `AngleLayer.tsx` khi gốc SVG là `role="group"` | **ĐÃ CHỌN** |
+| **D-C1** | `lint-staged`/typecheck | Chạy typecheck thật qua `node -e` trong `lint-staged` | **ĐÃ THỰC THI (S4.5.0b)** |
+| **D-C2** | Giấy phép | Owner quyết định giấy phép thực tế khi release | Ngoài scope S4.5 |
+| **D-C3** | Quy ước *Evidence commit* | `398d68b` là commit code có CI #263; commit chỉ chạm `docs/` không cần CI riêng | **ĐÃ THỰC THI (S4.5.0a)** |
 
 ### 32.2 Known Gaps ghi nhận
 
@@ -883,13 +901,13 @@ S4.5 đóng khi **tất cả** đúng:
 
 ## 35. Final Recommendation
 
-**`CONDITIONALLY READY`**
+**`APPROVED & READY`**
 
-**Điều kiện chặn (phải xong trước khi viết mã S4.5.1+):**
-1. Owner xác nhận **D-S45-02, 03, 04, 07, 08, 09** (Mục 32.1).
-2. Owner cung cấp URL CI #263 và đồng ý quy ước *Evidence commit* (D-C3) để làm S4.5.0a; chọn phương án `lint-staged` (D-C1) để làm S4.5.0b.
+**Tiền đề đã hoàn tất 100%:**
+1. Owner đã chính thức phê duyệt toàn bộ **D-S45-02, 03, 04, 07, 08, 09** (Mục 32.1) cùng các quy tắc đo đạc và ràng buộc thực thi.
+2. Owner đã cung cấp URL CI #263 và xác nhận quy ước *Evidence commit* (D-C3); Task **S4.5.0** (cả docs 0a và code 0b) đã hoàn thành.
 
-Không có blocker kỹ thuật: mọi tiền đề S4.4 có đủ và đã kiểm.
+Không có blocker kỹ thuật: mọi tiền đề S4.4 có đủ và đã kiểm. Sẵn sàng bắt đầu triển khai từ Task S4.5.1.
 
 ---
 
