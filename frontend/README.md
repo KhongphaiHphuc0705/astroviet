@@ -82,8 +82,8 @@ _Lưu ý: Dự án sử dụng Husky và lint-staged để tự động chạy l
 
 ## 11. Production Build
 
-- `npm run build`: Thực hiện Type-check (`tsc --noEmit`) sau đó build ra gói sản xuất.
-- `npm run typecheck`: Thực hiện kiểm tra lỗi TypeScript độc lập mà không xuất file build.
+- `npm run build`: Thực hiện Type-check (`tsc -p tsconfig.app.json --noEmit`) sau đó build ra gói sản xuất (`vite build`).
+- `npm run typecheck`: Thực hiện kiểm tra lỗi TypeScript độc lập (`tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit`) mà không xuất file build.
 - `npm run preview`: Chạy local server để kiểm tra gói build sản xuất.
 
 ## 12. Project Structure
