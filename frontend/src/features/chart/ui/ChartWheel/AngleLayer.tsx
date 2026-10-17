@@ -30,6 +30,7 @@ export function AngleLayer({ angles }: AngleLayerProps) {
             dominantBaseline="central"
             fontSize={16}
             className="fill-primary font-data font-bold"
+            role="img"
             aria-label={angle.ariaLabel}
           >
             {angle.shortLabel}
