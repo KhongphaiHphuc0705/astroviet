@@ -4,6 +4,7 @@ import {
   DEGREE_SIGN,
   EPS_MINUTES,
   formatDegreeMinute,
+  formatDegreeOnly,
   MINUTE_SIGN,
 } from "./format";
 
@@ -122,6 +123,27 @@ describe("formatDegreeMinute (F4-M2.2)", () => {
       expect(first).toBe(second);
       expect(second).toBe(third);
       expect(first).toBe("123°27′");
+    });
+  });
+
+  describe("formatDegreeOnly (F1) and boundary characterization (F2)", () => {
+    it("F1: extracts whole degree 'D°' from 'D°MM′' strings and handles null/invalid gracefully", () => {
+      expect(formatDegreeOnly("10°31′")).toBe("10°");
+      expect(formatDegreeOnly("0°00′")).toBe("0°");
+      expect(formatDegreeOnly("29°59′")).toBe("29°");
+      expect(formatDegreeOnly("359°59′")).toBe("359°");
+      expect(formatDegreeOnly(null)).toBeNull();
+      expect(formatDegreeOnly(undefined)).toBeNull();
+      expect(formatDegreeOnly("")).toBeNull();
+      expect(formatDegreeOnly("abc")).toBeNull();
+      expect(formatDegreeOnly("10.5°")).toBeNull();
+    });
+
+    it("F2: characterization of boundary degreeInSign near 30", () => {
+      // Characterizes formatDegreeMinute behavior near 30° threshold
+      expect(formatDegreeMinute(29.9999999)).toBe("29°59′");
+      // Extremely close floating-point value with EPS_MINUTES
+      expect(formatDegreeMinute(29.99999999999)).toBe("30°00′");
     });
   });
 });
