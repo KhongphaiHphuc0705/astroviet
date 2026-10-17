@@ -42,12 +42,7 @@ describe("ChartViewerShell", () => {
     });
     expect(timeElement).toBeInTheDocument();
 
-    expect(
-      screen.getByTestId("chart-visualization-placeholder"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Biểu đồ tròn sẽ xuất hiện ở đây."),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("chart-wheel")).toBeInTheDocument();
 
     // No house data notice when houses are available
     expect(
@@ -161,13 +156,60 @@ describe("ChartViewerShell", () => {
       expect(firstHeader).toHaveClass("px-2 py-2");
     });
 
-    it("S6: placeholder wheel exists with data-testid and updated text", () => {
+    it("S6: chart-wheel exists with data-testid and renders foundation layers", () => {
       const vm = toChartViewModel(chartFull);
       render(<ChartViewerShell vm={vm} />);
 
-      const placeholder = screen.getByTestId("chart-visualization-placeholder");
-      expect(placeholder).toBeInTheDocument();
-      expect(placeholder).toHaveTextContent("Biểu đồ tròn sẽ xuất hiện ở đây.");
+      const wheel = screen.getByTestId("chart-wheel");
+      expect(wheel).toBeInTheDocument();
+      expect(wheel.querySelector("svg")).toHaveAttribute(
+        "viewBox",
+        "0 0 600 600",
+      );
+    });
+
+    it("S-W1: renders chart-wheel in Shell instead of placeholder, and all 4 tables remain visible", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      expect(screen.getByTestId("chart-wheel")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("chart-visualization-placeholder"),
+      ).not.toBeInTheDocument();
+
+      // Exactly 4 semantic tables: PlanetTable, HouseTable (houses + angles), AspectTable
+      const tables = screen.getAllByRole("table");
+      expect(tables).toHaveLength(4);
+      expect(
+        screen.getByRole("table", { name: /vị trí hành tinh/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /nhà theo hệ placidus/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /các góc chính/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("table", { name: /góc chiếu giữa các hành tinh/i }),
+      ).toBeInTheDocument();
+    });
+
+    it("S-W2: renders chart-wheel without house-ring and preserves HouseDataNotice when houseDataAvailable is false", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartNoHouses);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const wheel = screen.getByTestId("chart-wheel");
+      expect(wheel).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-layer="house-ring"]'),
+      ).not.toBeInTheDocument();
+
+      const notices = screen.getAllByText(
+        "Dữ liệu Nhà và các góc chưa khả dụng",
+      );
+      expect(notices).toHaveLength(1);
     });
 
     it("S7: selection buttons are not rendered in M7 presentation-only mode", () => {
