@@ -977,3 +977,68 @@ export const chartZeroBoundary: ChartResponse = {
     },
   ],
 };
+
+// DERIVED
+// Nguồn: Tạo từ chartFull với aspects rỗng ([])
+// Mục đích: Kiểm thử hiển thị khi lá số không có góc chiếu nào (hoặc công tắc ẩn)
+export const chartNoAspects: ChartResponse = {
+  ...chartFull,
+  id: "b3c4d5e6-f7a8-4b9c-8d1e-2f3a4b5c6d7e",
+  aspects: [],
+};
+
+// DERIVED
+// Nguồn: Tạo từ chartFull với danh sách aspects tính toán tay nhất quán từ kinh độ thật
+// Đầy đủ 5 loại: Conjunction, Sextile, Square, Trine, Opposition
+// Mục đích: Kiểm thử hình học đường aspect thuần (M6)
+export const chartAllAspects: ChartResponse = {
+  ...chartFull,
+  id: "c4d5e6f7-a8b9-4c0d-9e2f-3a4b5c6d7e8f",
+  aspects: [
+    {
+      aspectType: "Opposition",
+      planetA: "Jupiter",
+      planetB: "Sun",
+      exactAngle: 174.67112923884133,
+      orb: 5.328870761158669,
+      isApplying: true,
+      nature: "Challenging",
+    },
+    {
+      aspectType: "Square",
+      planetA: "Mars",
+      planetB: "Moon",
+      exactAngle: 79.5524606051258,
+      orb: 10.4475393948742,
+      isApplying: true,
+      nature: "Challenging",
+    },
+    {
+      aspectType: "Trine",
+      planetA: "Jupiter",
+      planetB: "Moon",
+      exactAngle: 125.84073391674815,
+      orb: 5.84073391674815,
+      isApplying: true,
+      nature: "Harmonious",
+    },
+    {
+      aspectType: "Sextile",
+      planetA: "Mars",
+      planetB: "Venus",
+      exactAngle: 56.463325555797724,
+      orb: 3.5366744442022764,
+      isApplying: true,
+      nature: "Harmonious",
+    },
+    {
+      aspectType: "Conjunction",
+      planetA: "Sun",
+      planetB: "Neptune",
+      exactAngle: 1.5101374775115346,
+      orb: 1.5101374775115346,
+      isApplying: true,
+      nature: "Neutral",
+    },
+  ],
+};

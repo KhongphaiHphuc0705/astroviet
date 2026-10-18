@@ -187,6 +187,10 @@ describe("geometry primitives (M4.1: G1 - G10)", () => {
       expect(WHEEL_RADII.planetLaneA).toBe(141);
       expect(WHEEL_RADII.planetLaneB).toBe(146);
       expect(WHEEL_RADII.planetZoneInner).toBe(114);
+      expect(WHEEL_RADII.aspectRing).toBe(108);
+      expect(WHEEL_RADII.aspectRing).toBeLessThanOrEqual(
+        WHEEL_RADII.planetZoneInner - 6,
+      );
     });
   });
 });
