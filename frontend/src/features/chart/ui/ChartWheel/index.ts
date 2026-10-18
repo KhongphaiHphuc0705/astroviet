@@ -1,4 +1,6 @@
 export { AngleLayer, type AngleLayerProps } from "./AngleLayer";
+export { AspectLayer, type AspectLayerProps } from "./AspectLayer";
+export { AspectLegend, type AspectLegendProps } from "./AspectLegend";
 export {
   buildWheelDescription,
   ChartWheel,

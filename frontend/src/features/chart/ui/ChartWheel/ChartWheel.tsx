@@ -1,5 +1,9 @@
 import { useId, useMemo } from "react";
 
+import {
+  buildAspectGeometry,
+  type AspectGeometryResult,
+} from "../../model/aspectGeometry";
 import type { ChartViewModel } from "../../model/chartViewModel";
 import {
   buildPlanetWheelModel,
@@ -11,6 +15,7 @@ import {
 } from "../../model/wheelGeometry";
 
 import { AngleLayer } from "./AngleLayer";
+import { AspectLayer } from "./AspectLayer";
 import { HouseLayer } from "./HouseLayer";
 import { PlanetLayer } from "./PlanetLayer";
 import { TickLayer } from "./TickLayer";
@@ -20,6 +25,8 @@ export interface ChartWheelProps {
   vm: ChartViewModel;
   geometry?: WheelGeometry;
   planetModel?: PlanetWheelModel;
+  aspectGeometry?: AspectGeometryResult;
+  showAspectLines?: boolean;
   className?: string;
 }
 
@@ -66,6 +73,8 @@ export function ChartWheel({
   vm,
   geometry,
   planetModel: planetModelProp,
+  aspectGeometry: aspectGeometryProp,
+  showAspectLines = false,
   className,
 }: ChartWheelProps) {
   const titleId = useId();
@@ -90,20 +99,50 @@ export function ChartWheel({
     ],
   );
 
+  const resolvedAspectGeometry = useMemo(
+    () =>
+      aspectGeometryProp ??
+      buildAspectGeometry(vm.aspects, vm.planets, wheelGeometry.rotation),
+    [aspectGeometryProp, vm.aspects, vm.planets, wheelGeometry.rotation],
+  );
+
   const description = useMemo(
     () => buildWheelDescription(vm, planetModel),
     [vm, planetModel],
   );
 
   const figcaptionText = useMemo(() => {
+    const hasAspects =
+      showAspectLines && resolvedAspectGeometry.lines.length > 0;
+
     if (planetModel.status === "overflow") {
-      return "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.";
+      const base =
+        "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.";
+      return hasAspects
+        ? `${base} Các đường nối thể hiện góc chiếu giữa các hành tinh. Kiểu nét giúp phân biệt nhóm góc chiếu; xem chú giải để biết ý nghĩa từng kiểu.`
+        : base;
     }
+
     if (planetModel.tier === "B") {
-      return "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh. Độ của từng hành tinh xem ở bảng bên dưới.";
+      const base = hasAspects
+        ? "Hiển thị vòng 12 cung, nhà, các góc, vị trí hành tinh và các đường góc chiếu. Độ của từng hành tinh xem ở bảng bên dưới."
+        : "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh. Độ của từng hành tinh xem ở bảng bên dưới.";
+      return hasAspects
+        ? `${base} Các đường nối thể hiện góc chiếu giữa các hành tinh. Kiểu nét giúp phân biệt nhóm góc chiếu; xem chú giải để biết ý nghĩa từng kiểu.`
+        : base;
     }
+
+    if (hasAspects) {
+      return "Hiển thị vòng 12 cung, nhà, các góc, vị trí hành tinh và các đường góc chiếu. Các đường nối thể hiện góc chiếu giữa các hành tinh. Kiểu nét giúp phân biệt nhóm góc chiếu; xem chú giải để biết ý nghĩa từng kiểu.";
+    }
+
     return "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh.";
-  }, [planetModel.status, planetModel.tier]);
+  }, [
+    planetModel.status,
+    planetModel.tier,
+    showAspectLines,
+    resolvedAspectGeometry.lines.length,
+  ]);
 
   return (
     <figure data-testid="chart-wheel" className={className}>
@@ -127,6 +166,7 @@ export function ChartWheel({
           <TickLayer ticks={wheelGeometry.ticks} />
           <HouseLayer houses={wheelGeometry.houses} />
           <AngleLayer angles={wheelGeometry.angles} />
+          {showAspectLines && <AspectLayer geometry={resolvedAspectGeometry} />}
           <PlanetLayer model={planetModel} />
         </svg>
       </div>
