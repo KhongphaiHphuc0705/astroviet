@@ -309,4 +309,42 @@ describe("PlanetLayer (M5 Task 4: PL1 - PL15)", () => {
 
     expect(container.querySelector('[data-layer="planets"]')).toBeNull();
   });
+
+  it("PL16: in overflow status renders accessible label groups without visible text and passes axe", async () => {
+    const overflowModel = {
+      ...fullModelA,
+      status: "overflow" as const,
+    };
+
+    const { container } = render(
+      <svg role="group" aria-label="Biểu đồ hành tinh overflow">
+        <PlanetLayer model={overflowModel} />
+      </svg>,
+    );
+
+    // 10 accessible planet groups are still present
+    const planetGroups = container.querySelectorAll(
+      '[data-part="labels"] > [data-planet]',
+    );
+    expect(planetGroups).toHaveLength(10);
+    planetGroups.forEach((g) => {
+      expect(g).toHaveAttribute("role", "img");
+      expect(g.getAttribute("aria-label")).toBeTruthy();
+    });
+
+    // 0 visible text elements
+    expect(
+      container.querySelectorAll('[data-part="labels"] text'),
+    ).toHaveLength(0);
+
+    // Markers are still present
+    expect(
+      container.querySelectorAll(
+        '[data-part="marks"] line[data-part="marker"]',
+      ),
+    ).toHaveLength(10);
+
+    // Accessibility passes
+    expect(await axe(container)).toHaveNoViolations();
+  });
 });

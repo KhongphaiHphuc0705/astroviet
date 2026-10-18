@@ -1,10 +1,10 @@
-import { WHEEL_CENTER, WHEEL_RADII } from "../../model/geometry";
+import { WHEEL_CENTER } from "../../model/geometry";
+import { PLANET_TEXT_SIZES } from "../../model/labelLayout";
 import type { PlanetWheelModel } from "../../model/planetGeometry";
 
 export interface PlanetLayerProps {
   model: PlanetWheelModel;
   center?: number;
-  radii?: typeof WHEEL_RADII;
 }
 
 /**
@@ -76,61 +76,63 @@ export function PlanetLayer({
       </g>
 
       {/* Accessible planet label groups */}
-      {model.status !== "overflow" && (
-        <g data-part="labels">
-          {model.planets.map((item) => (
-            <g
-              key={item.id}
-              data-planet={item.id}
-              role="img"
-              aria-label={item.ariaLabel}
-            >
-              <text
-                data-part="glyph"
-                x={item.glyphPoint.x}
-                y={item.glyphPoint.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={18}
-                className="select-none fill-primary font-display"
-                aria-hidden="true"
-              >
-                {item.glyph ?? item.fallbackText}
-              </text>
-
-              {item.isRetrograde && item.retrogradePoint && (
+      <g data-part="labels">
+        {model.planets.map((item) => (
+          <g
+            key={item.id}
+            data-planet={item.id}
+            role="img"
+            aria-label={item.ariaLabel}
+          >
+            {model.status !== "overflow" && (
+              <>
                 <text
-                  data-part="retrograde"
-                  x={item.retrogradePoint.x}
-                  y={item.retrogradePoint.y}
+                  data-part="glyph"
+                  x={item.glyphPoint.x}
+                  y={item.glyphPoint.y}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize={16}
+                  fontSize={PLANET_TEXT_SIZES.glyph}
                   className="select-none fill-primary font-display"
                   aria-hidden="true"
                 >
-                  ℞
+                  {item.glyph ?? item.fallbackText}
                 </text>
-              )}
 
-              {item.degreeText && item.degreePoint && (
-                <text
-                  data-part="degree"
-                  x={item.degreePoint.x}
-                  y={item.degreePoint.y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={16}
-                  className="select-none fill-primary font-data"
-                  aria-hidden="true"
-                >
-                  {item.degreeText}
-                </text>
-              )}
-            </g>
-          ))}
-        </g>
-      )}
+                {item.isRetrograde && item.retrogradePoint && (
+                  <text
+                    data-part="retrograde"
+                    x={item.retrogradePoint.x}
+                    y={item.retrogradePoint.y}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={PLANET_TEXT_SIZES.retrograde}
+                    className="select-none fill-primary font-display"
+                    aria-hidden="true"
+                  >
+                    ℞
+                  </text>
+                )}
+
+                {item.degreeText && item.degreePoint && (
+                  <text
+                    data-part="degree"
+                    x={item.degreePoint.x}
+                    y={item.degreePoint.y}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={PLANET_TEXT_SIZES.degree}
+                    className="select-none fill-primary font-data"
+                    aria-hidden="true"
+                  >
+                    {item.degreeText}
+                  </text>
+                )}
+              </>
+            )}
+          </g>
+        ))}
+      </g>
     </g>
   );
 }

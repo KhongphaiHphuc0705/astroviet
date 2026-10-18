@@ -27,7 +27,10 @@ export interface ChartWheelProps {
  * Builds a concise accessible description for the chart wheel SVG.
  * Notes house system availability, Ascendant location, and number of displayed planets.
  */
-export function buildWheelDescription(vm: ChartViewModel): string {
+export function buildWheelDescription(
+  vm: ChartViewModel,
+  planetModel?: PlanetWheelModel,
+): string {
   const parts: string[] = ["Biểu đồ lá số chiêm tinh."];
 
   if (vm.flags.houseDataAvailable) {
@@ -41,7 +44,15 @@ export function buildWheelDescription(vm: ChartViewModel): string {
     parts.push(`Cung Mọc tại ${asc.sign.labelVi} ${asc.degreeLabel}.`);
   }
 
-  parts.push(`Hiển thị ${vm.planets.length} hành tinh.`);
+  if (vm.planets.length === 0) {
+    parts.push("Không có hành tinh nào được hiển thị.");
+  } else if (planetModel?.status === "overflow") {
+    parts.push(
+      "Vị trí hành tinh hiển thị bằng vạch dấu; chi tiết xem tại bảng bên dưới.",
+    );
+  } else {
+    parts.push(`Hiển thị ${vm.planets.length} hành tinh.`);
+  }
 
   return parts.join(" ");
 }
@@ -79,14 +90,20 @@ export function ChartWheel({
     ],
   );
 
-  const description = useMemo(() => buildWheelDescription(vm), [vm]);
+  const description = useMemo(
+    () => buildWheelDescription(vm, planetModel),
+    [vm, planetModel],
+  );
 
   const figcaptionText = useMemo(() => {
+    if (planetModel.status === "overflow") {
+      return "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.";
+    }
     if (planetModel.tier === "B") {
       return "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh. Độ của từng hành tinh xem ở bảng bên dưới.";
     }
     return "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh.";
-  }, [planetModel.tier]);
+  }, [planetModel.status, planetModel.tier]);
 
   return (
     <figure data-testid="chart-wheel" className={className}>

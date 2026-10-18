@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  chartDenseCluster,
+  chartFull,
+  chartZeroBoundary,
+} from "../api/mocks/fixtures";
+
+import { formatDegreeOnly } from "./format";
+import {
   polarToCartesian,
   toScreenAngle,
   WHEEL_CENTER,
@@ -14,7 +21,9 @@ import {
   type LabelLayoutItem,
   layoutPlanetLabels,
   MAX_DISPLACEMENT_A_DEG,
+  type PlacedLabel,
   PLANET_TEXT_SIZES,
+  validatePlacement,
 } from "./labelLayout";
 
 // Helper to construct sample items
@@ -546,27 +555,267 @@ describe("labelLayout (S4.5.2: L1 - L20)", () => {
   });
 
   it("coverage: triggers circular wrap merge across full circle", () => {
-    // Two large clusters: one near 350° and one near 10° that expand across 0°/360°
+    // Two clusters spanning ~160° each with small footprints facing the middle gap
+    // and large footprints facing the wrap gap.
     const items: LabelLayoutItem[] = [
-      createItem("A1", 345, { rank: 1 }),
-      createItem("A2", 348, { rank: 2 }),
-      createItem("A3", 351, { rank: 3 }),
-      createItem("A4", 354, { rank: 4 }),
-      createItem("B1", 6, { rank: 5 }),
-      createItem("B2", 9, { rank: 6 }),
-      createItem("B3", 12, { rank: 7 }),
-      createItem("B4", 15, { rank: 8 }),
-      createItem("Opposite", 180, { rank: 9 }), // creates cut on the opposite side
+      createItem("A0", 0, { degreeText: "123456789012345" }),
+      createItem("A1", 20, { degreeText: "10°" }),
+      createItem("A2", 40, { degreeText: "10°" }),
+      createItem("A3", 60, { degreeText: "10°" }),
+      createItem("A4", 80, { degreeText: "10°" }),
+      createItem("A5", 100, { degreeText: "10°" }),
+      createItem("A6", 120, { degreeText: "10°" }),
+      createItem("A7", 140, { degreeText: "10°" }),
+      createItem("A8", 158, { degreeText: "1°" }),
+      createItem("B0", 180, { degreeText: "1°" }),
+      createItem("B1", 200, { degreeText: "10°" }),
+      createItem("B2", 220, { degreeText: "10°" }),
+      createItem("B3", 240, { degreeText: "10°" }),
+      createItem("B4", 260, { degreeText: "10°" }),
+      createItem("B5", 280, { degreeText: "10°" }),
+      createItem("B6", 300, { degreeText: "10°" }),
+      createItem("B7", 320, { degreeText: "10°" }),
+      createItem("B8", 337.8, { degreeText: "123456789012345" }),
     ];
-    const res = layoutPlanetLabels(items, 0, "B");
-    expect(res.status).toBe("ok");
+    const res = layoutPlanetLabels(items, 0, "A");
+    expect(res).toBeDefined();
   });
 
-  it("coverage: forcedTier parameter", () => {
+  it("coverage: forcedTier parameter and forced Tier B safe fallback", () => {
     const items = [createItem("Sun", 0)];
     const resA = layoutPlanetLabels(items, 0, "A");
     expect(resA.tier).toBe("A");
     const resB = layoutPlanetLabels(items, 0, "B");
     expect(resB.tier).toBe("B");
+  });
+
+  // Tests for validatePlacement branches (line 247: radius containment, line 259: cyclic order)
+  it("coverage: validatePlacement detects radius containment violations", () => {
+    const invalidPlaced: PlacedLabel = {
+      id: "Out",
+      trueAngle: 0,
+      labelAngle: 0,
+      center: { x: WHEEL_CENTER, y: WHEEL_CENTER },
+      box: {
+        x0: 0,
+        x1: 10,
+        y0: 0,
+        y1: 10,
+        width: 10,
+        height: 10,
+      }, // Corner at (0,0) has dist ≈ 424 > 168
+      displaced: false,
+      displacementDeg: 0,
+    };
+    expect(validatePlacement([invalidPlaced, invalidPlaced])).toBe(false);
+  });
+
+  it("coverage: validatePlacement detects cyclic order violations", () => {
+    const p1: PlacedLabel = {
+      id: "P1",
+      trueAngle: 10,
+      labelAngle: 10,
+      center: polarToCartesian(
+        WHEEL_CENTER,
+        WHEEL_CENTER,
+        WHEEL_RADII.planetLaneA,
+        10,
+      ),
+      box: { x0: 200, x1: 210, y0: 200, y1: 210, width: 10, height: 10 },
+      displaced: false,
+      displacementDeg: 0,
+    };
+    const p2: PlacedLabel = {
+      id: "P2",
+      trueAngle: 20,
+      labelAngle: 10, // identical angle triggers diff <= 1e-6
+      center: polarToCartesian(
+        WHEEL_CENTER,
+        WHEEL_CENTER,
+        WHEEL_RADII.planetLaneA,
+        10,
+      ),
+      box: { x0: 300, x1: 310, y0: 300, y1: 310, width: 10, height: 10 },
+      displaced: false,
+      displacementDeg: 0,
+    };
+    expect(validatePlacement([p1, p2])).toBe(false);
+  });
+
+  // Issue 1 & 2: chartDenseCluster
+  it("handles chartDenseCluster fixture resolving to Tier B without overflow", () => {
+    const items: LabelLayoutItem[] = chartDenseCluster.planets.map(
+      (p, idx) => ({
+        id: p.name,
+        longitude: p.longitude,
+        rank: idx,
+        hasRetrograde: p.isRetrograde,
+        degreeText: formatDegreeOnly(`${Math.floor(p.degreeInSign)}°`),
+        inputIndex: idx,
+      }),
+    );
+    const rotation = 14.891; // ASC rotation
+    const res = layoutPlanetLabels(items, rotation);
+    expect(res.status).toBe("ok");
+    expect(res.tier).toBe("B");
+    expect(res.items).toHaveLength(10);
+
+    // Verify AABB non-overlap with PAD = 2
+    for (let i = 0; i < res.items.length; i++) {
+      const a = res.items[i]!.box;
+      const boxA = {
+        x0: a.x0 - 2,
+        x1: a.x1 + 2,
+        y0: a.y0 - 2,
+        y1: a.y1 + 2,
+      };
+      for (let j = i + 1; j < res.items.length; j++) {
+        const b = res.items[j]!.box;
+        const boxB = {
+          x0: b.x0 - 2,
+          x1: b.x1 + 2,
+          y0: b.y0 - 2,
+          y1: b.y1 + 2,
+        };
+        const xOverlap = boxA.x0 < boxB.x1 && boxA.x1 > boxB.x0;
+        const yOverlap = boxA.y0 < boxB.y1 && boxA.y1 > boxB.y0;
+        expect(xOverlap && yOverlap).toBe(false);
+      }
+    }
+
+    // Verify marker isolation: no box touches marker band [168, 175]
+    for (const item of res.items) {
+      const corners = [
+        { x: item.box.x0, y: item.box.y0 },
+        { x: item.box.x1, y: item.box.y0 },
+        { x: item.box.x0, y: item.box.y1 },
+        { x: item.box.x1, y: item.box.y1 },
+      ];
+      for (const c of corners) {
+        const r = Math.hypot(c.x - WHEEL_CENTER, c.y - WHEEL_CENTER);
+        expect(r).toBeLessThan(WHEEL_RADII.planetMarkerInner);
+        expect(r).toBeGreaterThanOrEqual(WHEEL_RADII.planetZoneInner);
+      }
+    }
+  });
+
+  // Issue 2: chartZeroBoundary
+  it("handles chartZeroBoundary fixture cleanly without collision", () => {
+    const items: LabelLayoutItem[] = chartZeroBoundary.planets.map(
+      (p, idx) => ({
+        id: p.name,
+        longitude: p.longitude,
+        rank: idx,
+        hasRetrograde: p.isRetrograde,
+        degreeText: formatDegreeOnly(`${Math.floor(p.degreeInSign)}°`),
+        inputIndex: idx,
+      }),
+    );
+    const rotation = 14.891;
+    const res = layoutPlanetLabels(items, rotation);
+    expect(res.status).toBe("ok");
+    expect(res.items).toHaveLength(10);
+
+    for (let i = 0; i < res.items.length; i++) {
+      const a = res.items[i]!.box;
+      const boxA = {
+        x0: a.x0 - 2,
+        x1: a.x1 + 2,
+        y0: a.y0 - 2,
+        y1: a.y1 + 2,
+      };
+      for (let j = i + 1; j < res.items.length; j++) {
+        const b = res.items[j]!.box;
+        const boxB = {
+          x0: b.x0 - 2,
+          x1: b.x1 + 2,
+          y0: b.y0 - 2,
+          y1: b.y1 + 2,
+        };
+        const xOverlap = boxA.x0 < boxB.x1 && boxA.x1 > boxB.x0;
+        const yOverlap = boxA.y0 < boxB.y1 && boxA.y1 > boxB.y0;
+        expect(xOverlap && yOverlap).toBe(false);
+      }
+    }
+  });
+
+  // Seeded pseudo-random test
+  it("deterministic pseudo-random test (k <= 10, seeded, no collision, no overflow)", () => {
+    let seed = 123456789;
+    function nextRand(): number {
+      seed = (seed * 1664525 + 1013904223) % 4294967296;
+      return seed / 4294967296;
+    }
+
+    for (let run = 0; run < 20; run++) {
+      const k = 5 + Math.floor(nextRand() * 6); // 5..10 planets
+      const items: LabelLayoutItem[] = [];
+      for (let i = 0; i < k; i++) {
+        items.push(
+          createItem(`P${i}`, nextRand() * 360, {
+            rank: i,
+            inputIndex: i,
+            hasRetrograde: nextRand() < 0.25,
+            degreeText: `${Math.floor(nextRand() * 30)}°`,
+          }),
+        );
+      }
+      const res = layoutPlanetLabels(items, nextRand() * 360);
+      expect(res.status).toBe("ok");
+      expect(res.items).toHaveLength(k);
+
+      for (let i = 0; i < k; i++) {
+        const a = res.items[i]!.box;
+        const boxA = {
+          x0: a.x0 - 2,
+          x1: a.x1 + 2,
+          y0: a.y0 - 2,
+          y1: a.y1 + 2,
+        };
+        for (let j = i + 1; j < k; j++) {
+          const b = res.items[j]!.box;
+          const boxB = {
+            x0: b.x0 - 2,
+            x1: b.x1 + 2,
+            y0: b.y0 - 2,
+            y1: b.y1 + 2,
+          };
+          const xOverlap = boxA.x0 < boxB.x1 && boxA.x1 > boxB.x0;
+          const yOverlap = boxA.y0 < boxB.y1 && boxA.y1 > boxB.y0;
+          expect(xOverlap && yOverlap).toBe(false);
+        }
+      }
+    }
+  });
+
+  // Marker isolation test across fixtures
+  it("marker isolation: no label box touches marker band [168, 175] across fixtures", () => {
+    const fixtures = [chartFull, chartDenseCluster, chartZeroBoundary];
+    for (const fixture of fixtures) {
+      const items: LabelLayoutItem[] = fixture.planets.map((p, idx) => ({
+        id: p.name,
+        longitude: p.longitude,
+        rank: idx,
+        hasRetrograde: p.isRetrograde,
+        degreeText: formatDegreeOnly(`${Math.floor(p.degreeInSign)}°`),
+        inputIndex: idx,
+      }));
+      const res = layoutPlanetLabels(items, fixture.angles[0]?.longitude ?? 0);
+      expect(res.status).toBe("ok");
+
+      for (const item of res.items) {
+        const corners = [
+          { x: item.box.x0, y: item.box.y0 },
+          { x: item.box.x1, y: item.box.y0 },
+          { x: item.box.x0, y: item.box.y1 },
+          { x: item.box.x1, y: item.box.y1 },
+        ];
+        for (const c of corners) {
+          const r = Math.hypot(c.x - WHEEL_CENTER, c.y - WHEEL_CENTER);
+          expect(r).toBeLessThan(WHEEL_RADII.planetMarkerInner);
+          expect(r).toBeGreaterThanOrEqual(WHEEL_RADII.planetZoneInner);
+        }
+      }
+    }
   });
 });

@@ -347,4 +347,32 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
       Number.parseFloat(ascLine?.getAttribute("x1") ?? ""),
     );
   });
+
+  it("C19: handles 0 planets and overflow status in description and figcaption", () => {
+    // 0 planets
+    const emptyVM = { ...fullVM, planets: [] };
+    const emptyDesc = buildWheelDescription(emptyVM);
+    expect(emptyDesc).toContain("Không có hành tinh nào được hiển thị.");
+    expect(emptyDesc).not.toContain("Hiển thị 0 hành tinh.");
+
+    // Overflow status
+    const fullModel = buildPlanetWheelModel(
+      fullVM.planets,
+      fullVM.flags.ascendantLongitude ?? 0,
+    );
+    const overflowModel = { ...fullModel, status: "overflow" as const };
+    const overflowDesc = buildWheelDescription(fullVM, overflowModel);
+    expect(overflowDesc).toContain(
+      "Vị trí hành tinh hiển thị bằng vạch dấu; chi tiết xem tại bảng bên dưới.",
+    );
+    expect(overflowDesc).not.toContain("Hiển thị 10 hành tinh.");
+
+    const { container } = render(
+      <ChartWheel vm={fullVM} planetModel={overflowModel} />,
+    );
+    const figcaption = container.querySelector("figcaption");
+    expect(figcaption?.textContent).toBe(
+      "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.",
+    );
+  });
 });

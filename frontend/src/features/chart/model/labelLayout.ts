@@ -127,7 +127,13 @@ export function computeFootprint(
   height: number,
   screenAngleDeg: number,
   laneRadius: number,
+  useSafeDiameter = false,
 ): number {
+  if (useSafeDiameter) {
+    const diam = Math.hypot(width, height);
+    const projected = diam + 2 * LABEL_METRICS.pad;
+    return (projected / laneRadius) * (180 / Math.PI);
+  }
   const rad = (screenAngleDeg * Math.PI) / 180;
   const sin = Math.abs(Math.sin(rad));
   const cos = Math.abs(Math.cos(rad));
@@ -197,7 +203,7 @@ export function computeLeaderLine(
  * 2. All 4 corners of all boxes lie within [planetZoneInner, planetMarkerOuter].
  * 3. Cyclic order of labelAngle matches cyclic order of trueAngle.
  */
-function validatePlacement(placed: PlacedLabel[]): boolean {
+export function validatePlacement(placed: PlacedLabel[]): boolean {
   const N = placed.length;
   if (N <= 1) {
     return true;
@@ -229,9 +235,9 @@ function validatePlacement(placed: PlacedLabel[]): boolean {
     }
   }
 
-  // 2. Ring containment check: all 4 corners in [planetZoneInner, planetMarkerOuter]
+  // 2. Ring containment check: all 4 corners in [planetZoneInner, planetMarkerInner]
   const rMin = WHEEL_RADII.planetZoneInner - 1e-3;
-  const rMax = WHEEL_RADII.planetMarkerOuter + 1e-3;
+  const rMax = WHEEL_RADII.planetMarkerInner + 1e-3;
 
   for (let i = 0; i < N; i++) {
     const box = placed[i]!.box;
@@ -270,6 +276,7 @@ export function layoutForSingleTier(
   rawItems: LabelLayoutItem[],
   rotation: number,
   tier: LayoutTier,
+  useSafeFootprint = false,
 ): LabelLayoutResult {
   if (!Number.isFinite(rotation)) {
     throw new RangeError("rotation must be a finite number");
@@ -414,7 +421,13 @@ export function layoutForSingleTier(
       prevAngle = ang;
     }
     const boxDim = computeBoxDimensions(item, tier);
-    const f = computeFootprint(boxDim.width, boxDim.height, ang, laneRadius);
+    const f = computeFootprint(
+      boxDim.width,
+      boxDim.height,
+      ang,
+      laneRadius,
+      useSafeFootprint,
+    );
     unwrapped.push({
       canonicalIndex: cIdx,
       trueAngle: ang,
@@ -658,7 +671,18 @@ export function layoutPlanetLabels(
   forcedTier?: LayoutTier,
 ): LabelLayoutResult {
   if (forcedTier) {
-    return layoutForSingleTier(items, rotation, forcedTier);
+    const directResult = layoutForSingleTier(items, rotation, forcedTier);
+    if (directResult.status === "ok") {
+      return directResult;
+    }
+    // If forced Tier B overflows, attempt Tier B-safe before giving up
+    if (forcedTier === "B") {
+      const safeResult = layoutForSingleTier(items, rotation, "B", true);
+      if (safeResult.status === "ok") {
+        return safeResult;
+      }
+    }
+    return directResult;
   }
 
   // 1. Try Tier A (glyph + ℞ + degree)
@@ -670,17 +694,26 @@ export function layoutPlanetLabels(
     return resultA;
   }
 
-  // 2. Fallback to Tier B (glyph + ℞ only, no degree line on wheel)
+  // 2. Fallback to Tier B standard (glyph + ℞ only)
   const resultB = layoutForSingleTier(items, rotation, "B");
   if (resultB.status === "ok") {
     return resultB;
   }
 
-  // 3. Overflow if both tiers fail
+  // 3. Fallback to Tier B-safe (orientation-independent bounding circle footprint)
+  const resultBSafe = layoutForSingleTier(items, rotation, "B", true);
+  if (resultBSafe.status === "ok") {
+    return resultBSafe;
+  }
+
+  // 4. Overflow if both tiers and safe fallback fail
   return {
     status: "overflow",
     tier: "B",
-    items: resultB.items,
-    maxDisplacementDeg: resultB.maxDisplacementDeg,
+    items: resultBSafe.items.length > 0 ? resultBSafe.items : resultB.items,
+    maxDisplacementDeg: Math.max(
+      resultBSafe.maxDisplacementDeg,
+      resultB.maxDisplacementDeg,
+    ),
   };
 }
