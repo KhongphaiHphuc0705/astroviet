@@ -5,6 +5,7 @@
 
 export const WHEEL_VIEWBOX_SIZE = 600;
 export const WHEEL_CENTER = 300;
+export const WHEEL_MIN_DISPLAY_PX = 400;
 
 export const WHEEL_RADII = {
   signOuter: 260,
@@ -14,6 +15,11 @@ export const WHEEL_RADII = {
   houseOuter: 215,
   houseInner: 175,
   angleLabel: 282,
+  planetMarkerOuter: 175,
+  planetMarkerInner: 168,
+  planetLaneA: 141,
+  planetLaneB: 146,
+  planetZoneInner: 114,
 } as const;
 
 export interface Point {

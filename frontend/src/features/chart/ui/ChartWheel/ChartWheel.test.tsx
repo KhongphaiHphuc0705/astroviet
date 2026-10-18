@@ -5,6 +5,7 @@ import { axe } from "vitest-axe";
 import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
 import { KNOWN_ZODIAC_SIGNS } from "../../api/types";
 import { toChartViewModel } from "../../model/chartViewModel";
+import { buildPlanetWheelModel } from "../../model/planetGeometry";
 
 import { buildWheelDescription, ChartWheel } from "./ChartWheel";
 
@@ -12,7 +13,7 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
   const fullVM = toChartViewModel(chartFull);
   const noHousesVM = toChartViewModel(chartNoHouses);
 
-  it("C1: renders figure[data-testid=chart-wheel] with svg[viewBox='0 0 600 600'] and role='img'", () => {
+  it("C1: renders figure[data-testid=chart-wheel] with svg[viewBox='0 0 600 600'] and role='group'", () => {
     const { container } = render(<ChartWheel vm={fullVM} />);
 
     const figure = container.querySelector('figure[data-testid="chart-wheel"]');
@@ -21,7 +22,7 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveAttribute("viewBox", "0 0 600 600");
-    expect(svg).toHaveAttribute("role", "img");
+    expect(svg).toHaveAttribute("role", "group");
 
     const titleId = svg?.getAttribute("aria-labelledby");
     const descId = svg?.getAttribute("aria-describedby");
@@ -195,6 +196,7 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
       "degree-ticks",
       "house-ring",
       "angle-markers",
+      "planets",
     ]);
   });
 
@@ -262,25 +264,39 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
     );
   });
 
-  it("C14: figcaption describes scope accurately without stating missing house causes", () => {
-    render(<ChartWheel vm={fullVM} />);
+  it("C14: figcaption describes scope accurately for Tier A and Tier B", () => {
+    // 1. Tier A (standard fullVM)
+    const { rerender } = render(<ChartWheel vm={fullVM} />);
+    expect(
+      screen.getByText(
+        "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh.",
+      ),
+    ).toBeInTheDocument();
 
-    const figcaption = screen.getByText(
-      "Hiển thị vòng 12 cung, nhà và các góc. Vị trí hành tinh xem ở các bảng bên dưới.",
+    // 2. Tier B (forced or cluster)
+    const tierBModel = buildPlanetWheelModel(
+      fullVM.planets,
+      fullVM.flags.ascendantLongitude ?? 0,
+      { forcedTier: "B" },
     );
-    expect(figcaption).toBeInTheDocument();
+    rerender(<ChartWheel vm={fullVM} planetModel={tierBModel} />);
+    expect(
+      screen.getByText(
+        "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh. Độ của từng hành tinh xem ở bảng bên dưới.",
+      ),
+    ).toBeInTheDocument();
   });
 
-  it("C15: buildWheelDescription generates accurate description without mentioning unrendered bodies", () => {
+  it("C15: buildWheelDescription mentions number of rendered planets but not aspects", () => {
     const fullDesc = buildWheelDescription(fullVM);
     expect(fullDesc).toContain("Hệ nhà Placidus.");
     expect(fullDesc).toContain("Cung Mọc tại Bạch Dương 14°53′.");
-    expect(fullDesc).not.toContain("hành tinh");
+    expect(fullDesc).toContain("Hiển thị 10 hành tinh.");
     expect(fullDesc).not.toContain("góc chiếu");
 
     const noHousesDesc = buildWheelDescription(noHousesVM);
     expect(noHousesDesc).toContain("Không có dữ liệu nhà.");
-    expect(noHousesDesc).not.toContain("hành tinh");
+    expect(noHousesDesc).toContain("Hiển thị 10 hành tinh.");
     expect(noHousesDesc).not.toContain("góc chiếu");
   });
 
@@ -293,6 +309,70 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
       html.replace(/:r[0-9a-z]+:/g, ":id:");
     expect(normalizeIds(firstRender.innerHTML)).toBe(
       normalizeIds(secondRender.innerHTML),
+    );
+  });
+
+  it("C17: renders svg with role='group', desc with planet count, and PlanetLayer with tier attribute", () => {
+    const { container } = render(<ChartWheel vm={fullVM} />);
+
+    const svg = container.querySelector("svg");
+    expect(svg).toHaveAttribute("role", "group");
+
+    const descId = svg?.getAttribute("aria-describedby");
+    const descEl = document.getElementById(descId!);
+    expect(descEl?.textContent).toContain("Hiển thị 10 hành tinh.");
+
+    const planetLayer = container.querySelector('[data-layer="planets"]');
+    expect(planetLayer).toBeInTheDocument();
+    expect(planetLayer).toHaveAttribute("data-label-tier", "A");
+  });
+
+  it("C18: regression check: S4.4 foundation coordinates (ASC at 180°, MC, house cusps) remain strictly stable", () => {
+    const { container } = render(<ChartWheel vm={fullVM} />);
+
+    // Ascendant axis line (horizontal left: y1 === y2 === 300, x2 < x1)
+    const ascLine = container.querySelector(
+      '[data-layer="angle-markers"] [data-angle="Ascendant"] line',
+    );
+    expect(ascLine).toBeInTheDocument();
+    expect(Number.parseFloat(ascLine?.getAttribute("y1") ?? "")).toBeCloseTo(
+      300,
+      1,
+    );
+    expect(Number.parseFloat(ascLine?.getAttribute("y2") ?? "")).toBeCloseTo(
+      300,
+      1,
+    );
+    expect(Number.parseFloat(ascLine?.getAttribute("x2") ?? "")).toBeLessThan(
+      Number.parseFloat(ascLine?.getAttribute("x1") ?? ""),
+    );
+  });
+
+  it("C19: handles 0 planets and overflow status in description and figcaption", () => {
+    // 0 planets
+    const emptyVM = { ...fullVM, planets: [] };
+    const emptyDesc = buildWheelDescription(emptyVM);
+    expect(emptyDesc).toContain("Không có hành tinh nào được hiển thị.");
+    expect(emptyDesc).not.toContain("Hiển thị 0 hành tinh.");
+
+    // Overflow status
+    const fullModel = buildPlanetWheelModel(
+      fullVM.planets,
+      fullVM.flags.ascendantLongitude ?? 0,
+    );
+    const overflowModel = { ...fullModel, status: "overflow" as const };
+    const overflowDesc = buildWheelDescription(fullVM, overflowModel);
+    expect(overflowDesc).toContain(
+      "Vị trí hành tinh hiển thị bằng vạch dấu; chi tiết xem tại bảng bên dưới.",
+    );
+    expect(overflowDesc).not.toContain("Hiển thị 10 hành tinh.");
+
+    const { container } = render(
+      <ChartWheel vm={fullVM} planetModel={overflowModel} />,
+    );
+    const figcaption = container.querySelector("figcaption");
+    expect(figcaption?.textContent).toBe(
+      "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.",
     );
   });
 });

@@ -80,7 +80,7 @@ describe("ChartViewerShell", () => {
   });
 
   describe("Integration Tests (nhóm S)", () => {
-    it("S1: renders 3 tables and no cards when matchMedia >= 640px", () => {
+    it("S1: renders 4 tables and no cards when matchMedia >= 640px", () => {
       controller = installMatchMedia(true);
       const vm = toChartViewModel(chartFull);
 
@@ -88,7 +88,7 @@ describe("ChartViewerShell", () => {
 
       // PlanetTable, HouseTable (houses + angles = 2 tables), AspectTable => 4 tables in total
       const tables = screen.getAllByRole("table");
-      expect(tables.length).toBeGreaterThanOrEqual(3);
+      expect(tables).toHaveLength(4);
       expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
 
@@ -100,7 +100,7 @@ describe("ChartViewerShell", () => {
 
       expect(screen.queryByRole("table")).not.toBeInTheDocument();
       const lists = screen.getAllByRole("list");
-      expect(lists.length).toBeGreaterThanOrEqual(3);
+      expect(lists).toHaveLength(4);
     });
 
     it("S3: dynamically switches between cards and tables when viewport changes without losing content", () => {
@@ -110,7 +110,7 @@ describe("ChartViewerShell", () => {
       render(<ChartViewerShell vm={vm} />);
 
       expect(screen.queryByRole("table")).not.toBeInTheDocument();
-      expect(screen.getAllByRole("list").length).toBeGreaterThanOrEqual(3);
+      expect(screen.getAllByRole("list")).toHaveLength(4);
       expect(screen.getAllByText("Mặt Trời").length).toBeGreaterThan(0);
 
       // Viewport increases to desktop
@@ -118,7 +118,7 @@ describe("ChartViewerShell", () => {
         controller?.setMatches("(min-width: 640px)", true);
       });
 
-      expect(screen.getAllByRole("table").length).toBeGreaterThanOrEqual(3);
+      expect(screen.getAllByRole("table")).toHaveLength(4);
       expect(screen.queryByRole("list")).not.toBeInTheDocument();
       expect(screen.getAllByText("Mặt Trời").length).toBeGreaterThan(0);
     });

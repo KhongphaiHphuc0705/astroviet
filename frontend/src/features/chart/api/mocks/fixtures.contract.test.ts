@@ -13,7 +13,13 @@ import {
   type ListChartsResponse,
 } from "../types";
 
-import { chartFull, chartNoHouses, chartSummaryFixtures } from "./fixtures";
+import {
+  chartDenseCluster,
+  chartFull,
+  chartNoHouses,
+  chartSummaryFixtures,
+  chartZeroBoundary,
+} from "./fixtures";
 
 // Constants matching backend Presentation mapper (chart-response.mapper.ts)
 const EXPECTED_TOP_LEVEL_KEYS = [
@@ -381,6 +387,46 @@ describe("Chart Fixtures Contract (Sprint F4 M1 Section 18)", () => {
       expect("snapshotInterpretationVersion" in chartFull).toBe(false);
       expect("birthProfileId" in chartNoHouses).toBe(false);
       expect("snapshotInterpretationVersion" in chartNoHouses).toBe(false);
+    });
+  });
+
+  describe("DERIVED fixtures contract (chartDenseCluster, chartZeroBoundary)", () => {
+    const derivedFixtures = [
+      { name: "chartDenseCluster", fixture: chartDenseCluster },
+      { name: "chartZeroBoundary", fixture: chartZeroBoundary },
+    ];
+
+    it("has exactly the expected top-level and planet keys", () => {
+      for (const { fixture } of derivedFixtures) {
+        expect(Object.keys(fixture).sort()).toEqual(EXPECTED_TOP_LEVEL_KEYS);
+        expect(fixture.planets.length).toBe(10);
+        for (const p of fixture.planets) {
+          expect(Object.keys(p).sort()).toEqual(EXPECTED_PLANET_KEYS);
+        }
+      }
+    });
+
+    it("satisfies astronomical invariants (degreeInSign, sign, isRetrograde)", () => {
+      for (const { fixture } of derivedFixtures) {
+        for (const p of fixture.planets) {
+          expect(KNOWN_PLANET_NAMES as readonly string[]).toContain(p.name);
+          expect(KNOWN_PLANET_CATEGORIES as readonly string[]).toContain(
+            p.category,
+          );
+          expect(KNOWN_ZODIAC_SIGNS as readonly string[]).toContain(p.sign);
+
+          // Sign matches floor(longitude / 30)
+          const expectedSignIndex = Math.floor(p.longitude / 30);
+          expect(KNOWN_ZODIAC_SIGNS[expectedSignIndex]).toBe(p.sign);
+
+          // degreeInSign equals longitude % 30 within tolerance
+          const expectedDeg = p.longitude % 30;
+          expect(Math.abs(expectedDeg - p.degreeInSign)).toBeLessThan(1e-6);
+
+          // isRetrograde <=> speed < 0
+          expect(p.isRetrograde).toBe(p.speed < 0);
+        }
+      }
     });
   });
 });

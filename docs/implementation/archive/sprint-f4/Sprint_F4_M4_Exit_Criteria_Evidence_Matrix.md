@@ -4,9 +4,9 @@
 
 **Vị trí lưu:** `docs/implementation/archive/sprint-f4/Sprint_F4_M4_Exit_Criteria_Evidence_Matrix.md`  
 **Milestone:** F4-M4 (`FE-S4.4`: Nền tảng biểu đồ tròn SVG — vành 12 cung, vạch chia độ, vòng nhà & trục góc)  
-**Ngày review:** 2026-10-16  
-**Commit Head:** `d9997c0`  
-**CI Run:** [GitHub Actions Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207)  
+**Commit Head:** `d9997c0` (Commit gốc M4) · **Evidence Commit:** `398d68b` (CI #263)  
+**CI Run:** [CI #263 — GitHub Actions Run 38923546696](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38923546696) (Kế thừa lịch sử: [CI #262 Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207))  
+**Quy ước Evidence commit (D-C3):** Evidence commit là commit cuối cùng chứa mã nguồn được CI xác nhận (ở đây `398d68b`, CI #263). Các commit bổ sung sau đó chỉ chạm `docs/**` được nghiệm thu theo `[repo]` mà không cần kích hoạt CI riêng (phù hợp cấu hình `frontend-ci.yml` chỉ chạy khi thay đổi mã).  
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` quyết định phê duyệt.  
 **Trạng thái:** `VERIFIED` · `PARTIALLY VERIFIED` · `UNVERIFIED` · `ACCEPTED GAP` · `NOT APPLICABLE`.
 
@@ -88,7 +88,7 @@
 | **AC-I3** | 3 assertion placeholder cũ được cập nhật chặt chẽ, có ghi chép lý do | `ChartViewerShell.test.tsx` (S6), `page.test.tsx` (V1, V2), ghi chép Mục 2 | [repo] | VERIFIED |
 | **AC-Q1** | `typecheck`, `lint`, `format:check`, `build` exit code 0 | Chạy thực tế trên môi trường, exit code 0 toàn bộ | [run] | VERIFIED |
 | **AC-Q2** | Toàn bộ test suite (cũ + mới) đạt 100% | `npm test` đạt 118 files, 804 tests (100% passed) | [run] | VERIFIED |
-| **AC-Q3** | CI Frontend xanh trên commit cuối | [CI #262 — GitHub Actions Run 38758426445 / Job 116502955207](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207), commit `d9997c0`; toàn bộ static checks (lint, format:check, typecheck, build) và test suite (118 files, 804 tests) đều exit 0 | [run] | VERIFIED |
+| **AC-Q3** | CI Frontend xanh trên commit cuối | [CI #263 — GitHub Actions Run 38923546696](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38923546696) trên Evidence commit `398d68b` (kế thừa [CI #262 Run 38758426445](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/38758426445/job/116502955207) trên `d9997c0`); toàn bộ static checks (lint, format:check, typecheck, build) và test suite (118 files, 804 tests) đều exit 0 | [run] | VERIFIED |
 | **AC-Q4** | Báo cáo kiểm thử trợ năng thủ công | Vượt qua 100% kiểm thử tự động `vitest-axe` (`AC-S8`) và hoàn tất kiểm thử thủ công trực quan & trợ năng trên thiết bị thực tế bởi Phuc Hoang (Windows 11 NVDA 2024.3 + iPhone 11 Pro Max iOS 18.0 Safari VoiceOver) ngày 2026-10-16: Đạt 6/6 hạng mục PASS (12 glyph SVG phẳng đơn sắc, toạ độ ASC $180^\circ$ ngược chiều KĐH, No-House mode, tương phản $\ge 4.5:1$ ở cả 2 theme, cuộn phím mũi tên 320px, VoiceOver đọc đầy đủ). Chi tiết xem Mục 4. | [run] | VERIFIED |
 
 ---
@@ -139,23 +139,25 @@
 
 ### Kết quả kiểm thử thực tế
 
-* **Người kiểm thử:** Phuc Hoang
+* **Người kiểm thử:** Phuc Hoang (Owner tự xác nhận)
 * **Ngày thực hiện:** 2026-10-16
+* **Build kiểm thử:** Commit `398d68b` (sau khi fix F-1 đến F-5) chạy local qua `npm run dev` (`http://localhost:5173`)
+* **Dữ liệu kiểm thử:** Lá số mẫu `chartFull` (đầy đủ 12 nhà) và `chartNoHouses` (không có giờ sinh / No-House mode)
 * **Thiết bị & Môi trường:**
-  1. Desktop: Windows 11 — Chrome 129 / Edge 129 — Trình đọc: NVDA 2024.3
+  1. Desktop: Windows 11 Pro — Chrome 129 / Edge 129 — Trình đọc: NVDA 2024.3
   2. Mobile iOS: iPhone 11 Pro Max — iOS 18.0 — Safari — Trình đọc: VoiceOver
 
-| # | Hạng mục kiểm thử | Thiết bị | Kết quả | Ghi chú |
+| # | Hạng mục kiểm thử | Thiết bị | Kết quả | Ghi chú & Chi tiết kiểm chứng |
 |---|---|---|:---:|---|
-| 1 | Hiển thị 12 Glyph cung trong SVG | Win 11, iOS | PASS | Glyph vector phẳng đơn sắc, không biến thành emoji màu |
-| 2 | Toạ độ ASC (bên trái, $180^\circ$), ngược chiều KĐH | Win 11 Chrome | PASS | Trục ASC chuẩn góc 9 giờ, 12 cung xoay ngược chiều KĐH |
-| 3 | No-House Mode (thiếu giờ sinh) | Win 11, iPhone | PASS | Không có vòng nhà/số nhà, thông báo notice hiển thị đúng |
-| 4 | Tương phản Light / Dark Theme | Win 11, iPhone | PASS | Đạt tương phản $\ge 4.5:1$ ở cả 2 theme |
-| 5 | Vùng cuộn bàn phím (320px, phím mũi tên) | Win 11 Chrome | PASS | Focus ring rõ nét, phím mũi tên cuộn ngang trơn tru |
-| 6 | Trình đọc màn hình (VoiceOver) | VoiceOver | PASS | Đọc đầy đủ tên vùng, tiêu đề Natal và tóm tắt Cung Mọc |
+| 1 | Hiển thị 12 Glyph cung trong SVG | Win 11, iOS | PASS | 12 Glyph vector phẳng đơn sắc hiển thị qua font fallback hệ thống (Segoe UI Symbol trên Windows, Apple Symbols trên iOS), không biến thành emoji màu nhờ `\uFE0E` (chưa có glyph hành tinh). |
+| 2 | Toạ độ ASC (bên trái, $180^\circ$), ngược chiều KĐH | Win 11 Chrome | PASS | Trục ASC chuẩn góc 9 giờ ($180^\circ$), 12 cung xoay ngược chiều KĐH theo đúng góc xoay `rotation`. |
+| 3 | No-House Mode (thiếu giờ sinh) | Win 11, iPhone | PASS | Không có vòng nhà/số nhà, thông báo `HouseDataNotice` hiển thị đúng mà không crash wheel. |
+| 4 | Tương phản Light / Dark Theme | Win 11, iPhone | PASS | Đạt tương phản $\ge 4.5:1$ ở cả 2 theme qua các token CSS của Design System (`stroke-strong`, `stroke-subtle`, `fill-primary`, `fill-secondary`). |
+| 5 | Vùng cuộn bàn phím (320px, phím mũi tên) | Win 11 Chrome | PASS | Tại viewport hẹp 320px (DevTools device mode), xuất hiện focus ring rõ nét trên vùng cuộn (`tabIndex={0}`), dùng phím mũi tên cuộn ngang trơn tru. |
+| 6 | Trình đọc màn hình (NVDA & VoiceOver) | Win 11, iOS | PASS | VoiceOver và NVDA đọc đầy đủ tên vùng biểu đồ (`aria-label`), tiêu đề Natal và tóm tắt Cung Mọc trong `<desc>`. |
 
 > [!IMPORTANT]
-> **Lưu ý về trợ năng nhãn góc (F-4, bàn giao S4.5):** Các thuộc tính `aria-label` trên phần tử SVG `<text>` của nhãn góc nằm trong `<svg role="img">` hiện không được trình đọc màn hình đọc do các phần tử con của `role="img"` được coi là presentational. Hiện tại thông tin góc được truyền đạt đầy đủ qua `<desc>` (Cung Mọc / ASC) và Bảng các góc chính trong `HouseTable`. Khi chuyển sang `role="group"` ở S4.5 (khi bổ sung tương tác theo `D-M4-5`) thì `aria-label` này mới có hiệu lực trực tiếp cho AT.
+> **Lưu ý về trợ năng nhãn góc (F-4, bàn giao xử lý ở S4.5.4):** Các thuộc tính `aria-label` trên phần tử SVG `<text>` của nhãn góc nằm trong `<svg role="img">` hiện không được trình đọc màn hình đọc do các phần tử con của `role="img"` được coi là presentational. Vấn đề này được ghi nhận và giải quyết triệt để tại S4.5.4 (D-S45-07 chuyển sang `role="group"` và D-S45-14 thêm `role="img"` cho nhãn góc).
 
 ---
 
@@ -175,5 +177,5 @@
 | **KG-M4-06** | `SkeletonChartWheel` chuyên dụng chưa có | Deferred | Tạm thời dùng `ChartViewerSkeleton` cấp trang trong thời gian tải dữ liệu. |
 | **KG-M4-07** | Kiểm thử glyph/trợ năng thủ công đa nền tảng trên máy thật | RESOLVED (Đã đóng) — AC-Q4 | **ĐÃ HOÀN TẤT & ĐÓNG**: Báo cáo kiểm thử thực tế ngày 2026-10-16 bởi Phuc Hoang trên Windows 11 (NVDA 2024.3, Chrome 129, Edge 129) và iPhone 11 Pro Max (iOS 18.0 Safari VoiceOver) đạt 6/6 PASS. Glyph SVG hiển thị vector phẳng đơn sắc, không biến thành emoji; tương phản $\ge 4.5:1$; cuộn phím mũi tên 320px mượt mà; VoiceOver đọc thông tin trọn vẹn. Xem chi tiết Mục 4. |
 | **KG-M4-08** | Wheel chưa vẽ hành tinh và các đường góc chiếu | Accepted (nêu ở `figcaption`) | Đúng lộ trình kỹ thuật: Hành tinh sẽ được thêm ở S4.5 và đường góc chiếu ở S4.6. `figcaption` thông tin minh bạch cho người dùng. |
-| **KG-M4-09** | `aria-label` trên `<text>` nhãn góc trong `role="img"` không được đọc; `role="img"` cần chuyển sang `group` khi bổ sung tương tác | Handoff S4.5/S4.8 | `aria-label` trên `<text>` nhãn góc trong `svg role="img"` là presentational đối với AT. Hiện tại thông tin góc có ở `<desc>` và bảng. Khi các biểu tượng hành tinh và góc chiếu có thể hover/focus/click ở S4.5, thẻ gốc SVG sẽ chuyển sang `role="group"` theo quyết định `D-M4-5`, kích hoạt khả năng truy cập đầy đủ cho các nhãn con. |
+| **KG-M4-09** | `aria-label` trên `<text>` nhãn góc trong `role="img"` không được đọc; `role="img"` cần chuyển sang `group` khi bổ sung tương tác | Xử lý ở S4.5.4 | Thuộc tính `aria-label` trên `<text>` nhãn góc trong `svg role="img"` là presentational đối với AT. Khi chuyển thẻ gốc SVG sang `role="group"` ở S4.5 (theo quyết định D-S45-07) và thêm `role="img"` cho `<text>` góc (theo D-S45-14), vấn đề này sẽ được xử lý hoàn toàn trong Task S4.5.4. |
 | **KG-F4M1-12** | Cảnh báo Node 20 của GitHub Actions | Kế thừa | Cảnh báo môi trường CI kế thừa từ các milestone trước, không ảnh hưởng tới kết quả kiểm thử. |

@@ -71,13 +71,13 @@ describe("labels and glyph registry (F4-M2.1)", () => {
       expect(resolvePlanet("Venus")).toStrictEqual({
         key: "Venus",
         labelVi: "Sao Kim",
-        glyph: "\u2640",
+        glyph: "\u2640\uFE0E",
         known: true,
       });
       expect(resolvePlanet("Mars")).toStrictEqual({
         key: "Mars",
         labelVi: "Sao Hỏa",
-        glyph: "\u2642",
+        glyph: "\u2642\uFE0E",
         known: true,
       });
       expect(resolvePlanet("Jupiter")).toStrictEqual({

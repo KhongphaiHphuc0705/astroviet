@@ -31,3 +31,25 @@ export function formatDegreeMinute(
 
   return `${degrees}${DEGREE_SIGN}${minutes.toString().padStart(2, "0")}${MINUTE_SIGN}`;
 }
+
+/**
+ * Extracts the whole degree part from a "D°MM′" formatted degree label string.
+ * Returns "D°", or null if input is null/undefined or not conforming to "D°MM′".
+ * Decision D-S45-04: formats whole degree on wheel without mutating ViewModel.
+ */
+export function formatDegreeOnly(
+  degreeLabel: string | null | undefined,
+): string | null {
+  if (typeof degreeLabel !== "string") {
+    return null;
+  }
+  const degreeIndex = degreeLabel.indexOf(DEGREE_SIGN);
+  if (degreeIndex === -1) {
+    return null;
+  }
+  const degPart = degreeLabel.slice(0, degreeIndex);
+  if (!/^\d+$/.test(degPart)) {
+    return null;
+  }
+  return `${degPart}${DEGREE_SIGN}`;
+}
