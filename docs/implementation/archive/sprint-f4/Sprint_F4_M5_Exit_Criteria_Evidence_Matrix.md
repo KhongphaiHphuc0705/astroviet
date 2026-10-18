@@ -3,9 +3,9 @@
 ## Planet Rendering (`FE-S4.5`)
 
 **Vị trí lưu:** `docs/implementation/archive/sprint-f4/Sprint_F4_M5_Exit_Criteria_Evidence_Matrix.md`  
-**Milestone:** F4-M5 (`FE-S4.5`: Biểu diễn hành tinh trên Chart Wheel — glyph Unicode, vạch vị trí thật, chỉ báo nghịch hành ℞, nhãn độ nguyên, đường nối leader, thuật toán dàn nhãn tất định 2-tier kèm Tier B-safe)  
-**Commit Head:** `HEAD` · **Evidence Commit:** `HEAD`  
-**Link CI #268:** https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/39039444752  
+**Milestone:** F4-M5 (`FE-S4.5`: Biểu diễn hành tinh trên Chart Wheel — glyph Unicode, vạch vị trí thật, chỉ báo nghịch hành ℞, nhãn độ nguyên, đường nối leader, thuật toán dàn nhãn tất định 2-tier kèm Tier B-safe) 
+**Evidence Commit:** `bd3b619`  
+**Link CI #269:** https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/39082565856  
 **Quy ước Evidence commit (D-C3):** Evidence commit là commit cuối cùng chứa mã nguồn được CI xác nhận. Các commit bổ sung sau đó chỉ chạm `docs/**` được nghiệm thu theo `[repo]` mà không cần kích hoạt CI riêng (phù hợp cấu hình `frontend-ci.yml` chỉ chạy khi thay đổi mã nguồn).  
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` quyết định phê duyệt.  
 **Trạng thái:** `VERIFIED` · `PARTIALLY VERIFIED` · `UNVERIFIED` · `ACCEPTED GAP` · `NOT APPLICABLE`.
