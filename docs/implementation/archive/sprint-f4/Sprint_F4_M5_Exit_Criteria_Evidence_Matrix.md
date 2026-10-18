@@ -94,7 +94,7 @@
 | **AC-PL16** | Giữ nhóm trợ năng `role="img"` không có chữ khi overflow | `PlanetLayer.tsx`, `PlanetLayer.test.tsx` (PL16) | [run] | VERIFIED |
 | **AC-Q1** | `typecheck`, `lint`, `format:check`, `build` exit code 0 | Chạy thực tế trên môi trường, exit code 0 toàn bộ | [run] | VERIFIED |
 | **AC-Q2** | Toàn bộ suite S4.5 đạt 100% | `npx vitest run` đạt 13 files, 219 tests (100% passed) | [run] | VERIFIED |
-| **AC-Q3** | Báo cáo kiểm thử tự động CI Frontend xanh | CI #268 (Run `39039444752`) xanh 100% | [repo] | VERIFIED |
+| **AC-Q3** | Báo cáo kiểm thử tự động CI Frontend xanh | [CI #269 — GitHub Actions Run 39082565856](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/39082565856) trên Evidence commit `bd3b619` xanh 100% | [repo] | VERIFIED |
 | **AC-Q4** | Báo cáo kiểm thử thủ công trực quan & trợ năng đa nền tảng | Hướng dẫn kiểm thử vật lý Mục 4 đã được thiết lập chi tiết | [owner] | ACCEPTED GAP (Must resolve by Owner) |
 
 ---
