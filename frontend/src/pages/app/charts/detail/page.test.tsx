@@ -2,7 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
@@ -16,6 +16,7 @@ import {
 } from "@features/chart/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import * as reportErrorModule from "@shared/lib/report-error";
+import { installMatchMedia } from "@test/matchMedia";
 import { server } from "@test/msw-server";
 import { renderWithProviders } from "@test/render";
 
@@ -561,6 +562,70 @@ describe("ChartDetailPage", () => {
         await screen.findByTestId("chart-viewer-shell"),
       ).toBeInTheDocument();
       expect(heading).toHaveFocus();
+    });
+
+    it("SW10: resets userChoice state when navigating between different chart IDs", async () => {
+      const chart1 = chartFull;
+      const chart2 = {
+        ...chartFull,
+        id: "11111111-2222-3333-4444-555555555555",
+      };
+
+      server.use(
+        mockGetChart(({ params }) => {
+          if (params.chartId === chart2.id) {
+            return HttpResponse.json(chart2);
+          }
+          return HttpResponse.json(chart1);
+        }),
+      );
+
+      // On desktop (matchMedia >= 768px), aspect lines switch defaults to enabled
+      const controller = installMatchMedia(true);
+
+      const TestNavigation = () => {
+        const navigate = useNavigate();
+        return (
+          <>
+            <button onClick={() => navigate(`/app/charts/${chart2.id}`)}>
+              Chuyển lá số 2
+            </button>
+            <Routes>
+              <Route
+                path="/app/charts/:chartId"
+                element={<ChartDetailPage />}
+              />
+            </Routes>
+          </>
+        );
+      };
+
+      renderWithProviders(<TestNavigation />, {
+        initialEntries: [`/app/charts/${chart1.id}`],
+      });
+
+      // Initially enabled by responsive default
+      const toggle = await screen.findByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeChecked();
+
+      // User manually turns off aspect lines
+      const user = userEvent.setup();
+      await user.click(toggle);
+      expect(toggle).not.toBeChecked();
+
+      // Navigate to chart 2
+      const navBtn = screen.getByRole("button", { name: "Chuyển lá số 2" });
+      await user.click(navBtn);
+
+      // Shell remounts because key={chartId} changed, resetting userChoice to null (reverting to responsive default = checked)
+      const newToggle = await screen.findByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(newToggle).toBeChecked();
+
+      controller.restore();
     });
   });
 });

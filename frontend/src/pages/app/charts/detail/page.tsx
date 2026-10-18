@@ -105,7 +105,7 @@ export default function ChartDetailPage() {
   if (viewKind === "loading") {
     content = <ChartViewerSkeleton />;
   } else if (viewKind === "ready" && mapping?.ok) {
-    content = <ChartViewerShell vm={mapping.vm} />;
+    content = <ChartViewerShell key={chartId} vm={mapping.vm} />;
   } else if (viewKind === "invalid-data") {
     content = (
       <EmptyState
