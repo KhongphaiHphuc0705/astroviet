@@ -1,25 +1,12 @@
 import type { AspectGeometryResult } from "../../model/aspectGeometry";
 import { WHEEL_CENTER } from "../../model/geometry";
-import type { NatureTone } from "../../model/labels";
+
+import { TONE_FILL_CLASSES, TONE_STROKE_CLASSES } from "./aspectStyles";
 
 export interface AspectLayerProps {
   geometry: AspectGeometryResult;
   center?: number;
 }
-
-const TONE_STROKE_CLASSES: Record<NatureTone, string> = {
-  harmonious: "stroke-accent-secondary",
-  tense: "stroke-accent-primary",
-  neutral: "stroke-secondary",
-  unknown: "stroke-muted",
-};
-
-const TONE_FILL_CLASSES: Record<NatureTone, string> = {
-  harmonious: "fill-accent-secondary",
-  tense: "fill-accent-primary",
-  neutral: "fill-secondary",
-  unknown: "fill-muted",
-};
 
 /**
  * AspectLayer: SVG rendering of astrological aspect lines and Conjunction arcs/dots.

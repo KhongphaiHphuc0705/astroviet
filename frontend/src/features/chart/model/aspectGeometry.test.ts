@@ -281,6 +281,24 @@ describe("aspectGeometry (M6.2: G1 - G25)", () => {
     expect(resReverse.lines.map((l) => l.key)).toEqual(["K2", "K1", "K3"]);
   });
 
+  it("G11b: tie-breaks equal orbs by raw character code unit order independently of locale", () => {
+    const planets = [
+      makePlanet("Sun", 0),
+      makePlanet("Moon", 120),
+      makePlanet("Mars", 60),
+    ];
+    // '#' (ASCII 35) vs ':' (ASCII 58)
+    const a1 = makeAspect("Sun:Trine:Moon", "Sun", "Moon", "Trine", 1.0);
+    const a2 = makeAspect("Sun#2:Trine:Mars", "Sun", "Mars", "Trine", 1.0);
+
+    const res = buildAspectGeometry([a1, a2], planets, 0);
+    // In code unit comparison, '#' < ':', so "Sun#2..." comes before "Sun:..."
+    expect(res.lines.map((l) => l.key)).toEqual([
+      "Sun#2:Trine:Mars",
+      "Sun:Trine:Moon",
+    ]);
+  });
+
   // G12: hành tinh trùng key
   it("G12: skips aspect with ENDPOINT_AMBIGUOUS reason when planet key is duplicated (both keyA and keyB)", () => {
     const planetsA = [
@@ -343,6 +361,25 @@ describe("aspectGeometry (M6.2: G1 - G25)", () => {
     expect(res.lines).toHaveLength(0);
     expect(res.skipped).toHaveLength(1);
     expect(res.skipped[0]!.reason).toBe("UNSUPPORTED_TYPE");
+  });
+
+  it("G15b: skips Object prototype property names (constructor, toString, hasOwnProperty, __proto__) as UNSUPPORTED_TYPE", () => {
+    const planets = [makePlanet("Sun", 0), makePlanet("Moon", 60)];
+    const protoProps = [
+      "constructor",
+      "toString",
+      "hasOwnProperty",
+      "__proto__",
+      "valueOf",
+      "isPrototypeOf",
+    ];
+    for (const prop of protoProps) {
+      const aspects = [makeAspect(`A-${prop}`, "Sun", "Moon", prop)];
+      const res = buildAspectGeometry(aspects, planets, 0);
+      expect(res.lines).toHaveLength(0);
+      expect(res.skipped).toHaveLength(1);
+      expect(res.skipped[0]!.reason).toBe("UNSUPPORTED_TYPE");
+    }
   });
 
   // G16: nature lạ / unknown

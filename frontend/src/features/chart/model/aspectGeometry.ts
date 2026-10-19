@@ -163,13 +163,16 @@ export function buildAspectGeometry(
       continue;
     }
 
-    // Supported aspect type check
-    const typeKey = aspect.type.key as AspectType;
-    const style = ASPECT_LINE_STYLES[typeKey];
-    if (!style) {
+    // Supported aspect type check (defend against prototype inheritance such as constructor, toString, etc.)
+    const typeKey = aspect.type.key;
+    if (
+      typeof typeKey !== "string" ||
+      !Object.hasOwn(ASPECT_LINE_STYLES, typeKey)
+    ) {
       skipped.push({ key, reason: "UNSUPPORTED_TYPE" });
       continue;
     }
+    const style = ASPECT_LINE_STYLES[typeKey as AspectType];
 
     // Ambiguous endpoints check
     if (
@@ -275,8 +278,10 @@ export function buildAspectGeometry(
     }
   }
 
-  // 3. Sort lines by orb descending (tight aspects drawn last on top), tie-broken by key ascending
-  lines.sort((a, b) => b.orb - a.orb || a.key.localeCompare(b.key));
+  // 3. Sort lines by orb descending (tight aspects drawn last on top), tie-broken by key ascending (code unit comparison)
+  lines.sort(
+    (a, b) => b.orb - a.orb || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0),
+  );
 
   // 4. Construct legend in canonical KNOWN_ASPECT_TYPES order
   const legend: AspectLegendEntry[] = [];

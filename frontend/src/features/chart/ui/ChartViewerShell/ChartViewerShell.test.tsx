@@ -353,13 +353,35 @@ describe("ChartViewerShell", () => {
       expect(toggle).toBeInTheDocument();
 
       const describedBy = toggle.getAttribute("aria-describedby");
-      expect(describedBy).toBe("aspect-switch-hint");
+      expect(describedBy).toBeTruthy();
 
       const hintEl = document.getElementById(describedBy!);
       expect(hintEl).toBeInTheDocument();
       expect(hintEl?.textContent).toBe(
         "Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên biểu đồ.",
       );
+    });
+
+    it("SW5b: uses unique useId-generated hint IDs when multiple shells are rendered simultaneously", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(
+        <div>
+          <ChartViewerShell vm={vm} />
+          <ChartViewerShell vm={vm} />
+        </div>,
+      );
+
+      const switches = screen.getAllByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(switches).toHaveLength(2);
+
+      const id1 = switches[0]!.getAttribute("aria-describedby");
+      const id2 = switches[1]!.getAttribute("aria-describedby");
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
+      expect(id1).not.toBe(id2);
     });
 
     it("SW6: viewport resize before user interaction dynamically updates aspect lines state", () => {

@@ -1,19 +1,13 @@
 import { cn } from "@shared/lib/cn";
 
 import type { AspectLegendEntry } from "../../model/aspectGeometry";
-import type { NatureTone } from "../../model/labels";
+
+import { TONE_STROKE_CLASSES } from "./aspectStyles";
 
 export interface AspectLegendProps {
   legend: AspectLegendEntry[];
   className?: string;
 }
-
-const TONE_STROKE_CLASSES: Record<NatureTone, string> = {
-  harmonious: "stroke-accent-secondary",
-  tense: "stroke-accent-primary",
-  neutral: "stroke-secondary",
-  unknown: "stroke-muted",
-};
 
 /**
  * AspectLegend: semantic data-driven legend explaining rendered aspect line patterns and nature groups.

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { useMediaQuery } from "@shared/hooks/useMediaQuery";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
@@ -25,6 +25,7 @@ export interface ChartViewerShellProps {
 }
 
 export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
+  const hintId = useId();
   const isTable = useMediaQuery("(min-width: 640px)");
   const layout = isTable ? "table" : "cards";
   const density = usePreferenceStore((s) => s.densityMode);
@@ -82,9 +83,9 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
               label="Hiện đường góc chiếu"
               checked={showAspectLines}
               onChange={(e) => setUserChoice(e.target.checked)}
-              aria-describedby="aspect-switch-hint"
+              aria-describedby={hintId}
               description={
-                <span id="aspect-switch-hint">
+                <span id={hintId}>
                   Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên
                   biểu đồ.
                 </span>
