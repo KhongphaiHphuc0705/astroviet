@@ -528,6 +528,51 @@ describe("ChartViewerShell", () => {
     }, 60_000);
 
     describe("Milestone F4-M8 Synchronization Tests (nhóm S-M8)", () => {
+      it("S-A1: selecting a planet from ChartWheel syncs to PlanetTable and SelectionDetail", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const wheelSunBtn = container.querySelector(
+          '[data-part="labels"] > [data-planet="Sun"]',
+        );
+        expect(wheelSunBtn).toBeInTheDocument();
+        expect(wheelSunBtn).toHaveAttribute("aria-pressed", "false");
+
+        fireEvent.click(wheelSunBtn!);
+
+        expect(wheelSunBtn).toHaveAttribute("aria-pressed", "true");
+        const tableSunBtn = screen.getByRole("button", {
+          name: "Chọn Mặt Trời",
+        });
+        expect(tableSunBtn).toHaveAttribute("aria-pressed", "true");
+
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        expect(screen.getByText("Đang lọc: Mặt Trời")).toBeInTheDocument();
+      });
+
+      it("S-C1: selecting an aspect from ChartWheel syncs to AspectTable and SelectionDetail", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const firstAspectHit = container.querySelector(
+          '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+        );
+        expect(firstAspectHit).toBeInTheDocument();
+
+        fireEvent.click(firstAspectHit!);
+
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("status").textContent).toContain(
+          "Đã chọn góc chiếu",
+        );
+      });
+
       it("S-B1: selecting a planet from PlanetTable syncs to SelectionDetail and live region", () => {
         controller = installMatchMedia(true);
         const vm = toChartViewModel(chartFull);

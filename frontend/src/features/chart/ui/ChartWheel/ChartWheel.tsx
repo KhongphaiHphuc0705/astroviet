@@ -9,6 +9,7 @@ import {
   buildPlanetWheelModel,
   type PlanetWheelModel,
 } from "../../model/planetGeometry";
+import type { WheelInteraction } from "../../model/selection";
 import {
   buildWheelGeometry,
   type WheelGeometry,
@@ -27,6 +28,7 @@ export interface ChartWheelProps {
   planetModel?: PlanetWheelModel;
   aspectGeometry?: AspectGeometryResult;
   showAspectLines?: boolean;
+  interaction?: WheelInteraction;
   className?: string;
 }
 
@@ -75,6 +77,7 @@ export function ChartWheel({
   planetModel: planetModelProp,
   aspectGeometry: aspectGeometryProp,
   showAspectLines = false,
+  interaction,
   className,
 }: ChartWheelProps) {
   const titleId = useId();
@@ -166,8 +169,13 @@ export function ChartWheel({
           <TickLayer ticks={wheelGeometry.ticks} />
           <HouseLayer houses={wheelGeometry.houses} />
           <AngleLayer angles={wheelGeometry.angles} />
-          {showAspectLines && <AspectLayer geometry={resolvedAspectGeometry} />}
-          <PlanetLayer model={planetModel} />
+          {showAspectLines && (
+            <AspectLayer
+              geometry={resolvedAspectGeometry}
+              interaction={interaction}
+            />
+          )}
+          <PlanetLayer model={planetModel} interaction={interaction} />
         </svg>
       </div>
       <figcaption className="mt-3 text-center text-body-sm text-secondary">

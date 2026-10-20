@@ -472,4 +472,29 @@ describe("selection model (M8 Task 1: U1 - U24)", () => {
       ),
     ).toBe("");
   });
+
+  it("U25: handles fallbacks and unknown actions safely", () => {
+    const initialState = INITIAL_INTERACTION_STATE;
+    // @ts-expect-error testing unknown action
+    expect(interactionReducer(initialState, { type: "UNKNOWN" })).toBe(
+      initialState,
+    );
+
+    expect(
+      resolveSelection(
+        // @ts-expect-error testing unknown selection kind
+        { kind: "unknown" },
+        { planetKeys: new Set(), aspectKeys: new Set() },
+      ),
+    ).toEqual({ kind: "none" });
+
+    expect(
+      buildLiveMessage(
+        { seq: 7, kind: "selected" },
+        // @ts-expect-error testing unknown selection kind
+        { kind: "unknown" },
+        fullVM,
+      ),
+    ).toBe("");
+  });
 });

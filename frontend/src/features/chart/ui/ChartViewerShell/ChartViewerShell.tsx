@@ -113,6 +113,39 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
     [interactionState.announcement, effectiveSelection, vm],
   );
 
+  const wheelInteraction = useMemo(
+    () => ({
+      selection: effectiveSelection,
+      emphasis,
+      onSelect: (target: InteractionTarget) =>
+        dispatch({ type: "select", target }),
+      onPreview: (
+        target: InteractionTarget | null,
+        source: "hover" | "focus",
+      ) => {
+        if (target === null) {
+          if (source === "hover" && interactionState.hovered) {
+            dispatch({ type: "hoverLeave", target: interactionState.hovered });
+          } else if (source === "focus" && interactionState.focused) {
+            dispatch({ type: "focusLeave", target: interactionState.focused });
+          }
+        } else {
+          if (source === "hover") {
+            dispatch({ type: "hoverEnter", target });
+          } else {
+            dispatch({ type: "focusEnter", target });
+          }
+        }
+      },
+    }),
+    [
+      effectiveSelection,
+      emphasis,
+      interactionState.hovered,
+      interactionState.focused,
+    ],
+  );
+
   const handleSelectPlanet = useCallback((key: PlanetKey) => {
     dispatch({ type: "select", target: { kind: "planet", key } });
   }, []);
@@ -262,6 +295,7 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
           geometry={wheelGeometry}
           aspectGeometry={aspectGeometry}
           showAspectLines={showAspectLines}
+          interaction={wheelInteraction}
         />
         <SelectionDetail
           selection={effectiveSelection}

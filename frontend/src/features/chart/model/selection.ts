@@ -205,6 +205,13 @@ export interface EmphasisResult {
   active: boolean;
 }
 
+export interface WheelInteraction {
+  selection: Selection;
+  emphasis: EmphasisResult;
+  onSelect(target: InteractionTarget): void;
+  onPreview(target: InteractionTarget | null, source: "hover" | "focus"): void;
+}
+
 /**
  * Computes structural emphasis (halo & dimming sets) purely by key lookup.
  * Performs no astrological calculations.
