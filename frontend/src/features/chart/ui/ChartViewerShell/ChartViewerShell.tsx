@@ -1,19 +1,23 @@
-import { useMemo } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { useMediaQuery } from "@shared/hooks/useMediaQuery";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { Alert } from "@shared/ui/Alert";
 import { Card } from "@shared/ui/Card";
+import { Switch } from "@shared/ui/Switch";
 
+import { buildAspectGeometry } from "../../model/aspectGeometry";
 import type { ChartViewModel } from "../../model/chartViewModel";
 import { buildWheelGeometry } from "../../model/wheelGeometry";
 import { AspectTable } from "../AspectTable";
-import { ChartWheel } from "../ChartWheel";
+import { AspectLegend, ChartWheel } from "../ChartWheel";
 import { HouseTable } from "../HouseTable";
 import { PlanetTable } from "../PlanetTable";
 
 import { formatCalculatedAt } from "./formatCalculatedAt";
 import { HouseDataNotice } from "./HouseDataNotice";
+
+export const ASPECT_LINES_DEFAULT_QUERY = "(min-width: 768px)";
 
 export interface ChartViewerShellProps {
   vm: ChartViewModel;
@@ -21,10 +25,20 @@ export interface ChartViewerShellProps {
 }
 
 export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
+  const hintId = useId();
   const isTable = useMediaQuery("(min-width: 640px)");
   const layout = isTable ? "table" : "cards";
   const density = usePreferenceStore((s) => s.densityMode);
   const wheelGeometry = useMemo(() => buildWheelGeometry(vm), [vm]);
+
+  const aspectGeometry = useMemo(
+    () => buildAspectGeometry(vm.aspects, vm.planets, wheelGeometry.rotation),
+    [vm.aspects, vm.planets, wheelGeometry.rotation],
+  );
+
+  const matchesMd = useMediaQuery(ASPECT_LINES_DEFAULT_QUERY);
+  const [userChoice, setUserChoice] = useState<boolean | null>(null);
+  const showAspectLines = userChoice ?? matchesMd;
 
   return (
     <div className={className ?? "space-y-6"} data-testid="chart-viewer-shell">
@@ -61,8 +75,31 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         />
       )}
 
-      <Card variant="raised" className="p-4 sm:p-6">
-        <ChartWheel vm={vm} geometry={wheelGeometry} />
+      <Card variant="raised" className="space-y-4 p-4 sm:p-6">
+        {aspectGeometry.lines.length > 0 && (
+          <div className="space-y-3">
+            <Switch
+              size="md"
+              label="Hiện đường góc chiếu"
+              checked={showAspectLines}
+              onChange={(e) => setUserChoice(e.target.checked)}
+              aria-describedby={hintId}
+              description={
+                <span id={hintId}>
+                  Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên
+                  biểu đồ.
+                </span>
+              }
+            />
+            {showAspectLines && <AspectLegend legend={aspectGeometry.legend} />}
+          </div>
+        )}
+        <ChartWheel
+          vm={vm}
+          geometry={wheelGeometry}
+          aspectGeometry={aspectGeometry}
+          showAspectLines={showAspectLines}
+        />
       </Card>
 
       <PlanetTable

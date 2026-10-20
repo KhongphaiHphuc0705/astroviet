@@ -14,8 +14,10 @@ import {
 } from "../types";
 
 import {
+  chartAllAspects,
   chartDenseCluster,
   chartFull,
+  chartNoAspects,
   chartNoHouses,
   chartSummaryFixtures,
   chartZeroBoundary,
@@ -426,6 +428,67 @@ describe("Chart Fixtures Contract (Sprint F4 M1 Section 18)", () => {
           // isRetrograde <=> speed < 0
           expect(p.isRetrograde).toBe(p.speed < 0);
         }
+      }
+    });
+  });
+
+  describe("DERIVED aspect fixtures contract (chartNoAspects, chartAllAspects)", () => {
+    it("chartNoAspects has empty aspects and matches expected keys", () => {
+      expect(Object.keys(chartNoAspects).sort()).toEqual(
+        EXPECTED_TOP_LEVEL_KEYS,
+      );
+      expect(chartNoAspects.aspects).toEqual([]);
+      expect(chartNoAspects.planets.length).toBe(10);
+    });
+
+    it("chartAllAspects contains exactly 5 aspects covering all 5 known aspect types", () => {
+      expect(Object.keys(chartAllAspects).sort()).toEqual(
+        EXPECTED_TOP_LEVEL_KEYS,
+      );
+      expect(chartAllAspects.aspects.length).toBe(5);
+
+      const presentTypes = new Set(
+        chartAllAspects.aspects.map((a) => a.aspectType),
+      );
+      expect(presentTypes.size).toBe(5);
+      expect(presentTypes.has("Conjunction")).toBe(true);
+      expect(presentTypes.has("Sextile")).toBe(true);
+      expect(presentTypes.has("Square")).toBe(true);
+      expect(presentTypes.has("Trine")).toBe(true);
+      expect(presentTypes.has("Opposition")).toBe(true);
+
+      const planetNames = new Set(chartAllAspects.planets.map((p) => p.name));
+      const planetMap = new Map(
+        chartAllAspects.planets.map((p) => [p.name, p.longitude]),
+      );
+
+      for (const aspect of chartAllAspects.aspects) {
+        expect(planetNames.has(aspect.planetA)).toBe(true);
+        expect(planetNames.has(aspect.planetB)).toBe(true);
+        expect(KNOWN_ASPECT_TYPES as readonly string[]).toContain(
+          aspect.aspectType,
+        );
+        expect(KNOWN_ASPECT_NATURES as readonly string[]).toContain(
+          aspect.nature,
+        );
+        expect(aspect.orb).toBeGreaterThanOrEqual(0);
+        expect(Number.isFinite(aspect.exactAngle)).toBe(true);
+
+        // Verify angular separation matches aspect angle within orb
+        const lonA = planetMap.get(aspect.planetA)!;
+        const lonB = planetMap.get(aspect.planetB)!;
+        const diff = Math.abs(
+          ((((lonB - lonA + 540) % 360) + 360) % 360) - 180,
+        );
+
+        let targetAngle = 0;
+        if (aspect.aspectType === "Conjunction") targetAngle = 0;
+        else if (aspect.aspectType === "Sextile") targetAngle = 60;
+        else if (aspect.aspectType === "Square") targetAngle = 90;
+        else if (aspect.aspectType === "Trine") targetAngle = 120;
+        else if (aspect.aspectType === "Opposition") targetAngle = 180;
+
+        expect(Math.abs(diff - targetAngle)).toBeCloseTo(aspect.orb, 5);
       }
     });
   });

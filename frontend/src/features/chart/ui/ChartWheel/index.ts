@@ -1,4 +1,7 @@
 export { AngleLayer, type AngleLayerProps } from "./AngleLayer";
+export { AspectLayer, type AspectLayerProps } from "./AspectLayer";
+export { AspectLegend, type AspectLegendProps } from "./AspectLegend";
+export { TONE_FILL_CLASSES, TONE_STROKE_CLASSES } from "./aspectStyles";
 export {
   buildWheelDescription,
   ChartWheel,

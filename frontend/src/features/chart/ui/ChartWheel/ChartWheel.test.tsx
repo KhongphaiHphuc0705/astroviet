@@ -2,7 +2,12 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { axe } from "vitest-axe";
 
-import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
+import {
+  chartAllAspects,
+  chartFull,
+  chartNoAspects,
+  chartNoHouses,
+} from "../../api/mocks/fixtures";
 import { KNOWN_ZODIAC_SIGNS } from "../../api/types";
 import { toChartViewModel } from "../../model/chartViewModel";
 import { buildPlanetWheelModel } from "../../model/planetGeometry";
@@ -374,5 +379,109 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
     expect(figcaption?.textContent).toBe(
       "Do các hành tinh tập trung quá dày, nhãn chữ không hiển thị trên vòng tròn. Vui lòng xem bảng dữ liệu chi tiết bên dưới.",
     );
+  });
+
+  describe("AspectLayer Integration (A7 - A9, A12)", () => {
+    const allAspectsVM = toChartViewModel(chartAllAspects);
+    const noAspectsVM = toChartViewModel(chartNoAspects);
+
+    it("A7: toggling showAspectLines does not alter other layer elements or planet marker coordinates", () => {
+      const { container: offContainer } = render(
+        <ChartWheel vm={allAspectsVM} showAspectLines={false} />,
+      );
+      const { container: onContainer } = render(
+        <ChartWheel vm={allAspectsVM} showAspectLines={true} />,
+      );
+
+      // Verify layer counts
+      const offSigns = offContainer.querySelectorAll(
+        '[data-layer="zodiac-ring"] *',
+      );
+      const onSigns = onContainer.querySelectorAll(
+        '[data-layer="zodiac-ring"] *',
+      );
+      expect(offSigns).toHaveLength(onSigns.length);
+
+      const offHouses = offContainer.querySelectorAll(
+        '[data-layer="house-ring"] *',
+      );
+      const onHouses = onContainer.querySelectorAll(
+        '[data-layer="house-ring"] *',
+      );
+      expect(offHouses).toHaveLength(onHouses.length);
+
+      const offPlanets = offContainer.querySelectorAll(
+        '[data-layer="planets"] [data-planet]',
+      );
+      const onPlanets = onContainer.querySelectorAll(
+        '[data-layer="planets"] [data-planet]',
+      );
+      expect(offPlanets).toHaveLength(onPlanets.length);
+
+      // Verify marker coordinates for all planets are identical
+      offPlanets.forEach((pOff) => {
+        const key = pOff.getAttribute("data-planet");
+        const pOn = onContainer.querySelector(
+          `[data-layer="planets"] [data-planet="${key}"]`,
+        );
+        const offLine = pOff.querySelector("line");
+        const onLine = pOn?.querySelector("line");
+
+        expect(offLine?.getAttribute("x1")).toBe(onLine?.getAttribute("x1"));
+        expect(offLine?.getAttribute("y1")).toBe(onLine?.getAttribute("y1"));
+        expect(offLine?.getAttribute("x2")).toBe(onLine?.getAttribute("x2"));
+        expect(offLine?.getAttribute("y2")).toBe(onLine?.getAttribute("y2"));
+      });
+    });
+
+    it("A8: renders cleanly without error and without aspect layer for chartNoAspects", () => {
+      const { container } = render(
+        <ChartWheel vm={noAspectsVM} showAspectLines={true} />,
+      );
+
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+      const figcaption = container.querySelector("figcaption");
+      expect(figcaption?.textContent).toBe(
+        "Hiển thị vòng 12 cung, nhà, các góc và vị trí hành tinh.",
+      );
+    });
+
+    it("A9: renders aspect lines cleanly for chartNoHouses while preserving baseline r=175", () => {
+      const { container } = render(
+        <ChartWheel vm={noHousesVM} showAspectLines={true} />,
+      );
+
+      const aspectLayer = container.querySelector('[data-layer="aspects"]');
+      expect(aspectLayer).toBeInTheDocument();
+
+      const baseline = container.querySelector('circle[data-part="baseline"]');
+      expect(baseline).toBeInTheDocument();
+      expect(baseline).toHaveAttribute("r", "175");
+    });
+
+    it("A12: AspectLayer is placed strictly before PlanetLayer in the DOM tree when showAspectLines is true", () => {
+      const { container } = render(
+        <ChartWheel vm={allAspectsVM} showAspectLines={true} />,
+      );
+
+      const layers = Array.from(container.querySelectorAll("svg > g")).map(
+        (g) => g.getAttribute("data-layer"),
+      );
+
+      expect(layers).toEqual([
+        "zodiac-ring",
+        "degree-ticks",
+        "house-ring",
+        "angle-markers",
+        "aspects",
+        "planets",
+      ]);
+
+      const figcaption = container.querySelector("figcaption");
+      expect(figcaption?.textContent).toContain("các đường góc chiếu");
+      expect(figcaption?.textContent).toContain(
+        "Kiểu nét giúp phân biệt nhóm góc chiếu",
+      );
+    });
   });
 });

@@ -20,6 +20,7 @@ export const WHEEL_RADII = {
   planetLaneA: 141,
   planetLaneB: 146,
   planetZoneInner: 114,
+  aspectRing: 108,
 } as const;
 
 export interface Point {

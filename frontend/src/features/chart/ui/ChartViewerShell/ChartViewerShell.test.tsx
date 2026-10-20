@@ -1,11 +1,15 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { axe } from "vitest-axe";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { installMatchMedia } from "@test/matchMedia";
 
-import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
+import {
+  chartFull,
+  chartNoAspects,
+  chartNoHouses,
+} from "../../api/mocks/fixtures";
 import { toChartViewModel } from "../../model/chartViewModel";
 
 import { ChartViewerShell } from "./ChartViewerShell";
@@ -89,7 +93,13 @@ describe("ChartViewerShell", () => {
       // PlanetTable, HouseTable (houses + angles = 2 tables), AspectTable => 4 tables in total
       const tables = screen.getAllByRole("table");
       expect(tables).toHaveLength(4);
-      expect(screen.queryByRole("list")).not.toBeInTheDocument();
+      // Only AspectLegend list is present on desktop (when aspect lines are on); no card data lists
+      const lists = screen.queryAllByRole("list");
+      expect(lists).toHaveLength(1);
+      expect(lists[0]).toHaveAttribute(
+        "aria-label",
+        "Chú giải kiểu đường góc chiếu",
+      );
     });
 
     it("S2: renders cards layout and no tables when matchMedia < 640px", () => {
@@ -245,5 +255,268 @@ describe("ChartViewerShell", () => {
       <ChartViewerShell vm={noHousesVM} />,
     );
     expect(await axe(noHousesContainer)).toHaveNoViolations();
+  }, 60_000);
+
+  describe("Aspect Visibility & Responsive Switching (SW1 - SW9, SW11)", () => {
+    it("SW1: defaults to enabled on viewport >= 768px (md)", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("list", { name: "Chú giải kiểu đường góc chiếu" }),
+      ).toBeInTheDocument();
+    });
+
+    it("SW2: defaults to disabled on viewport < 768px", () => {
+      controller = installMatchMedia((query) => query === "(min-width: 640px)");
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+      expect(
+        screen.queryByRole("list", { name: "Chú giải kiểu đường góc chiếu" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("SW3: clicking switch toggles state and mounts/unmounts AspectLayer and Legend", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+
+      // Click to disable
+      fireEvent.click(toggle);
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+      expect(
+        screen.queryByRole("list", { name: "Chú giải kiểu đường góc chiếu" }),
+      ).not.toBeInTheDocument();
+
+      // Click to re-enable
+      fireEvent.click(toggle);
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("list", { name: "Chú giải kiểu đường góc chiếu" }),
+      ).toBeInTheDocument();
+    });
+
+    it("SW4: keyboard navigation (Space & Enter) toggles switch state cleanly", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      toggle.focus();
+      expect(document.activeElement).toBe(toggle);
+
+      // Enter key triggers click handler in Switch
+      fireEvent.keyDown(toggle, { key: "Enter" });
+      expect(toggle).not.toBeChecked();
+
+      // Space key toggles native checkbox
+      fireEvent.click(toggle);
+      expect(toggle).toBeChecked();
+    });
+
+    it("SW5: switch provides accessible name and aria-describedby pointing to existing hint element", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeInTheDocument();
+
+      const describedBy = toggle.getAttribute("aria-describedby");
+      expect(describedBy).toBeTruthy();
+
+      const hintEl = document.getElementById(describedBy!);
+      expect(hintEl).toBeInTheDocument();
+      expect(hintEl?.textContent).toBe(
+        "Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên biểu đồ.",
+      );
+    });
+
+    it("SW5b: uses unique useId-generated hint IDs when multiple shells are rendered simultaneously", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(
+        <div>
+          <ChartViewerShell vm={vm} />
+          <ChartViewerShell vm={vm} />
+        </div>,
+      );
+
+      const switches = screen.getAllByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(switches).toHaveLength(2);
+
+      const id1 = switches[0]!.getAttribute("aria-describedby");
+      const id2 = switches[1]!.getAttribute("aria-describedby");
+      expect(id1).toBeTruthy();
+      expect(id2).toBeTruthy();
+      expect(id1).not.toBe(id2);
+    });
+
+    it("SW6: viewport resize before user interaction dynamically updates aspect lines state", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeChecked();
+
+      // Viewport shrinks below 768px
+      act(() => {
+        controller?.setMatches("(min-width: 768px)", false);
+      });
+
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+
+      // Viewport expands back to >= 768px
+      act(() => {
+        controller?.setMatches("(min-width: 768px)", true);
+      });
+
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+    });
+
+    it("SW7: user manual choice persists across viewport resize without being overwritten", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      expect(toggle).toBeChecked();
+
+      // User explicitly turns it off
+      fireEvent.click(toggle);
+      expect(toggle).not.toBeChecked();
+
+      // Viewport changes from 768px to desktop or mobile and back
+      act(() => {
+        controller?.setMatches("(min-width: 768px)", true);
+      });
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+
+      act(() => {
+        controller?.setMatches("(min-width: 768px)", false);
+      });
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+
+      // Now user explicitly turns it on while on mobile (< 768px)
+      fireEvent.click(toggle);
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+
+      // Viewport expands to desktop (>= 768px)
+      act(() => {
+        controller?.setMatches("(min-width: 768px)", true);
+      });
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+    });
+
+    it("SW8: does not mutate vm (frozen) and maintains stable wheel layout across toggles", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      Object.freeze(vm);
+      Object.freeze(vm.aspects);
+      Object.freeze(vm.planets);
+
+      const { container } = render(<ChartViewerShell vm={vm} />);
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+
+      // Toggling does not throw or mutate vm
+      expect(() => {
+        fireEvent.click(toggle);
+      }).not.toThrow();
+      expect(toggle).not.toBeChecked();
+
+      expect(() => {
+        fireEvent.click(toggle);
+      }).not.toThrow();
+      expect(toggle).toBeChecked();
+      expect(
+        container.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+    });
+
+    it("SW9: hides switch and legend completely when chart has 0 aspects (chartNoAspects)", () => {
+      controller = installMatchMedia(true);
+      const noAspectsVM = toChartViewModel(chartNoAspects);
+      const { container } = render(<ChartViewerShell vm={noAspectsVM} />);
+
+      expect(
+        screen.queryByRole("switch", { name: "Hiện đường góc chiếu" }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("list", { name: "Chú giải kiểu đường góc chiếu" }),
+      ).not.toBeInTheDocument();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+    });
+
+    it("SW11: passes vitest-axe checks with aspect switch on, off, and on zero-aspect chart", async () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+
+      // 1. Switch ON (with AspectLayer and AspectLegend)
+      const { container, rerender } = render(<ChartViewerShell vm={vm} />);
+      expect(await axe(container)).toHaveNoViolations();
+
+      // 2. Switch OFF
+      const toggle = screen.getByRole("switch", {
+        name: "Hiện đường góc chiếu",
+      });
+      fireEvent.click(toggle);
+      expect(await axe(container)).toHaveNoViolations();
+
+      // 3. Zero-aspect chart
+      const noAspectsVM = toChartViewModel(chartNoAspects);
+      rerender(<ChartViewerShell vm={noAspectsVM} />);
+      expect(await axe(container)).toHaveNoViolations();
+    }, 60_000);
   });
 });

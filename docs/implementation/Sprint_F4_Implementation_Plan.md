@@ -328,12 +328,12 @@ Mô-đun thuần `model/geometry.ts` (không React/DOM), kiểm thử số học
 | `sectorMidAngle(λ1, λ2)` | góc giữa một cung có xử lý vòng qua 360° (đặt số nhà) |
 | `formatDegreeMinute(d)` | `D°MM′`, làm tròn tới phút; `29°59.6′` → `0°00′` của cung kế tiếp được xử lý nhớ ở lớp gọi |
 
-Kiểm chứng định hướng: `λ = rotation` ⇒ điểm bên trái; `λ = rotation + 90°` ⇒ đáy; nhà 1 nằm ngay **dưới** đường chân trời bên trái. Bán kính (đơn vị viewBox): vành cung ngoài `[260, 225]`, vạch chia độ `225–215`, vòng nhà `[215, 175]`, vòng hành tinh `~150`, vòng aspect `110`. Con số chốt khi dựng; thay đổi chỉ ảnh hưởng một hằng số.
+Kiểm chứng định hướng: `λ = rotation` ⇒ điểm bên trái; `λ = rotation + 90°` ⇒ đáy; nhà 1 nằm ngay **dưới** đường chân trời bên trái. Bán kính (đơn vị viewBox): vành cung ngoài `[260, 225]`, vạch chia độ `225–215`, vòng nhà `[215, 175]`, vạch marker vị trí thật `[175, 168]`, vành nhãn hành tinh `[114, 168)`, vòng aspect `r ≤ 108` (chốt `aspectRing = 108` theo D-M6-02). Con số chốt khi dựng; thay đổi chỉ ảnh hưởng một hằng số.
 
 ## 18. Planet Rendering
 
-- Mỗi hành tinh = nhóm `<g>`: glyph (Unicode, thêm `U+FE0E` để buộc kiểu chữ trên nền tảng hiển thị emoji), nhãn độ nhỏ, đánh dấu nghịch hành `℞` (glyph miền, không icon Lucide — Design System §2), vạch nhỏ tại **vị trí thật** trên vòng chia độ, đường nối ngắn tới glyph khi glyph bị dời.
-- **Va chạm nhãn** (`model/labelLayout.ts`, thuần, tất định): sắp theo kinh độ (hoà thì theo thứ tự chính tắc); duyệt tuần tự, đảm bảo khoảng cách góc tối thiểu giữa tâm glyph `minSepDeg` (khoảng 7° ở bán kính vòng hành tinh, tính từ kích thước glyph); nếu thiếu, **dàn đều** cụm lân cận đối xứng quanh trọng tâm cụm, rồi dùng tối đa 2 làn bán kính cho cụm quá dày; xử lý vòng qua 0°/360°. Kết quả: `displayAngle` mỗi hành tinh; vị trí thật không đổi.
+- Mỗi hành tinh = nhóm `<g>`: glyph (Unicode, thêm `U+FE0E` cho ♀ và ♂ để buộc kiểu chữ trên nền tảng hiển thị emoji), nhãn độ nhỏ (độ nguyên `D°`), đánh dấu nghịch hành `℞` (glyph miền, không icon Lucide — Design System §2), vạch marker nhỏ tại **vị trí thật** trên dải `[175, 168]`, đường nối leader ngắn tới nhãn khi nhãn bị dời.
+- **Va chạm nhãn** (`model/labelLayout.ts`, thuần, tất định): sắp theo kinh độ (hoà thì theo thứ tự chính tắc); tính bề rộng góc orientation-aware theo hình chiếu SAT tiếp tuyến; kỹ thuật cluster-merge đối xứng quanh trọng tâm trên 1 làn bán kính (`r=141` ở Tier A, `r=146` ở Tier B); chính sách 2-tier (Tier A: glyph + `℞` + độ nguyên; Tier B: glyph + `℞`) và bổ sung bước **Tier B-safe** dùng đường kính bao hình tròn bất biến theo hướng cho cụm dày đặc; xử lý vòng qua 0°/360°. Kết quả: toạ độ và góc đặt nhãn mỗi hành tinh; vị trí marker thật `[175, 168]` giữ nguyên tuyệt đối.
 - Giới hạn: tối đa 14 vật thể; phép dàn O(n²) với n ≤ 14 là chấp nhận được.
 - Nhãn có kích thước chữ SVG ≥ 16 đơn vị với khung tối thiểu 400px ⇒ ≥ 10px hiển thị (UI Spec §7.2).
 
@@ -415,8 +415,8 @@ Không đề xuất state toàn cục mới. **Zustand: không được biện m
 Breakpoint theo Tailwind (`sm` 640, `md` 768, `lg` 1024): container `Container size="wide"` (đã có `wide`; giá trị `max-w-container-wide` `UNVERIFIED` cho đúng 1440 như spec).
 
 - **≥ `lg`:** hai cột — wheel (cố định, `sticky`) | cột phải: Planet Table, House Table, Aspect Table xếp dọc; `SelectionDetail` dưới wheel.
-- **`md`–`lg` (tablet):** một cột, wheel trước, bảng sau; bảng vẫn dạng `<table>`.
-- **< `sm`:** wheel trong khung vuông tối thiểu 400px (cuộn ngang nếu màn nhỏ hơn) với nút zoom; bảng chuyển **thẻ mỗi hàng**; aspect lines tắt mặc định.
+- **`md`–`lg` (tablet):** một cột, wheel trước, bảng sau; bảng vẫn dạng `<table>`; aspect lines bật mặc định (≥ 768px).
+- **< `md` (dưới 768px):** aspect lines tắt mặc định theo D-M6-08 (người dùng có thể bật qua Switch); dưới `sm` (< 640px): wheel trong khung vuông tối thiểu 400px (cuộn ngang nếu màn nhỏ hơn) với nút zoom; bảng chuyển **thẻ mỗi hàng**.
 - Chuyển layout bảng↔thẻ bằng `useMediaQuery('(min-width: 640px)')` (một hook dùng chung nhỏ; **render một trong hai**, tránh trùng nội dung cho screen reader). Trong test jsdom, `matchMedia` mặc định `matches:false` (đã mock ở `setup.ts`) ⇒ cần mock theo ca.
 
 ## 29. Accessibility Strategy
@@ -490,11 +490,12 @@ Tín hiệu duy nhất: `isHouseDataAvailable === false` (response không có `i
 
 | Fixture | Nội dung |
 |---|---|
-| `chartFull` | 10 hành tinh (có ≥ 1 nghịch hành), 12 nhà, 4 góc, ~20–25 aspect (đủ 5 loại, cả `isApplying` true/false), `isHouseDataAvailable=true`, `interpretations` mẫu 21 mục, `interpretationVersion: "1.0"` |
+| `chartFull` | 10 hành tinh (có ≥ 1 nghịch hành), 12 nhà, 4 góc, 9 aspect thật (Opposition, Conjunction, Trine, Sextile — không có Square do Backend sinh), `isHouseDataAvailable=true`, `interpretations` mẫu 21 mục, `interpretationVersion: "1.0"` |
 | `chartNoHouses` | 10 hành tinh, `houses=[]`, `angles=[]`, `house: null`, `isHouseDataAvailable=false`, `interpretations` 10 mục `PlanetInSign` |
 | `chartCluster` | 4 hành tinh trong ≤ 8° (kiểm va chạm) |
 | `chartWrap` | hành tinh gần 359° và gần 1° (kiểm vòng 0°) |
-| `chartNoAspects` | `aspects=[]` |
+| `chartNoAspects` | DERIVED từ `chartFull` với `aspects=[]` |
+| `chartAllAspects` | DERIVED từ `chartFull`: danh sách aspect tính toán tay nhất quán đủ cả 5 loại (bổ sung Square), dùng làm fixture kiểm thử hình học M6 |
 
 ## 34. Performance Considerations
 
