@@ -209,4 +209,32 @@ describe("planetGeometry (M5 Task 3: P1 - P7)", () => {
     expect(noHousesModel.baselineRadius).toBe(175);
     expect(noHousesModel.planets).toHaveLength(10);
   });
+
+  it("P9 (P-key): every planet render item carries its raw key and duplicate keys retain unique ids", () => {
+    const duplicates: PlanetVM[] = [
+      { ...basePlanet, key: "Sun" },
+      {
+        ...basePlanet,
+        key: "Sun",
+        longitude: (basePlanet.longitude + 15) % 360,
+      },
+      {
+        ...basePlanet,
+        key: "Moon",
+        longitude: (basePlanet.longitude + 30) % 360,
+      },
+    ];
+
+    const model = buildPlanetWheelModel(duplicates, rotation);
+    expect(model.planets).toHaveLength(3);
+
+    expect(model.planets[0]!.id).toBe("Sun");
+    expect(model.planets[0]!.key).toBe("Sun");
+
+    expect(model.planets[1]!.id).toBe("Sun#2");
+    expect(model.planets[1]!.key).toBe("Sun");
+
+    expect(model.planets[2]!.id).toBe("Moon");
+    expect(model.planets[2]!.key).toBe("Moon");
+  });
 });
