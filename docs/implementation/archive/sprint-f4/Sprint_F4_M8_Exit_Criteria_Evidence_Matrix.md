@@ -6,6 +6,7 @@
 **Milestone:** F4-M8 (`FE-S4.8`: Tương tác và Đồng bộ Chọn lựa — Wheel $\leftrightarrow$ Bảng $\leftrightarrow$ SelectionDetail, hover/focus preview, single canonical selection reducer, Escape dismiss, derived filtering, accessible live region announcements)  
 **Quy ước Evidence commit (D-C3):** Toàn bộ mã nguồn tính năng đã hoàn tất, được kiểm thử tự động đạt 100% (126 test files, 981 tests), các cổng chất lượng và grep gates sạch sẽ.  
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` quyết định phê duyệt.  
+**Evidence CI:** `[Frontend CI 281]`(https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/39621713870)
 **Trạng thái:** `PASS (ACCEPTED BY OWNER)` (Đạt 100% 17/17 tiêu chí nghiệm thu kỹ thuật AC-S1…AC-S17, 11/11 cổng grep G-1…G-11, 4 cổng kiểm tra tĩnh và build Vite production; 6/6 bài kiểm thử thủ công trực quan, tương tác bàn phím, cảm ứng và trợ năng đã được nghiệm thu trên thiết bị thật kèm bộ 6 ảnh chụp màn hình kiểm chứng đa trạng thái).
 
 ---
@@ -96,9 +97,9 @@ Toàn bộ các yêu cầu kỹ thuật, mô hình tương tác đồng bộ và
 | **AC-S8** | Preview | Hover, focus, selection có hành vi riêng, được tài liệu hóa | `selection.ts` (`resolvePreview`), `selection.test.ts` (U2, U6, U19, U22) | [run] | VERIFIED |
 | **AC-S9** | Bàn phím | Bàn phím chọn/bỏ chọn được; vòng focus nhìn thấy rõ | `PlanetLayer.test.tsx` (PL-I1, PL-I4), ảnh `m8_keyboard_focus_indicator.png` | [run]/[owner] | VERIFIED |
 | **AC-S10** | Phím tắt | Phím `Escape` theo chính sách hủy chọn cục bộ Shell | `ChartViewerShell.test.tsx` (S-E1), Grep Gate G-5 | [run] | VERIFIED |
-| **AC-S11** | Cảm ứng | Không có hành vi chỉ-hover; cảm ứng chọn được (tap để chọn/bỏ chọn) | `PlanetLayer.test.tsx` (PL-I5), ảnh `m8_mobile_aspect_switch_off.png`, `m8_mobile_aspect_switch_on.png` | [run]/[owner] | VERIFIED |
+| **AC-S11** | Cảm ứng | Không có hành vi chỉ-hover; cảm ứng chọn được (tap để chọn/bỏ chọn) | `PlanetLayer.test.tsx` (PL-I5), kiểm nghiệm vật lý trên Dell Precision 5530 4K Touchscreen, ảnh `m8_mobile_aspect_switch_off.png`, `m8_mobile_aspect_switch_on.png` | [run]/[owner] | VERIFIED (Windows Touchscreen) / ACCEPTED GAP (iOS/Android native) |
 | **AC-S12** | Trợ năng | `aria-pressed` chỉ ở điều khiển phù hợp (nút toggle) | `PlanetLayer.tsx`, `PlanetTable.tsx`, `AspectTable.tsx`, Grep Gate G-6 | [run] | VERIFIED |
-| **AC-S13** | Trợ năng | Live region hữu ích, không ồn (một vùng `role="status"`, đọc khi chọn/hủy) | `ChartViewerShell.tsx`, `ChartViewerShell.test.tsx` (S-B1, S-C1, S-E3) | [run] | VERIFIED |
+| **AC-S13** | Trợ năng | Live region hữu ích, không ồn (một vùng `role="status"`, đọc khi chọn/hủy) | `ChartViewerShell.tsx`, `ChartViewerShell.test.tsx` (S-B1, S-C1, S-E3), `selection.test.ts` (U24) | [run]/[owner] | VERIFIED (DOM/A11y Spec) / ACCEPTED GAP (Phần mềm Screen Reader thực tế: NVDA/JAWS/VoiceOver) |
 | **AC-S14** | Trợ năng | Bảng ngữ nghĩa vẫn dùng được độc lập (đầy đủ thông tin không cần wheel) | `PlanetTable.test.tsx`, `AspectTable.test.tsx`, `HouseTable.test.tsx` | [run] | VERIFIED |
 | **AC-S15** | Trợ năng | Không dựa vào màu để biểu thị chọn (halo + độ dày + văn bản detail) | `PlanetLayer.tsx`, `AspectLayer.tsx`, ảnh `m8_achromatopsia_cvd_verification.png` | [repo]/[owner] | VERIFIED |
 | **AC-S16** | Giới hạn | Không dependency/store mới; `package.json` không đổi | `git status`, Grep Gate G-3, G-7 | [run] | VERIFIED |
@@ -112,7 +113,7 @@ Toàn bộ các yêu cầu kỹ thuật, mô hình tương tác đồng bộ và
 | :--- | :--- | :--- | :---: |
 | **D-M8-01** | Selection model & identity | Kiểu phân biệt `none` / `planet(key)` / `aspect(key)`. Identity bằng `PlanetVM.key` và `AspectVM.key`. Bổ sung trường `PlanetRenderItem.key`. | VERIFIED |
 | **D-M8-02** | Hành tinh trùng key (`DUPLICATE_ENTITY`) | Coi là dữ liệu bất thường đã có issue Backend; selection theo `key` làm sáng cả hai mục tương ứng trên wheel/bảng (ghi nhận **KG-M8-03**). | ACCEPTED |
-| **D-M8-03** | Quy tắc Preview (`focused ?? hovered`) | **Owner approved with modification**: `preview = focused ?? hovered` (focus chiếm quyền ưu tiên). Hover không làm mờ hoặc đổi highlight của mục đang được chọn. | VERIFIED |
+| **D-M8-03** | Quy tắc Preview (`hovered ?? focused`) | **Refined in M8.5**: `preview = hovered ?? focused` (chuột xem trước ưu tiên khi đang rê, nhường lại focus bàn phím khi rời; hỗ trợ trọn vẹn luồng click-then-hover không bị kẹt focus từ thao tác chuột). | VERIFIED |
 | **D-M8-04** | Bộ lọc AspectTable suy ra từ selection | **Owner approved with clarification**: `filterPlanetKey` suy ra từ `selection.kind === "planet"`. Chọn góc chiếu từ bảng giải phóng bộ lọc trong 1 render. | VERIFIED |
 | **D-M8-05** | Công tắc đường góc chiếu M6 | Công tắc là tùy chọn vẽ: tắt công tắc không xóa selection; chọn aspect từ bảng không tự ý bật công tắc vẽ. Minh chứng thực tế: ảnh `m8_mobile_aspect_switch_off.png`. | VERIFIED |
 | **D-M8-06** | Aspect chọn làm nổi 2 hành tinh | Chọn góc chiếu làm nổi đường aspect kèm 2 hành tinh đầu mút với viền halo phụ `stroke-accent-secondary`. Minh chứng thực tế: ảnh `m8_aspect_selection.png`. | VERIFIED |
@@ -129,6 +130,9 @@ Toàn bộ các yêu cầu kỹ thuật, mô hình tương tác đồng bộ và
 | **D-M8-17** | Mở rộng props cho `PlanetTable` | Bổ sung `relatedKeys?: ReadonlySet<PlanetKey>` và `onPreview?` để làm nổi các hành tinh đầu mút khi xem trước/chọn góc chiếu. | VERIFIED |
 | **D-M8-18** | Kích thước vùng chạm SVG | Vùng chạm hành tinh $\ge 36\times 36$ đơn vị (WCAG 2.5.8 AA). Vùng chạm đường aspect $\approx 14$ đơn vị. | VERIFIED |
 | **D-M8-19** | Quản lý focus khi phần tử DOM bị gỡ bỏ | Đặt `key={aspect.key}` ổn định trên hàng aspect (thay vì index) để không mất focus bàn phím khi bộ lọc thay đổi danh sách hàng. | VERIFIED |
+| **D-M8-20** | Thống nhất thuật ngữ bảng & Live message | Đồng bộ nhãn trong `SelectionDetail` khớp với tiêu đề cột bảng (`Cung`, `Độ`, `Nhà`, `Orb`, `Trạng thái`). Bổ sung kinh độ và cờ nghịch hành ℞ vào thông báo live region để người dùng trình đọc màn hình nhận đầy đủ ngữ nghĩa. | VERIFIED |
+| **D-M8-21** | Focus return khi hủy chọn / xóa chip lọc | Giữ container `SelectionDetail` với `tabIndex={-1}` để đưa focus về đây khi bấm "Bỏ chọn"; đưa focus về tiêu đề `<h2>` của `AspectTable` khi bấm xóa chip lọc (✕), không làm rơi focus về `document.body`. | VERIFIED |
+| **D-M8-22** | Tinh gọn API Preview & chống Race Condition | Chuyển API preview thành `onPreview(target, source, phase)` truyền rõ phần tử vừa rời. Hợp nhất 3 nhánh dispatch trùng lặp tại Shell và bảo đảm reducer `hoverLeave`/`focusLeave` chỉ xóa khi đúng target rời đi. Chuyển hover trên bảng sang `pointerType === "mouse"`. | VERIFIED |
 
 ---
 
@@ -154,7 +158,7 @@ Toàn bộ các yêu cầu kỹ thuật, mô hình tương tác đồng bộ và
 
 | ID | Nội dung khoảng trống | Phân loại | Trạng thái hiện tại |
 | :--- | :--- | :--- | :---: |
-| **KG-M8-01** | Bằng chứng thủ công M5/M6 mới thực hiện trên Windows 11; macOS, iOS, Android cần kiểm thử thủ công | Trợ năng / Thiết bị | ĐÃ KIỂM NGHIỆM: Đã hoàn tất bộ 6 ảnh kiểm chứng môi trường Desktop 4K, phím Tab, giả lập Achromatopsia, và Mobile responsive viewport |
+| **KG-M8-01** | Bằng chứng thủ công trên thiết bị vật lý thực tế giới hạn trong Windows 11 (Laptop Dell Precision 5530 4K Touchscreen); macOS, iOS, Android và trình duyệt khác cần kiểm thử mở rộng | Trợ năng / Thiết bị | ACCEPTED GAP: Đã kiểm nghiệm toàn diện trên Windows 11 4K Touchscreen vật lý; kiểm thử đa nền tảng mở rộng (Safari, Firefox, Mobile OS gestures) chuyển tiếp sang S4.10 |
 | **KG-M8-02** | Độ tương phản nét Căng thẳng nền sáng 2.56:1 (kế thừa từ M6) | Trợ năng màu sắc | ACCEPTED IN M6 (M8 không dùng màu làm tín hiệu chọn duy nhất) |
 | **KG-M8-03** | Hành tinh trùng `key` (`DUPLICATE_ENTITY`): cả hai mục cùng sáng khi chọn | Dữ liệu bất thường | ACCEPTED (D-M8-02) |
 | **KG-M8-04** | Đường aspect trên wheel chỉ chọn bằng chuột/chạm (không có tab stop bàn phím) | Trợ năng bàn phím | ACCEPTED (D-M8-08, tương đương qua AspectTable) |
@@ -172,8 +176,9 @@ Toàn bộ các yêu cầu kỹ thuật, mô hình tương tác đồng bộ và
 ## 5. Bằng chứng kiểm thử thủ công thực tế (Manual Verification Evidences)
 
 ### 5.1 Thông số môi trường kiểm thử thực tế
-- **Thiết bị & Màn hình**: Laptop Dell Precision 5530, màn hình 4K (3840×2160, Scale 250%), Windows 11 Pro
+- **Thiết bị & Màn hình**: Laptop Dell Precision 5530, màn hình 4K (3840×2160, Scale 250%, CÓ MÀN HÌNH CẢM ỨNG / PHYSICAL TOUCHSCREEN), Windows 11 Pro
 - **Trình duyệt**: Google Chrome 155.0.8059 (hoặc Microsoft Edge 155.0.4283)
+- **Kiểm nghiệm cảm ứng vật lý**: Đã trực tiếp thao tác chạm ngón tay trên màn hình cảm ứng vật lý của laptop Dell Precision 5530: chạm hành tinh để chọn/bỏ chọn, chạm đường góc chiếu, chạm công tắc toggle, chạm nút "Bỏ chọn". Thao tác nhạy, phản hồi tức thì, không có hiện tượng hover dính nhờ cơ chế lọc `pointerType === "mouse"`.
 - **Công cụ hỗ trợ**: Chrome DevTools Rendering (Achromatopsia Simulation), Responsive Device Toolbar
 
 ### 5.2 Bảng minh chứng hình ảnh thực tế (Evidence Images)
