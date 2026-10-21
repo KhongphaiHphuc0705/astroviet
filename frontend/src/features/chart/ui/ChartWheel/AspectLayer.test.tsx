@@ -364,9 +364,18 @@ describe("AspectLayer (A1 - A6, A10 - A13)", () => {
       // Mouse triggers preview
       fireEvent.pointerEnter(firstHitTarget, { pointerType: "mouse" });
       expect(onPreview).toHaveBeenCalledTimes(1);
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "aspect", key: allAspectsGeom.lines[0]!.key },
+        "hover",
+        "enter",
+      );
 
       fireEvent.pointerLeave(firstHitTarget, { pointerType: "mouse" });
-      expect(onPreview).toHaveBeenCalledWith(null, "hover");
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "aspect", key: allAspectsGeom.lines[0]!.key },
+        "hover",
+        "leave",
+      );
     });
 
     it("AL-I4: selected aspect increases strokeWidth and dimmed aspects receive opacity-25", () => {

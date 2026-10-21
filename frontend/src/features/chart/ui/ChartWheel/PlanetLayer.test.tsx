@@ -508,10 +508,15 @@ describe("PlanetLayer (M5 Task 4: PL1 - PL15)", () => {
       expect(onPreview).toHaveBeenCalledWith(
         { kind: "planet", key: "Sun" },
         "hover",
+        "enter",
       );
 
       fireEvent.pointerLeave(sun, { pointerType: "mouse" });
-      expect(onPreview).toHaveBeenCalledWith(null, "hover");
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "hover",
+        "leave",
+      );
     });
 
     it("PL-I6: focus and blur triggers onPreview with focus source", () => {
@@ -540,10 +545,15 @@ describe("PlanetLayer (M5 Task 4: PL1 - PL15)", () => {
       expect(onPreview).toHaveBeenCalledWith(
         { kind: "planet", key: "Sun" },
         "focus",
+        "enter",
       );
 
       fireEvent.blur(sun);
-      expect(onPreview).toHaveBeenCalledWith(null, "focus");
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "focus",
+        "leave",
+      );
     });
 
     it("PL-I7: renders selected and related halo rings and dimming classes", () => {

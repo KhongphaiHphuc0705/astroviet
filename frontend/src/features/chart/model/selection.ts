@@ -164,13 +164,14 @@ export function interactionReducer(
 
 /**
  * Resolves the previewed target based on D-M8-03:
- * Keyboard focus takes strict precedence over pointer hover (`focused ?? hovered`).
+ * Pointer hover takes precedence when active (`hovered ?? focused`),
+ * falling back smoothly to keyboard focus when pointer leaves.
  */
 export function resolvePreview(
   focused: InteractionTarget | null,
   hovered: InteractionTarget | null,
 ): InteractionTarget | null {
-  return focused ?? hovered;
+  return hovered ?? focused;
 }
 
 /**
@@ -209,7 +210,11 @@ export interface WheelInteraction {
   selection: Selection;
   emphasis: EmphasisResult;
   onSelect(target: InteractionTarget): void;
-  onPreview(target: InteractionTarget | null, source: "hover" | "focus"): void;
+  onPreview(
+    target: InteractionTarget,
+    source: "hover" | "focus",
+    phase: "enter" | "leave",
+  ): void;
 }
 
 /**
@@ -286,11 +291,13 @@ export function buildLiveMessage(
     if (!planet) {
       return "";
     }
+    const degreePart = planet.degreeLabel ? `, ${planet.degreeLabel}` : "";
     const housePart =
       planet.houseNumber !== null && planet.houseNumber !== undefined
         ? `, nhà ${planet.houseNumber}`
         : "";
-    return `Đã chọn ${planet.nameVi} ở ${planet.sign.labelVi}${housePart}.`;
+    const retroPart = planet.isRetrograde ? ", nghịch hành" : "";
+    return `Đã chọn ${planet.nameVi} ở ${planet.sign.labelVi}${degreePart}${housePart}${retroPart}.`;
   }
 
   if (selection.kind === "aspect") {

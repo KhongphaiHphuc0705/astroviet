@@ -35,9 +35,12 @@ describe("SelectionDetail (M8 Task 2: SD1 - SD6)", () => {
 
     const sun = fullVM.planets.find((p) => p.key === "Sun")!;
     expect(screen.getByText(sun.nameVi)).toBeInTheDocument();
+    expect(screen.getByText("Cung:")).toBeInTheDocument();
     expect(screen.getByText(sun.sign.labelVi)).toBeInTheDocument();
+    expect(screen.getByText("Độ:")).toBeInTheDocument();
     expect(screen.getByText(sun.degreeLabel!)).toBeInTheDocument();
     if (sun.houseNumber !== null) {
+      expect(screen.getByText("Nhà:")).toBeInTheDocument();
       expect(screen.getByText(`Nhà ${sun.houseNumber}`)).toBeInTheDocument();
     }
 
@@ -77,7 +80,10 @@ describe("SelectionDetail (M8 Task 2: SD1 - SD6)", () => {
     expect(
       screen.getByText(`${aspect.planetA.labelVi} – ${aspect.planetB.labelVi}`),
     ).toBeInTheDocument();
+    expect(screen.getByText("Tính chất:")).toBeInTheDocument();
     expect(screen.getByText(aspect.nature.labelVi)).toBeInTheDocument();
+    expect(screen.getByText("Orb:")).toBeInTheDocument();
+    expect(screen.getByText("Trạng thái:")).toBeInTheDocument();
     expect(screen.getByText(aspect.applyingLabelVi)).toBeInTheDocument();
 
     const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
@@ -123,5 +129,23 @@ describe("SelectionDetail (M8 Task 2: SD1 - SD6)", () => {
     expect(
       screen.getAllByText("Chọn một hành tinh hoặc góc chiếu để xem chi tiết."),
     ).toHaveLength(2);
+  });
+
+  it("SD7: clicking clear button stably focuses the selection detail section", () => {
+    const onClear = vi.fn();
+    const { container } = render(
+      <SelectionDetail
+        selection={{ kind: "planet", key: "Sun" }}
+        vm={fullVM}
+        onClear={onClear}
+      />,
+    );
+
+    const section = container.querySelector("section")!;
+    const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+    fireEvent.click(clearBtn);
+
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(section);
   });
 });

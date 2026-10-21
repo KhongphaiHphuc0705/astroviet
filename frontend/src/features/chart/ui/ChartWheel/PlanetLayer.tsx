@@ -210,21 +210,33 @@ export function PlanetLayer({
                   interaction.onPreview(
                     { kind: "planet", key: item.key },
                     "hover",
+                    "enter",
                   );
                 }
               }}
               onPointerLeave={(e) => {
                 if (e.pointerType === "mouse") {
-                  interaction.onPreview(null, "hover");
+                  interaction.onPreview(
+                    { kind: "planet", key: item.key },
+                    "hover",
+                    "leave",
+                  );
                 }
               }}
               onFocus={() =>
                 interaction.onPreview(
                   { kind: "planet", key: item.key },
                   "focus",
+                  "enter",
                 )
               }
-              onBlur={() => interaction.onPreview(null, "focus")}
+              onBlur={() =>
+                interaction.onPreview(
+                  { kind: "planet", key: item.key },
+                  "focus",
+                  "leave",
+                )
+              }
               className={cn(
                 "group cursor-pointer outline-none transition-opacity focus:outline-none",
                 isDimmed && "opacity-40",

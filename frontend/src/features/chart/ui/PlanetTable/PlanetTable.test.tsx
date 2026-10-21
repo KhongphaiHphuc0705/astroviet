@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
@@ -278,6 +278,38 @@ describe("PlanetTable", () => {
       screen.getByText("Không có dữ liệu hành tinh để hiển thị"),
     ).toBeInTheDocument();
     expect(screen.queryByRole("table")).not.toBeInTheDocument();
+  });
+
+  it("triggers onPreview for mouse pointer events and focus, ignoring touch pointerType", () => {
+    const handlePreview = vi.fn();
+    render(
+      <PlanetTable
+        planets={fullVM.planets}
+        houseDataAvailable={true}
+        onSelect={vi.fn()}
+        onPreview={handlePreview}
+      />,
+    );
+
+    const sunButton = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+
+    // Touch pointer events do not trigger preview (no sticky hover)
+    fireEvent.pointerEnter(sunButton, { pointerType: "touch" });
+    expect(handlePreview).not.toHaveBeenCalled();
+
+    // Mouse pointer events trigger preview
+    fireEvent.pointerEnter(sunButton, { pointerType: "mouse" });
+    expect(handlePreview).toHaveBeenCalledWith("Sun", "hover", "enter");
+
+    fireEvent.pointerLeave(sunButton, { pointerType: "mouse" });
+    expect(handlePreview).toHaveBeenCalledWith("Sun", "hover", "leave");
+
+    // Focus & blur trigger preview with focus source
+    fireEvent.focus(sunButton);
+    expect(handlePreview).toHaveBeenCalledWith("Sun", "focus", "enter");
+
+    fireEvent.blur(sunButton);
+    expect(handlePreview).toHaveBeenCalledWith("Sun", "focus", "leave");
   });
 
   it("passes axe accessibility checks across table and cards with and without selection", async () => {

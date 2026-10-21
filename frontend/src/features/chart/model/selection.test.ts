@@ -358,12 +358,12 @@ describe("selection model (M8 Task 1: U1 - U24)", () => {
     ).toEqual({ kind: "none" });
   });
 
-  it("U22: resolvePreview strictly prioritizes keyboard focus over hover (focused ?? hovered)", () => {
+  it("U22: resolvePreview prioritizes pointer hover over keyboard focus (hovered ?? focused)", () => {
     expect(resolvePreview(null, null)).toBeNull();
     expect(resolvePreview(null, sunTarget)).toEqual(sunTarget);
     expect(resolvePreview(marsTarget, null)).toEqual(marsTarget);
-    // When both are present, focus strictly wins!
-    expect(resolvePreview(marsTarget, sunTarget)).toEqual(marsTarget);
+    // When both are present, hover prioritizes to support click-then-hover
+    expect(resolvePreview(marsTarget, sunTarget)).toEqual(sunTarget);
   });
 
   it("U23: computeEmphasis computes structural emphasis sets accurately without astrological calculation", () => {
@@ -422,26 +422,34 @@ describe("selection model (M8 Task 1: U1 - U24)", () => {
       buildLiveMessage({ seq: 1, kind: "cleared" }, { kind: "none" }, fullVM),
     ).toBe("Đã bỏ chọn.");
 
-    // Planet with house
+    // Planet with house, degree, and retrograde info
     const sunPlanet = fullVM.planets.find((p) => p.key === "Sun")!;
+    const sunDegreePart = sunPlanet.degreeLabel
+      ? `, ${sunPlanet.degreeLabel}`
+      : "";
+    const sunRetroPart = sunPlanet.isRetrograde ? ", nghịch hành" : "";
     const sunMsg = buildLiveMessage(
       { seq: 2, kind: "selected" },
       sunTarget,
       fullVM,
     );
     expect(sunMsg).toBe(
-      `Đã chọn ${sunPlanet.nameVi} ở ${sunPlanet.sign.labelVi}, nhà ${sunPlanet.houseNumber}.`,
+      `Đã chọn ${sunPlanet.nameVi} ở ${sunPlanet.sign.labelVi}${sunDegreePart}, nhà ${sunPlanet.houseNumber}${sunRetroPart}.`,
     );
 
     // Planet without house (chartNoHouses)
     const sunNoHouses = noHousesVM.planets.find((p) => p.key === "Sun")!;
+    const noHouseDegreePart = sunNoHouses.degreeLabel
+      ? `, ${sunNoHouses.degreeLabel}`
+      : "";
+    const noHouseRetroPart = sunNoHouses.isRetrograde ? ", nghịch hành" : "";
     const noHouseMsg = buildLiveMessage(
       { seq: 3, kind: "selected" },
       sunTarget,
       noHousesVM,
     );
     expect(noHouseMsg).toBe(
-      `Đã chọn ${sunNoHouses.nameVi} ở ${sunNoHouses.sign.labelVi}.`,
+      `Đã chọn ${sunNoHouses.nameVi} ở ${sunNoHouses.sign.labelVi}${noHouseDegreePart}${noHouseRetroPart}.`,
     );
 
     // Aspect message

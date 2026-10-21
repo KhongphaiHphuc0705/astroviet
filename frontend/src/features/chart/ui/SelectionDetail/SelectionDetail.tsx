@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useCallback, useId, useRef } from "react";
 
 import { cn } from "@shared/lib/cn";
 import { Badge } from "@shared/ui/Badge";
@@ -23,22 +23,30 @@ export function SelectionDetail({
   className,
 }: SelectionDetailProps) {
   const headingId = useId();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleClear = useCallback(() => {
+    onClear();
+    sectionRef.current?.focus();
+  }, [onClear]);
 
   if (selection.kind === "planet") {
     const planet = vm.planets.find((p) => p.key === selection.key);
     if (!planet) {
       return (
         <section
+          ref={sectionRef}
+          tabIndex={-1}
           aria-labelledby={headingId}
           className={cn(
-            "bg-surface-raised/40 flex min-h-[5rem] items-center justify-center rounded-lg border border-subtle p-4 text-center",
+            "bg-surface-raised/40 flex min-h-[4rem] items-center justify-center rounded-lg border border-subtle px-4 py-3 text-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
             className,
           )}
         >
           <h2 id={headingId} className="sr-only">
             Chi tiết đang chọn
           </h2>
-          <p className="text-body-sm italic text-subtle">
+          <p className="text-body-sm italic text-secondary">
             Chọn một hành tinh hoặc góc chiếu để xem chi tiết.
           </p>
         </section>
@@ -58,9 +66,11 @@ export function SelectionDetail({
 
     return (
       <section
+        ref={sectionRef}
+        tabIndex={-1}
         aria-labelledby={headingId}
         className={cn(
-          "bg-surface-raised/40 space-y-3 rounded-lg border border-subtle p-4",
+          "bg-surface-raised/40 space-y-2.5 rounded-lg border border-subtle px-4 pb-3 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
           className,
         )}
       >
@@ -68,7 +78,7 @@ export function SelectionDetail({
           Chi tiết đang chọn
         </h2>
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+          <div className="-mt-2 flex items-center gap-2">
             <div className="text-body-base font-semibold text-primary">
               <PlanetGlyph
                 planet={planetLabel}
@@ -76,7 +86,7 @@ export function SelectionDetail({
               />
             </div>
             {planet.isRetrograde && (
-              <Badge variant="warning" size="sm">
+              <Badge variant="warning" size="sm" className="w-28 h-6">
                 {RETROGRADE_LABEL_VI}
               </Badge>
             )}
@@ -85,7 +95,7 @@ export function SelectionDetail({
             type="button"
             variant="secondary"
             size="sm"
-            onClick={onClear}
+            onClick={handleClear}
             aria-label="Bỏ chọn"
           >
             Bỏ chọn
@@ -94,13 +104,15 @@ export function SelectionDetail({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-body-sm text-secondary">
           <div className="inline-flex items-center gap-1.5">
-            <span className="text-subtle">Cung:</span>
-            <SignGlyph sign={planet.sign} />
+            <span className="font-medium text-secondary">Cung:</span>
+            <span className="font-medium text-primary">
+              <SignGlyph sign={planet.sign} />
+            </span>
           </div>
 
           {planet.degreeLabel && (
             <div className="inline-flex items-center gap-1.5">
-              <span className="text-subtle">Tọa độ:</span>
+              <span className="font-medium text-secondary">Độ:</span>
               <span className="font-mono font-medium text-primary">
                 {planet.degreeLabel}
               </span>
@@ -109,16 +121,22 @@ export function SelectionDetail({
 
           {planet.houseNumber !== null && (
             <div className="inline-flex items-center gap-1.5">
-              <span className="text-subtle">Vị trí:</span>
+              <span className="font-medium text-secondary">Nhà:</span>
               <span className="font-medium text-primary">
                 Nhà {planet.houseNumber}
               </span>
             </div>
           )}
 
-          <div className="text-body-xs inline-flex items-center gap-1.5 text-subtle">
+          <div className="inline-flex items-center gap-1.5 text-body-sm text-secondary">
             {relatedAspectsCount > 0 ? (
-              <span>Có {relatedAspectsCount} góc chiếu liên quan</span>
+              <span>
+                Có{" "}
+                <span className="font-semibold text-primary">
+                  {relatedAspectsCount}
+                </span>{" "}
+                góc chiếu liên quan
+              </span>
             ) : (
               <span>Không có góc chiếu liên quan</span>
             )}
@@ -133,16 +151,18 @@ export function SelectionDetail({
     if (!aspect) {
       return (
         <section
+          ref={sectionRef}
+          tabIndex={-1}
           aria-labelledby={headingId}
           className={cn(
-            "bg-surface-raised/40 flex min-h-[5rem] items-center justify-center rounded-lg border border-subtle p-4 text-center",
+            "bg-surface-raised/40 flex min-h-[4rem] items-center justify-center rounded-lg border border-subtle px-4 py-3 text-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
             className,
           )}
         >
           <h2 id={headingId} className="sr-only">
             Chi tiết đang chọn
           </h2>
-          <p className="text-body-sm italic text-subtle">
+          <p className="text-body-sm italic text-secondary">
             Chọn một hành tinh hoặc góc chiếu để xem chi tiết.
           </p>
         </section>
@@ -151,9 +171,11 @@ export function SelectionDetail({
 
     return (
       <section
+        ref={sectionRef}
+        tabIndex={-1}
         aria-labelledby={headingId}
         className={cn(
-          "bg-surface-raised/40 space-y-3 rounded-lg border border-subtle p-4",
+          "bg-surface-raised/40 space-y-2.5 rounded-lg border border-subtle px-4 pb-3 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
           className,
         )}
       >
@@ -173,7 +195,7 @@ export function SelectionDetail({
             type="button"
             variant="secondary"
             size="sm"
-            onClick={onClear}
+            onClick={handleClear}
             aria-label="Bỏ chọn"
           >
             Bỏ chọn
@@ -182,21 +204,21 @@ export function SelectionDetail({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-body-sm text-secondary">
           <div className="inline-flex items-center gap-1.5">
-            <span className="text-subtle">Tính chất:</span>
+            <span className="font-medium text-secondary">Tính chất:</span>
             <span className="font-medium text-primary">
               {aspect.nature.labelVi}
             </span>
           </div>
 
           <div className="inline-flex items-center gap-1.5">
-            <span className="text-subtle">Sai số:</span>
+            <span className="font-medium text-secondary">Orb:</span>
             <span className="font-mono font-medium text-primary">
               {aspect.orbLabel ?? `${aspect.orb.toFixed(1)}°`}
             </span>
           </div>
 
           <div className="inline-flex items-center gap-1.5">
-            <span className="text-subtle">Trạng thái:</span>
+            <span className="font-medium text-secondary">Trạng thái:</span>
             <span className="font-medium text-primary">
               {aspect.applyingLabelVi}
             </span>
@@ -209,16 +231,18 @@ export function SelectionDetail({
   // selection.kind === "none"
   return (
     <section
+      ref={sectionRef}
+      tabIndex={-1}
       aria-labelledby={headingId}
       className={cn(
-        "bg-surface-raised/40 flex min-h-[5rem] items-center justify-center rounded-lg border border-subtle p-4 text-center",
+        "bg-surface-raised/40 flex min-h-[4rem] items-center justify-center rounded-lg border border-subtle px-4 py-3 text-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
         className,
       )}
     >
       <h2 id={headingId} className="sr-only">
         Chi tiết đang chọn
       </h2>
-      <p className="text-body-sm italic text-subtle">
+      <p className="text-body-sm italic text-secondary">
         Chọn một hành tinh hoặc góc chiếu để xem chi tiết.
       </p>
     </section>

@@ -743,6 +743,86 @@ describe("ChartViewerShell", () => {
           "Đã chọn góc chiếu",
         );
       });
+
+      it("S-G1: click then hover prioritizes hovered target over focused target in preview", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+
+        // 1. Click Sun: Sun is selected and focused
+        fireEvent.click(sunBtn);
+        expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+        // 2. Hover Moon: pointer hover preview takes precedence over lingering focus
+        fireEvent.pointerEnter(moonBtn, { pointerType: "mouse" });
+
+        // On the wheel, Moon's label should not be dimmed because it's previewed!
+        const moonWheelLabel = container.querySelector(
+          '[data-part="labels"] > [data-planet="Moon"]',
+        );
+        expect(moonWheelLabel).not.toHaveClass("opacity-40");
+
+        // 3. Pointer leaves Moon: preview falls back cleanly
+        fireEvent.pointerLeave(moonBtn, { pointerType: "mouse" });
+      });
+
+      it("S-G2: interleaved enter and leave protects against race conditions", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+
+        // Enter Sun
+        fireEvent.pointerEnter(sunBtn, { pointerType: "mouse" });
+        // Enter Moon (before leaving Sun)
+        fireEvent.pointerEnter(moonBtn, { pointerType: "mouse" });
+        // Leave Sun (stale leave event)
+        fireEvent.pointerLeave(sunBtn, { pointerType: "mouse" });
+
+        // Moon should STILL be emphasized and NOT dimmed because Moon is the active hover!
+        const moonWheelLabel = container.querySelector(
+          '[data-part="labels"] > [data-planet="Moon"]',
+        );
+        expect(moonWheelLabel).not.toHaveClass("opacity-40");
+      });
+
+      it("S-G3: clicking 'Bỏ chọn' and clearing filter chip return focus to stable semantic elements", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        // 1. Select a planet
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        fireEvent.click(sunBtn);
+
+        // 2. Click 'Bỏ chọn'
+        const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+        fireEvent.click(clearBtn);
+
+        // Document activeElement should be the SelectionDetail section, not document.body
+        const selectionSection = screen.getByRole("region", {
+          name: "Chi tiết đang chọn",
+        });
+        expect(document.activeElement).toBe(selectionSection);
+
+        // 3. Select planet again to show filter chip
+        fireEvent.click(sunBtn);
+        const deleteFilterBtn = screen.getByRole("button", {
+          name: "Xóa bộ lọc theo Mặt Trời",
+        });
+        fireEvent.click(deleteFilterBtn);
+
+        // Focus shifts to AspectTable heading
+        const aspectHeading = screen.getByRole("heading", {
+          name: "Góc chiếu",
+        });
+        expect(document.activeElement).toBe(aspectHeading);
+      });
     });
   });
 });

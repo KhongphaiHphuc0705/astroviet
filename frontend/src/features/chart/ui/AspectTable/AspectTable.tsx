@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useCallback, useId, useRef } from "react";
 
 import { cn } from "@shared/lib/cn";
 import { Card } from "@shared/ui/Card";
@@ -24,7 +24,11 @@ export interface AspectTableProps {
   filterPlanetKey?: string | null;
   filterPlanet?: GlyphLabel;
   onClearFilter?: () => void;
-  onPreview?: (key: AspectKey | null, source: "hover" | "focus") => void;
+  onPreview?: (
+    key: AspectKey,
+    source: "hover" | "focus",
+    phase: "enter" | "leave",
+  ) => void;
   className?: string;
 }
 
@@ -41,7 +45,13 @@ export function AspectTable({
   className,
 }: AspectTableProps) {
   const headingId = useId();
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const cellPadding = getTableCellPadding(density);
+
+  const handleClearFilter = useCallback(() => {
+    onClearFilter?.();
+    headingRef.current?.focus();
+  }, [onClearFilter]);
 
   const resolvedFilterPlanet: GlyphLabel | undefined = filterPlanetKey
     ? (filterPlanet ?? {
@@ -64,7 +74,9 @@ export function AspectTable({
     <section aria-labelledby={headingId} className={className}>
       <h2
         id={headingId}
-        className="mb-3 text-heading-sm font-semibold text-primary"
+        ref={headingRef}
+        tabIndex={-1}
+        className="mb-3 text-heading-sm font-semibold text-primary outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         Góc chiếu
       </h2>
@@ -74,7 +86,7 @@ export function AspectTable({
           <div className="mb-3">
             <AspectFilterChip
               planet={resolvedFilterPlanet}
-              onClear={onClearFilter}
+              onClear={handleClearFilter}
             />
           </div>
         )}
@@ -137,10 +149,22 @@ export function AspectTable({
                           type="button"
                           aria-pressed={isSelected}
                           onClick={() => onSelect(aspect.key)}
-                          onMouseEnter={() => onPreview?.(aspect.key, "hover")}
-                          onMouseLeave={() => onPreview?.(null, "hover")}
-                          onFocus={() => onPreview?.(aspect.key, "focus")}
-                          onBlur={() => onPreview?.(null, "focus")}
+                          onPointerEnter={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(aspect.key, "hover", "enter");
+                            }
+                          }}
+                          onPointerLeave={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(aspect.key, "hover", "leave");
+                            }
+                          }}
+                          onFocus={() =>
+                            onPreview?.(aspect.key, "focus", "enter")
+                          }
+                          onBlur={() =>
+                            onPreview?.(aspect.key, "focus", "leave")
+                          }
                           aria-label={buttonLabel}
                           className={cn(
                             "rounded inline-flex items-center text-left transition-colors",
@@ -204,10 +228,18 @@ export function AspectTable({
                       type="button"
                       aria-pressed={isSelected}
                       onClick={() => onSelect(aspect.key)}
-                      onMouseEnter={() => onPreview?.(aspect.key, "hover")}
-                      onMouseLeave={() => onPreview?.(null, "hover")}
-                      onFocus={() => onPreview?.(aspect.key, "focus")}
-                      onBlur={() => onPreview?.(null, "focus")}
+                      onPointerEnter={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(aspect.key, "hover", "enter");
+                        }
+                      }}
+                      onPointerLeave={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(aspect.key, "hover", "leave");
+                        }
+                      }}
+                      onFocus={() => onPreview?.(aspect.key, "focus", "enter")}
+                      onBlur={() => onPreview?.(aspect.key, "focus", "leave")}
                       aria-label={buttonLabel}
                       className={cn(
                         "rounded inline-flex min-h-[44px] w-full min-w-[44px] items-center text-left transition-colors",

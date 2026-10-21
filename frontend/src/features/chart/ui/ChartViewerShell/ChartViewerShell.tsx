@@ -113,37 +113,38 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
     [interactionState.announcement, effectiveSelection, vm],
   );
 
+  const handlePreview = useCallback(
+    (
+      target: InteractionTarget,
+      source: "hover" | "focus",
+      phase: "enter" | "leave",
+    ) => {
+      if (phase === "enter") {
+        dispatch(
+          source === "hover"
+            ? { type: "hoverEnter", target }
+            : { type: "focusEnter", target },
+        );
+      } else {
+        dispatch(
+          source === "hover"
+            ? { type: "hoverLeave", target }
+            : { type: "focusLeave", target },
+        );
+      }
+    },
+    [],
+  );
+
   const wheelInteraction = useMemo(
     () => ({
       selection: effectiveSelection,
       emphasis,
       onSelect: (target: InteractionTarget) =>
         dispatch({ type: "select", target }),
-      onPreview: (
-        target: InteractionTarget | null,
-        source: "hover" | "focus",
-      ) => {
-        if (target === null) {
-          if (source === "hover" && interactionState.hovered) {
-            dispatch({ type: "hoverLeave", target: interactionState.hovered });
-          } else if (source === "focus" && interactionState.focused) {
-            dispatch({ type: "focusLeave", target: interactionState.focused });
-          }
-        } else {
-          if (source === "hover") {
-            dispatch({ type: "hoverEnter", target });
-          } else {
-            dispatch({ type: "focusEnter", target });
-          }
-        }
-      },
+      onPreview: handlePreview,
     }),
-    [
-      effectiveSelection,
-      emphasis,
-      interactionState.hovered,
-      interactionState.focused,
-    ],
+    [effectiveSelection, emphasis, handlePreview],
   );
 
   const handleSelectPlanet = useCallback((key: PlanetKey) => {
@@ -159,49 +160,17 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
   }, []);
 
   const handlePreviewPlanet = useCallback(
-    (key: PlanetKey | null, source: "hover" | "focus") => {
-      if (key === null) {
-        if (source === "hover" && interactionState.hovered?.kind === "planet") {
-          dispatch({ type: "hoverLeave", target: interactionState.hovered });
-        } else if (
-          source === "focus" &&
-          interactionState.focused?.kind === "planet"
-        ) {
-          dispatch({ type: "focusLeave", target: interactionState.focused });
-        }
-      } else {
-        const target: InteractionTarget = { kind: "planet", key };
-        if (source === "hover") {
-          dispatch({ type: "hoverEnter", target });
-        } else {
-          dispatch({ type: "focusEnter", target });
-        }
-      }
+    (key: PlanetKey, source: "hover" | "focus", phase: "enter" | "leave") => {
+      handlePreview({ kind: "planet", key }, source, phase);
     },
-    [interactionState.hovered, interactionState.focused],
+    [handlePreview],
   );
 
   const handlePreviewAspect = useCallback(
-    (key: AspectKey | null, source: "hover" | "focus") => {
-      if (key === null) {
-        if (source === "hover" && interactionState.hovered?.kind === "aspect") {
-          dispatch({ type: "hoverLeave", target: interactionState.hovered });
-        } else if (
-          source === "focus" &&
-          interactionState.focused?.kind === "aspect"
-        ) {
-          dispatch({ type: "focusLeave", target: interactionState.focused });
-        }
-      } else {
-        const target: InteractionTarget = { kind: "aspect", key };
-        if (source === "hover") {
-          dispatch({ type: "hoverEnter", target });
-        } else {
-          dispatch({ type: "focusEnter", target });
-        }
-      }
+    (key: AspectKey, source: "hover" | "focus", phase: "enter" | "leave") => {
+      handlePreview({ kind: "aspect", key }, source, phase);
     },
-    [interactionState.hovered, interactionState.focused],
+    [handlePreview],
   );
 
   const shellRef = useRef<HTMLDivElement>(null);

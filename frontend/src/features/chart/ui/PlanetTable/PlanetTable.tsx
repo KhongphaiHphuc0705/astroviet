@@ -21,7 +21,11 @@ export interface PlanetTableProps {
   selectedKey?: string | null;
   onSelect?: (key: PlanetKey) => void;
   relatedKeys?: ReadonlySet<PlanetKey>;
-  onPreview?: (key: PlanetKey | null, source: "hover" | "focus") => void;
+  onPreview?: (
+    key: PlanetKey,
+    source: "hover" | "focus",
+    phase: "enter" | "leave",
+  ) => void;
   className?: string;
 }
 
@@ -121,10 +125,22 @@ export function PlanetTable({
                           type="button"
                           aria-pressed={isSelected}
                           onClick={() => onSelect(planet.key)}
-                          onMouseEnter={() => onPreview?.(planet.key, "hover")}
-                          onMouseLeave={() => onPreview?.(null, "hover")}
-                          onFocus={() => onPreview?.(planet.key, "focus")}
-                          onBlur={() => onPreview?.(null, "focus")}
+                          onPointerEnter={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(planet.key, "hover", "enter");
+                            }
+                          }}
+                          onPointerLeave={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(planet.key, "hover", "leave");
+                            }
+                          }}
+                          onFocus={() =>
+                            onPreview?.(planet.key, "focus", "enter")
+                          }
+                          onBlur={() =>
+                            onPreview?.(planet.key, "focus", "leave")
+                          }
                           aria-label={`Chọn ${planet.nameVi}`}
                           className={cn(
                             "rounded inline-flex items-center text-left transition-colors",
@@ -218,10 +234,18 @@ export function PlanetTable({
                       type="button"
                       aria-pressed={isSelected}
                       onClick={() => onSelect(planet.key)}
-                      onMouseEnter={() => onPreview?.(planet.key, "hover")}
-                      onMouseLeave={() => onPreview?.(null, "hover")}
-                      onFocus={() => onPreview?.(planet.key, "focus")}
-                      onBlur={() => onPreview?.(null, "focus")}
+                      onPointerEnter={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(planet.key, "hover", "enter");
+                        }
+                      }}
+                      onPointerLeave={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(planet.key, "hover", "leave");
+                        }
+                      }}
+                      onFocus={() => onPreview?.(planet.key, "focus", "enter")}
+                      onBlur={() => onPreview?.(planet.key, "focus", "leave")}
                       aria-label={`Chọn ${planet.nameVi}`}
                       className={cn(
                         "rounded inline-flex min-h-[44px] min-w-[44px] items-center text-left transition-colors",

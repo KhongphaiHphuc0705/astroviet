@@ -119,12 +119,17 @@ export function AspectLayer({
                       interaction.onPreview(
                         { kind: "aspect", key: l.key },
                         "hover",
+                        "enter",
                       );
                     }
                   }}
                   onPointerLeave={(e) => {
                     if (e.pointerType === "mouse") {
-                      interaction.onPreview(null, "hover");
+                      interaction.onPreview(
+                        { kind: "aspect", key: l.key },
+                        "hover",
+                        "leave",
+                      );
                     }
                   }}
                 />
@@ -148,12 +153,17 @@ export function AspectLayer({
                     interaction.onPreview(
                       { kind: "aspect", key: l.key },
                       "hover",
+                      "enter",
                     );
                   }
                 }}
                 onPointerLeave={(e) => {
                   if (e.pointerType === "mouse") {
-                    interaction.onPreview(null, "hover");
+                    interaction.onPreview(
+                      { kind: "aspect", key: l.key },
+                      "hover",
+                      "leave",
+                    );
                   }
                 }}
               />
