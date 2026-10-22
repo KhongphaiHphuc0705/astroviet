@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
 import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
@@ -346,5 +346,252 @@ describe("PlanetLayer (M5 Task 4: PL1 - PL15)", () => {
 
     // Accessibility passes
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  describe("PlanetLayer Interactive Mode (PL-I1 - PL-I10)", () => {
+    it("PL-I1: renders role='button', tabIndex={0}, aria-pressed, and accessible name starting with 'Chọn'", () => {
+      const mockInteraction = {
+        selection: { kind: "planet" as const, key: "Sun" },
+        emphasis: {
+          planets: new Set(["Sun", "Moon"]),
+          aspects: new Set<string>(),
+          active: true,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+      expect(buttons).toHaveLength(10);
+
+      const sunButton = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      );
+      expect(sunButton).toHaveAttribute("role", "button");
+      expect(sunButton).toHaveAttribute("tabindex", "0");
+      expect(sunButton).toHaveAttribute("aria-pressed", "true");
+      expect(sunButton?.getAttribute("aria-label")).toMatch(/^Chọn /);
+
+      const moonButton = container.querySelector(
+        '[data-part="labels"] > [data-planet="Moon"]',
+      );
+      expect(moonButton).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("PL-I2: renders touch target rect >= 36x36 for all planets", () => {
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const rects = container.querySelectorAll(
+        '[data-part="labels"] > [data-planet] rect[aria-hidden="true"]',
+      );
+      expect(rects.length).toBeGreaterThanOrEqual(10);
+      rects.forEach((rect) => {
+        const width = Number(rect.getAttribute("width"));
+        const height = Number(rect.getAttribute("height"));
+        expect(width).toBeGreaterThanOrEqual(36);
+        expect(height).toBeGreaterThanOrEqual(36);
+      });
+    });
+
+    it("PL-I3: clicking planet triggers interaction.onSelect", () => {
+      const onSelect = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect,
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const sun = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      )!;
+      fireEvent.click(sun);
+      expect(onSelect).toHaveBeenCalledWith({ kind: "planet", key: "Sun" });
+    });
+
+    it("PL-I4: pressing Enter and Space triggers onSelect, Space prevents default", () => {
+      const onSelect = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect,
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const sun = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      )!;
+      fireEvent.keyDown(sun, { key: "Enter" });
+      expect(onSelect).toHaveBeenCalledWith({ kind: "planet", key: "Sun" });
+
+      const spaceEvent = new KeyboardEvent("keydown", {
+        key: " ",
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefaultSpy = vi.spyOn(spaceEvent, "preventDefault");
+      sun.dispatchEvent(spaceEvent);
+      expect(preventDefaultSpy).toHaveBeenCalled();
+      expect(onSelect).toHaveBeenCalledTimes(2);
+    });
+
+    it("PL-I5: pointer enter/leave with pointerType='mouse' triggers onPreview", () => {
+      const onPreview = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview,
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const sun = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      )!;
+
+      // Touch pointer events do not trigger preview (no sticky hover on mobile)
+      fireEvent.pointerEnter(sun, { pointerType: "touch" });
+      expect(onPreview).not.toHaveBeenCalled();
+
+      // Mouse pointer events trigger preview
+      fireEvent.pointerEnter(sun, { pointerType: "mouse" });
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "hover",
+        "enter",
+      );
+
+      fireEvent.pointerLeave(sun, { pointerType: "mouse" });
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "hover",
+        "leave",
+      );
+    });
+
+    it("PL-I6: focus and blur triggers onPreview with focus source", () => {
+      const onPreview = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview,
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const sun = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      )!;
+      fireEvent.focus(sun);
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "focus",
+        "enter",
+      );
+
+      fireEvent.blur(sun);
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "planet", key: "Sun" },
+        "focus",
+        "leave",
+      );
+    });
+
+    it("PL-I7: renders selected and related halo rings and dimming classes", () => {
+      const mockInteraction = {
+        selection: { kind: "planet" as const, key: "Sun" },
+        emphasis: {
+          planets: new Set(["Sun", "Moon"]),
+          aspects: new Set<string>(),
+          active: true,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg>
+          <PlanetLayer model={fullModelA} interaction={mockInteraction} />
+        </svg>,
+      );
+
+      const sun = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      )!;
+      expect(
+        sun.querySelector("circle.stroke-accent-primary"),
+      ).toBeInTheDocument();
+
+      const moon = container.querySelector(
+        '[data-part="labels"] > [data-planet="Moon"]',
+      )!;
+      expect(
+        moon.querySelector("circle.stroke-accent-secondary"),
+      ).toBeInTheDocument();
+
+      const mars = container.querySelector(
+        '[data-part="labels"] > [data-planet="Mars"]',
+      )!;
+      expect(mars).toHaveClass("opacity-40");
+    });
   });
 });

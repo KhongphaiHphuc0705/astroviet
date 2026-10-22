@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
@@ -217,6 +217,78 @@ describe("AspectTable (nhóm A)", () => {
       screen.getByRole("button", { name: "Xóa bộ lọc theo Sun" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Đang lọc: Sun")).toBeInTheDocument();
+  });
+
+  it("triggers onPreview for mouse pointer events and focus, ignoring touch pointerType", () => {
+    const handlePreview = vi.fn();
+    render(
+      <AspectTable
+        aspects={fullVM.aspects}
+        onSelect={vi.fn()}
+        onPreview={handlePreview}
+      />,
+    );
+
+    const firstAspect = fullVM.aspects[0]!;
+    const button = screen.getByRole("button", {
+      name: `Chọn góc chiếu ${firstAspect.type.labelVi} giữa ${firstAspect.planetA.labelVi} và ${firstAspect.planetB.labelVi}`,
+    });
+
+    // Touch does not trigger preview
+    fireEvent.pointerEnter(button, { pointerType: "touch" });
+    expect(handlePreview).not.toHaveBeenCalled();
+
+    // Mouse triggers preview
+    fireEvent.pointerEnter(button, { pointerType: "mouse" });
+    expect(handlePreview).toHaveBeenCalledWith(
+      firstAspect.key,
+      "hover",
+      "enter",
+    );
+
+    fireEvent.pointerLeave(button, { pointerType: "mouse" });
+    expect(handlePreview).toHaveBeenCalledWith(
+      firstAspect.key,
+      "hover",
+      "leave",
+    );
+
+    // Focus & blur trigger preview with focus source
+    fireEvent.focus(button);
+    expect(handlePreview).toHaveBeenCalledWith(
+      firstAspect.key,
+      "focus",
+      "enter",
+    );
+
+    fireEvent.blur(button);
+    expect(handlePreview).toHaveBeenCalledWith(
+      firstAspect.key,
+      "focus",
+      "leave",
+    );
+  });
+
+  it("shifts focus stably to the section heading when filter chip is cleared", async () => {
+    const user = userEvent.setup();
+    const onClear = vi.fn();
+    render(
+      <AspectTable
+        aspects={fullVM.aspects}
+        filterPlanetKey="Sun"
+        filterPlanet={resolvePlanet("Sun")}
+        onClearFilter={onClear}
+      />,
+    );
+
+    const chipButton = screen.getByRole("button", {
+      name: "Xóa bộ lọc theo Mặt Trời",
+    });
+    await user.click(chipButton);
+
+    expect(onClear).toHaveBeenCalledTimes(1);
+    const heading = screen.getByRole("heading", { name: "Góc chiếu" });
+    expect(document.activeElement).toBe(heading);
   });
 
   it("passes axe accessibility checks across table, cards, empty, filtered, and selected states", async () => {

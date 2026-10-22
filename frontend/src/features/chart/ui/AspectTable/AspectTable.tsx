@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useCallback, useId, useRef } from "react";
 
 import { cn } from "@shared/lib/cn";
 import { Card } from "@shared/ui/Card";
@@ -24,6 +24,11 @@ export interface AspectTableProps {
   filterPlanetKey?: string | null;
   filterPlanet?: GlyphLabel;
   onClearFilter?: () => void;
+  onPreview?: (
+    key: AspectKey,
+    source: "hover" | "focus",
+    phase: "enter" | "leave",
+  ) => void;
   className?: string;
 }
 
@@ -36,10 +41,17 @@ export function AspectTable({
   filterPlanetKey,
   filterPlanet,
   onClearFilter,
+  onPreview,
   className,
 }: AspectTableProps) {
   const headingId = useId();
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const cellPadding = getTableCellPadding(density);
+
+  const handleClearFilter = useCallback(() => {
+    onClearFilter?.();
+    headingRef.current?.focus();
+  }, [onClearFilter]);
 
   const resolvedFilterPlanet: GlyphLabel | undefined = filterPlanetKey
     ? (filterPlanet ?? {
@@ -62,17 +74,19 @@ export function AspectTable({
     <section aria-labelledby={headingId} className={className}>
       <h2
         id={headingId}
-        className="mb-3 text-heading-sm font-semibold text-primary"
+        ref={headingRef}
+        tabIndex={-1}
+        className="mb-3 text-heading-sm font-semibold text-primary outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         Góc chiếu
       </h2>
 
-      <div aria-live="polite" className="min-h-[2rem]">
+      <div className="min-h-[2rem]">
         {filterPlanetKey && resolvedFilterPlanet && (
           <div className="mb-3">
             <AspectFilterChip
               planet={resolvedFilterPlanet}
-              onClear={onClearFilter}
+              onClear={handleClearFilter}
             />
           </div>
         )}
@@ -112,13 +126,13 @@ export function AspectTable({
               </tr>
             </thead>
             <tbody>
-              {displayedAspects.map((aspect, index) => {
+              {displayedAspects.map((aspect) => {
                 const isSelected = selectedKey === aspect.key;
                 const buttonLabel = `Chọn góc chiếu ${aspect.type.labelVi} giữa ${aspect.planetA.labelVi} và ${aspect.planetB.labelVi}`;
 
                 return (
                   <tr
-                    key={`${aspect.key}#${index}`}
+                    key={aspect.key}
                     className={cn(
                       "border-b border-subtle transition-colors",
                       isSelected
@@ -135,6 +149,22 @@ export function AspectTable({
                           type="button"
                           aria-pressed={isSelected}
                           onClick={() => onSelect(aspect.key)}
+                          onPointerEnter={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(aspect.key, "hover", "enter");
+                            }
+                          }}
+                          onPointerLeave={(e) => {
+                            if (e.pointerType === "mouse") {
+                              onPreview?.(aspect.key, "hover", "leave");
+                            }
+                          }}
+                          onFocus={() =>
+                            onPreview?.(aspect.key, "focus", "enter")
+                          }
+                          onBlur={() =>
+                            onPreview?.(aspect.key, "focus", "leave")
+                          }
                           aria-label={buttonLabel}
                           className={cn(
                             "rounded inline-flex items-center text-left transition-colors",
@@ -178,14 +208,14 @@ export function AspectTable({
           role="list"
           className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {displayedAspects.map((aspect, index) => {
+          {displayedAspects.map((aspect) => {
             const isSelected = selectedKey === aspect.key;
             const buttonLabel = `Chọn góc chiếu ${aspect.type.labelVi} giữa ${aspect.planetA.labelVi} và ${aspect.planetB.labelVi}`;
 
             return (
               <Card
                 as="li"
-                key={`${aspect.key}#${index}`}
+                key={aspect.key}
                 padding="sm"
                 className={cn(
                   "flex flex-col gap-3 transition-colors",
@@ -198,6 +228,18 @@ export function AspectTable({
                       type="button"
                       aria-pressed={isSelected}
                       onClick={() => onSelect(aspect.key)}
+                      onPointerEnter={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(aspect.key, "hover", "enter");
+                        }
+                      }}
+                      onPointerLeave={(e) => {
+                        if (e.pointerType === "mouse") {
+                          onPreview?.(aspect.key, "hover", "leave");
+                        }
+                      }}
+                      onFocus={() => onPreview?.(aspect.key, "focus", "enter")}
+                      onBlur={() => onPreview?.(aspect.key, "focus", "leave")}
                       aria-label={buttonLabel}
                       className={cn(
                         "rounded inline-flex min-h-[44px] w-full min-w-[44px] items-center text-left transition-colors",

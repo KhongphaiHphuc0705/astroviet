@@ -12,7 +12,7 @@
 
 import { KNOWN_PLANET_NAMES, type PlanetName } from "../api/types";
 
-import type { PlanetVM } from "./chartViewModel";
+import type { PlanetKey, PlanetVM } from "./chartViewModel";
 import { formatDegreeOnly } from "./format";
 import {
   polarToCartesian,
@@ -34,6 +34,7 @@ import {
 
 export interface PlanetRenderItem {
   id: string;
+  key: PlanetKey;
   nameVi: string;
   glyph: string | null;
   fallbackText: string;
@@ -227,6 +228,7 @@ export function buildPlanetWheelModel(
 
     return {
       id,
+      key: planet.key,
       nameVi: planet.nameVi,
       glyph: planet.glyph,
       fallbackText,

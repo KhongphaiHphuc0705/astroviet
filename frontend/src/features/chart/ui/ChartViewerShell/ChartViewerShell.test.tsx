@@ -222,14 +222,22 @@ describe("ChartViewerShell", () => {
       expect(notices).toHaveLength(1);
     });
 
-    it("S7: selection buttons are not rendered in M7 presentation-only mode", () => {
+    it("S7: selection buttons are rendered and accessible in M8 interactive mode", () => {
       controller = installMatchMedia(true);
       const vm = toChartViewModel(chartFull);
 
       render(<ChartViewerShell vm={vm} />);
 
-      // No interactive buttons rendered inside tables
-      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+      // Selection buttons are now rendered inside tables with aria-pressed="false"
+      const sunButton = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      expect(sunButton).toBeInTheDocument();
+      expect(sunButton).toHaveAttribute("aria-pressed", "false");
+
+      const aspectButtons = screen.getAllByRole("button", {
+        name: /Chọn góc chiếu/,
+      });
+      expect(aspectButtons.length).toBeGreaterThan(0);
+      expect(aspectButtons[0]).toHaveAttribute("aria-pressed", "false");
     });
   });
 
@@ -518,5 +526,303 @@ describe("ChartViewerShell", () => {
       rerender(<ChartViewerShell vm={noAspectsVM} />);
       expect(await axe(container)).toHaveNoViolations();
     }, 60_000);
+
+    describe("Milestone F4-M8 Synchronization Tests (nhóm S-M8)", () => {
+      it("S-A1: selecting a planet from ChartWheel syncs to PlanetTable and SelectionDetail", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const wheelSunBtn = container.querySelector(
+          '[data-part="labels"] > [data-planet="Sun"]',
+        );
+        expect(wheelSunBtn).toBeInTheDocument();
+        expect(wheelSunBtn).toHaveAttribute("aria-pressed", "false");
+
+        fireEvent.click(wheelSunBtn!);
+
+        expect(wheelSunBtn).toHaveAttribute("aria-pressed", "true");
+        const tableSunBtn = screen.getByRole("button", {
+          name: "Chọn Mặt Trời",
+        });
+        expect(tableSunBtn).toHaveAttribute("aria-pressed", "true");
+
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        expect(screen.getByText("Đang lọc: Mặt Trời")).toBeInTheDocument();
+      });
+
+      it("S-C1: selecting an aspect from ChartWheel syncs to AspectTable and SelectionDetail", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const firstAspectHit = container.querySelector(
+          '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+        );
+        expect(firstAspectHit).toBeInTheDocument();
+
+        fireEvent.click(firstAspectHit!);
+
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("status").textContent).toContain(
+          "Đã chọn góc chiếu",
+        );
+      });
+
+      it("S-B1: selecting a planet from PlanetTable syncs to SelectionDetail and live region", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        expect(sunBtn).toHaveAttribute("aria-pressed", "false");
+
+        // Initial empty selection detail
+        expect(
+          screen.getByText(
+            "Chọn một hành tinh hoặc góc chiếu để xem chi tiết.",
+          ),
+        ).toBeInTheDocument();
+
+        fireEvent.click(sunBtn);
+
+        expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+        // SelectionDetail now displays Sun details
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        // Central live region announces selection
+        const liveRegion = screen.getByRole("status");
+        expect(liveRegion.textContent).toContain("Đã chọn Mặt Trời");
+      });
+
+      it("S-D1: selecting an aspect from AspectTable syncs to SelectionDetail", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        const firstAspect = vm.aspects[0]!;
+        const aspectBtnLabel = `Chọn góc chiếu ${firstAspect.type.labelVi} giữa ${firstAspect.planetA.labelVi} và ${firstAspect.planetB.labelVi}`;
+        const aspectBtn = screen.getByRole("button", { name: aspectBtnLabel });
+        expect(aspectBtn).toHaveAttribute("aria-pressed", "false");
+
+        fireEvent.click(aspectBtn);
+
+        expect(aspectBtn).toHaveAttribute("aria-pressed", "true");
+        expect(
+          screen.getByText(
+            `${firstAspect.planetA.labelVi} – ${firstAspect.planetB.labelVi}`,
+          ),
+        ).toBeInTheDocument();
+        const liveRegion = screen.getByRole("status");
+        expect(liveRegion.textContent).toContain("Đã chọn góc chiếu");
+      });
+
+      it("S-E1: pressing Escape on Shell clears selection", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { getByTestId } = render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        fireEvent.click(sunBtn);
+        expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+        // Press Escape on Shell
+        const shell = getByTestId("chart-viewer-shell");
+        fireEvent.keyDown(shell, { key: "Escape" });
+
+        expect(sunBtn).toHaveAttribute("aria-pressed", "false");
+        expect(
+          screen.getByText(
+            "Chọn một hành tinh hoặc góc chiếu để xem chi tiết.",
+          ),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("status").textContent).toBe("Đã bỏ chọn.");
+      });
+
+      it("S-E2: selecting the same planet toggles selection off", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        fireEvent.click(sunBtn);
+        expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+        fireEvent.click(sunBtn);
+        expect(sunBtn).toHaveAttribute("aria-pressed", "false");
+        expect(
+          screen.getByText(
+            "Chọn một hành tinh hoặc góc chiếu để xem chi tiết.",
+          ),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("status").textContent).toBe("Đã bỏ chọn.");
+      });
+
+      it("S-E3: clicking 'Bỏ chọn' in SelectionDetail clears selection", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Chọn Mặt Trời" }));
+        const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+        fireEvent.click(clearBtn);
+
+        expect(
+          screen.getByRole("button", { name: "Chọn Mặt Trời" }),
+        ).toHaveAttribute("aria-pressed", "false");
+        expect(screen.getByRole("status").textContent).toBe("Đã bỏ chọn.");
+      });
+
+      it("S-F1: selecting a planet filters AspectTable and shows AspectFilterChip", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        // Select Moon
+        const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+        fireEvent.click(moonBtn);
+
+        // AspectFilterChip is rendered with Moon
+        expect(screen.getByText("Đang lọc: Mặt Trăng")).toBeInTheDocument();
+        const deleteFilterBtn = screen.getByRole("button", {
+          name: "Xóa bộ lọc theo Mặt Trăng",
+        });
+        expect(deleteFilterBtn).toBeInTheDocument();
+      });
+
+      it("S-F2: clicking AspectFilterChip clear button clears filter and selection", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Chọn Mặt Trăng" }));
+        const deleteFilterBtn = screen.getByRole("button", {
+          name: "Xóa bộ lọc theo Mặt Trăng",
+        });
+
+        fireEvent.click(deleteFilterBtn);
+        expect(
+          screen.queryByText("Đang lọc: Mặt Trăng"),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: "Chọn Mặt Trăng" }),
+        ).toHaveAttribute("aria-pressed", "false");
+        expect(screen.getByRole("status").textContent).toBe("Đã bỏ chọn.");
+      });
+
+      it("S-F3: selecting an aspect while planet is filtered clears planet filter and selects aspect", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        // 1. Filter by Sun
+        fireEvent.click(screen.getByRole("button", { name: "Chọn Mặt Trời" }));
+        expect(screen.getByText("Đang lọc: Mặt Trời")).toBeInTheDocument();
+
+        // 2. Select an aspect from the filtered list
+        const aspectButtons = screen.getAllByRole("button", {
+          name: /Chọn góc chiếu/,
+        });
+        expect(aspectButtons.length).toBeGreaterThan(0);
+        fireEvent.click(aspectButtons[0]!);
+
+        // Filter chip for Sun disappears because selection became aspect
+        expect(
+          screen.queryByText("Đang lọc: Mặt Trời"),
+        ).not.toBeInTheDocument();
+        // SelectionDetail now displays aspect
+        expect(
+          screen.getByRole("button", { name: "Bỏ chọn" }),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("status").textContent).toContain(
+          "Đã chọn góc chiếu",
+        );
+      });
+
+      it("S-G1: click then hover prioritizes hovered target over focused target in preview", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+
+        // 1. Click Sun: Sun is selected and focused
+        fireEvent.click(sunBtn);
+        expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+        // 2. Hover Moon: pointer hover preview takes precedence over lingering focus
+        fireEvent.pointerEnter(moonBtn, { pointerType: "mouse" });
+
+        // On the wheel, Moon's label should not be dimmed because it's previewed!
+        const moonWheelLabel = container.querySelector(
+          '[data-part="labels"] > [data-planet="Moon"]',
+        );
+        expect(moonWheelLabel).not.toHaveClass("opacity-40");
+
+        // 3. Pointer leaves Moon: preview falls back cleanly
+        fireEvent.pointerLeave(moonBtn, { pointerType: "mouse" });
+      });
+
+      it("S-G2: interleaved enter and leave protects against race conditions", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        const { container } = render(<ChartViewerShell vm={vm} />);
+
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+
+        // Enter Sun
+        fireEvent.pointerEnter(sunBtn, { pointerType: "mouse" });
+        // Enter Moon (before leaving Sun)
+        fireEvent.pointerEnter(moonBtn, { pointerType: "mouse" });
+        // Leave Sun (stale leave event)
+        fireEvent.pointerLeave(sunBtn, { pointerType: "mouse" });
+
+        // Moon should STILL be emphasized and NOT dimmed because Moon is the active hover!
+        const moonWheelLabel = container.querySelector(
+          '[data-part="labels"] > [data-planet="Moon"]',
+        );
+        expect(moonWheelLabel).not.toHaveClass("opacity-40");
+      });
+
+      it("S-G3: clicking 'Bỏ chọn' and clearing filter chip return focus to stable semantic elements", () => {
+        controller = installMatchMedia(true);
+        const vm = toChartViewModel(chartFull);
+        render(<ChartViewerShell vm={vm} />);
+
+        // 1. Select a planet
+        const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+        fireEvent.click(sunBtn);
+
+        // 2. Click 'Bỏ chọn'
+        const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+        fireEvent.click(clearBtn);
+
+        // Document activeElement should be the SelectionDetail section, not document.body
+        const selectionSection = screen.getByRole("region", {
+          name: "Chi tiết đang chọn",
+        });
+        expect(document.activeElement).toBe(selectionSection);
+
+        // 3. Select planet again to show filter chip
+        fireEvent.click(sunBtn);
+        const deleteFilterBtn = screen.getByRole("button", {
+          name: "Xóa bộ lọc theo Mặt Trời",
+        });
+        fireEvent.click(deleteFilterBtn);
+
+        // Focus shifts to AspectTable heading
+        const aspectHeading = screen.getByRole("heading", {
+          name: "Góc chiếu",
+        });
+        expect(document.activeElement).toBe(aspectHeading);
+      });
+    });
   });
 });

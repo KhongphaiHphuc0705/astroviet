@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
 import {
@@ -482,6 +482,86 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
       expect(figcaption?.textContent).toContain(
         "Kiểu nét giúp phân biệt nhóm góc chiếu",
       );
+    });
+
+    it("CW-I1: passes interaction prop to layers and enables planet selection on wheel", () => {
+      const onSelect = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect,
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <ChartWheel vm={fullVM} interaction={mockInteraction} />,
+      );
+
+      const sunButton = container.querySelector(
+        '[data-part="labels"] > [data-planet="Sun"]',
+      );
+      expect(sunButton).toHaveAttribute("role", "button");
+      expect(sunButton).toHaveAttribute("tabindex", "0");
+
+      fireEvent.click(sunButton!);
+      expect(onSelect).toHaveBeenCalledWith({ kind: "planet", key: "Sun" });
+    });
+
+    it("CW-I2: clicking aspect lines on wheel triggers aspect selection", () => {
+      const onSelect = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect,
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <ChartWheel
+          vm={allAspectsVM}
+          showAspectLines={true}
+          interaction={mockInteraction}
+        />,
+      );
+
+      const hitTarget = container.querySelector(
+        '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+      );
+      expect(hitTarget).toBeInTheDocument();
+      fireEvent.click(hitTarget!);
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ kind: "aspect" }),
+      );
+    });
+
+    it("CW-I4: passes axe accessibility check in interactive mode", async () => {
+      const mockInteraction = {
+        selection: { kind: "planet" as const, key: "Sun" },
+        emphasis: {
+          planets: new Set(["Sun", "Moon"]),
+          aspects: new Set<string>(),
+          active: true,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <ChartWheel
+          vm={fullVM}
+          showAspectLines={true}
+          interaction={mockInteraction}
+        />,
+      );
+      expect(await axe(container)).toHaveNoViolations();
     });
   });
 });

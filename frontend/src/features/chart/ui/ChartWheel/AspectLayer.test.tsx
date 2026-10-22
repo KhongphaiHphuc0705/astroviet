@@ -1,5 +1,5 @@
-import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { chartAllAspects, chartFull } from "../../api/mocks/fixtures";
 import { buildAspectGeometry } from "../../model/aspectGeometry";
@@ -264,6 +264,190 @@ describe("AspectLayer (A1 - A6, A10 - A13)", () => {
       numbers.forEach((num) => {
         expect(num).toBeGreaterThanOrEqual(0);
         expect(num).toBeLessThanOrEqual(600);
+      });
+    });
+  });
+
+  describe("AspectLayer Interactive Mode (AL-I1 - AL-I6)", () => {
+    it("AL-I1: renders interactive hit targets with strokeWidth 14 under data-part='aspect-hit-targets'", () => {
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg viewBox="0 0 600 600">
+          <AspectLayer
+            geometry={allAspectsGeom}
+            interaction={mockInteraction}
+          />
+        </svg>,
+      );
+
+      const hitTargets = container.querySelectorAll(
+        '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+      );
+      expect(hitTargets).toHaveLength(allAspectsGeom.lines.length);
+
+      const hitPath = container.querySelector(
+        '[data-part="aspect-hit-targets"] path',
+      );
+      expect(hitPath).toHaveAttribute("stroke-width", "14");
+      expect(hitPath).toHaveAttribute("stroke", "transparent");
+    });
+
+    it("AL-I2: clicking hit target calls interaction.onSelect", () => {
+      const onSelect = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect,
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg viewBox="0 0 600 600">
+          <AspectLayer
+            geometry={allAspectsGeom}
+            interaction={mockInteraction}
+          />
+        </svg>,
+      );
+
+      const firstHitTarget = container.querySelector(
+        '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+      )!;
+      fireEvent.click(firstHitTarget);
+      expect(onSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it("AL-I3: pointer enter/leave on hit target with mouse triggers onPreview", () => {
+      const onPreview = vi.fn();
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview,
+      };
+
+      const { container } = render(
+        <svg viewBox="0 0 600 600">
+          <AspectLayer
+            geometry={allAspectsGeom}
+            interaction={mockInteraction}
+          />
+        </svg>,
+      );
+
+      const firstHitTarget = container.querySelector(
+        '[data-part="aspect-hit-targets"] path',
+      )!;
+
+      // Touch does not trigger hover preview
+      fireEvent.pointerEnter(firstHitTarget, { pointerType: "touch" });
+      expect(onPreview).not.toHaveBeenCalled();
+
+      // Mouse triggers preview
+      fireEvent.pointerEnter(firstHitTarget, { pointerType: "mouse" });
+      expect(onPreview).toHaveBeenCalledTimes(1);
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "aspect", key: allAspectsGeom.lines[0]!.key },
+        "hover",
+        "enter",
+      );
+
+      fireEvent.pointerLeave(firstHitTarget, { pointerType: "mouse" });
+      expect(onPreview).toHaveBeenCalledWith(
+        { kind: "aspect", key: allAspectsGeom.lines[0]!.key },
+        "hover",
+        "leave",
+      );
+    });
+
+    it("AL-I4: selected aspect increases strokeWidth and dimmed aspects receive opacity-25", () => {
+      const selectedAspectKey = allAspectsGeom.lines[0]!.key;
+      const otherAspectKey = allAspectsGeom.lines[1]!.key;
+
+      const mockInteraction = {
+        selection: { kind: "aspect" as const, key: selectedAspectKey },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set([selectedAspectKey]),
+          active: true,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg viewBox="0 0 600 600">
+          <AspectLayer
+            geometry={allAspectsGeom}
+            interaction={mockInteraction}
+          />
+        </svg>,
+      );
+
+      const selectedLine = container.querySelector(
+        `[data-aspect="${selectedAspectKey}"]`,
+      )!;
+      const otherLine = container.querySelector(
+        `[data-aspect="${otherAspectKey}"]`,
+      )!;
+
+      // Selected line has increased strokeWidth (+1.5)
+      const expectedSelectedWidth = allAspectsGeom.lines[0]!.style.width + 1.5;
+      expect(Number(selectedLine.getAttribute("stroke-width"))).toBeCloseTo(
+        expectedSelectedWidth,
+        1,
+      );
+
+      // Unrelated line receives dimming class
+      expect(otherLine).toHaveClass("opacity-25");
+    });
+
+    it("AL-I5: aspect lines and hit targets remain aria-hidden without tabIndex (A10 compliance)", () => {
+      const mockInteraction = {
+        selection: { kind: "none" as const },
+        emphasis: {
+          planets: new Set<string>(),
+          aspects: new Set<string>(),
+          active: false,
+        },
+        onSelect: vi.fn(),
+        onPreview: vi.fn(),
+      };
+
+      const { container } = render(
+        <svg viewBox="0 0 600 600">
+          <AspectLayer
+            geometry={allAspectsGeom}
+            interaction={mockInteraction}
+          />
+        </svg>,
+      );
+
+      const layer = container.querySelector('[data-layer="aspects"]');
+      expect(layer).toHaveAttribute("aria-hidden", "true");
+
+      const allElements = layer!.querySelectorAll("*");
+      allElements.forEach((el) => {
+        expect(el.getAttribute("tabindex")).toBeNull();
+        expect(el.getAttribute("role")).toBeNull();
       });
     });
   });
