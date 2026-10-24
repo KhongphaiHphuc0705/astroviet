@@ -265,7 +265,7 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
     expect(scrollRegion).toHaveAttribute("tabindex", "0");
     expect(scrollRegion).toHaveAttribute(
       "aria-label",
-      "Biểu đồ tròn, có thể cuộn ngang trên màn hình hẹp",
+      "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
     );
   });
 
@@ -562,6 +562,57 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
         />,
       );
       expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
+  describe("M9.2: Square Wheel Frame & Zoom (Z1 - Z3)", () => {
+    it("Z1: scroll region has square aspect on mobile, touch actions, and updated accessible label", () => {
+      render(<ChartWheel vm={fullVM} />);
+      const scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+
+      expect(scrollRegion).toBeInTheDocument();
+      expect(scrollRegion).toHaveAttribute("tabindex", "0");
+      expect(scrollRegion).toHaveClass(
+        "w-full",
+        "max-w-[640px]",
+        "mx-auto",
+        "overflow-auto",
+        "max-md:aspect-square",
+        "touch-pan-x",
+        "touch-pan-y",
+        "touch-pinch-zoom",
+      );
+    });
+
+    it("Z2: passes --zoom CSS variable to scroll region style attribute", () => {
+      const { rerender } = render(<ChartWheel vm={fullVM} zoom={1} />);
+      let scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("1");
+
+      rerender(<ChartWheel vm={fullVM} zoom={2.5} />);
+      scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("2.5");
+    });
+
+    it("Z3: svg element has responsive width and max-width classes for zoom and desktop", () => {
+      const { container } = render(<ChartWheel vm={fullVM} />);
+      const svg = container.querySelector("svg");
+      expect(svg).toBeInTheDocument();
+      expect(svg).toHaveClass(
+        "mx-auto",
+        "h-auto",
+        "max-md:max-w-none",
+        "max-md:w-[max(400px,calc(var(--zoom)*100%))]",
+        "md:w-full",
+        "md:max-w-[640px]",
+        "md:min-w-[400px]",
+      );
     });
   });
 });
