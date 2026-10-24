@@ -4,6 +4,7 @@ import { axe } from "vitest-axe";
 
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { installMatchMedia } from "@test/matchMedia";
+import { installViewport, type ViewportController } from "@test/viewport";
 
 import {
   chartFull,
@@ -16,6 +17,7 @@ import { ChartViewerShell } from "./ChartViewerShell";
 
 describe("ChartViewerShell", () => {
   let controller: ReturnType<typeof installMatchMedia> | null = null;
+  let viewport: ViewportController | null = null;
 
   beforeEach(() => {
     usePreferenceStore.setState({ densityMode: "comfortable" });
@@ -25,6 +27,10 @@ describe("ChartViewerShell", () => {
     if (controller) {
       controller.restore();
       controller = null;
+    }
+    if (viewport) {
+      viewport.restore();
+      viewport = null;
     }
   });
 
@@ -1097,6 +1103,400 @@ describe("ChartViewerShell", () => {
         name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
       });
       expect(region).toBeInTheDocument();
+    });
+  });
+
+  describe("M9.5: Responsive and Accessibility Regression (RS7 - RS12, RG1 - RG10)", () => {
+    it("RS7 & RS8: layout foundation provides container query grid and sticky left column across breakpoints", () => {
+      viewport = installViewport(1500);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const cqWrapper = container.querySelector(
+        '[class*="[container-type:inline-size]"]',
+      );
+      expect(cqWrapper).toBeInTheDocument();
+
+      const grid = container.querySelector(
+        '[class*="[@container(min-width:1010px)]:grid"]',
+      );
+      expect(grid).toBeInTheDocument();
+      expect(grid).toHaveClass(
+        "[@container(min-width:1010px)]:grid-cols-[minmax(448px,5fr)_minmax(0,7fr)]",
+      );
+
+      const stickyCol = container.querySelector(
+        '[class*="[@media(min-height:1000px)]:sticky"]',
+      );
+      expect(stickyCol).toBeInTheDocument();
+      expect(stickyCol).toHaveClass("[@media(min-height:1000px)]:top-[88px]");
+
+      const tablesCol = container.querySelector("#chart-data-tables");
+      expect(tablesCol).toHaveClass("min-w-0");
+    });
+
+    it("RS9 & RS10: aspect switch defaults and interaction across viewports", () => {
+      viewport = installViewport(375);
+      const vm = toChartViewModel(chartFull);
+      const { container, unmount } = render(<ChartViewerShell vm={vm} />);
+
+      // At 375px (< 768px), aspect lines switch is unchecked by default and layer is unmounted
+      const toggle = screen.getByRole("switch");
+      expect(toggle).not.toBeChecked();
+      expect(container.querySelector('[data-layer="aspects"]')).toBeNull();
+
+      // Selecting aspect from cards selects it and highlights endpoints without errors
+      const aspectBtns = screen.getAllByRole("button", {
+        name: /Chọn góc chiếu/,
+      });
+      expect(aspectBtns.length).toBeGreaterThan(0);
+      fireEvent.click(aspectBtns[0]!);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Bỏ chọn" }),
+      ).toBeInTheDocument();
+
+      unmount();
+
+      // At 800px (>= 768px), aspect lines switch is checked by default and layer is mounted
+      viewport.setWidth(800);
+      const { container: containerTablet } = render(
+        <ChartViewerShell vm={vm} />,
+      );
+      const tabletToggle = screen.getByRole("switch");
+      expect(tabletToggle).toBeChecked();
+      expect(
+        containerTablet.querySelector('[data-layer="aspects"]'),
+      ).toBeInTheDocument();
+    });
+
+    it("RS11: mounts mobile cards exclusively at < 640px and tables at >= 640px with no duplicate DOM content", () => {
+      viewport = installViewport(375);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      // At 375px: 0 <table> elements, cards are mounted as <Card as="li">
+      expect(screen.queryAllByRole("table")).toHaveLength(0);
+      expect(screen.queryAllByRole("list").length).toBeGreaterThan(0);
+
+      // Scale up to 800px (Tablet): tables mounted, card lists unmounted
+      act(() => {
+        viewport!.setWidth(800);
+      });
+      expect(screen.getAllByRole("table")).toHaveLength(4);
+
+      // Scale up to 1500px (Desktop): tables remain mounted
+      act(() => {
+        viewport!.setWidth(1500);
+      });
+      expect(screen.getAllByRole("table")).toHaveLength(4);
+    });
+
+    it("RS12: handles chartNoHouses properly in both mobile card and desktop table viewports", () => {
+      viewport = installViewport(375);
+      const vm = toChartViewModel(chartNoHouses);
+      render(<ChartViewerShell vm={vm} />);
+
+      // At 375px: Notice rendered, no house tables, planet cards show fallback sr-only
+      expect(
+        screen.getByText("Dữ liệu Nhà và các góc chưa khả dụng"),
+      ).toBeInTheDocument();
+      expect(screen.queryAllByRole("table")).toHaveLength(0);
+
+      // Resize to 800px
+      act(() => {
+        viewport!.setWidth(800);
+      });
+      expect(
+        screen.getByText("Dữ liệu Nhà và các góc chưa khả dụng"),
+      ).toBeInTheDocument();
+      // Planet table + Aspect table = 2 tables, house table replaced by notice
+      expect(screen.getAllByRole("table")).toHaveLength(2);
+    });
+
+    it("RG1: planet selection from ChartWheel functions identically across 375, 800, and 1500 viewports", () => {
+      const vm = toChartViewModel(chartFull);
+
+      for (const width of [375, 800, 1500]) {
+        viewport = installViewport(width);
+        const { unmount } = render(<ChartViewerShell vm={vm} />);
+
+        const sunWheelBtn = screen.getByRole("button", {
+          name: "Chọn Mặt Trời",
+        });
+        fireEvent.click(sunWheelBtn);
+
+        expect(sunWheelBtn).toHaveAttribute("aria-pressed", "true");
+        const detail = screen.getByRole("region", {
+          name: "Chi tiết đang chọn",
+        });
+        expect(detail).toHaveTextContent("Mặt Trời");
+        expect(detail).toHaveTextContent("Ma Kết");
+
+        // Clear selection via Escape
+        const shell = screen.getByTestId("chart-viewer-shell");
+        fireEvent.keyDown(shell, { key: "Escape" });
+        expect(sunWheelBtn).toHaveAttribute("aria-pressed", "false");
+
+        unmount();
+        viewport.restore();
+        viewport = null;
+      }
+    });
+
+    it("RG2: planet selection from table (800/1500) and card (375) syncs to SelectionDetail and live region", () => {
+      const vm = toChartViewModel(chartFull);
+
+      // Card mode (< 640px)
+      viewport = installViewport(375);
+      const { container: containerMobile, unmount: unmountMobile } = render(
+        <ChartViewerShell vm={vm} />,
+      );
+
+      const sunCardBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      fireEvent.click(sunCardBtn);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toHaveTextContent("Mặt Trời");
+      const mobileLiveRegion =
+        containerMobile.querySelector('div[role="status"]');
+      expect(mobileLiveRegion?.textContent).toContain("Đã chọn Mặt Trời");
+
+      unmountMobile();
+      viewport.restore();
+
+      // Table mode (>= 640px)
+      viewport = installViewport(800);
+      const { container: containerTable } = render(
+        <ChartViewerShell vm={vm} />,
+      );
+
+      const sunTableBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      fireEvent.click(sunTableBtn);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toHaveTextContent("Mặt Trời");
+      const tableLiveRegion =
+        containerTable.querySelector('div[role="status"]');
+      expect(tableLiveRegion?.textContent).toContain("Đã chọn Mặt Trời");
+    });
+
+    it("RG3: aspect selection from table and card syncs SelectionDetail and filter chip", () => {
+      const vm = toChartViewModel(chartFull);
+
+      // Card mode at 375px
+      viewport = installViewport(375);
+      const { unmount: unmountMobile } = render(<ChartViewerShell vm={vm} />);
+
+      const aspectCardBtn = screen.getAllByRole("button", {
+        name: /Chọn góc chiếu/,
+      })[0]!;
+      fireEvent.click(aspectCardBtn);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Bỏ chọn" }),
+      ).toBeInTheDocument();
+
+      unmountMobile();
+      viewport.restore();
+
+      // Table mode at 800px
+      viewport = installViewport(800);
+      render(<ChartViewerShell vm={vm} />);
+
+      const aspectTableBtn = screen.getAllByRole("button", {
+        name: /Chọn góc chiếu/,
+      })[0]!;
+      fireEvent.click(aspectTableBtn);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Bỏ chọn" }),
+      ).toBeInTheDocument();
+    });
+
+    it("RG4: aspect selection via wheel aspect lines works when enabled", () => {
+      const vm = toChartViewModel(chartFull);
+
+      // At 800px (lines on by default)
+      viewport = installViewport(800);
+      const { container, unmount } = render(<ChartViewerShell vm={vm} />);
+
+      const hitTarget = container.querySelector(
+        '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+      );
+      expect(hitTarget).toBeInTheDocument();
+      fireEvent.click(hitTarget!);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("status").textContent).toContain(
+        "Đã chọn góc chiếu",
+      );
+
+      unmount();
+      viewport.restore();
+
+      // At 375px: turn switch on manually, then hit target is clickable
+      viewport = installViewport(375);
+      const { container: containerMobile } = render(
+        <ChartViewerShell vm={vm} />,
+      );
+      const toggle = screen.getByRole("switch");
+      fireEvent.click(toggle);
+
+      const hitTargetMobile = containerMobile.querySelector(
+        '[data-part="aspect-hit-targets"] path, [data-part="aspect-hit-targets"] circle',
+      );
+      expect(hitTargetMobile).toBeInTheDocument();
+      fireEvent.click(hitTargetMobile!);
+
+      expect(
+        screen.getByRole("region", { name: "Chi tiết đang chọn" }),
+      ).toBeInTheDocument();
+    });
+
+    it("RG5: highlights aspect endpoint planets and dims non-related planets", () => {
+      viewport = installViewport(800);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      // Select first aspect
+      const firstAspectBtn = screen.getAllByRole("button", {
+        name: /Chọn góc chiếu/,
+      })[0]!;
+      fireEvent.click(firstAspectBtn);
+
+      // Verify dimmed planet has opacity-40
+      const dimmedPlanets = container.querySelectorAll(
+        '[data-part="labels"] > g.opacity-40',
+      );
+      expect(dimmedPlanets.length).toBeGreaterThan(0);
+    });
+
+    it("RG6: hover and focus preview does not get stuck", () => {
+      viewport = installViewport(800);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      const moonBtn = screen.getByRole("button", { name: "Chọn Mặt Trăng" });
+
+      // Click Sun to select
+      fireEvent.click(sunBtn);
+      expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+      // Hover Moon
+      fireEvent.pointerEnter(moonBtn, { pointerType: "mouse" });
+      const moonWheelLabel = container.querySelector(
+        '[data-part="labels"] > [data-planet="Moon"]',
+      );
+      expect(moonWheelLabel).not.toHaveClass("opacity-40");
+
+      // Leave Moon -> preview clears, committed Sun remains selected
+      fireEvent.pointerLeave(moonBtn, { pointerType: "mouse" });
+      expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+    });
+
+    it("RG7: Escape key clears selection and clicking active item toggles selection off", () => {
+      viewport = installViewport(800);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+
+      // Click Sun -> selected
+      fireEvent.click(sunBtn);
+      expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+      // Press Escape -> cleared
+      const shell = screen.getByTestId("chart-viewer-shell");
+      fireEvent.keyDown(shell, { key: "Escape" });
+      expect(sunBtn).toHaveAttribute("aria-pressed", "false");
+
+      // Click Sun -> selected
+      fireEvent.click(sunBtn);
+      expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+      // Click Sun again -> toggled off
+      fireEvent.click(sunBtn);
+      expect(sunBtn).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("RG8: 'Bỏ chọn' button restores focus to SelectionDetail container instead of body", () => {
+      viewport = installViewport(800);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      fireEvent.click(sunBtn);
+
+      const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+      fireEvent.click(clearBtn);
+
+      const selectionSection = screen.getByRole("region", {
+        name: "Chi tiết đang chọn",
+      });
+      expect(document.activeElement).toBe(selectionSection);
+    });
+
+    it("RG9: live region role='status' is unique and announces selection and clearing", () => {
+      viewport = installViewport(800);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const statuses = screen.getAllByRole("status");
+      expect(statuses).toHaveLength(1);
+
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      fireEvent.click(sunBtn);
+      expect(statuses[0]?.textContent).toContain("Đã chọn Mặt Trời");
+
+      const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+      fireEvent.click(clearBtn);
+      expect(statuses[0]?.textContent).toContain("Đã bỏ chọn");
+    });
+
+    it("RG10: user switch choice persists across multiple viewport resizes", () => {
+      viewport = installViewport(375);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const toggle = screen.getByRole("switch");
+      expect(toggle).not.toBeChecked();
+
+      // User manually toggles switch ON
+      fireEvent.click(toggle);
+      expect(toggle).toBeChecked();
+
+      // Resize to 800px
+      act(() => {
+        viewport!.setWidth(800);
+      });
+      expect(toggle).toBeChecked();
+
+      // Resize to 1500px
+      act(() => {
+        viewport!.setWidth(1500);
+      });
+      expect(toggle).toBeChecked();
+
+      // Resize back to 375px -> userChoice persists
+      act(() => {
+        viewport!.setWidth(375);
+      });
+      expect(toggle).toBeChecked();
     });
   });
 });
