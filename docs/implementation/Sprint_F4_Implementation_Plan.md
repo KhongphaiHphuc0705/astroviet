@@ -33,7 +33,7 @@ Phát hiện quan trọng của audit (đều `VERIFIED`):
 5. **Chart Guest không xem lại được** (`save=false` không có `id` truy xuất), nên luồng Guest nằm ngoài F4 (Mục 4).
 6. **Baseline frontend xanh:** [C-run] `typecheck`, `lint`, `format:check`, `build` exit 0; Vitest 78 file / 391 test pass (cần `VITE_API_BASE_URL`, nếu thiếu thì `env.ts` ném ZodError ở khâu nạp module).
 
-Kiến trúc đề xuất (đơn giản nhất thoả yêu cầu): feature `chart` mới theo cấu trúc `api/ hooks/ model/ ui/`; **SVG tự vẽ** với tầng hình học thuần (không React); **state chọn/hover cục bộ trong `ChartViewer`** (không Zustand, không Context); server state ở TanStack Query với `staleTime: Infinity`; tính lá số dùng `POST /api/v1/charts/natal?save=true` rồi điều hướng tới `/app/charts/:chartId`. Diễn giải (`interpretations`) được type/chấp nhận nhưng **không hiển thị** ở F4 (Interpretation UI là sprint F5).
+Kiến trúc đề xuất (đơn giản nhất thoả yêu cầu): feature `chart` mới theo cấu trúc `api/ hooks/ model/ ui/`; **SVG tự vẽ** với tầng hình học thuần (không React); **state chọn/hover cục bộ trong `ChartViewerShell`** (không Zustand, không Context); server state ở TanStack Query với `staleTime: Infinity`; tính lá số dùng `POST /api/v1/charts/natal?save=true` rồi điều hướng tới `/app/charts/:chartId`. Diễn giải (`interpretations`) được type/chấp nhận nhưng **không hiển thị** ở F4 (Interpretation UI là sprint F5).
 
 ## 2. Sprint Goal
 
@@ -210,7 +210,7 @@ src/features/chart/
   hooks/      query-keys.ts · useChartQuery.ts · useChartsQuery.ts · useCreateNatalChartMutation.ts
   model/      labels.ts · format.ts · chartViewModel.ts · geometry.ts · labelLayout.ts
               aspectGeometry.ts · selection.ts          (thuần TS, không React)
-  ui/         ChartViewer/ · ChartWheel/ · PlanetTable/ · HouseTable/ · AspectTable/
+  ui/         ChartViewerShell/ · ChartWheel/ · PlanetTable/ · HouseTable/ · AspectTable/
               ChartHeader · UnknownTimeNotice · SelectionDetail · ChartBadges/ ·
               CalculateChartDialog/ · ChartViewerSkeleton · ChartList/ (ChartListItem)
   index.ts    API công khai của feature
@@ -225,7 +225,7 @@ Hướng phụ thuộc: `api` → `hooks` → `model` (adapter, hình học) →
 
 | Thành phần                                   | Trách nhiệm                                                                                        | Input                                                    | Output/sự kiện                   | State                                                         | Phụ thuộc                                       | Test                 |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------- | ----------------------------------------------- | -------------------- |
-| `ChartViewer`                                | Container: ghép header, notice, wheel, bảng, detail; **sở hữu selection/hover/zoom**               | `vm: ChartViewModel`                                     | —                                | `selection`, `hoveredKey`, `showAspectLines`, `zoom` (cục bộ) | model, các ui con                               | component + tích hợp |
+| `ChartViewerShell`                                | Container: ghép header, notice, wheel, bảng, detail; **sở hữu selection/hover/zoom**               | `vm: ChartViewModel`                                     | —                                | `selection`, `hoveredKey`, `showAspectLines`, `zoom` (cục bộ) | model, các ui con                               | component + tích hợp |
 | `ChartWheel`                                 | Vẽ SVG từ `WheelGeometry`                                                                          | `geometry`, `selection`, `hoveredKey`, `showAspectLines` | `onSelect`, `onHover`, `onClear` | không (controlled)                                            | `model/geometry*`, `ChartBadges` glyph          | component + axe      |
 | `PlanetTable` / `HouseTable` / `AspectTable` | Bảng ngữ nghĩa + thẻ mobile; đánh dấu hàng đã chọn                                                 | rows VM, `selection`, `densityMode`                      | `onSelect`, `onHover`            | không                                                         | badges                                          | component + axe      |
 | `SelectionDetail`                            | Hiển thị chi tiết mục đang chọn (thay tooltip, dùng được trên touch)                               | `selection`, `vm`                                        | `onClear`                        | không                                                         | —                                               | component            |
@@ -241,14 +241,14 @@ Hướng phụ thuộc: `api` → `hooks` → `model` (adapter, hình học) →
 | #         | Quyết định                                                                                                                                  | Bằng chứng                                                                                        | Phương án đã xét                                 | Lý do loại                                                                                                | Hệ quả                                                         |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | 1         | **SVG tự vẽ** (không Canvas, không thư viện)                                                                                                | UI Spec §12.5 bắt buộc SVG; repo không có thư viện chart; ~200–300 node                           | Canvas; thư viện (Recharts/d3/`astrochart`)      | Canvas mất `<title>`/focus; Recharts không phù hợp bánh xe; thư viện thêm phụ thuộc và khó kiểm soát a11y | Tự quản hình học, bù bằng unit test thuần                      |
-| 2         | Kiến trúc: `ChartViewer` + wheel/bảng nhỏ, hình học thuần ở `model/`                                                                        | Architecture Spec §9 (Composite/Presentational), prompt Mục 44                                    | Một file lớn `ChartViewer.tsx`                   | Khó test, vi phạm ranh giới                                                                               | Nhiều file nhỏ, mỗi file một trách nhiệm                       |
+| 2         | Kiến trúc: `ChartViewerShell` + wheel/bảng nhỏ, hình học thuần ở `model/`                                                                        | Architecture Spec §9 (Composite/Presentational), prompt Mục 44                                    | Một file lớn `ChartViewerShell.tsx`                   | Khó test, vi phạm ranh giới                                                                               | Nhiều file nhỏ, mỗi file một trách nhiệm                       |
 | 3         | **DTO ≠ ViewModel**: adapter ở `model/chartViewModel.ts`                                                                                    | Backend không cam kết thứ tự; DTO dùng chuỗi tiếng Anh                                            | Dùng DTO trực tiếp trong component               | Rải giả định Backend khắp UI                                                                              | Một điểm sửa khi hợp đồng đổi                                  |
-| 4         | State chọn/hover **cục bộ** trong `ChartViewer`                                                                                             | Chỉ cha–con gần cần chia sẻ (Architecture Spec §7.2)                                              | Context; Zustand                                 | Không cần: các con đều là con trực tiếp của `ChartViewer`                                                 | Không có store mới                                             |
+| 4         | State chọn/hover **cục bộ** trong `ChartViewerShell`                                                                                             | Chỉ cha–con gần cần chia sẻ (Architecture Spec §7.2)                                              | Context; Zustand                                 | Không cần: các con đều là con trực tiếp của `ChartViewerShell`                                                 | Không có store mới                                             |
 | 5         | **Không Context**                                                                                                                           | Như trên; chỉ prop drilling 1 cấp                                                                 | `ChartContext`                                   | Thêm ngầm định không cần thiết                                                                            | Props rõ ràng, test dễ                                         |
 | 6         | **Không Zustand**                                                                                                                           | Spec: `chart-viewer` không có Global UI State; ESLint boundaries tắt nên càng nên tránh store mới | Store thứ 4                                      | Không có state cần sống qua unmount hay giữa cây không liên quan                                          | Không đổi 3 store                                              |
 | 7         | Mô hình tương tác: hover = làm nổi; **chọn = click/Enter/Space/tap**                                                                        | UI Spec §12.5                                                                                     | Chỉ hover                                        | Không dùng được trên touch/bàn phím                                                                       | Chi tiết ở panel, không tooltip                                |
-| 8         | Đồng bộ: **một nguồn `selection`** trong `ChartViewer` (discriminated union)                                                                | Prompt Mục 40 (tránh state trùng)                                                                 | Hai state riêng cho wheel và bảng                | Dễ lệch                                                                                                   | Một reducer thuần dễ test                                      |
-| 9         | Responsive: wheel trong khung vuông; bảng→thẻ dưới `sm`; hai cột ở `lg`                                                                     | UI Spec §7.2                                                                                      | Scale cả wheel theo chiều rộng                   | Chữ < 10px                                                                                                | Chi tiết Mục 28                                                |
+| 8         | Đồng bộ: **một nguồn `selection`** trong `ChartViewerShell` (discriminated union)                                                                | Prompt Mục 40 (tránh state trùng)                                                                 | Hai state riêng cho wheel và bảng                | Dễ lệch                                                                                                   | Một reducer thuần dễ test                                      |
+| 9         | Responsive: bản vẽ wheel vuông; bảng→thẻ dưới `sm`; hai cột ở `lg` **khi container đủ rộng** (D-M9-04)                                                                     | UI Spec §7.2                                                                                      | Scale cả wheel theo chiều rộng                   | Chữ < 10px                                                                                                | Chi tiết Mục 28                                                |
 | 10        | A11y: wheel là `group` có nhãn tóm tắt + nút tiêu điểm; **bảng là nguồn thông tin đầy đủ**                                                  | UI Spec §12.5                                                                                     | `role="img"` như spec                            | `role=img` làm con thành presentational, mâu thuẫn với phần tử focusable                                  | Lệch spec có chủ đích (Mục 29)                                 |
 | 11        | UX thiếu giờ sinh: banner `info` + wheel không có vòng nhà + bảng nhà thay bằng giải thích                                                  | Prompt Mục 7, F3 OQ-1                                                                             | Báo lỗi chung                                    | Sai ngữ nghĩa                                                                                             | Mục 31                                                         |
 | 12        | Loading/error/empty: Skeleton, `EmptyState` (danger/default), không trang trắng                                                             | Pattern F3                                                                                        | Spinner toàn trang                               | Kém trực quan                                                                                             | Mục 30                                                         |
@@ -281,7 +281,7 @@ ChartPage ── useChartQuery(chartId)  (GET /charts/:id nếu cache chưa có;
       ▼
 toChartViewModel(dto)   ← adapter thuần (sắp xếp chính tắc, nhãn, định dạng, cờ suy giảm)
       ▼
-ChartViewer (state: selection · hoveredKey · showAspectLines · zoom)
+ChartViewerShell (state: selection · hoveredKey · showAspectLines · zoom)
       ├─ ChartHeader / UnknownTimeNotice
       ├─ ChartWheel  ← buildWheelGeometry(vm)  (hình học thuần)
       ├─ PlanetTable / HouseTable / AspectTable
@@ -378,13 +378,13 @@ Danh sách (list layout bắt buộc, ma trận `grid` hoãn): cột Hành tinh 
 | Bỏ chọn          | click lại / chip ✕ / nút "Bỏ chọn"                            | `Esc`, `Enter` lần hai             | tap lại / nút "Bỏ chọn"                                                           |
 | Chi tiết         | `SelectionDetail` cố định cạnh/dưới wheel (không tooltip nổi) | cùng                               | cùng                                                                              |
 | Bật/tắt aspect   | `Switch`                                                      | có                                 | có                                                                                |
-| Zoom (dưới `md`) | nút `+`/`−`/Đặt lại (1×–3×)                                   | có                                 | nút; pinch gốc của trình duyệt được phép (`touch-action: pan-x pan-y pinch-zoom`) |
+| Zoom (dưới `md`) | nút `+`/`−`/Đặt lại (1×–3×, bước 0,5×; chỉ render dưới `md`)                                   | có                                 | nút; pinch gốc của trình duyệt được phép (`touch-action: pan-x pan-y pinch-zoom`) |
 
 Wheel không chặn cuộn trang trên mobile (không bắt sự kiện kéo). Pinch tuỳ biến bằng Pointer Events **hoãn** (lệch UI Spec §7.2 có chủ đích, Mục 47).
 
 ## 26. Selection Synchronization
 
-Một nguồn sự thật trong `ChartViewer` (tên component triển khai là `ChartViewerShell`), mô hình hoá bằng union phân biệt và reducer thuần (`model/selection.ts`):
+Một nguồn sự thật trong `ChartViewerShell` (cùng tên với component triển khai), mô hình hoá bằng union phân biệt và reducer thuần (`model/selection.ts`):
 
 ```text
 Selection = { kind: "none" }
@@ -400,9 +400,9 @@ Quy tắc: chọn hành tinh ⇒ hành tinh nổi ở wheel + hàng Planet Table
 | State                          | Loại               | Chủ sở hữu                                   | Lý do                                                |
 | ------------------------------ | ------------------ | -------------------------------------------- | ---------------------------------------------------- |
 | `ChartResponse`                | Server             | TanStack Query (`chartKeys.detail`)          | Dữ liệu Backend; không đưa vào Zustand               |
-| `ChartViewModel`               | Derived            | `useMemo` trong page/`ChartViewer`           | Tính từ DTO; thuần                                   |
-| `selection`, `hoveredKey`      | UI                 | `useReducer`/`useState` trong `ChartViewer`  | Chỉ cha–con gần dùng                                 |
-| `showAspectLines`, `zoom`      | UI                 | `ChartViewer` (`useState`)                   | Cục bộ, mặc định theo breakpoint                     |
+| `ChartViewModel`               | Derived            | `useMemo` trong page/`ChartViewerShell`           | Tính từ DTO; thuần                                   |
+| `selection`, `hoveredKey`      | UI                 | `useReducer`/`useState` trong `ChartViewerShell`  | Chỉ cha–con gần dùng                                 |
+| `showAspectLines`, `zoom`      | UI                 | `ChartViewerShell` (`useState`)                   | Cục bộ, mặc định theo breakpoint                     |
 | `houseSystem` trong dialog     | Form cục bộ        | `CalculateChartDialog`                       | Chỉ dialog dùng; mặc định `Placidus`                 |
 | `densityMode`                  | Preference (đã có) | `preferenceStore`                            | Tái dùng, không thêm                                 |
 | `chartId`                      | URL                | Router params                                | Chia sẻ qua đường dẫn                                |
@@ -414,9 +414,9 @@ Không đề xuất state toàn cục mới. **Zustand: không được biện m
 
 Breakpoint theo Tailwind (`sm` 640, `md` 768, `lg` 1024): container `Container size="wide"` (đã có `wide`; giá trị `max-w-container-wide` `UNVERIFIED` cho đúng 1440 như spec).
 
-- **≥ `lg`:** hai cột — wheel (cố định, `sticky`) | cột phải: Planet Table, House Table, Aspect Table xếp dọc; `SelectionDetail` dưới wheel.
+- **≥ `lg`:** desktop. **Hai cột chỉ khi container của viewer đủ rộng** (container query; ngưỡng khởi điểm đo ở M9.0 = **1010 px**, khoá ở M9.1); ngược lại một cột như tablet. Hai cột: cột trái = wheel + `SelectionDetail` (`sticky` **chỉ khi viewport đủ cao**, `min-height` khởi điểm **1000 px**), cột phải = Planet Table, House Table, Aspect Table xếp dọc. (Lý do: chiều rộng nội dung thực ở viewport 1024 chỉ 656–832 px sau sidebar và padding lồng; đã đo ở M9.0.)
 - **`md`–`lg` (tablet):** một cột, wheel trước, bảng sau; bảng vẫn dạng `<table>`; aspect lines bật mặc định (≥ 768px).
-- **< `md` (dưới 768px):** aspect lines tắt mặc định theo D-M6-08 (người dùng có thể bật qua Switch); dưới `sm` (< 640px): wheel trong khung vuông tối thiểu 400px (cuộn ngang nếu màn nhỏ hơn) với nút zoom; bảng chuyển **thẻ mỗi hàng**.
+- **< `md` (dưới 768px):** aspect lines tắt mặc định theo D-M6-08 (người dùng có thể bật qua Switch); wheel: bản vẽ SVG vuông tối thiểu 400px trong khung cuộn (cuộn nếu màn nhỏ hơn) với **nút zoom** (D-M9-02); dưới `sm` (< 640px): bảng chuyển **thẻ mỗi hàng**.
 - Chuyển layout bảng↔thẻ bằng `useMediaQuery('(min-width: 640px)')` (một hook dùng chung nhỏ; **render một trong hai**, tránh trùng nội dung cho screen reader). Trong test jsdom, `matchMedia` mặc định `matches:false` (đã mock ở `setup.ts`) ⇒ cần mock theo ca.
 
 ## 29. Accessibility Strategy
@@ -461,7 +461,7 @@ Tín hiệu duy nhất: `isHouseDataAvailable === false` (response không có `i
 
 **Unit (thuần TS):** `toChartViewModel` (sắp xếp chính tắc, nhãn tiếng Việt, giá trị lạ, flag suy giảm, bỏ qua interpretation); `formatDegreeMinute` (làm tròn, nhớ phút `29°59.7′`, 0°, biên); `normalizeLongitude`; `toScreenAngle`/`polarToCartesian` (ASC bên trái, +90° đáy, đối xứng, vòng 360°); `sectorMidAngle` (vòng qua 0°); `resolveLabelAngles` (hai hành tinh trùng, stellium 4, vòng 0°/360°, tính tất định: xáo thứ tự đầu vào → cùng đầu ra); `aspectGeometry` (đầu mút bằng vị trí thật; conjunction → cung); `selection` reducer; kiểm hợp đồng fixture (`floor(cuspDegree/30)` ↔ `signOnCusp`).
 
-**Component (Testing Library + MSW):** `ChartWheel` (số nút hành tinh, `aria-label`, không vòng nhà khi thiếu dữ liệu, nghịch hành), ba bảng (caption, `scope`, thứ tự hàng, hàng chọn, thẻ mobile bằng mock `matchMedia`), `ChartViewer` (đồng bộ chọn hai chiều, lọc aspect, `Esc`, live region), `UnknownTimeNotice`, skeleton/empty/error, `CalculateChartDialog` (mặc định `Placidus`, cảnh báo giờ sinh, lỗi từ điển), `useChartQuery`/mutation (cache seed, `enabled`), `vitest-axe` cho từng component chính.
+**Component (Testing Library + MSW):** `ChartWheel` (số nút hành tinh, `aria-label`, không vòng nhà khi thiếu dữ liệu, nghịch hành), ba bảng (caption, `scope`, thứ tự hàng, hàng chọn, thẻ mobile bằng mock `matchMedia`), `ChartViewerShell` (đồng bộ chọn hai chiều, lọc aspect, `Esc`, live region), `UnknownTimeNotice`, skeleton/empty/error, `CalculateChartDialog` (mặc định `Placidus`, cảnh báo giờ sinh, lỗi từ điển), `useChartQuery`/mutation (cache seed, `enabled`), `vitest-axe` cho từng component chính.
 
 **Tích hợp (MemoryRouter + MSW):** `/app/profiles` → bấm "Tính lá số" → dialog → `POST` mock 201 → điều hướng `/app/charts/:id` → viewer hiển thị wheel + bảng; đường lỗi (500 `CHART_CALCULATION_FAILED`); tải trực tiếp `/app/charts/:id` → `GET`; 404.
 
@@ -571,7 +571,7 @@ Thứ tự thực thi khuyến nghị (các ID giữ theo prompt; **S4.7 đặt 
 - **Why:** phương án thay thế bắt buộc; có giá trị sớm.
 - **Preconditions:** S4.2, S4.3, `useMediaQuery`.
 - **Inspect:** UI Spec §12.2–12.4, 12.8–12.11; `preferenceStore`.
-- **Likely change:** `features/chart/ui/{PlanetTable,HouseTable,AspectTable,ChartBadges}/**`, `shared/hooks/useMediaQuery.ts`, `ChartViewer` (ghép).
+- **Likely change:** `features/chart/ui/{PlanetTable,HouseTable,AspectTable,ChartBadges}/**`, `shared/hooks/useMediaQuery.ts`, `ChartViewerShell` (ghép).
 - **Steps:** badges (`PlanetGlyph`, `SignGlyph`, `HouseBadge`, `AspectBadge`); bảng với `caption`/`scope`; thẻ mobile; nút chọn trong ô đầu (chưa nối sync); khối giải thích thiếu nhà; chip lọc (kết nối ở S4.8).
 - **State:** không (controlled).
 - **Tests:** component + `vitest-axe`; mock `matchMedia`.
@@ -616,7 +616,7 @@ Thứ tự thực thi khuyến nghị (các ID giữ theo prompt; **S4.7 đặt 
 
 - **Objective:** hover/focus/chọn; đồng bộ wheel ↔ bảng ↔ detail; bàn phím; live region.
 - **Preconditions:** S4.5–S4.7.
-- **Likely change:** `model/selection.ts`, `ChartViewer`, `SelectionDetail`, lớp hành tinh/aspect, bảng (kết nối).
+- **Likely change:** `model/selection.ts`, `ChartViewerShell`, `SelectionDetail`, lớp hành tinh/aspect, bảng (kết nối).
 - **Steps:** reducer; truyền controlled props; chip lọc; `Esc`; `aria-pressed`; live region; tap-để-chọn.
 - **Tests:** component đồng bộ hai chiều, bàn phím, lọc; axe.
 - **Acceptance:** AC Synchronization; không state trùng.
@@ -678,7 +678,7 @@ S4.7 độc lập với S4.4–S4.6 sau S4.3 (có thể song song); S4.8 cần c
 | `frontend/src/features/chart/model/{labels,format,chartViewModel,selection}.ts` (+ test)                                      | Create | Adapter, nhãn, selection                        | FE-S4.2, S4.8      |
 | `frontend/src/features/chart/model/{geometry,labelLayout,aspectGeometry}.ts` (+ test)                                         | Create | Hình học thuần                                  | FE-S4.4–S4.6       |
 | `frontend/src/features/chart/ui/CalculateChartDialog/**`                                                                      | Create | Dialog tính lá số                               | FE-S4.3            |
-| `frontend/src/features/chart/ui/ChartViewer/**`, `ChartHeader`, `UnknownTimeNotice`, `SelectionDetail`, `ChartViewerSkeleton` | Create | Viewer                                          | FE-S4.3, S4.8–S4.9 |
+| `frontend/src/features/chart/ui/ChartViewerShell/**`, `ChartHeader`, `UnknownTimeNotice`, `SelectionDetail`, `ChartViewerSkeleton` | Create | Viewer                                          | FE-S4.3, S4.8–S4.9 |
 | `frontend/src/features/chart/ui/ChartWheel/**`                                                                                | Create | SVG wheel                                       | FE-S4.4–S4.6       |
 | `frontend/src/features/chart/ui/{PlanetTable,HouseTable,AspectTable,ChartBadges}/**`                                          | Create | Bảng + badge                                    | FE-S4.7            |
 | `frontend/src/features/chart/api/listCharts.ts`, `hooks/useChartsQuery.ts` (+ test)                                           | Create | Gọi và cache `GET /charts`                      | FE-S4.1            |
@@ -721,11 +721,11 @@ S4.7 độc lập với S4.4–S4.6 sau S4.3 (có thể song song); S4.8 cần c
 | --------------------- | ---------- | --------------------------- | ----------------------------- |
 | ChartResponse         | Server     | TanStack Query              | Dữ liệu Backend, bất biến     |
 | ChartViewModel        | Derived    | `useMemo`                   | Thuần, không lưu              |
-| Selected Planet       | UI         | `ChartViewer` (`selection`) | Cha của wheel/bảng            |
-| Selected Aspect       | UI         | `ChartViewer` (`selection`) | Cùng nguồn với planet (union) |
-| Hovered Element       | UI         | `ChartViewer`               | Ephemeral                     |
-| Show aspect lines     | UI         | `ChartViewer`               | Cục bộ                        |
-| Zoom                  | UI         | `ChartViewer`               | Cục bộ, chỉ dưới `md`         |
+| Selected Planet       | UI         | `ChartViewerShell` (`selection`) | Cha của wheel/bảng            |
+| Selected Aspect       | UI         | `ChartViewerShell` (`selection`) | Cùng nguồn với planet (union) |
+| Hovered Element       | UI         | `ChartViewerShell`               | Ephemeral                     |
+| Show aspect lines     | UI         | `ChartViewerShell`               | Cục bộ                        |
+| Zoom                  | UI         | `ChartViewerShell`               | Cục bộ, chỉ dưới `md`         |
 | House system (dialog) | Form       | `CalculateChartDialog`      | Cục bộ                        |
 | Density mode          | Preference | `preferenceStore` (đã có)   | Tái dùng                      |
 
