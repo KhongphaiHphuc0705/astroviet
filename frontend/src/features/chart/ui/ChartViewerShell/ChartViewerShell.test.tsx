@@ -825,4 +825,148 @@ describe("ChartViewerShell", () => {
       });
     });
   });
+
+  describe("M9.1 & M9.2: Layout Foundation & Zoom Integration", () => {
+    it("RS-H1: renders sr-only h2 headings for overview and chart wheel cards linked via aria-labelledby", () => {
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const overviewHeading = screen.getByRole("heading", {
+        name: "Thông tin lá số",
+        level: 2,
+      });
+      expect(overviewHeading).toBeInTheDocument();
+      expect(overviewHeading).toHaveClass("sr-only");
+
+      const wheelHeading = screen.getByRole("heading", {
+        name: "Biểu đồ lá số",
+        level: 2,
+      });
+      expect(wheelHeading).toBeInTheDocument();
+      expect(wheelHeading).toHaveClass("sr-only");
+    });
+
+    it("RS-L1: renders two-column container query grid, sticky left column wrapper, and min-w-0 tables column", () => {
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      // Container query inline-size wrapper
+      const cqWrapper = container.querySelector(
+        '[class*="[container-type:inline-size]"]',
+      );
+      expect(cqWrapper).toBeInTheDocument();
+
+      // Responsive grid
+      const grid = container.querySelector(
+        '[class*="[@container(min-width:1010px)]:grid"]',
+      );
+      expect(grid).toBeInTheDocument();
+      expect(grid).toHaveClass(
+        "[@container(min-width:1010px)]:grid-cols-[minmax(448px,5fr)_minmax(0,7fr)]",
+        "[@container(min-width:1010px)]:items-start",
+        "[@container(min-width:1010px)]:gap-6",
+      );
+
+      // Sticky left column with height clamp
+      const stickyCol = container.querySelector(
+        '[class*="[@media(min-height:1000px)]:sticky"]',
+      );
+      expect(stickyCol).toBeInTheDocument();
+      expect(stickyCol).toHaveClass("[@media(min-height:1000px)]:top-[88px]");
+
+      // Right column tables container with min-w-0 and stable id
+      const rightCol = container.querySelector("#chart-data-tables");
+      expect(rightCol).toBeInTheDocument();
+      expect(rightCol).toHaveAttribute("tabindex", "-1");
+      expect(rightCol).toHaveClass("min-w-0", "focus:outline-none");
+    });
+
+    it("RS-L2: preserves natural DOM order between left wheel card and right tables column with no order-* classes", () => {
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      const stickyCol = container.querySelector(
+        '[class*="[@media(min-height:1000px)]:sticky"]',
+      );
+      const rightCol = container.querySelector("#chart-data-tables");
+      expect(stickyCol).toBeInTheDocument();
+      expect(rightCol).toBeInTheDocument();
+
+      // Ensure stickyCol precedes rightCol in DOM tree
+      expect(stickyCol!.compareDocumentPosition(rightCol!)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+
+      // Ensure neither column nor grid items use visual reordering classes
+      expect(stickyCol?.className).not.toMatch(/\border-/);
+      expect(rightCol?.className).not.toMatch(/\border-/);
+    });
+
+    it("Z-S1: renders ChartZoomControls when matchesMd is false (< md) and controls zoom on ChartWheel", () => {
+      controller = installMatchMedia(false); // Mobile viewport (< 768px)
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const zoomGroup = screen.getByRole("group", {
+        name: "Thu phóng biểu đồ",
+      });
+      expect(zoomGroup).toBeInTheDocument();
+
+      const scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("1");
+
+      const zoomInBtn = screen.getByRole("button", {
+        name: "Phóng to biểu đồ",
+      });
+      fireEvent.click(zoomInBtn);
+
+      expect(screen.getByLabelText("Mức thu phóng")).toHaveTextContent("150%");
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("1.5");
+
+      const resetBtn = screen.getByRole("button", {
+        name: "Đặt lại thu phóng",
+      });
+      fireEvent.click(resetBtn);
+
+      expect(screen.getByLabelText("Mức thu phóng")).toHaveTextContent("100%");
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("1");
+    });
+
+    it("Z-S2: does not render ChartZoomControls when matchesMd is true (>= md)", () => {
+      controller = installMatchMedia(true); // Tablet/Desktop (>= 768px)
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      expect(
+        screen.queryByRole("group", { name: "Thu phóng biểu đồ" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("Z-S3: preserves selection state when zoom is modified", () => {
+      controller = installMatchMedia(false);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      // Select a planet (cards on mobile)
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      fireEvent.click(sunBtn);
+      expect(sunBtn).toHaveAttribute("aria-pressed", "true");
+
+      // Zoom in
+      const zoomInBtn = screen.getByRole("button", {
+        name: "Phóng to biểu đồ",
+      });
+      fireEvent.click(zoomInBtn);
+
+      // Sun should still be selected
+      expect(
+        screen.getByRole("button", { name: "Chọn Mặt Trời" }),
+      ).toHaveAttribute("aria-pressed", "true");
+      expect(
+        screen.getByRole("heading", { name: "Chi tiết đang chọn", level: 2 }),
+      ).toBeInTheDocument();
+    });
+  });
 });

@@ -628,4 +628,19 @@ describe("ChartDetailPage", () => {
       controller.restore();
     });
   });
+
+  describe("Group R: Responsive Layout (F4-M9.1)", () => {
+    it("R1: renders Container with size='wide' and paddingX={false}", async () => {
+      server.use(getChartSuccess(chartFull));
+
+      const { container } = renderPage(chartFull.id);
+
+      await screen.findByRole("heading", { name: "Lá số sinh", level: 1 });
+
+      const wideContainer = container.querySelector(".max-w-container-wide");
+      expect(wideContainer).toBeInTheDocument();
+      expect(wideContainer?.className).not.toContain("px-4");
+      expect(wideContainer?.className).not.toContain("md:px-8");
+    });
+  });
 });

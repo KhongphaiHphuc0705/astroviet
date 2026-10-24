@@ -177,7 +177,7 @@ export default function ChartDetailPage() {
   }
 
   return (
-    <Container className="space-y-6 py-8">
+    <Container size="wide" paddingX={false} className="space-y-6 py-8">
       <div>
         <Link
           to="/app/profiles"
