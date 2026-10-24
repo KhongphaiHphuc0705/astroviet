@@ -35,6 +35,15 @@ describe("AppLayout", () => {
 
     const main = screen.getByRole("main");
     expect(main).toBeInTheDocument();
+    expect(main.id).toBe("main-content");
+    expect(main).toHaveAttribute("tabindex", "-1");
+
+    // SkipLink check (SK1 / SK3)
+    const skipLink = screen.getByRole("link", {
+      name: "Chuyển đến nội dung chính",
+    });
+    expect(skipLink).toBeInTheDocument();
+    expect(skipLink).toHaveAttribute("href", "#main-content");
 
     const navs = screen.getAllByRole("navigation", { hidden: true });
     expect(navs.length).toBeGreaterThanOrEqual(2);

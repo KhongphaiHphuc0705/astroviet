@@ -201,7 +201,8 @@ export function AppLayout({ children, headerActions }: AppLayoutProps) {
         <Container
           as="main"
           id="main-content"
-          className="max-w-full flex-1 px-4 py-8 md:px-8"
+          tabIndex={-1}
+          className="max-w-full flex-1 px-4 py-8 focus:outline-none md:px-8"
         >
           {children}
         </Container>

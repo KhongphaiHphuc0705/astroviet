@@ -16,7 +16,15 @@ describe("MarketingLayout", () => {
     const main = screen.getByRole("main");
     expect(main).toBeInTheDocument();
     expect(main.id).toBe("main-content");
+    expect(main).toHaveAttribute("tabindex", "-1");
     expect(main).toHaveTextContent("Test Content");
+
+    // Check SkipLink (SK1 / SK3)
+    const skipLink = screen.getByRole("link", {
+      name: "Chuyển đến nội dung chính",
+    });
+    expect(skipLink).toBeInTheDocument();
+    expect(skipLink).toHaveAttribute("href", "#main-content");
 
     // Check footer
     const footer = screen.getByRole("contentinfo");

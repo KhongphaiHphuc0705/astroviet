@@ -55,9 +55,9 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(
           props.onClick?.(e);
         }}
         className={cn(
-          "relative inline-flex items-center justify-center font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-not-allowed disabled:opacity-50",
+          "relative inline-flex items-center justify-center font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none",
           // Active state (Micro Spec §1.5)
-          "active:scale-[0.98]",
+          "active:scale-[0.98] motion-reduce:active:scale-100",
           // Size
           !iconOnly && size === "sm" && "h-9 rounded-md px-3 py-2 text-body-sm",
           !iconOnly &&

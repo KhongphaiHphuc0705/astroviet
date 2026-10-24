@@ -41,7 +41,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             "border border-accent-secondary bg-surface shadow-level-1",
           // Interactive
           interactive &&
-            "cursor-pointer transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:border-accent-primary hover:bg-surface-raised",
+            "cursor-pointer transition-colors focus-within:border-accent-primary focus-within:ring-2 focus-within:ring-focus hover:border-accent-primary hover:bg-surface-raised motion-reduce:transition-none",
           className,
         )}
         {...props}

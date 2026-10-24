@@ -85,14 +85,14 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           />
           <div
             className={cn(
-              "pointer-events-none flex shrink-0 items-center rounded-full p-[2px] transition-colors duration-fast ease-standard peer-focus-visible:ring-2 peer-focus-visible:ring-focus",
+              "pointer-events-none flex shrink-0 items-center rounded-full p-[2px] transition-colors duration-fast ease-standard peer-focus-visible:ring-2 peer-focus-visible:ring-focus motion-reduce:transition-none",
               trackSize,
               checked ? "bg-accent-secondary" : "bg-strong",
             )}
           >
             <div
               className={cn(
-                "shadow-sm rounded-full bg-surface transition-transform duration-fast ease-standard",
+                "shadow-sm rounded-full bg-surface transition-transform duration-fast ease-standard motion-reduce:transition-none",
                 thumbSize,
                 thumbTranslate,
               )}

@@ -85,7 +85,12 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main Content */}
-      <Container as="main" id="main-content" className="flex-1 py-8">
+      <Container
+        as="main"
+        id="main-content"
+        tabIndex={-1}
+        className="flex-1 py-8 focus:outline-none"
+      >
         {children}
       </Container>
 

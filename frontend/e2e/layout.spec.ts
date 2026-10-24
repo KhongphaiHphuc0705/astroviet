@@ -33,11 +33,13 @@ test.describe("Layout Foundations (M4)", () => {
     await expect(drawerNav).toBeVisible();
   });
 
-  test("SkipLink becomes visible on focus", async ({ page }) => {
+  test("SkipLink becomes visible on focus and focuses main content", async ({
+    page,
+  }) => {
     // Visit the home page, which uses MarketingLayout and is not nested
     await page.goto("/");
 
-    const skipLink = page.locator("text=Skip to content");
+    const skipLink = page.locator("text=Chuyển đến nội dung chính");
 
     await expect(skipLink).not.toBeFocused();
 
@@ -50,5 +52,9 @@ test.describe("Layout Foundations (M4)", () => {
     await expect(skipLink).toBeFocused();
     // Playwright evaluates visibility based on CSS
     await expect(skipLink).toBeVisible();
+
+    // Activating SkipLink moves focus to main content container
+    await page.keyboard.press("Enter");
+    await expect(page.locator("main#main-content")).toBeFocused();
   });
 });

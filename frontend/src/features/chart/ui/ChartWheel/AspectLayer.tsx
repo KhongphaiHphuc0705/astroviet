@@ -70,7 +70,7 @@ export function AspectLayer({
               r={strokeWidth / 2}
               className={cn(
                 TONE_FILL_CLASSES[l.natureTone],
-                "pointer-events-none transition-opacity",
+                "pointer-events-none transition-opacity motion-reduce:transition-none",
                 isDimmed && "opacity-25",
               )}
             />
@@ -88,7 +88,7 @@ export function AspectLayer({
             fill="none"
             className={cn(
               TONE_STROKE_CLASSES[l.natureTone],
-              "pointer-events-none transition-opacity",
+              "pointer-events-none transition-opacity motion-reduce:transition-none",
               isDimmed && "opacity-25",
             )}
             strokeWidth={strokeWidth}

@@ -13,6 +13,7 @@ import { cn } from "@shared/lib/cn";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { Alert } from "@shared/ui/Alert";
 import { Card } from "@shared/ui/Card";
+import { SkipLink } from "@shared/ui/SkipLink";
 import { Switch } from "@shared/ui/Switch";
 
 import { buildAspectGeometry } from "../../model/aspectGeometry";
@@ -216,6 +217,11 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
       >
         {liveMessage}
       </div>
+
+      {/* Internal skip link to bypass wheel interactive tab stops (D-M9-08) */}
+      <SkipLink href="#chart-data-tables" className="focus:fixed">
+        Chuyển tới bảng dữ liệu
+      </SkipLink>
 
       <Card className="p-4 sm:p-6" aria-labelledby={overviewHeadingId}>
         <h2 id={overviewHeadingId} className="sr-only">

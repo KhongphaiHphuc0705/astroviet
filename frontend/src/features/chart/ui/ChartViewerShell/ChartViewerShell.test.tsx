@@ -969,4 +969,134 @@ describe("ChartViewerShell", () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe("M9.3: Skip Link & Reduced Motion", () => {
+    it("SK4 & SK5: renders internal skip link before wheel targeting #chart-data-tables", () => {
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const skipLink = screen.getByRole("link", {
+        name: "Chuyển tới bảng dữ liệu",
+      });
+      expect(skipLink).toBeInTheDocument();
+      expect(skipLink).toHaveAttribute("href", "#chart-data-tables");
+      expect(skipLink).toHaveClass("sr-only", "focus:not-sr-only");
+
+      const target = document.querySelector("#chart-data-tables");
+      expect(target).toBeInTheDocument();
+      expect(target).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("RM1 & RM2: includes motion-reduce:transition-none classes on interactive layers and table elements", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      const { container } = render(<ChartViewerShell vm={vm} />);
+
+      // Layer elements
+      const leaders = container.querySelectorAll('[data-part="leader"]');
+      expect(leaders.length).toBeGreaterThan(0);
+      leaders.forEach((el) => {
+        expect(el.getAttribute("class")).toContain(
+          "motion-reduce:transition-none",
+        );
+      });
+
+      const markers = container.querySelectorAll('[data-part="marker"]');
+      expect(markers.length).toBeGreaterThan(0);
+      markers.forEach((el) => {
+        expect(el.getAttribute("class")).toContain(
+          "motion-reduce:transition-none",
+        );
+      });
+
+      // Planet button
+      const sunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      expect(sunBtn.className).toContain("motion-reduce:transition-none");
+
+      // Switch
+      const switchTrack = container.querySelector(".pointer-events-none.flex");
+      expect(switchTrack?.className).toContain("motion-reduce:transition-none");
+    });
+  });
+
+  describe("M9.4: Accessibility Audit & Remediation (AX1 - AX10)", () => {
+    it("AX1: passes axe accessibility audit on Desktop mode with chartFull and chartNoHouses", async () => {
+      controller = installMatchMedia(true);
+      const { container: fullContainer } = render(
+        <ChartViewerShell vm={toChartViewModel(chartFull)} />,
+      );
+      expect(await axe(fullContainer)).toHaveNoViolations();
+
+      const { container: noHousesContainer } = render(
+        <ChartViewerShell vm={toChartViewModel(chartNoHouses)} />,
+      );
+      expect(await axe(noHousesContainer)).toHaveNoViolations();
+    });
+
+    it("AX3: passes axe accessibility audit on Mobile mode with chartFull and chartNoHouses", async () => {
+      controller = installMatchMedia(false);
+      const { container: fullContainer } = render(
+        <ChartViewerShell vm={toChartViewModel(chartFull)} />,
+      );
+      expect(await axe(fullContainer)).toHaveNoViolations();
+
+      const { container: noHousesContainer } = render(
+        <ChartViewerShell vm={toChartViewModel(chartNoHouses)} />,
+      );
+      expect(await axe(noHousesContainer)).toHaveNoViolations();
+    });
+
+    it("AX9: verifies heading hierarchy and accessible landmarks", () => {
+      controller = installMatchMedia(true);
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const headings = screen.getAllByRole("heading");
+      // All headings in shell should be level 2 or level 3 (Angles sub-section under House)
+      headings.forEach((heading) => {
+        const tag = heading.tagName.toLowerCase();
+        expect(["h2", "h3"]).toContain(tag);
+      });
+
+      expect(
+        screen.getByRole("heading", { name: "Thông tin lá số", level: 2 }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Biểu đồ lá số", level: 2 }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Vị trí hành tinh", level: 2 }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Nhà và các góc", level: 2 }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", {
+          name: "Các góc chính",
+          level: 3,
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Góc chiếu", level: 2 }),
+      ).toBeInTheDocument();
+    });
+
+    it("AX10: ensures interactive controls have accessible names and labels", () => {
+      const vm = toChartViewModel(chartFull);
+      render(<ChartViewerShell vm={vm} />);
+
+      const buttons = screen.getAllByRole("button");
+      buttons.forEach((btn) => {
+        expect(btn).toHaveAccessibleName();
+      });
+
+      const toggle = screen.getByRole("switch");
+      expect(toggle).toHaveAccessibleName("Hiện đường góc chiếu");
+
+      const region = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(region).toBeInTheDocument();
+    });
+  });
 });
