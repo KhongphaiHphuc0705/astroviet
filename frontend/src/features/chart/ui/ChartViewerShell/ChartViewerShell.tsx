@@ -262,8 +262,8 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
       {/* Responsive layout container (D-M9-04: two-column when container >= 1010px) */}
       <div className="[container-type:inline-size]">
         <div className="space-y-6 [@container(min-width:1010px)]:grid [@container(min-width:1010px)]:grid-cols-[minmax(448px,5fr)_minmax(0,7fr)] [@container(min-width:1010px)]:items-start [@container(min-width:1010px)]:gap-6 [@container(min-width:1010px)]:space-y-0">
-          {/* Left Column: Card wheel with sticky protection (D-M9-05) */}
-          <div className="[@media(min-height:1000px)]:sticky [@media(min-height:1000px)]:top-[88px]">
+          {/* Left Column: Card wheel with sticky protection only in two-column mode (D-M9-05) */}
+          <div className="[@container(min-width:1010px)]:[@media(min-height:1000px)]:sticky [@container(min-width:1010px)]:[@media(min-height:1000px)]:top-[88px]">
             <Card
               variant="raised"
               className="space-y-4 p-4 sm:p-6"

@@ -614,5 +614,94 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
         "md:min-w-[400px]",
       );
     });
+
+    it("Z3b: centers scrollLeft and scrollTop when overflow occurs on mount and on zoom change", () => {
+      const originalScrollWidth = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "scrollWidth",
+      );
+      const originalClientWidth = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "clientWidth",
+      );
+      const originalScrollHeight = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "scrollHeight",
+      );
+      const originalClientHeight = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "clientHeight",
+      );
+
+      Object.defineProperty(HTMLElement.prototype, "scrollWidth", {
+        configurable: true,
+        get() {
+          return 400;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+        configurable: true,
+        get() {
+          return 300;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "scrollHeight", {
+        configurable: true,
+        get() {
+          return 400;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+        configurable: true,
+        get() {
+          return 300;
+        },
+      });
+
+      try {
+        const { rerender } = render(<ChartWheel vm={fullVM} zoom={1} />);
+        const scrollRegion = screen.getByRole("region", {
+          name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+        });
+
+        // (400 - 300) / 2 = 50
+        expect(scrollRegion.scrollLeft).toBe(50);
+        expect(scrollRegion.scrollTop).toBe(50);
+
+        // When zoom changes, recenters
+        rerender(<ChartWheel vm={fullVM} zoom={2} />);
+        expect(scrollRegion.scrollLeft).toBe(50);
+        expect(scrollRegion.scrollTop).toBe(50);
+      } finally {
+        if (originalScrollWidth) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "scrollWidth",
+            originalScrollWidth,
+          );
+        }
+        if (originalClientWidth) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "clientWidth",
+            originalClientWidth,
+          );
+        }
+        if (originalScrollHeight) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "scrollHeight",
+            originalScrollHeight,
+          );
+        }
+        if (originalClientHeight) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "clientHeight",
+            originalClientHeight,
+          );
+        }
+      }
+    });
   });
 });

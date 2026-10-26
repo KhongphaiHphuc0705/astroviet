@@ -873,12 +873,14 @@ describe("ChartViewerShell", () => {
         "[@container(min-width:1010px)]:gap-6",
       );
 
-      // Sticky left column with height clamp
+      // Sticky left column with height clamp and container query scope
       const stickyCol = container.querySelector(
         '[class*="[@media(min-height:1000px)]:sticky"]',
       );
       expect(stickyCol).toBeInTheDocument();
-      expect(stickyCol).toHaveClass("[@media(min-height:1000px)]:top-[88px]");
+      expect(stickyCol).toHaveClass(
+        "[@container(min-width:1010px)]:[@media(min-height:1000px)]:top-[88px]",
+      );
 
       // Right column tables container with min-w-0 and stable id
       const rightCol = container.querySelector("#chart-data-tables");
@@ -1129,7 +1131,9 @@ describe("ChartViewerShell", () => {
         '[class*="[@media(min-height:1000px)]:sticky"]',
       );
       expect(stickyCol).toBeInTheDocument();
-      expect(stickyCol).toHaveClass("[@media(min-height:1000px)]:top-[88px]");
+      expect(stickyCol).toHaveClass(
+        "[@container(min-width:1010px)]:[@media(min-height:1000px)]:top-[88px]",
+      );
 
       const tablesCol = container.querySelector("#chart-data-tables");
       expect(tablesCol).toHaveClass("min-w-0");

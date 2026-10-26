@@ -113,7 +113,7 @@ export function SelectionDetail({
           {planet.degreeLabel && (
             <div className="inline-flex items-center gap-1.5">
               <span className="font-medium text-secondary">Độ:</span>
-              <span className="font-mono font-medium text-primary">
+              <span className="font-data font-medium text-primary">
                 {planet.degreeLabel}
               </span>
             </div>
@@ -212,7 +212,7 @@ export function SelectionDetail({
 
           <div className="inline-flex items-center gap-1.5">
             <span className="font-medium text-secondary">Orb:</span>
-            <span className="font-mono font-medium text-primary">
+            <span className="font-data font-medium text-primary">
               {aspect.orbLabel ?? `${aspect.orb.toFixed(1)}°`}
             </span>
           </div>

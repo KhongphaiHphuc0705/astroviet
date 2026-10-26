@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react";
+import { useId, useLayoutEffect, useMemo, useRef } from "react";
 
 import {
   buildAspectGeometry,
@@ -84,6 +84,43 @@ export function ChartWheel({
 }: ChartWheelProps) {
   const titleId = useId();
   const descId = useId();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const centerScroll = () => {
+      const maxScrollLeft = el.scrollWidth - el.clientWidth;
+      const maxScrollTop = el.scrollHeight - el.clientHeight;
+
+      if (maxScrollLeft > 0) {
+        el.scrollLeft = Math.round(maxScrollLeft / 2);
+      }
+      if (maxScrollTop > 0) {
+        el.scrollTop = Math.round(maxScrollTop / 2);
+      }
+    };
+
+    centerScroll();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        centerScroll();
+      });
+      resizeObserver.observe(el);
+    }
+
+    window.addEventListener("resize", centerScroll);
+
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      window.removeEventListener("resize", centerScroll);
+    };
+  }, [zoom]);
 
   const wheelGeometry = useMemo(
     () => geometry ?? buildWheelGeometry(vm),
@@ -152,6 +189,7 @@ export function ChartWheel({
   return (
     <figure data-testid="chart-wheel" className={className}>
       <div
+        ref={scrollContainerRef}
         role="region"
         aria-label="Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp"
         tabIndex={0}

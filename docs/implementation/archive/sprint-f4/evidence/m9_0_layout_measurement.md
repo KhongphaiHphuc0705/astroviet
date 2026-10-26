@@ -90,4 +90,4 @@ Lưu ý đọc bảng: ở các hàng `block` (một cột) cột trái rộng b
 
 ## 7. Tái hiện
 
-Gói `m9_0_measurement_scripts.zip` (`harness.mjs`, `m9_0_measure.mjs`, `baseline.mjs`): `cd frontend && npm run build && npx vite preview --port 4173 --strictPort`, rồi `CHROME_PATH=… node m9_0_measure.mjs "1024,1100;1366,1100"` (cần `npm i puppeteer-core`; nếu không có `CHROME_PATH` thì dùng `@sparticuz/chromium`). Đổi `T`/`H` bằng biến môi trường.
+Các kịch bản đo đạc (`harness.mjs`, `m9_0_measure.mjs`, `baseline.mjs`) được chạy bằng môi trường đo đạc ngoài repo (không đưa vào repo nhằm tránh dependency nặng): `cd frontend && npm run build && npx vite preview --port 4173 --strictPort`, rồi `CHROME_PATH=… node m9_0_measure.mjs "1024,1100;1366,1100"` (sử dụng `puppeteer-core` hoặc `@sparticuz/chromium`). Tham số `T`/`H` cấu hình qua biến môi trường.

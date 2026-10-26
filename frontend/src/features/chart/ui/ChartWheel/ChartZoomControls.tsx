@@ -54,7 +54,7 @@ export function ChartZoomControls({
 
       <output
         aria-label="Mức thu phóng"
-        className="font-mono min-w-[3.5rem] select-none text-center text-body-sm font-semibold text-primary"
+        className="min-w-[3.5rem] select-none text-center font-data text-body-sm font-semibold text-primary"
       >
         {formatZoomPercent(zoom)}
       </output>
