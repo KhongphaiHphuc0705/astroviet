@@ -98,8 +98,11 @@ function attachErrorObservers(page: Page) {
 
   page.on("response", (res) => {
     if (res.url().includes("/api/") && res.status() >= 400) {
-      // Allowlist: POST /api/v1/auth/refresh returning 401 before session exists (normal bootstrap)
-      if (res.url().includes("/auth/refresh") && res.status() === 401) {
+      // Allowlist: POST /api/v1/auth/refresh returning 400 (missing cookie) or 401 (invalid/expired) before session exists (normal bootstrap)
+      if (
+        res.url().includes("/auth/refresh") &&
+        (res.status() === 400 || res.status() === 401)
+      ) {
         return;
       }
       apiErrors.push(
@@ -225,7 +228,7 @@ test.describe("Primary E2E Scenario 1: Successful Natal Chart Journey", () => {
       page.getByRole("heading", { name: "Vị trí hành tinh" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Các cung địa bàn" }),
+      page.getByRole("heading", { name: "Nhà và các góc" }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Góc chiếu" }),
@@ -473,7 +476,10 @@ test.describe("Primary E2E Scenario 2: Degraded / Unknown Birth Time Journey", (
       page.getByRole("heading", { name: "Vị trí hành tinh" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Các cung địa bàn" }),
+      page.getByRole("columnheader", { name: "Nhà" }),
+    ).not.toBeVisible();
+    await expect(
+      page.getByRole("columnheader", { name: "Cusp (độ)" }),
     ).not.toBeVisible();
   });
 
