@@ -301,7 +301,7 @@ AstroViet Frontend là **CSR thuần túy** (Vite + React, không Next.js/Remix)
 
 - Mọi component trong `pages/` được `React.lazy()` hóa tại nơi khai báo route (mục 6), **không** lazy hóa `widgets/` (layout cần sẵn sàng ngay để tránh layout shift) hay `entities/`/`shared/ui` (quá nhỏ để tách chunk, overhead HTTP request không đáng).
 - Ngưỡng lazy hóa bổ sung trong 1 page (không phải route-level): component **> 40KB gzip ước tính** hoặc phụ thuộc thư viện nặng dùng không thường xuyên — ứng viên rõ nhất là `ChartWheel` (SVG phức tạp + có thể kèm Framer Motion) nếu đo được vượt ngưỡng, tách lazy độc lập khỏi phần còn lại của `chart-viewer` feature.
-- `vite.config.ts` cấu hình `manualChunks` tách riêng: `vendor-react` (react/react-dom/react-router), `vendor-query` (TanStack Query), `vendor-charts` (Recharts) — tránh 1 vendor chunk khổng lồ chứa mọi thư viện.
+- `vite.config.ts` cấu hình `manualChunks` tách riêng: `vendor-react` (react/react-dom/react-router), `vendor-query` (TanStack Query), `vendor-charts` (Recharts khi tích hợp) — tránh 1 vendor chunk khổng lồ chứa mọi thư viện. *(Ghi chú Sprint F4: Recharts và Framer Motion chưa được cài đặt trong dependencies của F4 theo quy định chất lượng; các cấu hình chunk này phục vụ lộ trình tích hợp thư viện ở phase sau)*.
 
 ### 5.3. Suspense
 
@@ -588,7 +588,7 @@ Memoization (`React.memo`, `useMemo`, `useCallback`) **không** áp dụng mặc
 
 ### 11.2. Bundle Splitting — trách nhiệm phân theo tầng
 
-Kế thừa mục 5.2 (route-level splitting) và bổ sung ở mức **thư viện**: `vite.config.ts` `manualChunks` tách vendor theo nhóm sử dụng (`vendor-charts` chỉ load khi vào page có `ChartWheel`/`ElementChart` — nhờ route-level lazy loading kéo theo, không cần cấu hình tách thủ công phức tạp nếu import đúng chỗ). Nguyên tắc: **import thư viện nặng (Recharts, Framer Motion) chỉ trong file thực sự dùng nó** (`entities/astrology/chart-wheel`, không import lại ở `index.ts` barrel file của `entities/astrology` nếu barrel export khiến bundler không tree-shake được — xem 11.5).
+Kế thừa mục 5.2 (route-level splitting) và bổ sung ở mức **thư viện**: `vite.config.ts` `manualChunks` tách vendor theo nhóm sử dụng (`vendor-charts` chỉ load khi vào page có `ChartWheel`/`ElementChart` — nhờ route-level lazy loading kéo theo, không cần cấu hình tách thủ công phức tạp nếu import đúng chỗ; *(Ghi chú Sprint F4: Recharts/Framer Motion chưa cài đặt ở F4)*). Nguyên tắc: **import thư viện nặng (Recharts, Framer Motion) chỉ trong file thực sự dùng nó** (`entities/astrology/chart-wheel`, không import lại ở `index.ts` barrel file của `entities/astrology` nếu barrel export khiến bundler không tree-shake được — xem 11.5).
 
 ### 11.3. Asset Optimization
 
