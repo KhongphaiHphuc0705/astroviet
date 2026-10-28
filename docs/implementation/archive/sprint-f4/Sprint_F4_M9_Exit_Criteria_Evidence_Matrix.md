@@ -8,7 +8,7 @@
 **Nguồn bằng chứng:** `[repo]` đọc mã/diff; `[run]` chạy lệnh thực tế trên môi trường; `[owner]` quyết định phê duyệt.  
 **Evidence Commit:** `3827277`  
 **Evidence CI:** `https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/40256277594`  
-**Trạng thái:** `PASS (READY FOR OWNER REVIEW / CLOSURE)` (Đạt 100% 25/25 tiêu chí nghiệm thu kỹ thuật AC-RA-R1…R11, AC-RA-A1…A10, AC-RA-G1…G4, 10/10 cổng grep G-M9-1…G-M9-10, 4 cổng kiểm tra tĩnh và build Vite production; kiểm thử tự động 130 test files/1041 tests xanh 100%).
+**Trạng thái:** `PASS (ACCEPTED BY OWNER)` (Đạt 100% 25/25 tiêu chí nghiệm thu kỹ thuật AC-RA-R1…R11, AC-RA-A1…A10, AC-RA-G1…G4, 10/10 cổng grep G-M9-1…G-M9-10, 4 cổng kiểm tra tĩnh và build Vite production; kiểm thử tự động 130 test files/1041 tests xanh 100%; Owner phê duyệt nghiệm thu đóng milestone M9).
 
 ---
 

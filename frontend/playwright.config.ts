@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: "html",
   use: {
     baseURL: "http://localhost:5173",
-    trace: "on-first-retry",
+    trace: process.env.CI ? "off" : "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
   },
