@@ -1102,4 +1102,44 @@ describe("Chart ViewModel and Canonical Ordering (F4-M2.3)", () => {
       expect(filtered).toEqual(["AlphaPlanet", "BetaPlanet", "GammaPlanet"]);
     });
   });
+
+  describe("Group I: Backend Sprint 4 Interpretations tolerance (G-1 / M10.3)", () => {
+    it("I1: handles interpretations as empty array and interpretationVersion as null without error", () => {
+      const dto = makeDto((d) => {
+        d.interpretations = [];
+        d.interpretationVersion = null;
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.meta.id).toBe(dto.id);
+      expect(vm.planets).toHaveLength(10);
+      expect(vm.aspects).toHaveLength(9);
+      expect(vm.issues).toHaveLength(0);
+    });
+
+    it("I2: handles interpretations with missing or null tone property without error", () => {
+      const dto = makeDto((d) => {
+        d.interpretations = [
+          {
+            subjectType: "PlanetInSign",
+            subjectKey: "Sun_Aries",
+            language: "vi",
+            bodyText: "Mặt Trời ở Bạch Dương thể hiện năng lượng tiên phong.",
+            tone: null,
+          },
+          {
+            subjectType: "PlanetInSign",
+            subjectKey: "Moon_Taurus",
+            language: "vi",
+            bodyText: "Mặt Trăng ở Kim Ngưu biểu thị sự ổn định cảm xúc.",
+          },
+        ];
+        d.interpretationVersion = "1.0";
+      });
+      const vm = toChartViewModel(dto);
+      expect(vm.meta.id).toBe(dto.id);
+      expect(vm.planets).toHaveLength(10);
+      expect(vm.aspects).toHaveLength(9);
+      expect(vm.issues).toHaveLength(0);
+    });
+  });
 });

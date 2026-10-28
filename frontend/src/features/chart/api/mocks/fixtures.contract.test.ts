@@ -492,4 +492,34 @@ describe("Chart Fixtures Contract (Sprint F4 M1 Section 18)", () => {
       }
     });
   });
+
+  describe("Interpretation contract & tolerance (G-1 / M10.3 / C-2)", () => {
+    it("validates interpretationVersion is string or null across fixtures", () => {
+      expect(
+        typeof chartFull.interpretationVersion === "string" ||
+          chartFull.interpretationVersion === null,
+      ).toBe(true);
+      expect(
+        typeof chartNoHouses.interpretationVersion === "string" ||
+          chartNoHouses.interpretationVersion === null,
+      ).toBe(true);
+    });
+
+    it("accepts interpretations with optional or null tone", () => {
+      for (const i of [
+        ...chartFull.interpretations,
+        ...chartNoHouses.interpretations,
+      ]) {
+        expect(
+          i.tone === undefined || i.tone === null || typeof i.tone === "string",
+        ).toBe(true);
+      }
+    });
+
+    it("satisfies the 14 contract fields required by backend Presentation schema", () => {
+      expect(EXPECTED_TOP_LEVEL_KEYS).toHaveLength(14);
+      expect(EXPECTED_TOP_LEVEL_KEYS).toContain("interpretations");
+      expect(EXPECTED_TOP_LEVEL_KEYS).toContain("interpretationVersion");
+    });
+  });
 });
