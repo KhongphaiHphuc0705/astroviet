@@ -53,11 +53,12 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
           </Link>
 
           <div className="ml-2 flex items-center gap-3">
-            {status === "authenticated" ? (
+            {status === "authenticated" && (
               <Button as={Link} to="/app" variant="primary" size="sm">
                 Vào ứng dụng
               </Button>
-            ) : (
+            )}
+            {status === "unauthenticated" && (
               <>
                 <Button as={Link} to="/login" variant="ghost" size="sm">
                   Đăng nhập
@@ -72,11 +73,12 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav Actions */}
         <div className="flex items-center gap-2 lg:hidden">
-          {status === "authenticated" ? (
+          {status === "authenticated" && (
             <Button as={Link} to="/app" variant="primary" size="sm">
               Vào app
             </Button>
-          ) : (
+          )}
+          {status === "unauthenticated" && (
             <Button as={Link} to="/login" variant="ghost" size="sm">
               Đăng nhập
             </Button>
@@ -139,7 +141,7 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
           </Link>
 
           <div className="my-2 border-t border-subtle pt-4">
-            {status === "authenticated" ? (
+            {status === "authenticated" && (
               <Button
                 as={Link}
                 to="/app"
@@ -150,7 +152,8 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
               >
                 Vào ứng dụng
               </Button>
-            ) : (
+            )}
+            {status === "unauthenticated" && (
               <Stack gap="3">
                 <Button
                   as={Link}

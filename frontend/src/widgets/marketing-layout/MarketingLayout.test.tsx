@@ -90,4 +90,24 @@ describe("MarketingLayout", () => {
     expect(appLinks.length).toBeGreaterThanOrEqual(1);
     expect(appLinks[0]).toHaveAttribute("href", "/app");
   });
+
+  it("does not render auth buttons when status is resolving (prevents flash)", () => {
+    useAuthStore.setState({
+      status: "resolving",
+      accessToken: null,
+      user: null,
+    });
+
+    renderWithProviders(<MarketingLayout>Test</MarketingLayout>);
+
+    expect(
+      screen.queryByRole("link", { name: "Đăng nhập" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Đăng ký" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /vào (ứng dụng|app)/i }),
+    ).not.toBeInTheDocument();
+  });
 });
