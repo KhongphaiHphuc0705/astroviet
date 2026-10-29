@@ -782,7 +782,7 @@ S4.7 độc lập với S4.4–S4.6 sau S4.3 (có thể song song); S4.8 cần c
 | API client              | Mutation mới dùng `apiClient`                                    | Không sửa `shared/api`; `client.test` xanh                      |
 | Routing                 | Route lazy mới, thứ tự khớp                                      | `router.test`                                                   |
 | Shared UI               | Dùng Modal/Alert/Radio/Skeleton                                  | Test shared UI không đổi                                        |
-| Existing tests          | Số lượng/độ xanh                                                 | 130 file / 1048 test baseline (khi đóng F4); CI `test:coverage`                 |
+| Existing tests          | Số lượng/độ xanh                                                 | 130 file / 1049 test baseline (khi đóng F4); CI `test:coverage`                 |
 | BE Sprint 4             | `ChartResponse` mới có `interpretations`/`interpretationVersion` | Fixture thật + test độc lập với diễn giải; E2E với backend thật |
 | Dictionary errors       | Mã mới                                                           | `error-messages.test`                                           |
 | App layout / nav (v1.1) | Thêm mục nav ở hai nơi làm lệch thứ tự/test hiện có              | `AppLayout.test` (chỉ **thêm** ca), E2E điều hướng              |

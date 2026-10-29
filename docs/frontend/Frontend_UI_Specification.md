@@ -306,7 +306,7 @@ Display font (Newsreader) **không dùng weight 700 cho size nhỏ hơn 22px** �
 
 ### 7.2. Nguyên tắc responsive đặc thù cho dữ liệu chiêm tinh
 
-- **Chart Wheel** là thành phần khó responsive nhất: dưới `md`, Chart Wheel chuyển sang chế độ **pinch-to-zoom trong container cố định vuông** (không co kích thước chữ ký hiệu nhỏ hơn 10px — dưới ngưỡng này ký hiệu không đọc được), thay vì scale toàn bộ theo chiều rộng màn hình.
+- **Chart Wheel** là thành phần khó responsive nhất: dưới `md`, Chart Wheel chuyển sang khung nhìn container cố định vuông căn giữa bản vẽ, hỗ trợ **bộ điều khiển thu phóng 1×–3× chuyên dụng kèm pinch gốc của trình duyệt** (không co kích thước chữ ký hiệu nhỏ hơn 10px — dưới ngưỡng này ký hiệu không đọc được), thay vì scale toàn bộ theo chiều rộng màn hình.
 - **PlanetTable/AspectTable** dưới `sm`: chuyển từ layout bảng (`<table>`) sang layout **card-per-row** (mỗi hành tinh là 1 card dọc) — không dùng horizontal scroll làm giải pháp chính (chỉ là fallback nếu người dùng bật `compact` mode trên mobile).
 - **Sidebar** (mục 11) sụp thành `Drawer` dưới `lg`.
 - Layout **không có breakpoint riêng cho `2xl` trừ trang Chart Detail** — nơi có thể tận dụng không gian rộng để hiển thị Chart Wheel + PlanetTable song song thay vì xếp chồng.
@@ -845,7 +845,7 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 - **Render engine**: SVG (không phải Canvas) — bắt buộc để có thể gắn `<title>`/`aria-label` cho từng phần tử tương tác và hỗ trợ zoom vector không vỡ hình.
 - **States**: `default`, `hover-planet` (highlight hành tinh + tất cả aspect liên quan, làm mờ phần còn lại), `selected-planet` (đồng bộ 2 chiều với Planet Table row-selected, mục 12.2).
 - **Accessibility**: đây là thành phần **khó tiếp cận nhất trong toàn hệ thống** — bắt buộc: (1) Chart Wheel sử dụng SVG với `role="group"` và `aria-label="Bản đồ sao chiêm tinh"` (hoặc nhãn tóm tắt tổng quan) kèm tiêu đề ngữ nghĩa ẩn `<h2>` liên kết qua `aria-labelledby`, (2) toàn bộ dữ liệu trong Wheel **phải** có mặt song song ở Planet Table/House Table/Aspect Table dạng bảng thật — Chart Wheel không bao giờ là nguồn thông tin duy nhất, (3) từng hành tinh trên Wheel là 1 phần tử nút bấm tương tác (`role="button"`, `aria-pressed`, `tabindex="0"` khi interactive), di chuyển bằng Tab, Enter/Space để "chọn" (đồng bộ 2 chiều với Planet Table và SelectionDetail), (4) các đường Aspect hỗ trợ tương tác hover/focus và lọc bảng Aspect.
-- **Responsive**: xem quy tắc riêng ở mục 7.2 (pinch-to-zoom trong container vuông cố định dưới `md`, không scale chữ dưới 10px).
+- **Responsive**: xem quy tắc riêng ở mục 7.2 (khung nhìn container vuông cố định căn giữa bản vẽ dưới `md`, điều khiển thu phóng qua cụm nút 1×–3×/Đặt lại chuyên dụng kèm pinch gốc của trình duyệt, không scale chữ dưới 10px).
 - **Loading**: `SkeletonChartWheel` — vòng tròn xám với hiệu ứng shimmer dạng cung (đồng bộ hình dạng The Ring).
 - **Empty**: không áp dụng trong luồng chuẩn.
 - **Error**: nếu tính toán Swiss Ephemeris thất bại (dữ liệu ngày sinh ngoài phạm vi ephemeris hỗ trợ), thay Wheel bằng `EmptyState` kiểu error, không cố render Wheel rỗng/méo.
