@@ -3,7 +3,7 @@
 ## Natal Chart Viewer
 
 **Vị trí đề xuất:** `docs/implementation/Sprint_F4_Implementation_Plan.md` (blueprint tạm thời; theo quy ước, xoá sau khi sprint đóng, chỉ lưu Evidence Matrix/Known Gaps vào `archive/sprint-f4/`)
-**Phiên bản:** 1.1 — `READY FOR IMPLEMENTATION` (owner đã phê duyệt O-F4-1/2/3; hợp đồng Backend cho điều kiện của O-F4-3 và cho phương án B của O-F4-2 đã được xác minh, xem Mục 0 và 7.1)
+**Phiên bản:** 1.1 — `SPRINT F4 CLOSED` (2026-10-30: Owner chính thức phê duyệt Matrix M10 & nghiệm thu đóng Sprint F4; 11/11 milestones FE-S4.1–FE-S4.11 hoàn thành, 130 test files / 1049 tests xanh 100%, 38/38 Playwright E2E xanh trên Backend thật, bump version 0.3.0)
 **Căn cứ:** audit trực tiếp nhánh `dev` tại `9f0ff70` (clone mới, 2026-10-08): `frontend/**`, `backend/src/modules/chart/**`, `docs/frontend/*` (UI Spec, Architecture Spec, Design System, Coding Standards), `docs/api/REST_API_Specification.md`, tài liệu Sprint 4 Backend (đã đóng) và F3.
 **Quy ước trạng thái bằng chứng:** `VERIFIED` (đọc mã/chạy lệnh thật), `PARTIALLY VERIFIED`, `UNVERIFIED`, `BLOCKED`, `NOT APPLICABLE`, `DEFERRED`. Nguồn: `[repo]` đọc mã/tài liệu; `[C-run]` Claude chạy trong sandbox khi lập plan (baseline, không phải bằng chứng đóng sprint). Plan phân biệt rõ **Current State** (hiện có), **Target State** (đích), **Planned Work** (việc cần làm).
 
@@ -875,10 +875,8 @@ Sprint F4 hoàn thành khi: luồng Birth Profile → Tính lá số → Chart A
 | Dependencies          | Không thêm gói; chỉ một hook nội bộ                                                                                                                                                   |
 | Risks                 | Glyph đa nền tảng; thiếu `birthProfileId`/dữ liệu sinh trong `ChartResponse` (FG-01) và `birthProfileLabel` (FG-13)                                                                   |
 
-## 51. Final Recommendation
+## 51. Final Recommendation & Sprint Closure
 
-`READY FOR IMPLEMENTATION`
+`SPRINT F4 CLOSED — OFFICIALLY ACCEPTED BY OWNER` (2026-10-30)
 
-**Các điều kiện của v1.0 đã đáp ứng:** O-F4-1 (route `/app/charts/:chartId`, `save=true`), O-F4-2 (phương án B — thêm FE-S4.11), O-F4-3 (đã xác minh hợp đồng: `houseSystem` ∈ {`Placidus`, `WholeSign`}; `includeOptionalPoints` mặc định `[]` hợp lệ, không có Chiron nếu không yêu cầu) đều được owner phê duyệt, và hợp đồng Backend liên quan (`GET /charts`, `POST /charts/natal`) đã được xác minh ở Mục 7.1. Các khuyến nghị mặc định còn lại được giữ nguyên.
-
-**Không còn blocker.** Việc tiếp theo: bắt đầu FE-S4.1 (API/DTO/hooks, kèm `listCharts`/`useChartsQuery`) và FE-S4.2 (ViewModel). Điểm cần theo dõi khi triển khai: (1) xác minh mã lỗi chart thực sự tới client (đọc `map-domain-error.ts`) khi làm từ điển lỗi; (2) tạo fixture từ phản hồi thật của Backend; (3) hai khai báo nav trong `widgets/app-layout/index.tsx` phải sửa đồng bộ.
+**Kết luận đóng sprint:** Toàn bộ 11 milestone từ FE-S4.1 đến FE-S4.11 đã hoàn thành trọn vẹn và được nghiệm thu trên commit `5762233` (CI run #40850309135). Toàn bộ 23 tiêu chí kỹ thuật AC-E1…S3, 12 ranh giới kiến trúc B1…B12, 1049/1049 tests tự động và 38/38 tests E2E đều đạt 100%. Các khoảng trống kỹ thuật (Known Gaps) và giới hạn thiết bị ngoài môi trường Windows đã được phê duyệt chính thức theo đúng 7 điều kiện quy định. Sprint F4 chính thức đóng và chuyển tiếp sẵn sàng cho Sprint F5 (Interpretation UI).
