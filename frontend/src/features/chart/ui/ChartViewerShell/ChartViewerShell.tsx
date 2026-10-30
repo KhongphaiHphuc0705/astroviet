@@ -9,9 +9,11 @@ import {
 } from "react";
 
 import { useMediaQuery } from "@shared/hooks/useMediaQuery";
+import { cn } from "@shared/lib/cn";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { Alert } from "@shared/ui/Alert";
 import { Card } from "@shared/ui/Card";
+import { SkipLink } from "@shared/ui/SkipLink";
 import { Switch } from "@shared/ui/Switch";
 
 import { buildAspectGeometry } from "../../model/aspectGeometry";
@@ -30,8 +32,9 @@ import {
   type InteractionTarget,
 } from "../../model/selection";
 import { buildWheelGeometry } from "../../model/wheelGeometry";
+import { DEFAULT_ZOOM, zoomIn, zoomOut } from "../../model/zoom";
 import { AspectTable } from "../AspectTable";
-import { AspectLegend, ChartWheel } from "../ChartWheel";
+import { AspectLegend, ChartWheel, ChartZoomControls } from "../ChartWheel";
 import { HouseTable } from "../HouseTable";
 import { PlanetTable } from "../PlanetTable";
 import { SelectionDetail } from "../SelectionDetail";
@@ -48,6 +51,8 @@ export interface ChartViewerShellProps {
 
 export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
   const hintId = useId();
+  const overviewHeadingId = useId();
+  const wheelHeadingId = useId();
   const isTable = useMediaQuery("(min-width: 640px)");
   const layout = isTable ? "table" : "cards";
   const density = usePreferenceStore((s) => s.densityMode);
@@ -61,6 +66,12 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
   const matchesMd = useMediaQuery(ASPECT_LINES_DEFAULT_QUERY);
   const [userChoice, setUserChoice] = useState<boolean | null>(null);
   const showAspectLines = userChoice ?? matchesMd;
+
+  // Milestone F4-M9: Zoom state for compact viewports (< md)
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const handleZoomIn = useCallback(() => setZoom((z) => zoomIn(z)), []);
+  const handleZoomOut = useCallback(() => setZoom((z) => zoomOut(z)), []);
+  const handleZoomReset = useCallback(() => setZoom(DEFAULT_ZOOM), []);
 
   // Milestone F4-M8: Interaction & Selection State Management
   const [interactionState, dispatch] = useReducer(
@@ -194,7 +205,7 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
   return (
     <div
       ref={shellRef}
-      className={className ?? "space-y-6"}
+      className={cn("space-y-6", className)}
       data-testid="chart-viewer-shell"
     >
       {/* Polite centralized screen reader live region (D-M8-09) */}
@@ -207,7 +218,15 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         {liveMessage}
       </div>
 
-      <Card className="p-4 sm:p-6">
+      {/* Internal skip link to bypass wheel interactive tab stops (D-M9-08) */}
+      <SkipLink href="#chart-data-tables" className="focus:fixed">
+        Chuyển tới bảng dữ liệu
+      </SkipLink>
+
+      <Card className="p-4 sm:p-6" aria-labelledby={overviewHeadingId}>
+        <h2 id={overviewHeadingId} className="sr-only">
+          Thông tin lá số
+        </h2>
         <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <dt className="text-body-sm text-subtle">Hệ nhà</dt>
@@ -240,76 +259,113 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
         />
       )}
 
-      <Card variant="raised" className="space-y-4 p-4 sm:p-6">
-        {aspectGeometry.lines.length > 0 && (
-          <div className="space-y-3">
-            <Switch
-              size="md"
-              label="Hiện đường góc chiếu"
-              checked={showAspectLines}
-              onChange={(e) => setUserChoice(e.target.checked)}
-              aria-describedby={hintId}
-              description={
-                <span id={hintId}>
-                  Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên
-                  biểu đồ.
-                </span>
-              }
-            />
-            {showAspectLines && <AspectLegend legend={aspectGeometry.legend} />}
+      {/* Responsive layout container (D-M9-04: two-column when container >= 1010px) */}
+      <div className="[container-type:inline-size]">
+        <div className="space-y-6 [@container(min-width:1010px)]:grid [@container(min-width:1010px)]:grid-cols-[minmax(448px,5fr)_minmax(0,7fr)] [@container(min-width:1010px)]:items-start [@container(min-width:1010px)]:gap-6 [@container(min-width:1010px)]:space-y-0">
+          {/* Left Column: Card wheel with sticky protection only in two-column mode (D-M9-05) */}
+          <div className="[@container(min-width:1010px)]:[@media(min-height:1000px)]:sticky [@container(min-width:1010px)]:[@media(min-height:1000px)]:top-[88px]">
+            <Card
+              variant="raised"
+              className="space-y-4 p-4 sm:p-6"
+              aria-labelledby={wheelHeadingId}
+            >
+              <h2 id={wheelHeadingId} className="sr-only">
+                Biểu đồ lá số
+              </h2>
+              {aspectGeometry.lines.length > 0 && (
+                <div className="space-y-3">
+                  <Switch
+                    size="md"
+                    label="Hiện đường góc chiếu"
+                    checked={showAspectLines}
+                    onChange={(e) => setUserChoice(e.target.checked)}
+                    aria-describedby={hintId}
+                    description={
+                      <span id={hintId}>
+                        Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh
+                        trên biểu đồ.
+                      </span>
+                    }
+                  />
+                  {showAspectLines && (
+                    <AspectLegend legend={aspectGeometry.legend} />
+                  )}
+                </div>
+              )}
+              {!matchesMd && (
+                <ChartZoomControls
+                  zoom={zoom}
+                  onZoomIn={handleZoomIn}
+                  onZoomOut={handleZoomOut}
+                  onZoomReset={handleZoomReset}
+                />
+              )}
+              <ChartWheel
+                vm={vm}
+                geometry={wheelGeometry}
+                aspectGeometry={aspectGeometry}
+                showAspectLines={showAspectLines}
+                interaction={wheelInteraction}
+                zoom={zoom}
+              />
+              <SelectionDetail
+                selection={effectiveSelection}
+                vm={vm}
+                onClear={handleClearSelection}
+              />
+            </Card>
           </div>
-        )}
-        <ChartWheel
-          vm={vm}
-          geometry={wheelGeometry}
-          aspectGeometry={aspectGeometry}
-          showAspectLines={showAspectLines}
-          interaction={wheelInteraction}
-        />
-        <SelectionDetail
-          selection={effectiveSelection}
-          vm={vm}
-          onClear={handleClearSelection}
-        />
-      </Card>
 
-      <PlanetTable
-        planets={vm.planets}
-        houseDataAvailable={vm.flags.houseDataAvailable}
-        layout={layout}
-        density={density}
-        selectedKey={
-          effectiveSelection.kind === "planet" ? effectiveSelection.key : null
-        }
-        onSelect={handleSelectPlanet}
-        relatedKeys={emphasis.planets}
-        onPreview={handlePreviewPlanet}
-      />
+          {/* Right Column: Tables (with min-w-0 to prevent flex/grid expansion) */}
+          <div
+            id="chart-data-tables"
+            tabIndex={-1}
+            className="min-w-0 space-y-6 focus:outline-none"
+          >
+            <PlanetTable
+              planets={vm.planets}
+              houseDataAvailable={vm.flags.houseDataAvailable}
+              layout={layout}
+              density={density}
+              selectedKey={
+                effectiveSelection.kind === "planet"
+                  ? effectiveSelection.key
+                  : null
+              }
+              onSelect={handleSelectPlanet}
+              relatedKeys={emphasis.planets}
+              onPreview={handlePreviewPlanet}
+            />
 
-      <HouseTable
-        houses={vm.houses}
-        angles={vm.angles}
-        houseDataAvailable={vm.flags.houseDataAvailable}
-        hasAngles={vm.flags.hasAngles}
-        houseSystemLabel={vm.meta.houseSystem.labelVi}
-        unavailableContent={<HouseDataNotice warnings={vm.warnings} />}
-        layout={layout}
-        density={density}
-      />
+            <HouseTable
+              houses={vm.houses}
+              angles={vm.angles}
+              houseDataAvailable={vm.flags.houseDataAvailable}
+              hasAngles={vm.flags.hasAngles}
+              houseSystemLabel={vm.meta.houseSystem.labelVi}
+              unavailableContent={<HouseDataNotice warnings={vm.warnings} />}
+              layout={layout}
+              density={density}
+            />
 
-      <AspectTable
-        aspects={vm.aspects}
-        layout={layout}
-        density={density}
-        selectedKey={
-          effectiveSelection.kind === "aspect" ? effectiveSelection.key : null
-        }
-        onSelect={handleSelectAspect}
-        filterPlanetKey={filterPlanetKey}
-        filterPlanet={filterPlanet}
-        onClearFilter={handleClearSelection}
-        onPreview={handlePreviewAspect}
-      />
+            <AspectTable
+              aspects={vm.aspects}
+              layout={layout}
+              density={density}
+              selectedKey={
+                effectiveSelection.kind === "aspect"
+                  ? effectiveSelection.key
+                  : null
+              }
+              onSelect={handleSelectAspect}
+              filterPlanetKey={filterPlanetKey}
+              filterPlanet={filterPlanet}
+              onClearFilter={handleClearSelection}
+              onPreview={handlePreviewAspect}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

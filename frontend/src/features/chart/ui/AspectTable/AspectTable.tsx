@@ -134,7 +134,7 @@ export function AspectTable({
                   <tr
                     key={aspect.key}
                     className={cn(
-                      "border-b border-subtle transition-colors",
+                      "border-b border-subtle transition-colors motion-reduce:transition-none",
                       isSelected
                         ? "bg-surface-raised font-semibold"
                         : "hover:bg-surface-hover/50",
@@ -167,7 +167,7 @@ export function AspectTable({
                           }
                           aria-label={buttonLabel}
                           className={cn(
-                            "rounded inline-flex items-center text-left transition-colors",
+                            "rounded inline-flex items-center text-left transition-colors motion-reduce:transition-none",
                             "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                             isSelected && "font-semibold",
                           )}
@@ -218,7 +218,7 @@ export function AspectTable({
                 key={aspect.key}
                 padding="sm"
                 className={cn(
-                  "flex flex-col gap-3 transition-colors",
+                  "flex flex-col gap-3 transition-colors motion-reduce:transition-none",
                   isSelected && "bg-surface-raised ring-2 ring-accent-primary",
                 )}
               >
@@ -242,7 +242,7 @@ export function AspectTable({
                       onBlur={() => onPreview?.(aspect.key, "focus", "leave")}
                       aria-label={buttonLabel}
                       className={cn(
-                        "rounded inline-flex min-h-[44px] w-full min-w-[44px] items-center text-left transition-colors",
+                        "rounded inline-flex min-h-[44px] w-full min-w-[44px] items-center text-left transition-colors motion-reduce:transition-none",
                         "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                         isSelected && "font-semibold",
                       )}

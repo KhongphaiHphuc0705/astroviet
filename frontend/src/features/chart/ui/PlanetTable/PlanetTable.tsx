@@ -108,7 +108,7 @@ export function PlanetTable({
                   <tr
                     key={`${planet.key}#${index}`}
                     className={cn(
-                      "border-b border-subtle transition-colors",
+                      "border-b border-subtle transition-colors motion-reduce:transition-none",
                       isSelected
                         ? "bg-surface-raised font-semibold"
                         : isRelated
@@ -143,7 +143,7 @@ export function PlanetTable({
                           }
                           aria-label={`Chọn ${planet.nameVi}`}
                           className={cn(
-                            "rounded inline-flex items-center text-left transition-colors",
+                            "rounded inline-flex items-center text-left transition-colors motion-reduce:transition-none",
                             "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                             isSelected && "font-semibold",
                           )}
@@ -221,7 +221,7 @@ export function PlanetTable({
                 key={`${planet.key}#${index}`}
                 padding="sm"
                 className={cn(
-                  "flex flex-col gap-3 transition-colors",
+                  "flex flex-col gap-3 transition-colors motion-reduce:transition-none",
                   isSelected && "bg-surface-raised ring-2 ring-accent-primary",
                   isRelated &&
                     !isSelected &&
@@ -248,7 +248,7 @@ export function PlanetTable({
                       onBlur={() => onPreview?.(planet.key, "focus", "leave")}
                       aria-label={`Chọn ${planet.nameVi}`}
                       className={cn(
-                        "rounded inline-flex min-h-[44px] min-w-[44px] items-center text-left transition-colors",
+                        "rounded inline-flex min-h-[44px] min-w-[44px] items-center text-left transition-colors motion-reduce:transition-none",
                         "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                         isSelected && "font-semibold",
                       )}

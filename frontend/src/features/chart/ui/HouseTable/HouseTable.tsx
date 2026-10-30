@@ -78,7 +78,7 @@ export function HouseTable({
                 {houses.map((house) => (
                   <tr
                     key={house.number}
-                    className="hover:bg-surface-hover/50 border-b border-subtle transition-colors"
+                    className="hover:bg-surface-hover/50 border-b border-subtle transition-colors motion-reduce:transition-none"
                   >
                     <th
                       scope="row"
@@ -184,7 +184,7 @@ export function HouseTable({
                   {angles.map((angle) => (
                     <tr
                       key={angle.key}
-                      className="hover:bg-surface-hover/50 border-b border-subtle transition-colors"
+                      className="hover:bg-surface-hover/50 border-b border-subtle transition-colors motion-reduce:transition-none"
                     >
                       <th
                         scope="row"

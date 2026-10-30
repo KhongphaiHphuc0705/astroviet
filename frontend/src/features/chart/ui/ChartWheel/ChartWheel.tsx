@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react";
+import { useId, useLayoutEffect, useMemo, useRef } from "react";
 
 import {
   buildAspectGeometry,
@@ -29,6 +29,7 @@ export interface ChartWheelProps {
   aspectGeometry?: AspectGeometryResult;
   showAspectLines?: boolean;
   interaction?: WheelInteraction;
+  zoom?: number;
   className?: string;
 }
 
@@ -78,10 +79,48 @@ export function ChartWheel({
   aspectGeometry: aspectGeometryProp,
   showAspectLines = false,
   interaction,
+  zoom = 1,
   className,
 }: ChartWheelProps) {
   const titleId = useId();
   const descId = useId();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const centerScroll = () => {
+      const maxScrollLeft = el.scrollWidth - el.clientWidth;
+      const maxScrollTop = el.scrollHeight - el.clientHeight;
+
+      if (maxScrollLeft > 0) {
+        el.scrollLeft = Math.round(maxScrollLeft / 2);
+      }
+      if (maxScrollTop > 0) {
+        el.scrollTop = Math.round(maxScrollTop / 2);
+      }
+    };
+
+    centerScroll();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        centerScroll();
+      });
+      resizeObserver.observe(el);
+    }
+
+    window.addEventListener("resize", centerScroll);
+
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      window.removeEventListener("resize", centerScroll);
+    };
+  }, [zoom]);
 
   const wheelGeometry = useMemo(
     () => geometry ?? buildWheelGeometry(vm),
@@ -150,17 +189,19 @@ export function ChartWheel({
   return (
     <figure data-testid="chart-wheel" className={className}>
       <div
+        ref={scrollContainerRef}
         role="region"
-        aria-label="Biểu đồ tròn, có thể cuộn ngang trên màn hình hẹp"
+        aria-label="Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp"
         tabIndex={0}
-        className="overflow-x-auto rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        style={{ "--zoom": zoom } as React.CSSProperties}
+        className="mx-auto w-full max-w-[640px] touch-pan-x touch-pan-y touch-pinch-zoom overflow-auto rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus max-md:aspect-square"
       >
         <svg
           viewBox="0 0 600 600"
           role="group"
           aria-labelledby={titleId}
           aria-describedby={descId}
-          className="mx-auto h-auto w-full min-w-[400px] max-w-[640px]"
+          className="mx-auto h-auto max-md:w-[max(400px,calc(var(--zoom)*100%))] max-md:max-w-none md:w-full md:min-w-[400px] md:max-w-[640px]"
         >
           <title id={titleId}>Biểu đồ Natal</title>
           <desc id={descId}>{description}</desc>

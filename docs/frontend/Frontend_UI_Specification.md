@@ -306,7 +306,7 @@ Display font (Newsreader) **không dùng weight 700 cho size nhỏ hơn 22px** �
 
 ### 7.2. Nguyên tắc responsive đặc thù cho dữ liệu chiêm tinh
 
-- **Chart Wheel** là thành phần khó responsive nhất: dưới `md`, Chart Wheel chuyển sang chế độ **pinch-to-zoom trong container cố định vuông** (không co kích thước chữ ký hiệu nhỏ hơn 10px — dưới ngưỡng này ký hiệu không đọc được), thay vì scale toàn bộ theo chiều rộng màn hình.
+- **Chart Wheel** là thành phần khó responsive nhất: dưới `md`, Chart Wheel chuyển sang khung nhìn container cố định vuông căn giữa bản vẽ, hỗ trợ **bộ điều khiển thu phóng 1×–3× chuyên dụng kèm pinch gốc của trình duyệt** (không co kích thước chữ ký hiệu nhỏ hơn 10px — dưới ngưỡng này ký hiệu không đọc được), thay vì scale toàn bộ theo chiều rộng màn hình.
 - **PlanetTable/AspectTable** dưới `sm`: chuyển từ layout bảng (`<table>`) sang layout **card-per-row** (mỗi hành tinh là 1 card dọc) — không dùng horizontal scroll làm giải pháp chính (chỉ là fallback nếu người dùng bật `compact` mode trên mobile).
 - **Sidebar** (mục 11) sụp thành `Drawer` dưới `lg`.
 - Layout **không có breakpoint riêng cho `2xl` trừ trang Chart Detail** — nơi có thể tận dụng không gian rộng để hiển thị Chart Wheel + PlanetTable song song thay vì xếp chồng.
@@ -844,8 +844,8 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 - **Cấu trúc trực quan**: vòng ngoài = 12 cung hoàng đạo (glyph, mục 5.1), vòng giữa = 12 nhà (số La Mã nhỏ hoặc số thường tùy Locale), vòng trong = vị trí hành tinh (glyph + line nối tới vị trí chính xác), tâm = các đường Aspect nối giữa hành tinh (màu theo nhóm Aspect: Harmonious dùng `indigo`, Tense dùng `brass` đậm hơn hoặc pattern nét đứt — **không dùng đỏ/xanh lá trực tiếp** để tránh nhầm với `danger`/`success` semantic, giữ nguyên tắc "màu mã hóa dữ liệu ≠ màu semantic UI").
 - **Render engine**: SVG (không phải Canvas) — bắt buộc để có thể gắn `<title>`/`aria-label` cho từng phần tử tương tác và hỗ trợ zoom vector không vỡ hình.
 - **States**: `default`, `hover-planet` (highlight hành tinh + tất cả aspect liên quan, làm mờ phần còn lại), `selected-planet` (đồng bộ 2 chiều với Planet Table row-selected, mục 12.2).
-- **Accessibility**: đây là thành phần **khó tiếp cận nhất trong toàn hệ thống** — bắt buộc: (1) Chart Wheel có `role="img"` với `aria-label` tóm tắt tổng quan (ví dụ "Biểu đồ Natal với Mặt Trời tại Sư Tử nhà 5..."), (2) toàn bộ dữ liệu trong Wheel **phải** có mặt song song ở Planet Table/House Table/Aspect Table dạng bảng thật — Chart Wheel không bao giờ là nguồn thông tin duy nhất, (3) từng hành tinh trên Wheel là 1 phần tử focusable (`tabindex="0"`) khi `interactive=true`, di chuyển bằng Tab, Enter để "chọn" (đồng bộ Planet Table).
-- **Responsive**: xem quy tắc riêng ở mục 7.2 (pinch-to-zoom trong container vuông cố định dưới `md`, không scale chữ dưới 10px).
+- **Accessibility**: đây là thành phần **khó tiếp cận nhất trong toàn hệ thống** — bắt buộc: (1) Chart Wheel sử dụng SVG với `role="group"` và `aria-label="Bản đồ sao chiêm tinh"` (hoặc nhãn tóm tắt tổng quan) kèm tiêu đề ngữ nghĩa ẩn `<h2>` liên kết qua `aria-labelledby`, (2) toàn bộ dữ liệu trong Wheel **phải** có mặt song song ở Planet Table/House Table/Aspect Table dạng bảng thật — Chart Wheel không bao giờ là nguồn thông tin duy nhất, (3) từng hành tinh trên Wheel là 1 phần tử nút bấm tương tác (`role="button"`, `aria-pressed`, `tabindex="0"` khi interactive), di chuyển bằng Tab, Enter/Space để "chọn" (đồng bộ 2 chiều với Planet Table và SelectionDetail), (4) các đường Aspect hỗ trợ tương tác hover/focus và lọc bảng Aspect.
+- **Responsive**: xem quy tắc riêng ở mục 7.2 (khung nhìn container vuông cố định căn giữa bản vẽ dưới `md`, điều khiển thu phóng qua cụm nút 1×–3×/Đặt lại chuyên dụng kèm pinch gốc của trình duyệt, không scale chữ dưới 10px).
 - **Loading**: `SkeletonChartWheel` — vòng tròn xám với hiệu ứng shimmer dạng cung (đồng bộ hình dạng The Ring).
 - **Empty**: không áp dụng trong luồng chuẩn.
 - **Error**: nếu tính toán Swiss Ephemeris thất bại (dữ liệu ngày sinh ngoài phạm vi ephemeris hỗ trợ), thay Wheel bằng `EmptyState` kiểu error, không cố render Wheel rỗng/méo.
@@ -906,7 +906,7 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 
 ### 12.12. Element Chart
 
-- **Purpose**: Biểu đồ tổng hợp phân bố 4 nguyên tố (Lửa/Đất/Khí/Nước) trong toàn bộ chart — dùng Recharts (đã chốt trong stack).
+- **Purpose**: Biểu đồ tổng hợp phân bố 4 nguyên tố (Lửa/Đất/Khí/Nước) trong toàn bộ chart — *(Ghi chú Sprint F4: Recharts chưa được cài đặt trong dependencies của Sprint F4 theo quy định không thêm dependency mới; Element Chart được xếp vào backlog Phase tiếp theo)*.
 - **Props**: `distribution` (`{ fire, earth, air, water }` — số lượng hoặc %), `chartType` (`donut`|`bar`).
 - **Variants**: `donut` (mặc định, phù hợp hình tròn đồng điệu thẩm mỹ Chart Wheel), `bar` (dùng khi cần so sánh chính xác hơn, ví dụ trong Compact Mode).
 - **Accessibility**: Recharts SVG output cần bổ sung `<title>`/`role="img"` thủ công + bảng dữ liệu ẩn (`sr-only`) liệt kê số liệu chính xác cho screen reader (chart trực quan không tự accessible).
@@ -917,26 +917,30 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 
 ### 12.13. Modality Chart
 
-- **Purpose**: Tương tự Element Chart nhưng cho 3 Modality (Cardinal/Fixed/Mutable).
+- **Purpose**: Tương tự Element Chart nhưng cho 3 Modality (Cardinal/Fixed/Mutable) — *(Ghi chú Sprint F4: Chưa triển khai ở F4, xếp vào backlog Phase tiếp theo)*.
 - **Props/Variants/Accessibility/Responsive/Loading/Empty/Error**: kế thừa toàn bộ đặc tả từ Element Chart (12.12), chỉ khác tập dữ liệu 3 giá trị thay vì 4 và **không** dùng Element Colors (mục 3.5) — dùng 3 sắc độ của `indigo` (light/base/dark) vì Modality không có bảng màu quy ước riêng trong domain, tránh tạo thêm 1 bảng màu mới không cần thiết.
 
 ---
 
 ## 13. Page Specification
 
-| # | Route | Trang | Layout | Guest | Auth | Component chính |
-|---|---|---|---|---|---|---|
-| 1 | `/` | Landing Page | `MarketingLayout` (Navbar + Footer, không Sidebar) | ✅ | ✅ | Hero, giới thiệu tính năng, CTA "Tạo biểu đồ miễn phí" |
-| 2 | `/register` | Đăng ký | `AuthLayout` | ✅ | redirect `/app` nếu đã đăng nhập | Xem mục 10.2 |
-| 3 | `/login` | Đăng nhập | `AuthLayout` | ✅ | redirect `/app` | Xem mục 10.3 |
-| 4 | `/chart/new` | Tạo biểu đồ (Guest hoặc User) | `MarketingLayout` | ✅ (không lưu) | ✅ (có lưu) | `Birth Form` |
-| 5 | `/chart/:chartId` | Chart Detail | `MarketingLayout` (nếu chart public/guest) hoặc `AppLayout` (nếu chart thuộc user đã đăng nhập) | ✅ (chart tạo bởi guest, session-based, xem 25) | ✅ | `Page Header` + `Tabs` (Tổng quan/Bảng hành tinh/Aspect/Pattern) + `Chart Wheel` + `Planet Table`/`House Table`/`Aspect Table`/`Pattern Card`/`Interpretation Card`/`Element Chart`/`Modality Chart` |
-| 6 | `/app` (`/app/charts`) | Chart của tôi (Dashboard) | `AppLayout` (Navbar + Sidebar) | ❌ redirect `/login` | ✅ | `Grid` danh sách `Card` chart đã lưu, Empty State nếu chưa có chart nào |
-| 7 | `/app/profiles` | Hồ sơ sinh đã lưu | `AppLayout` | ❌ | ✅ | Danh sách `BirthProfile` (mutable, khác Chart immutable — mục 5 Project Summary), CRUD |
-| 8 | `/app/settings` | Cài đặt | `AppLayout` | ❌ | ✅ | House System mặc định, Theme, Ngôn ngữ, Hiện thuật ngữ kỹ thuật, Density Mode |
-| 9 | `/knowledge` | Kiến thức Astrology | `MarketingLayout` | ✅ | ✅ | Danh sách bài viết (`Pagination`), phục vụ persona "Người mới" |
-| 10 | `/knowledge/:slug` | Chi tiết bài viết | `MarketingLayout` | ✅ | ✅ | Nội dung markdown-rendered |
-| 11 | `*` (404) | Không tìm thấy | `MarketingLayout` | ✅ | ✅ | `EmptyState` kiểu error, CTA về trang chủ |
+| # | Route | Trang | Layout | Guest | Auth | Component chính | Trạng thái triển khai |
+|---|---|---|---|---|---|---|---|
+| 1 | `/` | Landing Page | `MarketingLayout` (Navbar + Footer, không Sidebar) | ✅ | ✅ | Header điều hướng, Hero, "AstroViet — Coming soon" | ✅ Đã triển khai |
+| 2 | `/register` | Đăng ký | `AuthLayout` | ✅ | redirect `/app` nếu đã đăng nhập | Register Form (Zod validation, error handling) | ✅ Đã triển khai |
+| 3 | `/login` | Đăng nhập | `AuthLayout` | ✅ | redirect `/app` | Login Form (Session bootstrap, refresh) | ✅ Đã triển khai |
+| 4 | `/chart/new` | Tạo biểu đồ (Guest hoặc User) | `MarketingLayout` | ✅ (không lưu) | ✅ (có lưu) | `Birth Form` | ⏳ Backlog / F5+ |
+| 5 | `/chart/:chartId` | Chart Detail (Guest/Public) | `MarketingLayout` | ✅ (session-based) | ✅ | Chart Detail công khai | ⏳ Backlog / F5+ |
+| 6 | `/app` | Dashboard | `AppLayout` (Navbar + Sidebar) | ❌ redirect `/login` | ✅ | Dashboard tổng quan người dùng | ✅ Đã triển khai |
+| 7 | `/app/profiles` | Hồ sơ sinh đã lưu | `AppLayout` | ❌ redirect `/login` | ✅ | Danh sách `BirthProfile` CRUD, nút "Tính lá số" | ✅ Đã triển khai |
+| 8 | `/app/profiles/new` | Tạo hồ sơ sinh | `AppLayout` | ❌ redirect `/login` | ✅ | Form tạo hồ sơ sinh 2 bước | ✅ Đã triển khai |
+| 9 | `/app/profiles/:id/edit` | Sửa hồ sơ sinh | `AppLayout` | ❌ redirect `/login` | ✅ | Form chỉnh sửa hồ sơ sinh | ✅ Đã triển khai |
+| 10 | `/app/charts` | Lá số của tôi (Danh sách) | `AppLayout` | ❌ redirect `/login` | ✅ | Danh sách lá số đã tính, phân trang, lọc | ✅ Đã triển khai (FE-S4.11) |
+| 11 | `/app/charts/:chartId` | Chi tiết lá số sinh | `AppLayout` | ❌ redirect `/login` | ✅ | `ChartViewerShell`: Wheel + 3 Tables + Selection | ✅ Đã triển khai (F4 lõi) |
+| 12 | `/app/settings` | Cài đặt | `AppLayout` | ❌ redirect `/login` | ✅ | House System mặc định, Theme, Ngôn ngữ | ⏳ Backlog / F5+ |
+| 13 | `/knowledge` | Kiến thức Astrology | `MarketingLayout` | ✅ | ✅ | Danh sách bài viết (`Pagination`) | ⏳ Backlog / F5+ |
+| 14 | `/knowledge/:slug` | Chi tiết bài viết | `MarketingLayout` | ✅ | ✅ | Nội dung markdown-rendered | ⏳ Backlog / F5+ |
+| 15 | `*` (404) | Không tìm thấy | Layout theo ngữ cảnh | ✅ | ✅ | `NotFoundPage` với thông báo tiếng Việt | ✅ Đã triển khai |
 
 > Các trang cho **Transit / Synastry / Composite / Progression / Solar Return** (Supported Chart, mục 7 Project Summary) dùng chung route pattern `/chart/:chartId` với `chartType` khác nhau trong response — Chart Wheel (12.5) đã hỗ trợ `secondaryChartData` sẵn cho Synastry/Transit overlay, không cần trang riêng biệt về mặt UI.
 
@@ -947,26 +951,32 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 ### 14.1. Cây route (React Router v6+, khai báo dạng object route)
 
 ```
-/                         MarketingLayout
-├── /                     LandingPage
-├── /register             AuthLayout > RegisterPage
-├── /login                AuthLayout > LoginPage
-├── /chart/new            BirthFormPage
-├── /chart/:chartId       ChartDetailPage
-├── /knowledge            KnowledgeListPage
-├── /knowledge/:slug      KnowledgeDetailPage
+/                         MarketingLayout (Public)
+├── /                     LandingPage (HomePage)
+├── /login                AuthLayout > LoginPage (GuestRoute)
+├── /register             AuthLayout > RegisterPage (GuestRoute)
 ├── /app                  AppLayout (route cha, bọc ProtectedRoute)
-│   ├── /app                 → redirect /app/charts
-│   ├── /app/charts          ChartsDashboardPage
+│   ├── /app                 AppPage (Dashboard)
 │   ├── /app/profiles        BirthProfilesPage
-│   └── /app/settings        SettingsPage
+│   │   ├── /app/profiles/new        BirthProfileCreatePage
+│   │   └── /app/profiles/:id/edit   BirthProfileEditPage
+│   ├── /app/charts          ChartListPage (Lá số của tôi)
+│   └── /app/charts/:chartId ChartDetailPage (Chi tiết lá số sinh)
+├── /dev/style-guide      VerifyPage (Chỉ môi trường DEV)
 └── *                     NotFoundPage
+
+[Lộ trình tương lai / Backlog F5+]
+├── /chart/new            Guest BirthFormPage
+├── /chart/:chartId       Public/Guest ChartDetailPage
+├── /app/settings        SettingsPage
+├── /knowledge            KnowledgeListPage
+└── /knowledge/:slug      KnowledgeDetailPage
 ```
 
 ### 14.2. Route Guard
 
-- `ProtectedRoute` (bọc toàn bộ nhánh `/app/*`): kiểm tra trạng thái auth từ Zustand store; nếu chưa đăng nhập → redirect `/login?redirect=<current-path>` (giữ lại đường dẫn để quay lại sau khi login thành công).
-- Không cần `GuestOnlyRoute` phức tạp cho `/login`/`/register` — chỉ cần check đơn giản trong component, redirect nếu đã có access token hợp lệ.
+- `ProtectedRoute` (bọc toàn bộ nhánh `/app/*`): kiểm tra trạng thái auth từ `authStore`; nếu chưa đăng nhập → redirect `/login?redirect=<current-path>`.
+- `GuestRoute` (bọc nhánh `/login`, `/register`): kiểm tra trạng thái auth; nếu đã đăng nhập (`status === 'authenticated'`) → redirect `/app`.
 
 ### 14.3. Code Splitting theo route
 
@@ -1106,7 +1116,7 @@ Theo tinh thần "instrument chính xác", animation dùng **có chủ đích, k
 ### 19.2. Thư viện
 
 - **CSS Transition/Animation** cho mọi hiệu ứng đơn giản (hover, focus, fade, slide của Toast/Modal/Drawer/Dropdown) — ưu tiên vì nhẹ, không cần JS runtime.
-- **Framer Motion** (đã chốt, "khi cần") **chỉ** dùng cho: (1) Chart Wheel — vẽ dần các đường Aspect khi chart load lần đầu (đúng tinh thần "vẽ bằng dụng cụ đo"), (2) The Ring draw-on reveal ở Hero, (3) transition giữa các Tab trong Chart Detail (crossfade nội dung, không phải slide).
+- **Framer Motion** (định hướng kiến trúc khi cần): *(Ghi chú Sprint F4: Chưa cài đặt trong dependencies của Sprint F4; mọi hiệu ứng và tương tác biểu đồ hiện sử dụng CSS Transition thuần và hỗ trợ `motion-reduce:transition-none`)*. Phục vụ định hướng sau này cho: (1) Chart Wheel vẽ dần Aspect, (2) The Ring draw-on reveal ở Hero, (3) transition giữa các Tab trong Chart Detail.
 
 ### 19.3. Duration & Easing Token
 
@@ -1140,7 +1150,7 @@ Khi bật, **toàn bộ** animation `duration-deliberate` bị tắt hoàn toàn
 
 - **Route-based code splitting** (mục 14.3) — mỗi Page là 1 chunk riêng.
 - **Font**: self-host `.woff2`, `font-display: swap`, subset Vietnamese + Latin (loại bỏ glyph không dùng để giảm dung lượng, mục 4.1).
-- **Recharts/Framer Motion**: import theo module cụ thể (tree-shakable), không `import * as`.
+- **Recharts/Framer Motion** (khi tích hợp ở các phase sau): import theo module cụ thể (tree-shakable), không `import * as`. *(Ghi chú Sprint F4: Chưa cài đặt trong dependencies của F4)*.
 - **Ảnh** (nếu có, ví dụ ảnh minh họa Knowledge Base): dùng `<img loading="lazy">` ngoài viewport đầu tiên, format `webp` có fallback.
 - **TanStack Query**: `staleTime` hợp lý (mục 15.2) để giảm request thừa, đặc biệt với Chart data immutable.
 - **Chart Wheel SVG**: memoize phần tử tĩnh (vòng cung hoàng đạo, cung nhà) — chỉ re-render phần động (đường Aspect, vị trí hover) khi state đổi.

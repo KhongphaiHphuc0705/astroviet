@@ -125,7 +125,7 @@ export function PlanetLayer({
               x2={item.leader.x2}
               y2={item.leader.y2}
               className={cn(
-                "stroke-subtle transition-opacity",
+                "stroke-subtle transition-opacity motion-reduce:transition-none",
                 isDimmed && "opacity-40",
               )}
               strokeWidth={1}
@@ -154,7 +154,7 @@ export function PlanetLayer({
               x2={item.markerOuter.x}
               y2={item.markerOuter.y}
               className={cn(
-                "stroke-strong transition-opacity",
+                "stroke-strong transition-opacity motion-reduce:transition-none",
                 isDimmed && "opacity-40",
               )}
               strokeWidth={1.5}
@@ -238,7 +238,7 @@ export function PlanetLayer({
                 )
               }
               className={cn(
-                "group cursor-pointer outline-none transition-opacity focus:outline-none",
+                "group cursor-pointer outline-none transition-opacity focus:outline-none motion-reduce:transition-none",
                 isDimmed && "opacity-40",
               )}
             >

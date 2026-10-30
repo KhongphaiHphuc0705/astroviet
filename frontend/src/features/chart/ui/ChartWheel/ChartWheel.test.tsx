@@ -265,7 +265,7 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
     expect(scrollRegion).toHaveAttribute("tabindex", "0");
     expect(scrollRegion).toHaveAttribute(
       "aria-label",
-      "Biểu đồ tròn, có thể cuộn ngang trên màn hình hẹp",
+      "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
     );
   });
 
@@ -562,6 +562,146 @@ describe("ChartWheel (M4.3 & M4.4: C1 - C16)", () => {
         />,
       );
       expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
+  describe("M9.2: Square Wheel Frame & Zoom (Z1 - Z3)", () => {
+    it("Z1: scroll region has square aspect on mobile, touch actions, and updated accessible label", () => {
+      render(<ChartWheel vm={fullVM} />);
+      const scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+
+      expect(scrollRegion).toBeInTheDocument();
+      expect(scrollRegion).toHaveAttribute("tabindex", "0");
+      expect(scrollRegion).toHaveClass(
+        "w-full",
+        "max-w-[640px]",
+        "mx-auto",
+        "overflow-auto",
+        "max-md:aspect-square",
+        "touch-pan-x",
+        "touch-pan-y",
+        "touch-pinch-zoom",
+      );
+    });
+
+    it("Z2: passes --zoom CSS variable to scroll region style attribute", () => {
+      const { rerender } = render(<ChartWheel vm={fullVM} zoom={1} />);
+      let scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("1");
+
+      rerender(<ChartWheel vm={fullVM} zoom={2.5} />);
+      scrollRegion = screen.getByRole("region", {
+        name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+      });
+      expect(scrollRegion.style.getPropertyValue("--zoom")).toBe("2.5");
+    });
+
+    it("Z3: svg element has responsive width and max-width classes for zoom and desktop", () => {
+      const { container } = render(<ChartWheel vm={fullVM} />);
+      const svg = container.querySelector("svg");
+      expect(svg).toBeInTheDocument();
+      expect(svg).toHaveClass(
+        "mx-auto",
+        "h-auto",
+        "max-md:max-w-none",
+        "max-md:w-[max(400px,calc(var(--zoom)*100%))]",
+        "md:w-full",
+        "md:max-w-[640px]",
+        "md:min-w-[400px]",
+      );
+    });
+
+    it("Z3b: centers scrollLeft and scrollTop when overflow occurs on mount and on zoom change", () => {
+      const originalScrollWidth = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "scrollWidth",
+      );
+      const originalClientWidth = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "clientWidth",
+      );
+      const originalScrollHeight = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "scrollHeight",
+      );
+      const originalClientHeight = Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "clientHeight",
+      );
+
+      Object.defineProperty(HTMLElement.prototype, "scrollWidth", {
+        configurable: true,
+        get() {
+          return 400;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "clientWidth", {
+        configurable: true,
+        get() {
+          return 300;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "scrollHeight", {
+        configurable: true,
+        get() {
+          return 400;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+        configurable: true,
+        get() {
+          return 300;
+        },
+      });
+
+      try {
+        const { rerender } = render(<ChartWheel vm={fullVM} zoom={1} />);
+        const scrollRegion = screen.getByRole("region", {
+          name: "Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp",
+        });
+
+        // (400 - 300) / 2 = 50
+        expect(scrollRegion.scrollLeft).toBe(50);
+        expect(scrollRegion.scrollTop).toBe(50);
+
+        // When zoom changes, recenters
+        rerender(<ChartWheel vm={fullVM} zoom={2} />);
+        expect(scrollRegion.scrollLeft).toBe(50);
+        expect(scrollRegion.scrollTop).toBe(50);
+      } finally {
+        if (originalScrollWidth) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "scrollWidth",
+            originalScrollWidth,
+          );
+        }
+        if (originalClientWidth) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "clientWidth",
+            originalClientWidth,
+          );
+        }
+        if (originalScrollHeight) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "scrollHeight",
+            originalScrollHeight,
+          );
+        }
+        if (originalClientHeight) {
+          Object.defineProperty(
+            HTMLElement.prototype,
+            "clientHeight",
+            originalClientHeight,
+          );
+        }
+      }
     });
   });
 });

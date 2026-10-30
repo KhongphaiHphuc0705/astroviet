@@ -7,6 +7,10 @@ export {
   ChartWheel,
   type ChartWheelProps,
 } from "./ChartWheel";
+export {
+  ChartZoomControls,
+  type ChartZoomControlsProps,
+} from "./ChartZoomControls";
 export { HouseLayer, type HouseLayerProps } from "./HouseLayer";
 export { PlanetLayer, type PlanetLayerProps } from "./PlanetLayer";
 export { TickLayer, type TickLayerProps } from "./TickLayer";
