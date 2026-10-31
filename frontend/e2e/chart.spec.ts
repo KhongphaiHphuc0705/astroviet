@@ -2,6 +2,34 @@ import { test, expect, type Page } from "@playwright/test";
 
 test.describe.configure({ mode: "serial" });
 
+const KNOWN_ZODIAC_SIGNS = [
+  "Aries",
+  "Taurus",
+  "Gemini",
+  "Cancer",
+  "Leo",
+  "Virgo",
+  "Libra",
+  "Scorpio",
+  "Sagittarius",
+  "Capricorn",
+  "Aquarius",
+  "Pisces",
+] as const;
+
+const MVP_PLANET_NAMES = [
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto",
+] as const;
+
 const password = "Password123!";
 
 /**
@@ -200,6 +228,115 @@ test.describe("Primary E2E Scenario 1: Successful Natal Chart Journey", () => {
     }
     expect(chartResponseJson["isHouseDataAvailable"]).toBe(true);
     expect(chartResponseJson["houses"]).toHaveLength(12);
+
+    // Probe A: Permanent contract verification for seeded interpretations (Sprint F5 M1)
+    expect(
+      chartResponseJson["interpretationVersion"],
+      `Expected interpretationVersion === "1.0", got ${String(chartResponseJson["interpretationVersion"])}`,
+    ).toBe("1.0");
+
+    const interpretations = (chartResponseJson["interpretations"] ??
+      []) as Array<{
+      subjectType: string;
+      subjectKey: string;
+      language: string;
+      bodyText: string;
+    }>;
+
+    const planetInSignItems = interpretations.filter(
+      (item) => item.subjectType === "PlanetInSign",
+    );
+    const angleInSignItems = interpretations.filter(
+      (item) => item.subjectType === "AngleInSign",
+    );
+    const planetInHouseItems = interpretations.filter(
+      (item) => item.subjectType === "PlanetInHouse",
+    );
+
+    expect(
+      interpretations,
+      `Expected 21 interpretations for known birth time, got ${interpretations.length} (PlanetInSign=${planetInSignItems.length}, AngleInSign=${angleInSignItems.length}, PlanetInHouse=${planetInHouseItems.length})`,
+    ).toHaveLength(21);
+    expect(
+      planetInSignItems,
+      `Expected 10 PlanetInSign interpretations, got ${planetInSignItems.length}`,
+    ).toHaveLength(10);
+    expect(
+      angleInSignItems,
+      `Expected 1 AngleInSign interpretation, got ${angleInSignItems.length}`,
+    ).toHaveLength(1);
+    expect(
+      planetInHouseItems,
+      `Expected 10 PlanetInHouse interpretations, got ${planetInHouseItems.length}`,
+    ).toHaveLength(10);
+
+    const subjectKeys = new Set<string>();
+    for (const item of interpretations) {
+      expect(item.language).toBe("vi");
+      expect(typeof item.bodyText).toBe("string");
+      expect(item.bodyText.trim().length).toBeGreaterThan(0);
+      expect(["PlanetInSign", "AngleInSign", "PlanetInHouse"]).toContain(
+        item.subjectType,
+      );
+      expect(
+        subjectKeys.has(item.subjectKey),
+        `Duplicate subjectKey: ${item.subjectKey}`,
+      ).toBe(false);
+      subjectKeys.add(item.subjectKey);
+    }
+
+    const planets = (chartResponseJson["planets"] ?? []) as Array<{
+      name: string;
+      sign: string;
+      house: number | null;
+    }>;
+    const angles = (chartResponseJson["angles"] ?? []) as Array<{
+      type: string;
+      sign: string;
+    }>;
+
+    for (const planet of planets) {
+      expect(
+        KNOWN_ZODIAC_SIGNS,
+        `Unknown planet sign: ${planet.sign}`,
+      ).toContain(planet.sign);
+    }
+
+    for (const mvpName of MVP_PLANET_NAMES) {
+      const planet = planets.find((p) => p.name === mvpName);
+      expect(planet, `MVP planet not found: ${mvpName}`).toBeDefined();
+      if (planet) {
+        const expectedSignKey = `${planet.name}_in_${planet.sign}`;
+        expect(
+          planetInSignItems.some((i) => i.subjectKey === expectedSignKey),
+          `Missing PlanetInSign key: ${expectedSignKey}`,
+        ).toBe(true);
+
+        const expectedHouseKey = `${planet.name}_in_House_${planet.house}`;
+        expect(
+          planetInHouseItems.some((i) => i.subjectKey === expectedHouseKey),
+          `Missing PlanetInHouse key: ${expectedHouseKey}`,
+        ).toBe(true);
+      }
+    }
+
+    const ascendant = angles.find((a) => a.type === "Ascendant");
+    expect(ascendant, "Ascendant not found in angles").toBeDefined();
+    if (ascendant) {
+      const expectedAscendantKey = `Ascendant_in_${ascendant.sign}`;
+      expect(
+        angleInSignItems.some((i) => i.subjectKey === expectedAscendantKey),
+        `Missing AngleInSign key: ${expectedAscendantKey}`,
+      ).toBe(true);
+    }
+
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      const fs = await import("node:fs");
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        `\n- **Probe A (S1.3):** interpretationVersion=${String(chartResponseJson["interpretationVersion"])}, count=${interpretations.length} (PlanetInSign=${planetInSignItems.length}, AngleInSign=${angleInSignItems.length}, PlanetInHouse=${planetInHouseItems.length})\n`,
+      );
+    }
 
     // Navigates to /app/charts/:chartId
     await page.waitForURL(/\/app\/charts\/[0-9a-fA-F-]+/);
@@ -438,7 +575,14 @@ test.describe("Primary E2E Scenario 2: Degraded / Unknown Birth Time Journey", (
       isHouseDataAvailable: boolean;
       houses: unknown[];
       angles: unknown[];
-      planets: Array<{ house: number | null }>;
+      planets: Array<{ name: string; sign: string; house: number | null }>;
+      interpretations: Array<{
+        subjectType: string;
+        subjectKey: string;
+        language: string;
+        bodyText: string;
+      }>;
+      interpretationVersion: string | null;
     };
 
     // Verify degraded contract: isHouseDataAvailable === false, houses=[], angles=[]
@@ -448,6 +592,67 @@ test.describe("Primary E2E Scenario 2: Degraded / Unknown Birth Time Journey", (
     expect(chartJson.planets.length).toBeGreaterThan(0);
     for (const planet of chartJson.planets) {
       expect(planet.house).toBeNull();
+    }
+
+    // Probe B: Permanent contract verification for degraded interpretations (Sprint F5 M1)
+    expect(
+      chartJson.interpretationVersion,
+      `Expected interpretationVersion === "1.0", got ${String(chartJson.interpretationVersion)}`,
+    ).toBe("1.0");
+
+    const interpretationsB = chartJson.interpretations ?? [];
+    const planetInSignItemsB = interpretationsB.filter(
+      (item) => item.subjectType === "PlanetInSign",
+    );
+    const angleInSignItemsB = interpretationsB.filter(
+      (item) => item.subjectType === "AngleInSign",
+    );
+    const planetInHouseItemsB = interpretationsB.filter(
+      (item) => item.subjectType === "PlanetInHouse",
+    );
+
+    expect(
+      interpretationsB,
+      `Expected 10 interpretations for unknown birth time, got ${interpretationsB.length} (PlanetInSign=${planetInSignItemsB.length}, AngleInSign=${angleInSignItemsB.length}, PlanetInHouse=${planetInHouseItemsB.length})`,
+    ).toHaveLength(10);
+    expect(
+      planetInSignItemsB,
+      `Expected all 10 interpretations to be PlanetInSign, got ${planetInSignItemsB.length}`,
+    ).toHaveLength(10);
+    expect(angleInSignItemsB).toHaveLength(0);
+    expect(planetInHouseItemsB).toHaveLength(0);
+
+    for (const item of interpretationsB) {
+      expect(item.language).toBe("vi");
+      expect(typeof item.bodyText).toBe("string");
+      expect(item.bodyText.trim().length).toBeGreaterThan(0);
+    }
+
+    for (const planet of chartJson.planets) {
+      expect(
+        KNOWN_ZODIAC_SIGNS,
+        `Unknown planet sign: ${planet.sign}`,
+      ).toContain(planet.sign);
+    }
+
+    for (const mvpName of MVP_PLANET_NAMES) {
+      const planet = chartJson.planets.find((p) => p.name === mvpName);
+      expect(planet, `MVP planet not found: ${mvpName}`).toBeDefined();
+      if (planet) {
+        const expectedSignKey = `${planet.name}_in_${planet.sign}`;
+        expect(
+          planetInSignItemsB.some((i) => i.subjectKey === expectedSignKey),
+          `Missing PlanetInSign key: ${expectedSignKey}`,
+        ).toBe(true);
+      }
+    }
+
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      const fs = await import("node:fs");
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        `- **Probe B (S2.3):** interpretationVersion=${String(chartJson.interpretationVersion)}, count=${interpretationsB.length} (PlanetInSign=${planetInSignItemsB.length}, degraded/no-birth-time)\n`,
+      );
     }
 
     await page.waitForURL(/\/app\/charts\/[0-9a-fA-F-]+/);
