@@ -290,7 +290,8 @@ Disclosure: `<button aria-expanded aria-controls>` trong heading; Enter/Space; t
 
 Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; plan milestone là bản thảo tạm, chỉ Evidence Matrix được lưu `docs/implementation/archive/sprint-f5/` (theo quy ước đã dùng ở F4). **Evidence ≠ self-certification**: lệnh nào không chạy được trong sandbox (E2E, coverage, Backend/Postgres) ghi là bằng chứng CI.
 
-### F5.M1 — CI Seed & Contract Baseline
+### F5.M1 — CI Seed & Contract Baseline [DONE — 2026-10-31]
+- **Trạng thái:** **COMPLETED** (Commit `4b70422`, CI Run #41155563064 Passed; Evidence Matrix tại `docs/implementation/archive/sprint-f5/Sprint_F5_M1_Exit_Criteria_Evidence_Matrix.md`).
 - **Mục tiêu:** E2E Backend thật có nội dung diễn giải; chốt baseline.
 - **Tasks:** (1) đọc `backend/prisma/seed-content.ts` (tham số `--file`, `--validate-only`, tính idempotent, yêu cầu `DATABASE_URL`/`tsx`); (2) thêm bước `npm run prisma:seed:content` (working-directory `backend`) vào `frontend-ci.yml` ngay sau `prisma:deploy`, trước khi khởi động backend; (3) tái xác minh baseline (130 file/1049 test, 38 E2E) trên CI; (4) probe tạm thời trong E2E hiện có hoặc spec mới: chart tạo qua `POST /charts/natal?save=true` có `interpretationVersion = "1.0"` và 21 mục (chart đủ Nhà), 10 mục (chart không rõ giờ sinh); (5) xác nhận ở runtime `PlanetVM.sign` có định danh cung (giả định 3.5).
 - **Files:** `.github/workflows/frontend-ci.yml`; không đụng mã ứng dụng.

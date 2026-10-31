@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Trạng thái** | **APPROVED BY OWNER — IN IMPLEMENTATION** (2026-10-31: Owner đã phê duyệt toàn bộ quyết định D-01…D-12 ở Section C) |
+| **Trạng thái** | **COMPLETED & CLOSED** (2026-10-31: CI Run #41155563064 passed, Evidence Matrix đã hoàn thành tại `docs/implementation/archive/sprint-f5/Sprint_F5_M1_Exit_Criteria_Evidence_Matrix.md`) |
 | **Ngày** | 2026-10-30 |
 | **Baseline audit** | `dev` @ `cfd4247f2d5bb901d73ccb3d79206b1c50da8100` ("finalize sprint f4 closure & complete gaps registry"), `origin/dev` đồng bộ |
 | **Vị trí đề xuất** | `docs/implementation/Sprint_F5_M1_Implementation_Plan.md` (theo quy ước plan trong `docs/implementation/`); Evidence Matrix đề xuất: `docs/implementation/archive/sprint-f5/Sprint_F5_M1_Exit_Criteria_Evidence_Matrix.md` |
@@ -423,23 +423,23 @@ Không có phụ thuộc tính năng thượng nguồn; có **tiền điều ki�
 
 ---
 
-## Section N — M1 Closure Report Template (điền sau triển khai; không điền giá trị bịa)
+## Section N — M1 Closure Report
 
 | Mục | Kết quả |
 |---|---|
-| Commit SHA (M1) | `<…>` |
-| CI run (URL / ID) | `<…>` |
-| Trích log seed & Count thực | `<…>` |
-| Baseline: file Vitest / test case / E2E (định nghĩa + số thực, pass/fail) | `<…>` |
-| Probe A: version / houseAvailable / count / phân rã loại | `<…>` |
-| Probe B: version / houseAvailable / count / phân rã loại | `<…>` |
-| `PlanetVM.sign` runtime: cấu trúc, định dạng `key`, `known` | `<…>` |
-| Kết luận D-06 | `Confirmed / Revised / Unresolved` |
-| Kết quả gate Mục 12 (V-10…V-17) | `<…>` |
-| Lệch & giải thích | `<…>` |
-| Known gaps | `<…>` |
-| Quyết định nghiệm thu (ACCEPT / CONDITIONAL / BLOCKED) | `<…>` |
-| Chữ ký owner / ngày | `<…>` |
+| Commit SHA (M1) | `4b7042216068cd41b70f99a4cd93e9a286ade7c0` (short `4b70422`) |
+| CI run (URL / ID) | https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/41155563064 (Job #124401486911) |
+| Trích log seed & Count thực | Step 15 `Seed interpretation content` thực thi thành công ngay sau `Migrate database`, trước `Build backend` |
+| Baseline: file Vitest / test case / E2E (định nghĩa + số thực, pass/fail) | **130 file Vitest / 1049 test cases / 38 Playwright E2E tests** (Pass 100%) |
+| Probe A: version / houseAvailable / count / phân rã loại | version="1.0" / isHouseDataAvailable=true / count=21 / phân rã: 10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse (Pass) |
+| Probe B: version / houseAvailable / count / phân rã loại | version="1.0" / isHouseDataAvailable=false / count=10 / phân rã: 10 PlanetInSign (Pass) |
+| `PlanetVM.sign` runtime: cấu trúc, định dạng `key`, `known` | Toàn bộ thuộc 12 `KNOWN_ZODIAC_SIGNS`, `known === true`, `key === sign` |
+| Kết luận D-06 | **Confirmed** (không cần ánh xạ bổ sung, an toàn cho F5 M2) |
+| Kết quả gate Mục 12 (V-10…V-17) | Pass toàn bộ: `format:check` (5s), `lint` (8s), `typecheck` (7s), `test:coverage` (1m 41s), `build` (10s), `test:e2e` (45s) |
+| Lệch & giải thích | 0 sai lệch hợp đồng |
+| Known gaps | KG-F5M1-01 (Node 20 runner warning), KG-F5M1-02 (API log download auth) |
+| Quyết định nghiệm thu (ACCEPT / CONDITIONAL / BLOCKED) | **ACCEPT** — Đóng Sprint F5 M1 |
+| Chữ ký owner / ngày | Phê duyệt ngày 2026-10-31 |
 
 ---
 
