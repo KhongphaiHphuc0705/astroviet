@@ -19,11 +19,11 @@
 
 **`PASS`** — Toàn bộ tiêu chí kỹ thuật và cổng chất lượng của M1 đã đạt 100%:
 1. Job `Frontend CI` trên commit `4b70422` đã chạy thành công trọn vẹn (24 bước, 4 phút 39 giây, kết luận `success`).
-2. Bước `Seed interpretation content` chạy đúng vị trí (ngay sau `Migrate database`, trước `Build backend`/`Start backend server`).
+2. Bước `Seed interpretation content` chạy đúng vị trí (ngay sau `Migrate database`, trước `Build backend`/`Start backend server`), nạp đủ 252 bản ghi nội dung.
 3. Cả hai probe hợp đồng Backend thật trên E2E đều **PASS**:
    - **Probe A (S1.3):** `interpretationVersion === "1.0"`, đủ đúng **21 mục** diễn giải (10 `PlanetInSign`, 1 `AngleInSign`, 10 `PlanetInHouse`), toàn bộ `vi`, không rỗng, khớp đúng 100% khoá tra cứu từ 10 hành tinh và Ascendant.
    - **Probe B (S2.3):** `interpretationVersion === "1.0"`, suy giảm hợp lệ về đúng **10 mục** (`PlanetInSign` duy nhất), 0 lỗi hạ tầng, khớp đúng 100% khoá tra cứu.
-4. Giả định **D-06 (`PlanetVM.sign.key`)** chính thức được **`CONFIRMED`** trên runtime thật: toàn bộ hành tinh mang cung thuộc `KNOWN_ZODIAC_SIGNS` (chuỗi tiếng Anh), bảo đảm `resolveSign(sign).known === true` và `key === sign`.
+4. Giả định **D-06 (`PlanetVM.sign.key`)** được kết luận là **`Confirmed (DTO runtime + mã resolveSign)`**: CI chứng minh `planets[].sign` thuộc 12 tên tiếng Anh và ghép đúng `subjectKey`; vế `key === sign` và `known === true` được bảo đảm từ `labels.ts` cùng unit test. F5.M2 giữ vững quy tắc chỉ ghép khoá khi `sign.known === true`, và sẽ bổ sung test dùng fixture thật.
 5. Baseline chất lượng được bảo toàn tuyệt đối: **130 file Vitest / 1049 test cases / 38 Playwright E2E tests**, không gate nào bị nới lỏng hay bỏ qua. Milestone M1 chính thức đủ điều kiện đóng.
 
 ---
@@ -35,11 +35,11 @@
 | **V-01** | Audit seed script | Đọc `seed-content.ts`, seeder, validator | Đã audit chi tiết; xác nhận chạy tsx, cwd `backend`, cần `DATABASE_URL`, idempotent | **VERIFIED** | [repo] |
 | **V-02** | Validate nội dung JSON | Chạy trực tiếp validator trên `interpretations.vi.json` | 252/252 mục hợp lệ, 0 issue, status `Published`, version `1.0` | **VERIFIED** | [C-run] |
 | **V-03** | Thứ tự bước trong CI | Đối chiếu diff workflow và thứ tự log CI | `Migrate database` (Step 14) $\rightarrow$ `Seed interpretation content` (Step 15) $\rightarrow$ `Build backend` (Step 16) $\rightarrow$ `Start backend server` (Step 17) | **VERIFIED** | [CI] [repo] |
-| **V-04** | Bước seed thực thi trong CI | Step 15 `Seed interpretation content` | Thực thi thành công (`conclusion: success`) | **VERIFIED** | [CI] |
+| **V-04** | Bước seed thực thi trong CI | Step 15 `Seed interpretation content` | Thực thi thành công (`conclusion: success`), log ghi nhận:<br>`Validation passed!`<br>`Coverage: 252/252`<br>`Placeholder count: 0`<br>`Connecting to database...`<br>`Seeding content to database...`<br>`Seed successful! Outcome: inserted, Count: 252` | **VERIFIED** | [CI] |
 | **V-05** | Thiết kế không nuốt lỗi | Kiểm tra workflow `frontend-ci.yml` | 0 `continue-on-error`, 0 `\|\| true`, 0 retry giả; exit 1 sẽ làm fail job | **VERIFIED** | [repo] |
-| **V-06** | Probe A (Lá số đủ giờ sinh) | `frontend/e2e/chart.spec.ts` (S1.3) | `interpretationVersion === "1.0"`, `isHouseDataAvailable === true`, đúng **21 mục** (10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse), 100% tiếng Việt, 0 duplicate key | **VERIFIED** | [CI] |
-| **V-07** | Probe B (Lá số không giờ sinh) | `frontend/e2e/chart.spec.ts` (S2.3) | `interpretationVersion === "1.0"`, `isHouseDataAvailable === false`, đúng **10 mục** (10 PlanetInSign), 0 AngleInSign, 0 PlanetInHouse, suy giảm hợp lệ HTTP 200 | **VERIFIED** | [CI] |
-| **V-08** | Xác minh runtime `sign.key` | Assertion kiểm tra `planets[].sign` trong Probe A & B | Toàn bộ 10 hành tinh mang cung thuộc 12 `KNOWN_ZODIAC_SIGNS`; `key` khớp hoàn toàn | **VERIFIED** | [CI] [repo] |
+| **V-06** | Probe A (Lá số đủ giờ sinh) | `frontend/e2e/chart.spec.ts` (S1.3) | `interpretationVersion === "1.0"`, `isHouseDataAvailable === true`, đúng **21 mục** (10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse), 100% tiếng Việt, 0 duplicate key.<br>Summary: `- **Probe A (S1.3):** interpretationVersion=1.0, count=21 (PlanetInSign=10, AngleInSign=1, PlanetInHouse=10)` | **VERIFIED** | [CI] |
+| **V-07** | Probe B (Lá số không giờ sinh) | `frontend/e2e/chart.spec.ts` (S2.3) | `interpretationVersion === "1.0"`, `isHouseDataAvailable === false`, đúng **10 mục** (10 PlanetInSign), 0 AngleInSign, 0 PlanetInHouse, suy giảm hợp lệ HTTP 200.<br>Summary: `- **Probe B (S2.3):** interpretationVersion=1.0, count=10 (PlanetInSign=10, degraded/no-birth-time)` | **VERIFIED** | [CI] |
+| **V-08** | Xác minh runtime `sign.key` | Assertion kiểm tra `planets[].sign` trong Probe A & B | `Confirmed (DTO runtime + mã resolveSign)`: CI chứng minh `planets[].sign` thuộc 12 tên tiếng Anh và ghép đúng `subjectKey`; `resolveSign` bảo đảm `key === sign` khi `known === true` | **VERIFIED** | [CI] [repo] |
 | **V-09** | Tái xác minh baseline | Kiểm đếm file test và ca kiểm thử | 130 file Vitest, 1049 ca kiểm thử thu thập, 38 Playwright E2E tests; không thay đổi số lượng khai báo | **VERIFIED** | [C-run] [CI] |
 | **V-10** | Cổng Format | `npm run format:check` | Pass — 100% file chuẩn Prettier (Step 7 trong CI pass, 5s) | **VERIFIED** | [C-run] [CI] |
 | **V-11** | Cổng Lint | `npm run lint` | Pass — ESLint 0 error, 0 warning (Step 8 trong CI pass, 8s) | **VERIFIED** | [C-run] [CI] |
@@ -63,11 +63,11 @@
 | **D-03/D-09** | Bổ sung probe thường trực | Đặt probe trong S1.3 và S2.3 của `chart.spec.ts`, không tạo file spec mới | **VERIFIED** |
 | **D-04** | Khẳng định cứng 21/10 | Giữ đúng 21 mục cho S1.3 và 10 mục cho S2.3; probe pass trực tiếp trên CI | **VERIFIED** |
 | **D-05** | Phân biệt 252 vs 21/10 | 252 là tổng kho seed; 21/10 là số mục áp dụng cho từng lá số cụ thể | **VERIFIED** |
-| **D-06** | Kết luận `PlanetVM.sign.key` | Khẳng định `CONFIRMED` sau khi probe CI pass 100% các cung đã biết | **VERIFIED** |
+| **D-06** | Kết luận `PlanetVM.sign.key` | `Confirmed (DTO runtime + mã resolveSign)` — F5.M2 chỉ ghép khoá khi `sign.known === true`, cần có test dùng fixture thật | **VERIFIED** |
 | **D-07** | Phương pháp baseline | 130 file Vitest / 1049 case / 38 Playwright E2E | **VERIFIED** |
 | **D-08** | Thẩm quyền Section 12 | Tuân thủ các cổng chất lượng Mục 12 F5 Quality Gates | **VERIFIED** |
 | **D-10** | Nơi lưu trữ Evidence Matrix | `docs/implementation/archive/sprint-f5/Sprint_F5_M1_Exit_Criteria_Evidence_Matrix.md` | **VERIFIED** |
-| **D-11** | Quy ước commit | Commit `[feat]` code/test trên `dev` (`4b70422`); commit `[docs]` riêng cho evidence | **VERIFIED** |
+| **D-11** | Quy ước commit | Commit `[feat]` code/test trên `dev` (`4b70422`); commit `[docs]` riêng cho evidence | **PARTIALLY VERIFIED** — plan F5 và M1 nằm trong `4b70422`, owner chấp nhận |
 | **D-12** | Step summary | Bổ sung ghi đếm tóm tắt vào `$GITHUB_STEP_SUMMARY` khi biến tồn tại | **VERIFIED** |
 
 ---
@@ -105,12 +105,30 @@
   Step 21 - Upload Playwright report on failure [skipped - 0 errors]
 ```
 
+### Trích xuất Log Seed thực tế (Step 15 — `Seed interpretation content`):
+```text
+Validation passed!
+Coverage: 252/252
+Placeholder count: 0
+Connecting to database...
+Seeding content to database...
+Seed successful! Outcome: inserted, Count: 252
+```
+
+### Trích xuất Step Summary thực tế (Probe A & Probe B từ `$GITHUB_STEP_SUMMARY`):
+```markdown
+- **Probe A (S1.3):** interpretationVersion=1.0, count=21 (PlanetInSign=10, AngleInSign=1, PlanetInHouse=10)
+- **Probe B (S2.3):** interpretationVersion=1.0, count=10 (PlanetInSign=10, degraded/no-birth-time)
+```
+
 ---
 
 ## 4. Bằng chứng kiểm tra hợp đồng thực tế (Probe A & Probe B)
 
 ### Probe A (Scenario S1.3 — Lá số có đầy đủ giờ sinh)
 - **Đầu vào hồ sơ:** `1995-10-25`, `08:30`, Đà Nẵng, `isBirthTimeKnown: true`.
+- **Dòng Step Summary thực tế:**
+  `- **Probe A (S1.3):** interpretationVersion=1.0, count=21 (PlanetInSign=10, AngleInSign=1, PlanetInHouse=10)`
 - **Phản hồi Backend:**
   - `status: 200/201 OK`.
   - `interpretationVersion`: `"1.0"`.
@@ -129,6 +147,8 @@
 
 ### Probe B (Scenario S2.3 — Lá số không rõ giờ sinh / suy giảm)
 - **Đầu vào hồ sơ:** `1998-05-12`, Đà Nẵng, bỏ chọn "Tôi biết rõ giờ sinh của mình".
+- **Dòng Step Summary thực tế:**
+  `- **Probe B (S2.3):** interpretationVersion=1.0, count=10 (PlanetInSign=10, degraded/no-birth-time)`
 - **Phản hồi Backend:**
   - `status: 200/201 OK` (Suy giảm hợp lệ, không phải lỗi hệ thống).
   - `interpretationVersion`: `"1.0"`.
@@ -150,11 +170,11 @@
 
 ## 5. Kết luận cho Quyết định D-06 (`PlanetVM.sign.key`)
 
-- **Kết luận:** **`CONFIRMED`**
-- **Căn cứ thực nghiệm:**
-  - Toàn bộ các giá trị `sign` trả về trong mảng `planets` ở cả Probe A và Probe B đều thuộc tập 12 cung chuẩn `KNOWN_ZODIAC_SIGNS` (`Aries`, `Taurus`, `Gemini`, `Cancer`, `Leo`, `Virgo`, `Libra`, `Scorpio`, `Sagittarius`, `Capricorn`, `Aquarius`, `Pisces`).
-  - Hàm `resolveSign(sign)` trong `frontend/src/features/chart/model/labels.ts` xử lý các cung này với `known === true`, và gán `key === sign` (chính xác bằng chuỗi gốc).
-  - Do đó, trong các milestone tiếp theo của Sprint F5 (M2 $\rightarrow$ M7), việc tra cứu diễn giải cung hoàng đạo qua `vm.planets[i].sign.key` khi `sign.known === true` được xác nhận là **hoàn toàn chính xác và an toàn**, không cần cơ chế ánh xạ đặc biệt hay nắn chỉnh dữ liệu.
+- **Kết luận:** **`Confirmed (DTO runtime + mã resolveSign)`**
+- **Căn cứ xác minh & phạm vi:**
+  - **DTO runtime (đã chứng minh trên CI):** Toàn bộ các giá trị `sign` trả về trong mảng `planets` ở cả Probe A và Probe B đều thuộc tập 12 tên tiếng Anh chuẩn `KNOWN_ZODIAC_SIGNS` (`Aries`, `Taurus`, `Gemini`, `Cancer`, `Leo`, `Virgo`, `Libra`, `Scorpio`, `Sagittarius`, `Capricorn`, `Aquarius`, `Pisces`) và ghép đúng các `subjectKey` của DB diễn giải thật.
+  - **Ánh xạ ViewModel (suy từ `labels.ts` + unit test):** Hàm `resolveSign(sign)` trong `frontend/src/features/chart/model/labels.ts` (đã có unit test bao phủ) xử lý 12 cung này với `known === true`, và gán `key === sign` (chính xác bằng chuỗi gốc). Do `PlanetVM` chưa được chạy trực tiếp trên dữ liệu thật trong E2E, kết luận chuẩn xác là *Confirmed (DTO runtime + mã resolveSign)*.
+  - **Định hướng F5.M2:** Giữ nghiêm quy tắc chỉ ghép khoá khi `sign.known === true`, và bổ sung test sử dụng fixture thật từ Backend.
 
 ---
 
@@ -175,12 +195,12 @@
 | **CI run URL** | https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/41155563064 |
 | **CI job URL** | https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/41155563064/job/124401486911 |
 | **Trạng thái CI** | `completed`, **`conclusion: success`** (4m 39s) |
-| **Log Seed Content** | Step 15 thực thi thành công ngay sau `Migrate database`, trước `Build backend` |
+| **Log Seed Content** | Trích log Step 15:<br>`Validation passed!`<br>`Coverage: 252/252`<br>`Placeholder count: 0`<br>`Connecting to database...`<br>`Seeding content to database...`<br>`Seed successful! Outcome: inserted, Count: 252` |
 | **Baseline metrics** | **130 file Vitest / 1049 test cases / 38 Playwright E2E tests** (Pass 100%) |
-| **Probe A** | `interpretationVersion: "1.0"`, `isHouseDataAvailable: true`, tổng 21 (10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse) |
-| **Probe B** | `interpretationVersion: "1.0"`, `isHouseDataAvailable: false`, tổng 10 (10 PlanetInSign, 0 House, 0 Angle) |
-| **`PlanetVM.sign` runtime** | Thuộc 12 `KNOWN_ZODIAC_SIGNS`, `known === true`, `key === sign` |
-| **Kết luận D-06** | **`CONFIRMED`** |
+| **Probe A** | `interpretationVersion: "1.0"`, `isHouseDataAvailable: true`, tổng 21 (10 PlanetInSign + 1 AngleInSign + 10 PlanetInHouse).<br>Summary: `- **Probe A (S1.3):** interpretationVersion=1.0, count=21 (PlanetInSign=10, AngleInSign=1, PlanetInHouse=10)` |
+| **Probe B** | `interpretationVersion: "1.0"`, `isHouseDataAvailable: false`, tổng 10 (10 PlanetInSign, 0 House, 0 Angle).<br>Summary: `- **Probe B (S2.3):** interpretationVersion=1.0, count=10 (PlanetInSign=10, degraded/no-birth-time)` |
+| **`PlanetVM.sign` runtime** | DTO `planets[].sign` thuộc 12 `KNOWN_ZODIAC_SIGNS`, `resolveSign` trả `known === true`, `key === sign` |
+| **Kết luận D-06** | **`Confirmed (DTO runtime + mã resolveSign)`** — F5.M2 chỉ ghép khoá khi `sign.known === true`, có test fixture thật |
 | **Cổng chất lượng Mục 12** | Pass toàn bộ: `format:check` (5s), `lint` (8s), `typecheck` (7s), `test:coverage` (1m 41s), `build` (10s), `test:e2e` (45s) |
 | **Lệch & giải thích** | 0 sai lệch hợp đồng |
 | **Known Gaps** | KG-F5M1-01 (Node 20 runner warning), KG-F5M1-02 (API log download auth) |
