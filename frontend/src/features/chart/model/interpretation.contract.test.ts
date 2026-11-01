@@ -235,6 +235,13 @@ describe("interpretation contract tests - backend content bank verification", ()
 
 describe("interpretation purity & architecture tests (P-01..P-03)", () => {
   it("P-01: verifies allowlist imports in interpretation.ts", () => {
+    // Forbid dynamic imports and require()
+    expect(moduleSource).not.toMatch(/\bimport\s*\(/);
+    expect(moduleSource).not.toMatch(/\brequire\s*\(/);
+
+    // Forbid side-effect imports like import "module"
+    expect(moduleSource).not.toMatch(/^\s*import\s+['"][^'"]+['"]/m);
+
     const importRegex =
       /import\s+(?:type\s+)?[\s\S]*?from\s+["']([^"']+)["'];?/g;
     const matches = Array.from(moduleSource.matchAll(importRegex));

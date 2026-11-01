@@ -628,6 +628,86 @@ describe("interpretation model - derivation, assembly, and status (Task 5: U-07.
     expect(missingIssues).toHaveLength(21);
   });
 
+  it("U-09b: corrupted response vs unreleased (prevents false unreleased status)", () => {
+    const { vm } = makeVmInput(chartFull);
+
+    // 1. interpretations not an array + version null
+    const model1 = buildInterpretationModel(
+      {
+        interpretations:
+          undefined as unknown as typeof chartFull.interpretations,
+        interpretationVersion: null,
+      },
+      vm,
+    );
+    expect(model1.status).toBe("unavailable");
+    expect(model1.availableCount).toBe(0);
+    expect(model1.itemsById["planet:Sun"]!.bySign).toEqual({
+      state: "missing",
+      subjectKey: "Sun_in_Capricorn",
+    });
+    expect(model1.issues).toContainEqual({
+      code: "ENTRY_MALFORMED",
+      category: "defect",
+      subject: "interpretations",
+      count: 1,
+    });
+    expect(model1.issues.some((i) => i.code === "CONTENT_NOT_PUBLISHED")).toBe(
+      false,
+    );
+    expect(model1.issues.some((i) => i.code === "CONTENT_MISSING")).toBe(true);
+
+    // 2. [] + number version (e.g. 5)
+    const model2 = buildInterpretationModel(
+      {
+        interpretations: [],
+        interpretationVersion: 5 as unknown as string,
+      },
+      vm,
+    );
+    expect(model2.status).toBe("unavailable");
+    expect(model2.availableCount).toBe(0);
+    expect(model2.itemsById["planet:Sun"]!.bySign).toEqual({
+      state: "missing",
+      subjectKey: "Sun_in_Capricorn",
+    });
+    expect(model2.issues).toContainEqual({
+      code: "VERSION_INVALID",
+      category: "defect",
+      subject: "interpretationVersion",
+      count: 1,
+    });
+    expect(model2.issues.some((i) => i.code === "CONTENT_NOT_PUBLISHED")).toBe(
+      false,
+    );
+    expect(model2.issues.some((i) => i.code === "CONTENT_MISSING")).toBe(true);
+
+    // 3. [] + undefined version (missing field)
+    const model3 = buildInterpretationModel(
+      {
+        interpretations: [],
+        interpretationVersion: undefined as unknown as string,
+      },
+      vm,
+    );
+    expect(model3.status).toBe("unavailable");
+    expect(model3.availableCount).toBe(0);
+    expect(model3.itemsById["planet:Sun"]!.bySign).toEqual({
+      state: "missing",
+      subjectKey: "Sun_in_Capricorn",
+    });
+    expect(model3.issues).toContainEqual({
+      code: "VERSION_INVALID",
+      category: "defect",
+      subject: "interpretationVersion",
+      count: 1,
+    });
+    expect(model3.issues.some((i) => i.code === "CONTENT_NOT_PUBLISHED")).toBe(
+      false,
+    );
+    expect(model3.issues.some((i) => i.code === "CONTENT_MISSING")).toBe(true);
+  });
+
   it("U-14: flags non-applicable entries", () => {
     // 1. Valid entry but wrong sign for this chart (Moon in Gemini instead of Aquarius)
     const { dto, vm } = makeVmInput(chartFull, (d) => {
@@ -721,6 +801,37 @@ describe("interpretation model - derivation, assembly, and status (Task 5: U-07.
       category: "defect",
       subject: "planet:Moon.house",
       count: 1,
+    });
+
+    // Invalid sign key with known: true for planet and Ascendant
+    const { dto: dtoInv, vm: vmInv } = makeVmInput(
+      chartFull,
+      undefined,
+      (v) => {
+        const sun = v.planets.find((p) => p.key === "Sun")!;
+        sun.sign = {
+          known: true,
+          key: "InvalidSign" as unknown as typeof sun.sign.key,
+          labelVi: "Không hợp lệ",
+          glyph: "?",
+        };
+        const asc = v.angles.find((a) => a.key === "Ascendant")!;
+        asc.sign = {
+          known: true,
+          key: "InvalidSign" as unknown as typeof asc.sign.key,
+          labelVi: "Không hợp lệ",
+          glyph: "?",
+        };
+      },
+    );
+    const modelInv = buildInterpretationModel(dtoInv, vmInv);
+    expect(modelInv.itemsById["planet:Sun"]!.bySign).toEqual({
+      state: "unavailable",
+      reason: "SIGN_UNRESOLVED",
+    });
+    expect(modelInv.itemsById["angle:Ascendant"]!.bySign).toEqual({
+      state: "unavailable",
+      reason: "SIGN_UNRESOLVED",
     });
   });
 

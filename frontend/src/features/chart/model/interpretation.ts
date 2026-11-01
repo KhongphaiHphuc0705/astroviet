@@ -388,10 +388,7 @@ export function buildInterpretationModel(
   let version: string | null = null;
   if (typeof dto.interpretationVersion === "string") {
     version = dto.interpretationVersion;
-  } else if (
-    dto.interpretationVersion === null ||
-    dto.interpretationVersion === undefined
-  ) {
+  } else if (dto.interpretationVersion === null) {
     version = null;
   } else {
     version = null;
@@ -410,10 +407,10 @@ export function buildInterpretationModel(
   } = classifyEntries(dto.interpretations);
   rawIssues.push(...classificationIssues);
 
-  const rawArray = Array.isArray(dto.interpretations)
-    ? dto.interpretations
-    : [];
-  const isUnreleased = version === null && rawArray.length === 0;
+  const isUnreleased =
+    dto.interpretationVersion === null &&
+    Array.isArray(dto.interpretations) &&
+    dto.interpretations.length === 0;
 
   // Step 7: Degraded conditions check
   const houseDataAvailable = Boolean(vm.flags.houseDataAvailable);
@@ -508,7 +505,10 @@ export function buildInterpretationModel(
 
     // Resolve bySign
     let bySign: InterpretationPart;
-    if (!p.sign.known || !KNOWN_ZODIAC_SIGN_SET.has(p.sign.key)) {
+    const signKey = p.sign.known
+      ? buildPlanetInSignKey(planetName, p.sign.key)
+      : null;
+    if (signKey === null) {
       bySign = { state: "unavailable", reason: "SIGN_UNRESOLVED" };
       rawIssues.push({
         code: "IDENTIFIER_UNRESOLVED",
@@ -516,37 +516,13 @@ export function buildInterpretationModel(
         count: 1,
       });
     } else {
-      const key = buildPlanetInSignKey(planetName, p.sign.key);
-      if (key === null) {
-        bySign = { state: "unavailable", reason: "SIGN_UNRESOLVED" };
-        rawIssues.push({
-          code: "IDENTIFIER_UNRESOLVED",
-          subject: `planet:${planetName}.sign`,
-          count: 1,
-        });
-      } else {
-        bySign = resolvePart("PlanetInSign", key);
-      }
+      bySign = resolvePart("PlanetInSign", signKey);
     }
 
     // Resolve byHouse
     let byHouse: InterpretationPart;
     if (!houseDataAvailable) {
       byHouse = { state: "unavailable", reason: "HOUSE_DATA_UNAVAILABLE" };
-    } else if (
-      p.houseNumber === null ||
-      p.houseNumber === undefined ||
-      typeof p.houseNumber !== "number" ||
-      !Number.isInteger(p.houseNumber) ||
-      p.houseNumber < 1 ||
-      p.houseNumber > 12
-    ) {
-      byHouse = { state: "unavailable", reason: "HOUSE_NUMBER_UNRESOLVED" };
-      rawIssues.push({
-        code: "IDENTIFIER_UNRESOLVED",
-        subject: `planet:${planetName}.house`,
-        count: 1,
-      });
     } else {
       const key = buildPlanetInHouseKey(planetName, p.houseNumber);
       if (key === null) {
@@ -596,7 +572,8 @@ export function buildInterpretationModel(
     });
   } else {
     const a = matchingAscendants[0]!;
-    if (!a.sign.known || !KNOWN_ZODIAC_SIGN_SET.has(a.sign.key)) {
+    const ascKey = a.sign.known ? buildAscendantInSignKey(a.sign.key) : null;
+    if (ascKey === null) {
       ascendantBySign = { state: "unavailable", reason: "SIGN_UNRESOLVED" };
       rawIssues.push({
         code: "IDENTIFIER_UNRESOLVED",
@@ -604,17 +581,7 @@ export function buildInterpretationModel(
         count: 1,
       });
     } else {
-      const key = buildAscendantInSignKey(a.sign.key);
-      if (key === null) {
-        ascendantBySign = { state: "unavailable", reason: "SIGN_UNRESOLVED" };
-        rawIssues.push({
-          code: "IDENTIFIER_UNRESOLVED",
-          subject: "angle:Ascendant.sign",
-          count: 1,
-        });
-      } else {
-        ascendantBySign = resolvePart("AngleInSign", key);
-      }
+      ascendantBySign = resolvePart("AngleInSign", ascKey);
     }
   }
 
@@ -758,7 +725,7 @@ export function buildInterpretationModel(
       if (idxA !== idxB) {
         return idxA - idxB;
       }
-      return a.subject.localeCompare(b.subject, "en");
+      return a.subject < b.subject ? -1 : a.subject > b.subject ? 1 : 0;
     })
     .map((item) =>
       Object.freeze({
