@@ -300,11 +300,12 @@ Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; 
 - **Gates:** toàn bộ Mục 12. **Evidence:** run CI + trích log seed + kết quả probe. **DoD:** workflow commit, baseline được ghi, giả định `sign.key` đã chốt.
 - **Rủi ro:** seed yêu cầu bản dựng/`tsx` backend trong job (kiểm tra); đổi workflow không được làm yếu gate nào.
 
-### F5.M2 — Interpretation Model (thuần)
+### F5.M2 — Interpretation Model (thuần) [DONE — 2026-11-01]
+- **Trạng thái:** **COMPLETED** (Commit `9282ed6` kèm `5a87433` và `76d85c3`; 37 test mới xanh; Coverage dòng đạt 97.51%; Evidence Matrix tại `docs/implementation/archive/sprint-f5/Sprint_F5_M2_Exit_Criteria_Evidence_Matrix.md`).
 - **Mục tiêu:** model + hàm ghép khoá + phân loại trạng thái, có contract test.
-- **Tasks:** `model/interpretation.ts`; các nhóm Cốt lõi/Hành tinh; phân loại thiếu/hỏng/`language≠vi`/trùng khoá; `issues`; (nếu cần) `PlanetVM.signKey`.
+- **Tasks:** `model/interpretation.ts`; các nhóm Cốt lõi/Hành tinh; phân loại thiếu/hỏng/`language≠vi`/trùng khoá; `issues`; giữ nguyên `PlanetVM` theo quyết định J-1.
 - **Tiên quyết:** M1 (giả định `sign.key`). **Acceptance:** AC-04…09, 11, 23; contract test: sinh khoá cho 10 hành tinh × 12 cung, × 12 nhà, 12 Ascendant, **khớp tập 252 khoá** của JSON; fixture đầy đủ → 21 mục, không-nhà → 10; không phụ thuộc thứ tự mảng (test xáo trộn); không import React/DOM.
-- **Gates:** lint/typecheck/test/format. **Evidence:** output test + coverage của file mới. **DoD:** coverage dòng ≥ 90% cho `interpretation.ts` (mục tiêu F5, thấp hơn thì ghi gap).
+- **Gates:** lint/typecheck/test/format. **Evidence:** output test + coverage của file mới. **DoD:** coverage dòng ≥ 90% cho `interpretation.ts` (đạt thực tế 97.51%).
 
 ### F5.M3 — Panel tĩnh (chưa đồng bộ chọn)
 - **Tasks:** `InterpretationPanel`, `Overview`, `Item` (disclosure); wire qua `page.tsx` + Shell; các trạng thái Mục 7.6; không đổi selection.
