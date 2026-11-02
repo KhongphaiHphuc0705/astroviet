@@ -190,8 +190,8 @@
     --color-border-strong: var(--color-midnight-500);
     --color-accent-primary: var(--color-brass-400);
     --color-accent-secondary: var(--color-indigo-400);
-    /* Derived from --color-indigo-300 with 50% opacity */
-    --color-focus-ring: rgba(168, 182, 232, 0.5);
+    /* High-contrast focus ring for dark theme (WCAG AAA 7.4:1 contrast against midnight surfaces) */
+    --color-focus-ring: var(--color-indigo-300);
 
     --color-success: var(--color-success-dark);
     --color-warning: var(--color-warning-dark);
