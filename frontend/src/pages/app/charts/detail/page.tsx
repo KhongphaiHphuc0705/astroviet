@@ -5,6 +5,7 @@ import {
   ChartViewerShell,
   ChartViewerSkeleton,
   ChartViewModelError,
+  buildInterpretationModel,
   isValidChartId,
   toChartViewModel,
   useChartQuery,
@@ -53,7 +54,9 @@ export default function ChartDetailPage() {
   const mapping = useMemo(() => {
     if (!query.data) return null;
     try {
-      return { ok: true as const, vm: toChartViewModel(query.data) };
+      const vm = toChartViewModel(query.data);
+      const interpretation = buildInterpretationModel(query.data, vm);
+      return { ok: true as const, vm, interpretation };
     } catch (error) {
       if (error instanceof ChartViewModelError) {
         return { ok: false as const, error };
@@ -70,6 +73,25 @@ export default function ChartDetailPage() {
   useEffect(() => {
     if (mapping && !mapping.ok) {
       reportError(mapping.error, "chart-view-model");
+    }
+  }, [mapping]);
+
+  useEffect(() => {
+    if (!mapping?.ok) return;
+    const counts = new Map<string, number>();
+    for (const issue of mapping.interpretation.issues) {
+      if (issue.category === "defect") {
+        counts.set(issue.code, (counts.get(issue.code) ?? 0) + issue.count);
+      }
+    }
+    if (counts.size > 0) {
+      const summary = [...counts]
+        .map(([code, count]) => `${code}×${count}`)
+        .join(", ");
+      reportError(
+        new Error(`Interpretation data issues: ${summary}`),
+        "interpretation-model",
+      );
     }
   }, [mapping]);
 
@@ -105,7 +127,13 @@ export default function ChartDetailPage() {
   if (viewKind === "loading") {
     content = <ChartViewerSkeleton />;
   } else if (viewKind === "ready" && mapping?.ok) {
-    content = <ChartViewerShell key={chartId} vm={mapping.vm} />;
+    content = (
+      <ChartViewerShell
+        key={chartId}
+        vm={mapping.vm}
+        interpretation={mapping.interpretation}
+      />
+    );
   } else if (viewKind === "invalid-data") {
     content = (
       <EmptyState

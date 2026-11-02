@@ -1,4 +1,5 @@
 export const INTERPRETATION_COPY = {
+  ascendantTitle: "Cung Mọc",
   panelTitle: "Diễn giải",
   navigationLabel: "Các nhóm diễn giải",
   groups: {
@@ -20,6 +21,10 @@ export const INTERPRETATION_COPY = {
   ascendantUnavailable: "Cung Mọc chưa khả dụng cho lá số này.",
   unavailable: "Hiện chưa thể hiển thị diễn giải cho lá số này.",
 } as const;
+
+export function formatItemLabel(title: string, detail: string): string {
+  return detail ? `${title} \u00b7 ${detail}` : title;
+}
 
 export function formatCount(count: number): string {
   return `Có ${count} diễn giải cho lá số này`;

@@ -3,7 +3,7 @@ import { useId } from "react";
 
 import type { InterpretationPart } from "../../model/interpretation";
 
-import { INTERPRETATION_COPY } from "./interpretationCopy";
+import { formatItemLabel, INTERPRETATION_COPY } from "./interpretationCopy";
 
 export interface InterpretationItemProps {
   id: string;
@@ -54,7 +54,7 @@ export function InterpretationItem({
   onToggle,
 }: InterpretationItemProps) {
   const panelId = useId();
-  const accessibleName = signLabel ? `${title} · ${signLabel}` : title;
+  const accessibleName = formatItemLabel(title, signLabel ?? "");
 
   return (
     <article className="border-b border-subtle py-3 last:border-b-0">
@@ -70,7 +70,9 @@ export function InterpretationItem({
           {glyph && <span aria-hidden="true">{glyph}</span>}
           <span>
             {title}
-            {signLabel && <span className="font-normal"> · {signLabel}</span>}
+            {signLabel && (
+              <span className="font-normal">{` \u00b7 ${signLabel}`}</span>
+            )}
           </span>
           <ChevronDown
             aria-hidden="true"
@@ -89,7 +91,10 @@ export function InterpretationItem({
               <PartRow
                 label={
                   houseLabel
-                    ? `${INTERPRETATION_COPY.parts.byHouse} · ${houseLabel}`
+                    ? formatItemLabel(
+                        INTERPRETATION_COPY.parts.byHouse,
+                        houseLabel,
+                      )
                     : INTERPRETATION_COPY.parts.byHouse
                 }
                 part={byHouse}

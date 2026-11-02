@@ -39,7 +39,7 @@ function getItemDisplay(item: ModelItem, vm: ChartViewModel) {
   }
   const angle = vm.angles.find((entry) => entry.key === "Ascendant");
   return {
-    title: angle?.labelVi ?? "Cung Mọc",
+    title: angle?.labelVi ?? INTERPRETATION_COPY.ascendantTitle,
     glyph: null,
     signLabel: angle?.sign.known ? angle.sign.labelVi : null,
     houseLabel: null,
