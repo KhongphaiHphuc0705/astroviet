@@ -1,0 +1,285 @@
+{
+  "id": "a9d7dcb2-68ed-4b67-b6ee-c62690009f24",
+  "chartType": "Natal",
+  "houseSystem": "Placidus",
+  "isHouseDataAvailable": true,
+  "planets": [
+    {
+      "name": "Sun",
+      "category": "Personal",
+      "longitude": 280.51691106994235,
+      "speed": 1.0194923529938007,
+      "isRetrograde": false,
+      "sign": "Capricorn",
+      "degreeInSign": 10.516911069942353,
+      "house": 9
+    },
+    {
+      "name": "Moon",
+      "category": "Personal",
+      "longitude": 329.34730639203553,
+      "speed": 13.412389338330554,
+      "isRetrograde": false,
+      "sign": "Aquarius",
+      "degreeInSign": 29.347306392035534,
+      "house": 11
+    },
+    {
+      "name": "Mercury",
+      "category": "Personal",
+      "longitude": 295.75033902105235,
+      "speed": -0.23700003865703062,
+      "isRetrograde": true,
+      "sign": "Capricorn",
+      "degreeInSign": 25.750339021052355,
+      "house": 10
+    },
+    {
+      "name": "Venus",
+      "category": "Personal",
+      "longitude": 306.25817134270744,
+      "speed": -0.11801988248339171,
+      "isRetrograde": true,
+      "sign": "Aquarius",
+      "degreeInSign": 6.258171342707442,
+      "house": 10
+    },
+    {
+      "name": "Mars",
+      "category": "Personal",
+      "longitude": 249.79484578690972,
+      "speed": 0.7035994166460557,
+      "isRetrograde": false,
+      "sign": "Sagittarius",
+      "degreeInSign": 9.794845786909718,
+      "house": 8
+    },
+    {
+      "name": "Jupiter",
+      "category": "Social",
+      "longitude": 95.18804030878363,
+      "speed": -0.13463459359841898,
+      "isRetrograde": true,
+      "sign": "Cancer",
+      "degreeInSign": 5.188040308783627,
+      "house": 3
+    },
+    {
+      "name": "Saturn",
+      "category": "Social",
+      "longitude": 285.62300635800534,
+      "speed": 0.11824438413403485,
+      "isRetrograde": false,
+      "sign": "Capricorn",
+      "degreeInSign": 15.623006358005341,
+      "house": 10
+    },
+    {
+      "name": "Uranus",
+      "category": "Outer",
+      "longitude": 275.76793545856526,
+      "speed": 0.06003217287286491,
+      "isRetrograde": false,
+      "sign": "Capricorn",
+      "degreeInSign": 5.767935458565262,
+      "house": 9
+    },
+    {
+      "name": "Neptune",
+      "category": "Outer",
+      "longitude": 282.0270485474539,
+      "speed": 0.03791296407196253,
+      "isRetrograde": false,
+      "sign": "Capricorn",
+      "degreeInSign": 12.027048547453887,
+      "house": 10
+    },
+    {
+      "name": "Pluto",
+      "category": "Outer",
+      "longitude": 227.0851251958727,
+      "speed": 0.02746153991388334,
+      "isRetrograde": false,
+      "sign": "Scorpio",
+      "degreeInSign": 17.085125195872706,
+      "house": 7
+    }
+  ],
+  "houses": [
+    {
+      "number": 1,
+      "cuspDegree": 14.89132122052622,
+      "signOnCusp": "Aries"
+    },
+    {
+      "number": 2,
+      "cuspDegree": 48.50008042964834,
+      "signOnCusp": "Taurus"
+    },
+    {
+      "number": 3,
+      "cuspDegree": 75.7507274368035,
+      "signOnCusp": "Gemini"
+    },
+    {
+      "number": 4,
+      "cuspDegree": 100.52344594653272,
+      "signOnCusp": "Cancer"
+    },
+    {
+      "number": 5,
+      "cuspDegree": 126.57483971481327,
+      "signOnCusp": "Leo"
+    },
+    {
+      "number": 6,
+      "cuspDegree": 157.48925715858206,
+      "signOnCusp": "Virgo"
+    },
+    {
+      "number": 7,
+      "cuspDegree": 194.8913212205262,
+      "signOnCusp": "Libra"
+    },
+    {
+      "number": 8,
+      "cuspDegree": 228.50008042964834,
+      "signOnCusp": "Scorpio"
+    },
+    {
+      "number": 9,
+      "cuspDegree": 255.75072743680352,
+      "signOnCusp": "Sagittarius"
+    },
+    {
+      "number": 10,
+      "cuspDegree": 280.5234459465327,
+      "signOnCusp": "Capricorn"
+    },
+    {
+      "number": 11,
+      "cuspDegree": 306.57483971481327,
+      "signOnCusp": "Aquarius"
+    },
+    {
+      "number": 12,
+      "cuspDegree": 337.48925715858206,
+      "signOnCusp": "Pisces"
+    }
+  ],
+  "angles": [
+    {
+      "type": "Ascendant",
+      "longitude": 14.89132122052622,
+      "sign": "Aries",
+      "degreeInSign": 14.891321220526208
+    },
+    {
+      "type": "Midheaven",
+      "longitude": 280.5234459465327,
+      "sign": "Capricorn",
+      "degreeInSign": 10.523445946532775
+    },
+    {
+      "type": "Descendant",
+      "longitude": 194.8913212205262,
+      "sign": "Libra",
+      "degreeInSign": 14.891321220526152
+    },
+    {
+      "type": "ImumCoeli",
+      "longitude": 100.52344594653272,
+      "sign": "Cancer",
+      "degreeInSign": 10.523445946532718
+    }
+  ],
+  "aspects": [
+    {
+      "aspectType": "Opposition",
+      "planetA": "Jupiter",
+      "planetB": "Sun",
+      "exactAngle": 174.67112923884133,
+      "orb": 5.328870761158669,
+      "isApplying": true,
+      "nature": "Challenging"
+    },
+    {
+      "aspectType": "Conjunction",
+      "planetA": "Saturn",
+      "planetB": "Sun",
+      "exactAngle": 5.106095288062988,
+      "orb": 5.106095288062988,
+      "isApplying": true,
+      "nature": "Neutral"
+    },
+    {
+      "aspectType": "Conjunction",
+      "planetA": "Sun",
+      "planetB": "Uranus",
+      "exactAngle": 4.748975611377091,
+      "orb": 4.748975611377091,
+      "isApplying": false,
+      "nature": "Neutral"
+    },
+    {
+      "aspectType": "Conjunction",
+      "planetA": "Neptune",
+      "planetB": "Sun",
+      "exactAngle": 1.5101374775115346,
+      "orb": 1.5101374775115346,
+      "isApplying": true,
+      "nature": "Neutral"
+    },
+    {
+      "aspectType": "Trine",
+      "planetA": "Jupiter",
+      "planetB": "Moon",
+      "exactAngle": 125.84073391674815,
+      "orb": 5.84073391674815,
+      "isApplying": true,
+      "nature": "Harmonious"
+    },
+    {
+      "aspectType": "Sextile",
+      "planetA": "Mars",
+      "planetB": "Venus",
+      "exactAngle": 56.463325555797724,
+      "orb": 3.5366744442022764,
+      "isApplying": true,
+      "nature": "Harmonious"
+    },
+    {
+      "aspectType": "Opposition",
+      "planetA": "Jupiter",
+      "planetB": "Uranus",
+      "exactAngle": 179.42010485021842,
+      "orb": 0.5798951497815779,
+      "isApplying": true,
+      "nature": "Challenging"
+    },
+    {
+      "aspectType": "Conjunction",
+      "planetA": "Neptune",
+      "planetB": "Saturn",
+      "exactAngle": 3.595957810551454,
+      "orb": 3.595957810551454,
+      "isApplying": false,
+      "nature": "Neutral"
+    },
+    {
+      "aspectType": "Sextile",
+      "planetA": "Pluto",
+      "planetB": "Saturn",
+      "exactAngle": 58.537881162132635,
+      "orb": 1.462118837867365,
+      "isApplying": false,
+      "nature": "Harmonious"
+    }
+  ],
+  "patterns": [],
+  "interpretations": [],
+  "interpretationVersion": "1.0",
+  "warnings": [],
+  "calculatedAt": "2026-10-10T09:56:45.941Z",
+  "engineVersion": "chart-engine-v0.2.0+swisseph-wasm-0.1.0"
+}
