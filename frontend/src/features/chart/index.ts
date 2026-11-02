@@ -13,3 +13,5 @@ export { useChartsQuery } from "./hooks/useChartsQuery";
 export { isValidChartId } from "./api/isValidChartId";
 export { toChartViewModel, ChartViewModelError } from "./model/chartViewModel";
 export type { ChartViewModel } from "./model/chartViewModel";
+export { buildInterpretationModel } from "./model/interpretation";
+export type { InterpretationModel } from "./model/interpretation";

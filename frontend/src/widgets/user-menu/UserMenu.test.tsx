@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, afterEach, describe, expect, it } from "vitest";
@@ -10,6 +10,7 @@ import {
 } from "@features/auth/api/mocks/handlers";
 import { createQueryClient } from "@shared/api/queryClient";
 import { useAuthStore } from "@shared/stores/authStore";
+import { usePreferenceStore } from "@shared/stores/preferenceStore";
 import { server } from "@test/msw-server";
 
 import { UserMenu } from "./index";
@@ -91,5 +92,22 @@ describe("UserMenu - Tests", () => {
 
     // Check store state
     expect(useAuthStore.getState().status).toBe("unauthenticated");
+  });
+
+  it("Test 3: Theme toggle switch renders and toggles theme", async () => {
+    usePreferenceStore.setState({
+      preference: "light",
+      resolvedTheme: "light",
+    });
+    const user = userEvent.setup();
+    render(<UserMenu />, { wrapper });
+
+    const themeSwitch = screen.getByRole("switch");
+    expect(themeSwitch).toBeInTheDocument();
+    expect(themeSwitch).toHaveAttribute("aria-checked", "false");
+    await act(async () => {
+      await user.click(themeSwitch);
+    });
+    expect(themeSwitch).toHaveAttribute("aria-checked", "true");
   });
 });

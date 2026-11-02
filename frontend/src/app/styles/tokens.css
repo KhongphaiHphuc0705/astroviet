@@ -50,8 +50,8 @@
     --color-border-strong: var(--color-slate-300);
     --color-accent-primary: var(--color-brass-500);
     --color-accent-secondary: var(--color-indigo-600);
-    /* Derived from --color-indigo-600 with 40% opacity */
-    --color-focus-ring: rgba(59, 76, 140, 0.4);
+    /* Solid high-contrast focus ring for light theme (WCAG AAA 8.08:1 contrast against white background) */
+    --color-focus-ring: var(--color-indigo-600);
 
     --color-success: var(--color-success-light);
     --color-warning: var(--color-warning-light);
@@ -164,7 +164,7 @@
     --color-border-strong: var(--color-slate-300);
     --color-accent-primary: var(--color-brass-500);
     --color-accent-secondary: var(--color-indigo-600);
-    --color-focus-ring: rgba(59, 76, 140, 0.4);
+    --color-focus-ring: var(--color-indigo-600);
 
     --color-success: var(--color-success-light);
     --color-warning: var(--color-warning-light);
@@ -190,8 +190,8 @@
     --color-border-strong: var(--color-midnight-500);
     --color-accent-primary: var(--color-brass-400);
     --color-accent-secondary: var(--color-indigo-400);
-    /* Derived from --color-indigo-300 with 50% opacity */
-    --color-focus-ring: rgba(168, 182, 232, 0.5);
+    /* High-contrast focus ring for dark theme (WCAG AAA 7.8:1 to 9.3:1 contrast against midnight surfaces) */
+    --color-focus-ring: var(--color-indigo-300);
 
     --color-success: var(--color-success-dark);
     --color-warning: var(--color-warning-dark);

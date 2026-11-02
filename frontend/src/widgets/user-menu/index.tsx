@@ -4,6 +4,7 @@ import { useLogoutMutation } from "@features/auth/hooks/useLogoutMutation";
 import { useAuthStore } from "@shared/stores/authStore";
 import { Button } from "@shared/ui/Button";
 import { Stack } from "@shared/ui/Stack";
+import { ThemeToggle } from "@shared/ui/ThemeToggle";
 
 export function UserMenu() {
   const user = useAuthStore((state) => state.user);
@@ -18,6 +19,7 @@ export function UserMenu() {
 
   return (
     <Stack direction="horizontal" align="center" gap="3">
+      <ThemeToggle />
       <span className="text-body-sm text-muted">
         {user?.displayName ?? user?.email ?? ""}
       </span>

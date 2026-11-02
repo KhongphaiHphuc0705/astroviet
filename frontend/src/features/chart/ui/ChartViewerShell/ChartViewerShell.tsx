@@ -22,6 +22,7 @@ import type {
   ChartViewModel,
   PlanetKey,
 } from "../../model/chartViewModel";
+import type { InterpretationModel } from "../../model/interpretation";
 import {
   buildLiveMessage,
   computeEmphasis,
@@ -36,6 +37,7 @@ import { DEFAULT_ZOOM, zoomIn, zoomOut } from "../../model/zoom";
 import { AspectTable } from "../AspectTable";
 import { AspectLegend, ChartWheel, ChartZoomControls } from "../ChartWheel";
 import { HouseTable } from "../HouseTable";
+import { InterpretationPanel } from "../InterpretationPanel";
 import { PlanetTable } from "../PlanetTable";
 import { SelectionDetail } from "../SelectionDetail";
 
@@ -46,10 +48,15 @@ export const ASPECT_LINES_DEFAULT_QUERY = "(min-width: 768px)";
 
 export interface ChartViewerShellProps {
   vm: ChartViewModel;
+  interpretation?: InterpretationModel;
   className?: string;
 }
 
-export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
+export function ChartViewerShell({
+  vm,
+  interpretation,
+  className,
+}: ChartViewerShellProps) {
   const hintId = useId();
   const overviewHeadingId = useId();
   const wheelHeadingId = useId();
@@ -366,6 +373,7 @@ export function ChartViewerShell({ vm, className }: ChartViewerShellProps) {
           </div>
         </div>
       </div>
+      {interpretation && <InterpretationPanel vm={vm} model={interpretation} />}
     </div>
   );
 }
