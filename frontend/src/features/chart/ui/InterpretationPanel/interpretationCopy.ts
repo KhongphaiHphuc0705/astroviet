@@ -1,3 +1,5 @@
+import type { InterpretationGroupId } from "../../model/interpretation";
+
 export const INTERPRETATION_COPY = {
   ascendantTitle: "Cung Mọc",
   panelTitle: "Diễn giải",
@@ -33,7 +35,6 @@ export function formatCount(count: number): string {
 export function formatHouseLabel(houseNumber: number): string {
   return `Nhà ${houseNumber}`;
 }
-import type { InterpretationGroupId } from "../../model/interpretation";
 
 export function getInterpretationGroupHeadingId(
   id: InterpretationGroupId,

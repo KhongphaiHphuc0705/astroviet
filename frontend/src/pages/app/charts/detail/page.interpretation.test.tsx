@@ -78,4 +78,43 @@ describe("ChartDetailPage interpretation integration", () => {
     );
     expect(report).toHaveBeenCalledTimes(1);
   });
+
+  it("PG-05: does not render interpretation panel when chart API fails", async () => {
+    vi.spyOn(reportErrorModule, "reportError").mockImplementation(() => {});
+    server.use(
+      mockGetChart(() =>
+        HttpResponse.json(
+          { errorCode: "INTERNAL_SERVER_ERROR", status: 500 },
+          {
+            status: 500,
+            headers: { "Content-Type": "application/problem+json" },
+          },
+        ),
+      ),
+    );
+    renderPage();
+    expect(
+      await screen.findByRole("heading", {
+        name: "Không thể tải lá số",
+        level: 3,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("region", { name: "Diễn giải" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("PG-06: does not render interpretation panel while chart is loading", () => {
+    server.use(
+      mockGetChart(async () => {
+        return new Promise(() => {}); // never resolves
+      }),
+    );
+    renderPage();
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.getByText("Đang tải lá số…")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("region", { name: "Diễn giải" }),
+    ).not.toBeInTheDocument();
+  });
 });

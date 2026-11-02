@@ -9,17 +9,15 @@ export interface ThemeToggleProps {
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const resolvedTheme = usePreferenceStore((state) => state.resolvedTheme);
+  const preference = usePreferenceStore((state) => state.preference);
   const setPreference = usePreferenceStore((state) => state.setPreference);
-  const _setResolvedTheme = usePreferenceStore(
-    (state) => state._setResolvedTheme,
-  );
 
-  const isDark = resolvedTheme === "dark";
+  const currentTheme = preference === "system" ? resolvedTheme : preference;
+  const isDark = currentTheme === "dark";
 
   const handleToggle = () => {
     const nextTheme = isDark ? "light" : "dark";
     setPreference(nextTheme);
-    _setResolvedTheme(nextTheme);
   };
 
   return (
@@ -27,11 +25,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       type="button"
       role="switch"
       aria-checked={isDark}
-      aria-label={
-        isDark
-          ? "Giao diện tối, bấm để chuyển sang giao diện sáng"
-          : "Giao diện sáng, bấm để chuyển sang giao diện tối"
-      }
+      aria-label="Giao diện tối"
       title={
         isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"
       }
@@ -45,7 +39,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         size={14}
         aria-hidden="true"
         className={cn(
-          "text-slate-400 transition-opacity",
+          "text-muted transition-opacity",
           isDark ? "opacity-40" : "opacity-0",
         )}
       />
@@ -53,7 +47,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         size={14}
         aria-hidden="true"
         className={cn(
-          "text-slate-400 transition-opacity",
+          "text-muted transition-opacity",
           isDark ? "opacity-0" : "opacity-40",
         )}
       />

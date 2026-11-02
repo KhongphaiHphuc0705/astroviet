@@ -1,5 +1,5 @@
 // OV-01 to OV-A: supplied count, navigation links, and approved scope copy.
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
@@ -97,6 +97,36 @@ it("OV-06: should show the house note only when house data is unavailable", () =
     />,
   );
   expect(screen.queryByText(/Dữ liệu Nhà/)).not.toBeInTheDocument();
+});
+
+it("OV-07: should ignore clicks with modifier keys or non-primary mouse buttons", () => {
+  const onClick = vi.fn();
+  render(
+    <InterpretationOverview
+      availableCount={21}
+      groups={groups}
+      houseDataAvailable
+      onGroupLinkClick={onClick}
+    />,
+  );
+  const link = screen.getByRole("link", { name: "Các hành tinh (1)" });
+
+  // Secondary/middle mouse button
+  fireEvent.click(link, { button: 1 });
+  expect(onClick).not.toHaveBeenCalled();
+
+  // Modifier keys
+  fireEvent.click(link, { ctrlKey: true });
+  expect(onClick).not.toHaveBeenCalled();
+
+  fireEvent.click(link, { metaKey: true });
+  expect(onClick).not.toHaveBeenCalled();
+
+  fireEvent.click(link, { shiftKey: true });
+  expect(onClick).not.toHaveBeenCalled();
+
+  fireEvent.click(link, { altKey: true });
+  expect(onClick).not.toHaveBeenCalled();
 });
 
 it("OV-A: should pass axe", async () => {

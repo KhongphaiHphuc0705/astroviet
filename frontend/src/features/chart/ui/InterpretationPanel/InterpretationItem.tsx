@@ -65,7 +65,7 @@ export function InterpretationItem({
           aria-controls={panelId}
           aria-label={accessibleName}
           onClick={() => onToggle(id)}
-          className="flex w-full items-center gap-3 text-left font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          className="flex w-full items-center gap-3 rounded-sm text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           {glyph && <span aria-hidden="true">{glyph}</span>}
           <span>

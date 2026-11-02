@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { axe } from "vitest-axe";
 
+import { ThemeProvider } from "@app/providers/ThemeProvider";
 import { usePreferenceStore } from "@shared/stores/preferenceStore";
 
 import { ThemeToggle } from "./index";
@@ -16,28 +17,30 @@ describe("ThemeToggle", () => {
   });
 
   it("renders with role switch and initial light state", () => {
-    render(<ThemeToggle />);
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+      </ThemeProvider>,
+    );
     const toggle = screen.getByRole("switch");
     expect(toggle).toBeInTheDocument();
     expect(toggle).toHaveAttribute("aria-checked", "false");
-    expect(toggle).toHaveAttribute(
-      "aria-label",
-      "Giao diện sáng, bấm để chuyển sang giao diện tối",
-    );
+    expect(toggle).toHaveAttribute("aria-label", "Giao diện tối");
   });
 
   it("toggles to dark theme on click", async () => {
     const user = userEvent.setup();
-    render(<ThemeToggle />);
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+      </ThemeProvider>,
+    );
 
     const toggle = screen.getByRole("switch");
     await user.click(toggle);
 
     expect(toggle).toHaveAttribute("aria-checked", "true");
-    expect(toggle).toHaveAttribute(
-      "aria-label",
-      "Giao diện tối, bấm để chuyển sang giao diện sáng",
-    );
+    expect(toggle).toHaveAttribute("aria-label", "Giao diện tối");
     expect(usePreferenceStore.getState().preference).toBe("dark");
     expect(usePreferenceStore.getState().resolvedTheme).toBe("dark");
   });
@@ -49,7 +52,11 @@ describe("ThemeToggle", () => {
     });
 
     const user = userEvent.setup();
-    render(<ThemeToggle />);
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+      </ThemeProvider>,
+    );
 
     const toggle = screen.getByRole("switch");
     expect(toggle).toHaveAttribute("aria-checked", "true");
@@ -62,7 +69,11 @@ describe("ThemeToggle", () => {
   });
 
   it("passes accessibility checks", async () => {
-    const { container } = render(<ThemeToggle />);
+    const { container } = render(
+      <ThemeProvider>
+        <ThemeToggle />
+      </ThemeProvider>,
+    );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
