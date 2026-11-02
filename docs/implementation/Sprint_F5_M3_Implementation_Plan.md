@@ -14,14 +14,14 @@
 
 ## 1. Executive Summary
 
-**M3 giao gì [Proposal].** Một khu vực "Diễn giải" **tĩnh** trong Chart Viewer, gồm ba component trình bày thuần (`InterpretationPanel`, `InterpretationOverview`, `InterpretationItem`) nhận `InterpretationModel` đã dựng ở M2 cùng nhãn hiển thị từ `ChartViewModel`, hiển thị các trạng thái trong **F5 Implementation Plan §7.6** và đáp ứng AC-01…03, 11, 12, 17…23 — **không** động tới selection.
+**M3 giao gì [Proposal].** Một khu vực "Diễn giải" **tĩnh** trong Chart Viewer, gồm ba component trình bày thuần (`InterpretationPanel`, `InterpretationOverview`, `InterpretationItem`) nhận `InterpretationModel` đã dựng ở M2 cùng nhãn hiển thị từ `ChartViewModel`, hiển thị các trạng thái trong **F5 Implementation Plan §7.6** và đáp ứng AC-01…03, 11, 12, 17…23 — **không** động tới selection. C-08 disclaimer đã được Owner duyệt và được hiển thị một lần trong Overview.
 
 **Đường tích hợp nhỏ nhất [Verified từ mã].**
 `useChartQuery` → `page.tsx` (memo `mapping` đã có `toChartViewModel`) → thêm `buildInterpretationModel(query.data, vm)` vào cùng memo → prop **tuỳ chọn** `interpretation` của `ChartViewerShell` → `<InterpretationPanel>` render **sau** lưới hai cột F4 (toàn chiều rộng, quyết định P-01). Prop tuỳ chọn khiến `ChartViewerShell.test.tsx` (F4) không bị ảnh hưởng.
 
 **Bằng chứng rủi ro hồi quy F4 [Verified bằng thử nghiệm cô lập].** Trên bản sao `/tmp` tôi nối một panel *giả* (h2 + h3 + nút `aria-expanded` có tên hành tinh, đoạn văn, `role="status"`) vào Shell và `page.tsx`: **9 file / 127 test** (Shell, trang chi tiết, hai integration flow, router) vẫn **xanh**. Đây là bằng chứng về *hình dạng DOM an toàn*, không thay cho việc chạy lại bộ F4 sau triển khai thật.
 
-**Blocker.** Không có blocker kỹ thuật cho việc duyệt plan. Review M3.1 đã chốt C-01…C-07 và C-09…C-13; chỉ C-08 disclaimer còn pending Owner vì PRD vẫn Draft, và sẽ không được đưa vào giao diện trước khi duyệt. Phát hiện cần lưu ý: **§7.6 không định nghĩa trạng thái "tất cả nội dung thiếu do lỗi dữ liệu"** mà M2 có thể sinh ra (S-08, Mục 6, O-3).
+**Blocker.** Không có blocker kỹ thuật cho việc duyệt plan. Review M3.1 đã chốt C-01…C-13; sau đó Owner duyệt riêng C-08 nguyên văn để dùng trong Overview. Phát hiện cần lưu ý: **§7.6 không định nghĩa trạng thái "tất cả nội dung thiếu do lỗi dữ liệu"** mà M2 có thể sinh ra (S-08, Mục 6, O-3).
 
 **Phạm vi file [Proposal].** Tạo 5 file mã trong `ui/InterpretationPanel/` + 6 file test; sửa 3 file (`ChartViewerShell.tsx`, `page.tsx`, `features/chart/index.ts`); không đụng `selection.ts`, `chartViewModel.ts`, các bảng F4, Backend, cấu hình, dependency, version.
 
@@ -46,7 +46,7 @@
 ### 2.1 "Section 7.6" và các AC — nguồn thẩm quyền [Verified]
 - **Section 7.6 = `docs/implementation/Sprint_F5_Implementation_Plan.md` §7.6 "Ma trận trạng thái"** (7 hàng). *Không* phải `Frontend_UI_Specification.md` §7 (đó là "Responsive Breakpoints"; §12.6 "Interpretation Card" của spec mâu thuẫn hợp đồng thật và sẽ được đính chính ở M8 — F5 plan A-2).
 - AC-01…03, 11, 12, 17…23: **F5 plan §17** (đã trích nguyên văn ở Mục 5). AC-13…16 (đồng bộ chọn) thuộc M4, **không** nằm trong M3.
-- Copy chú thích Nhà/disclaimer: F5 plan §7.6 (đoạn "Copy đề xuất, **chưa được ghi nhận là Owner duyệt**"); PRD còn Draft.
+- Copy chú thích Nhà/disclaimer: F5 plan §7.6; C-08 được Owner duyệt riêng nguyên văn ngày 2026-11-02 dù PRD nguồn vẫn Draft.
 - Quyết định đã chốt áp dụng: D-F5-01…09, P-01…P-06 (F5 plan §15), J-1…J-15 của M2.
 
 ### 2.2 Mâu thuẫn / khoảng trống phát hiện khi audit
@@ -228,7 +228,7 @@ export interface InterpretationItemProps {
 - AC-23 yêu cầu kiểm tra được "không hardcode văn bản trong component". Gom mọi chuỗi mới vào **một file** cho phép gate tự động: 3 file component phải **chỉ ASCII** (AR-03), còn `interpretationCopy.ts` do owner rà từng dòng. Khi sau này triển khai i18n, đây là điểm duy nhất cần chuyển sang `locales/vi/interpretation.json`.
 - Đây là điều chỉnh nhỏ so với quy ước JSX-inline của F4; không tạo abstraction mới (chỉ một hằng số đối tượng + hai hàm định dạng).
 
-### 8.3 Bảng copy (đã review M3.1; C-08 pending Owner)
+### 8.3 Bảng copy (đã review M3.1; C-08 được Owner duyệt)
 
 | ID | Vị trí | Nội dung đề xuất | Nguồn |
 |---|---|---|---|
@@ -239,7 +239,7 @@ export interface InterpretationItemProps {
 | C-05 | Nhãn khối | "Theo cung" · "Theo nhà" | F5 plan §7.2/7.3 |
 | C-06 | Chú thích Nhà (S-05) | "Dữ liệu Nhà và một số góc trong lá số này chưa khả dụng. Bạn vẫn có thể xem các diễn giải theo cung." | F5 plan §7.6 (đề xuất, chưa Owner duyệt) |
 | C-07 | Phạm vi (AC-03) | "Diễn giải góc chiếu và nhận định tổng hợp toàn lá số hiện chưa có nội dung." | **mới** — cần owner |
-| C-08 | Disclaimer | "Chiêm tinh là một góc nhìn để bạn khám phá và suy ngẫm về bản thân, không phải kết luận tuyệt đối về con người hay tương lai. Hãy đón nhận những nội dung phù hợp với trải nghiệm của chính bạn." | F5 plan §7.6; PRD Draft ⇒ cần duyệt sản phẩm |
+| C-08 | Disclaimer | "Chiêm tinh là một góc nhìn để bạn khám phá và suy ngẫm về bản thân, không phải kết luận tuyệt đối về con người hay tương lai. Hãy đón nhận những nội dung phù hợp với trải nghiệm của chính bạn." | F5 plan §7.6; Owner duyệt nguyên văn trong yêu cầu ngày 2026-11-02 |
 | C-09 | S-03 tiêu đề `Alert` | "Nội dung diễn giải chưa được phát hành" | §7.6 |
 | C-10 | Part thiếu (S-04) | "Chưa có nội dung cho mục này" | §7.6 |
 | C-11 | Cung Mọc khi vắng góc | "Cung Mọc chưa khả dụng cho lá số này." | F5 plan §7.3 |
@@ -347,9 +347,9 @@ Tuần tự (M3 độc lập kiểm thử được; không gói việc M4).
 | ID | Mục tiêu | Files | Việc chính | Tiên quyết | Xác minh | Bằng chứng | Điều kiện thoát |
 |---|---|---|---|---|---|---|---|
 | **M3.0** | Pre-flight | — | `git pull --ff-only`; cây sạch; ghi SHA; `vitest list` (kỳ vọng 132/1087), `playwright --list` (38); chạy `ChartViewerShell` + page + 2 integration test (kỳ vọng xanh: baseline F4 trước khi sửa) | owner duyệt plan | lệnh | log | baseline có số thật |
-| **M3.1** | Chốt copy & quyết định | `interpretationCopy.ts` (nháp), plan | Owner duyệt C-01…C-13, O-2…O-5, S-08 | M3.0 | review | ghi chú owner | copy được duyệt (hoặc ghi rõ phần chưa duyệt = "pending", **không** merge disclaimer chưa duyệt) |
+| **M3.1** | Chốt copy & quyết định | `interpretationCopy.ts` (nháp), plan | Owner duyệt C-01…C-13, O-2…O-5, S-08 | M3.0 | review | ghi chú owner | C-01…C-13 được duyệt; C-08 hiển thị theo quyết định Owner |
 | **M3.2** | Item | `InterpretationItem.tsx`, test | button/`aria-expanded`/`hidden`, ánh xạ part (7.3) | M3.1 | IT-01…IT-10, IT-A | output vitest | IT xanh; không import ngoài allowlist |
-| **M3.3** | Overview | `InterpretationOverview.tsx`, test | count, nav, ghi chú, scope, disclaimer | M3.1 | OV-01…OV-06, OV-A | output | OV xanh |
+| **M3.3** | Overview | `InterpretationOverview.tsx`, test | count, nav, ghi chú, scope và C-08 disclaimer | M3.1 | OV-01…OV-06, OV-A | output | OV xanh |
 | **M3.4** | Panel | `InterpretationPanel.tsx`, `index.ts`, test | state mở/đóng, focus link nhóm, S-02…S-05/S-08 | M3.2, M3.3 | PN-01…PN-12, PN-A | output | PN xanh |
 | **M3.5** | Tích hợp | `ChartViewerShell.tsx`, `page.tsx`, `features/chart/index.ts`, 2 test file mới | prop + render + effect báo lỗi | M3.4 | SH-01…SH-05, PG-01…PG-06 + **F4 suite nguyên vẹn** | output | tất cả xanh; test F4 không bị sửa (`git diff` trên các file test F4 rỗng) |
 | **M3.6** | Kiểm tĩnh | `…purity.test.ts` | AR-01…AR-05; grep an toàn | M3.5 | AR | output | xanh |
@@ -386,7 +386,7 @@ Quy ước [Verified: Coding Standards §13; UI Spec §23.3]: Vitest + RTL + MSW
 | OV-01 | Số lượng bằng `availableCount` | 21 (từ `chartFull`) và 10 (từ `chartNoHouses`) hiển thị bằng đúng số của model, không tính lại | AC-01 |
 | OV-02 | Định dạng số qua copy | `formatCount(n)` → "Có n diễn giải cho lá số này" | AC-01 |
 | OV-03 | Link nhóm | mỗi link có `href="#<id>"`; bấm → `preventDefault` + `onGroupLinkClick(groupId)`; Enter kích hoạt | AC-02 |
-| OV-04 | Phạm vi & disclaimer | có C-07 và C-08 **đúng một lần**; không có đoạn nào ngoài danh sách đã định (không nội dung tổng hợp) | AC-03 |
+| OV-04 | Phạm vi và trạng thái disclaimer | C-07 và C-08 đã duyệt xuất hiện đúng một lần; không có nội dung tổng hợp | AC-03; O-1 |
 | OV-05 | Không nhóm rỗng | `groups=[]` → không `<nav>`; `availableCount` vẫn hiển thị | AC-11 |
 | OV-06 | Chú thích Nhà | `houseDataAvailable=false` → C-06 đúng một lần, **không** `role="status"`; `true` → không có | AC-17 |
 | OV-A | axe | không vi phạm | §23.3 |
@@ -535,11 +535,11 @@ Không nới gate, không `skip/only`, không tắt rule lint. Gate không chạ
 
 ## 17. Risks and Owner Decisions
 
-### 17.1 Quyết định cần owner (mặc định đề xuất; **không** mục nào chặn việc duyệt plan; O-1 chặn *merge* copy chưa duyệt)
+### 17.1 Quyết định cần owner (mặc định đề xuất; **không** mục nào chặn việc duyệt plan; O-1 đã được xử lý)
 
 | ID | Câu hỏi | Lựa chọn | Đề xuất | Chặn? |
 |---|---|---|---|---|
-| **O-1** | Duyệt copy tĩnh C-01…C-13, đặc biệt **C-07** (mới) và **C-08 disclaimer** (PRD còn Draft) | duyệt nguyên văn / sửa / hoãn disclaimer | duyệt ở M3.1; nếu disclaimer chưa duyệt, **không** đưa vào bản merge (ghi "pending") | Chặn M3.2+ cho phần copy tương ứng |
+| **O-1** | Duyệt copy tĩnh C-01…C-13, đặc biệt **C-07** (mới) và **C-08 disclaimer** (PRD còn Draft) | duyệt nguyên văn / sửa / hoãn disclaimer | C-08 được duyệt nguyên văn riêng ngày 2026-11-02; render một lần trong Overview | Không |
 | **O-2** | Vị trí chuỗi tĩnh | (a) `interpretationCopy.ts`; (b) inline JSX như F4 | (a) — cho phép gate AR-03 và rà soát copy tập trung; khi có i18n thật sẽ chuyển một chỗ | Không |
 | **O-3** | Thêm trạng thái **S-08** (lỗi dữ liệu → "không thể hiển thị", khác "chưa phát hành") | (a) thêm; (b) hiển thị 11 mục C-10; (c) coi như S-03 | (a) — tránh nói sai "chưa phát hành" (P-05) | Không |
 | **O-4** | Ngữ nghĩa "`reportError` đúng một lần" (AC-20) | (a) một lần mỗi lần tải dữ liệu, gộp theo `code`; (b) mỗi issue một lần | (a) — ít nhiễu; AC-20 vẫn đúng với một mục thiếu | Không |
@@ -557,7 +557,7 @@ Theo yêu cầu review plan và triển khai M3.0–M3.1, các mặc định O-1
 
 | ID | Kết quả | Điều kiện / ghi chú |
 |---|---|---|
-| **O-1** | Chấp nhận C-01…C-07 và C-09…C-13 theo nguyên văn đề xuất; **C-08 disclaimer để pending**, không đưa vào giao diện cho tới khi Owner duyệt riêng | C-06 giữ câu trung tính, không suy ra giờ sinh hay nguyên nhân thiếu Nhà. `interpretationCopy.ts` hiện chỉ chứa các câu đã chọn; disclaimer được lược khỏi mã. |
+| **O-1** | Chấp nhận C-01…C-13 theo nguyên văn đề xuất; C-08 disclaimer được Owner duyệt riêng theo nguyên văn ngày 2026-11-02 và hiển thị một lần trong Overview | C-06 giữ câu trung tính, không suy ra giờ sinh hay nguyên nhân thiếu Nhà. C-08 lưu trong `interpretationCopy.ts`; không đổi copy F4 hoặc Backend. |
 | **O-2** | Chọn (a): tập trung copy trong `interpretationCopy.ts` | Thực tế chưa có i18n trong Frontend; đáp ứng AC-23 và tránh chuỗi tiếng Việt rải trong component. |
 | **O-3** | Chọn (a): bổ sung S-08 cho lỗi dữ liệu, phân biệt với nội dung chưa phát hành | Tránh trình bày lỗi contract/dữ liệu như trạng thái xuất bản bình thường. |
 | **O-4** | Chọn (a): `reportError` một lần mỗi lần tải dữ liệu, gộp issue theo `code` | Giảm log trùng; test phải bảo đảm không lặp do re-render. |
@@ -568,7 +568,7 @@ Theo yêu cầu review plan và triển khai M3.0–M3.1, các mặc định O-1
 
 **M3.0 baseline và xác minh sau M3.1:** HEAD `c6b422e` khớp `origin/dev`; working tree ban đầu chỉ có plan M3 chưa tracked. Playwright liệt kê 38 E2E. Bốn suite hồi quy F4 trọng yếu (ChartViewerShell, chart detail page, chart-flow integration, saved-charts-flow integration) đạt 91/91 test; sau khi chuẩn bị M3.1, toàn bộ Frontend suite đạt **132 file / 1087 test**. Các lần chạy thành công dùng Vitest `--pool=threads --maxWorkers=1`. Vitest mặc định gặp `EPERM` khi worker đổi tên cache tạm trên Windows; chạy đủ với một worker thì pass. `vitest list` không hoàn tất trong môi trường này. Không chạy `git pull`: branch `dev` đã ở cùng SHA với `origin/dev` tại pre-flight.
 
-**M3.1 artifact:** tạo `frontend/src/features/chart/ui/InterpretationPanel/interpretationCopy.ts` làm bản copy đã chọn, chưa được component tiêu thụ ở milestone này. C-08 chưa được duyệt nên không có trong module.
+**M3.1 artifact:** tạo `frontend/src/features/chart/ui/InterpretationPanel/interpretationCopy.ts` làm bản copy đã chọn, chưa được component tiêu thụ ở milestone này. Ban đầu C-08 pending; Owner đã duyệt nguyên văn riêng ngày 2026-11-02 và M3.3 hiển thị disclaimer một lần trong Overview.
 
 ### 17.2 Rủi ro
 
@@ -577,7 +577,7 @@ Theo yêu cầu review plan và triển khai M3.0–M3.1, các mặc định O-1
 | R-01 | Hồi quy test/E2E F4 do text/role trùng | Thấp (đã thử: 127 + 46 test xanh) | Cao | R-1, CI E2E | ràng buộc copy + AR-05; prop tuỳ chọn; không sửa test F4 | Có nếu xảy ra |
 | R-02 | Strict-mode Playwright / khớp chuỗi con với tiêu đề mới | Thấp | Trung bình | CI `test:e2e` | AR-05 (tiêu đề không chứa chuỗi cấm) | Không |
 | R-03 | Nhầm "chưa phát hành" với lỗi dữ liệu | Trung bình (M2 từng mắc, đã fix) | Trung bình | PN-06/06b | S-03 ≠ S-08; test tách | Không |
-| R-04 | Copy/disclaimer chưa được duyệt | Cao | Trung bình | O-1 | cổng M3.1; "pending" không merge | Chặn phần copy |
+| R-04 | Copy/disclaimer chưa được duyệt | Cao | Trung bình | O-1 | C-08 đã được Owner duyệt nguyên văn; giữ nội dung trong module copy | Đã xử lý |
 | R-05 | Ảnh không tái lập được (không script) | Trung bình | Thấp | review Matrix | JSON biến thể + quy trình ghi rõ; owner thực hiện | Không |
 | R-06 | Phụ thuộc chéo F4 (`HouseDataNotice` lặp ý, suy giờ sinh) | Chắc chắn | Thấp | review | O-8 Known Gap | Không |
 | R-07 | Nhầm phạm vi sang M4 (thêm "Xem trên biểu đồ", highlight) | Trung bình | Trung bình | review diff, AR-02, PN-11 | Mục 4 + test không-chọn | Có nếu xảy ra |
@@ -608,7 +608,7 @@ Theo yêu cầu review plan và triển khai M3.0–M3.1, các mặc định O-1
 ## 19. Definition of Done
 
 M3 đóng khi **tất cả** đúng:
-- ☐ Owner đã duyệt plan và copy (O-1; disclaimer duyệt hoặc ghi pending không merge).
+- ☐ Owner đã duyệt plan và copy (O-1; C-08 được duyệt và hiển thị trong Overview).
 - ☐ 3 component + copy + `index.ts` đúng Mục 7–8; chỉ props, không state chọn, không đọc `selection`, không API, không HTML thô.
 - ☐ Tích hợp qua `page.tsx`/Shell/barrel đúng Mục 9; luồng loading/lỗi F4 không đổi.
 - ☐ S-01…S-07 (+ S-08 nếu duyệt) có hành vi, test và ảnh thật tương ứng.
@@ -637,4 +637,4 @@ M3 đóng khi **tất cả** đúng:
 **Quan sát trang CI:** run #304 success trên `d4961a6` (đăng xuất, không đọc log từng bước).
 **Không chạy:** `npm run build`, toàn bộ `vitest run`, E2E, lint toàn dự án sau fix; mọi test M3 (chưa tồn tại); không chụp ảnh nào (không có trình duyệt/Backend phù hợp trong sandbox).
 **Tác dụng phụ:** `/tmp/spike` (ngoài repo), `node_modules` và `frontend/.env` (git bỏ qua); plan M2 stale trong clone của tôi đã xoá.
-**[Open]/chưa xác minh:** Owner duyệt hoặc hoãn C-08 disclaimer; hành vi thật của focus/hash trên trình duyệt (jsdom không mô phỏng); QA thủ công responsive/accessibility ở M6. Số liệu Vitest đã xác minh sau M3.1 là 132 file / 1087 test; `vitest list` không hoàn tất trong môi trường Windows hiện tại.
+**[Open]/chưa xác minh:** hành vi thật của focus/hash trên trình duyệt (jsdom không mô phỏng); QA thủ công responsive/accessibility ở M6. Số liệu Vitest đã xác minh sau M3.1 là 132 file / 1087 test; `vitest list` không hoàn tất trong môi trường Windows hiện tại.
