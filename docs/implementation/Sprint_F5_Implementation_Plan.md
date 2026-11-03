@@ -133,7 +133,7 @@ Phân loại: **MH** Must Have · **SH** Should Have · **DEF** Deferred · **DE
 | F5-07 | Aspect | — | Có dữ liệu góc chiếu (F4), **không** có diễn giải | Không nhóm/nav; một dòng ghi chú ở Overview; không placeholder trong điều hướng | DEP (BE/content) | AC-10 | DEP · DEF |
 | F5-08 | Categorized sections | Tìm nhanh | — | Nhóm UI: Tổng quan · Cốt lõi · Các hành tinh; **không** nhóm rỗng | M3 | AC-11 | MH |
 | F5-09 | Expandable | Đọc có kiểm soát | Chưa có primitive | `InterpretationItem` = nút `aria-expanded` + vùng nội dung (không dependency) | M3 | AC-12, AC-24 | MH |
-| F5-10 | Chart↔Interpretation navigation | Giữ ngữ cảnh | Selection có; chưa nối | Selection → mục nổi bật + mở (không cướp focus); liên kết "Đọc diễn giải" và "Về biểu đồ" | M4 | AC-13…16 | MH |
+| F5-10 | Chart↔Interpretation navigation | Giữ ngữ cảnh | Selection có; chưa nối | Selection → mục nổi bật + mở (không cướp focus); nút "Đọc diễn giải" và "Xem trên biểu đồ" | M4 | AC-13…16 | MH |
 | F5-11 | UI states | Trung thực | HouseDataNotice có | Loading/empty/partial/unavailable/error (Mục 7.6) | M5 | AC-17…22 | MH |
 | F5-12 | Rendering/ngôn ngữ | An toàn | Text thuần `vi` | Render text node trong `<p>`; không HTML/markdown; entry `language ≠ "vi"` bị loại + ghi nhận | M2–M3 | AC-23 | MH |
 | NF-1 | Responsive | — | F4 có 3 chế độ | Khu vực đọc theo luồng dọc; đo lại ngưỡng 2 cột | M6 | AC-25 | MH |
@@ -231,7 +231,7 @@ Mọi viewport: luồng dọc một cột (không tab). Dưới `md`: Overview c
 
 State cục bộ mới (chỉ UI, trong `InterpretationPanel`): `expandedKeys: Set<ItemId>` do người dùng mở/đóng. `ItemId` là định danh UI ổn định (`planet:Sun`, `angle:Ascendant`), **không** phải `subjectKey`.
 
-**Hiển thị mở** = `userExpanded ∪ defaultExpanded(Cốt lõi) ∪ {mục của selection}`. Chọn khác ⇒ mục cũ không bị ép mở nữa nhưng nếu người dùng đã mở thì giữ; "Bỏ chọn" không đóng mục nào. Selection không được lưu qua route (như F4: reset khi đổi chart, `key={chartId}`).
+**Mục mở mặc định:** các mục Cốt lõi. Khi `selectedItemId` chuyển sang một mục khác (khác giá trị trước đó), thêm mục đó vào tập mở đúng một lần. Người dùng vẫn có thể thu gọn hoặc mở lại mục đang chọn; lần render tiếp theo không ép mục đã thu gọn trở lại. Chọn mục khác rồi quay lại sẽ mở mục vừa được chọn; "Bỏ chọn" không tự đóng mục nào. Selection không được lưu qua route (như F4: reset khi đổi chart, `key={chartId}`).
 
 Không cần reducer mới cho F5 (Escape/clear đã có).
 
