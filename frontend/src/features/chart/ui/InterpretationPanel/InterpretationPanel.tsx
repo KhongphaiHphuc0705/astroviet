@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 
 import { Alert } from "@shared/ui/Alert";
 import { Card } from "@shared/ui/Card";
 
-import type { ChartViewModel } from "../../model/chartViewModel";
-import type {
-  InterpretationGroupId,
-  InterpretationModel,
-  InterpretationItem as ModelItem,
+import type { ChartViewModel, PlanetKey } from "../../model/chartViewModel";
+import {
+  getInterpretationItemId,
+  type InterpretationGroupId,
+  type InterpretationModel,
+  type InterpretationItem as ModelItem,
 } from "../../model/interpretation";
 
 import {
@@ -18,9 +19,15 @@ import {
 import { InterpretationItem } from "./InterpretationItem";
 import { InterpretationOverview } from "./InterpretationOverview";
 
+export interface InterpretationPanelHandle {
+  revealItem(planetKey: string): boolean;
+}
+
 export interface InterpretationPanelProps {
   vm: ChartViewModel;
   model: InterpretationModel;
+  selectedPlanetKey?: PlanetKey | null;
+  onViewOnChart?: (planetKey: PlanetKey) => void;
 }
 
 function getItemDisplay(item: ModelItem, vm: ChartViewModel) {
@@ -46,7 +53,13 @@ function getItemDisplay(item: ModelItem, vm: ChartViewModel) {
   };
 }
 
-export function InterpretationPanel({ vm, model }: InterpretationPanelProps) {
+export const InterpretationPanel = forwardRef<
+  InterpretationPanelHandle,
+  InterpretationPanelProps
+>(function InterpretationPanel(
+  { vm, model, selectedPlanetKey, onViewOnChart },
+  ref,
+) {
   const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(
     () =>
       new Set(model.groups.find((group) => group.id === "core")?.itemIds ?? []),
@@ -54,6 +67,34 @@ export function InterpretationPanel({ vm, model }: InterpretationPanelProps) {
   const headings = useRef<
     Partial<Record<InterpretationGroupId, HTMLHeadingElement | null>>
   >({});
+  const itemButtons = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const selectedItemId = selectedPlanetKey
+    ? getInterpretationItemId(selectedPlanetKey)
+    : null;
+  const [syncedId, setSyncedId] = useState<string | null>(null);
+  if (selectedItemId !== syncedId) {
+    setSyncedId(selectedItemId);
+    if (selectedItemId && model.itemsById[selectedItemId]) {
+      setExpandedIds((current) => new Set(current).add(selectedItemId));
+    }
+  }
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      revealItem(planetKey: string): boolean {
+        const id = getInterpretationItemId(planetKey as PlanetKey);
+        if (!id || !model.itemsById[id]) return false;
+        const button = itemButtons.current[id];
+        if (!button || !button.isConnected) return false;
+        setExpandedIds((current) => new Set(current).add(id));
+        button.focus();
+        return document.activeElement === button;
+      },
+    }),
+    [model.itemsById],
+  );
 
   function toggleItem(id: string) {
     setExpandedIds((current) => {
@@ -127,7 +168,16 @@ export function InterpretationPanel({ vm, model }: InterpretationPanelProps) {
                           bySign={item.bySign}
                           byHouse={item.byHouse}
                           expanded={expandedIds.has(item.id)}
+                          selected={item.id === selectedItemId}
                           onToggle={toggleItem}
+                          onViewOnChart={
+                            item.kind === "planet" && onViewOnChart
+                              ? () => onViewOnChart(item.subject)
+                              : undefined
+                          }
+                          buttonRef={(node) => {
+                            itemButtons.current[item.id] = node;
+                          }}
                         />
                       </li>
                     );
@@ -140,4 +190,4 @@ export function InterpretationPanel({ vm, model }: InterpretationPanelProps) {
       )}
     </Card>
   );
-}
+});

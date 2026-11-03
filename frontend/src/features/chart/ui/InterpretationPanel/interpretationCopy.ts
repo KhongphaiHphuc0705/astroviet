@@ -22,7 +22,13 @@ export const INTERPRETATION_COPY = {
   itemMissing: "Chưa có nội dung cho mục này",
   ascendantUnavailable: "Cung Mọc chưa khả dụng cho lá số này.",
   unavailable: "Hiện chưa thể hiển thị diễn giải cho lá số này.",
+  selectedBadge: "Đang chọn",
+  viewOnChart: "Xem trên biểu đồ",
 } as const;
+
+export function formatViewOnChartLabel(title: string): string {
+  return `Xem trên biểu đồ: ${title}`;
+}
 
 export function formatItemLabel(title: string, detail: string): string {
   return detail ? `${title} \u00b7 ${detail}` : title;

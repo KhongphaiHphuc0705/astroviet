@@ -1,9 +1,15 @@
 import { ChevronDown } from "lucide-react";
 import { useId } from "react";
 
+import { cn } from "@shared/lib/cn";
+
 import type { InterpretationPart } from "../../model/interpretation";
 
-import { formatItemLabel, INTERPRETATION_COPY } from "./interpretationCopy";
+import {
+  formatItemLabel,
+  formatViewOnChartLabel,
+  INTERPRETATION_COPY,
+} from "./interpretationCopy";
 
 export interface InterpretationItemProps {
   id: string;
@@ -14,7 +20,10 @@ export interface InterpretationItemProps {
   bySign: InterpretationPart;
   byHouse: InterpretationPart | null;
   expanded: boolean;
+  selected?: boolean;
   onToggle: (id: string) => void;
+  onViewOnChart?: (id: string) => void;
+  buttonRef?: (node: HTMLButtonElement | null) => void;
 }
 
 function getPartText(part: InterpretationPart): string {
@@ -51,21 +60,32 @@ export function InterpretationItem({
   bySign,
   byHouse,
   expanded,
+  selected = false,
   onToggle,
+  onViewOnChart,
+  buttonRef,
 }: InterpretationItemProps) {
   const panelId = useId();
   const accessibleName = formatItemLabel(title, signLabel ?? "");
 
   return (
-    <article className="border-b border-subtle py-3 last:border-b-0">
-      <h4>
+    <article
+      className={cn(
+        "border-b border-subtle py-3 transition-colors last:border-b-0",
+        selected &&
+          "bg-surface-raised/40 ring-accent-primary/60 rounded-md px-2 ring-1",
+      )}
+    >
+      <h4 className="flex items-center gap-2">
         <button
+          ref={buttonRef}
           type="button"
           aria-expanded={expanded}
           aria-controls={panelId}
           aria-label={accessibleName}
+          aria-current={selected ? "true" : undefined}
           onClick={() => onToggle(id)}
-          className="flex w-full items-center gap-3 rounded-sm text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          className="flex flex-1 items-center gap-3 rounded-sm text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           {glyph && <span aria-hidden="true">{glyph}</span>}
           <span>
@@ -79,6 +99,11 @@ export function InterpretationItem({
             className={`ml-auto h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
           />
         </button>
+        {selected && (
+          <span className="py-0.5 shrink-0 rounded-full border border-subtle bg-surface-raised px-2 text-body-sm font-medium text-accent-primary">
+            {INTERPRETATION_COPY.selectedBadge}
+          </span>
+        )}
       </h4>
       <div id={panelId} hidden={!expanded}>
         <dl className="mt-3 grid gap-3 text-body-sm">
@@ -101,6 +126,18 @@ export function InterpretationItem({
               />
             )}
         </dl>
+        {onViewOnChart && (
+          <div className="mt-3 flex justify-end">
+            <button
+              type="button"
+              onClick={() => onViewOnChart(id)}
+              aria-label={formatViewOnChartLabel(title)}
+              className="inline-flex h-8 items-center justify-center rounded-md border border-subtle bg-surface px-3 text-body-sm font-medium transition-all hover:bg-surface-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-focus active:scale-[0.98]"
+            >
+              {INTERPRETATION_COPY.viewOnChart}
+            </button>
+          </div>
+        )}
       </div>
     </article>
   );
