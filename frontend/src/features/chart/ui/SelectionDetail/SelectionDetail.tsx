@@ -46,7 +46,7 @@ export function SelectionDetail({
     return () => {
       node.removeEventListener("keydown", onKeyDown);
     };
-  });
+  }, []);
 
   if (selection.kind === "planet") {
     const planet = vm.planets.find((p) => p.key === selection.key);

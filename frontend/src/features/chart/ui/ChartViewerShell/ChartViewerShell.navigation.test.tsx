@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { chartFull } from "../../api/mocks/fixtures";
 import { toChartViewModel } from "../../model/chartViewModel";
@@ -18,6 +18,12 @@ describe("ChartViewerShell navigation and synchronization", () => {
     ) as SVGElement;
 
   it("SH-N1: selecting from wheel updates table aria-pressed and panel badge/expanded without moving focus or scrolling", () => {
+    const scrollToSpy = vi
+      .spyOn(window, "scrollTo")
+      .mockImplementation(() => {});
+    const scrollIntoViewSpy = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoViewSpy;
+
     const { container } = render(
       <ChartViewerShell vm={vm} interpretation={interpretation} />,
     );
@@ -42,9 +48,31 @@ describe("ChartViewerShell navigation and synchronization", () => {
 
     // Focus remains on wheel element
     expect(document.activeElement).toBe(wheelMars);
+    // Scrolling to panel was not called
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+
+    // Deselect and re-select via keyboard
+    fireEvent.keyDown(wheelMars, { key: "Enter" });
+    expect(tableMarsBtn).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.keyDown(wheelMars, { key: " " });
+    expect(tableMarsBtn).toHaveAttribute("aria-pressed", "true");
+    expect(marsHeaderBtn).toHaveAttribute("aria-current", "true");
+    expect(document.activeElement).toBe(wheelMars);
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+
+    scrollToSpy.mockRestore();
   });
 
   it("SH-N2: selecting from Planet Table updates wheel and panel while keeping focus on table button", () => {
+    const scrollToSpy = vi
+      .spyOn(window, "scrollTo")
+      .mockImplementation(() => {});
+    const scrollIntoViewSpy = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoViewSpy;
+
     const { container } = render(
       <ChartViewerShell vm={vm} interpretation={interpretation} />,
     );
@@ -64,6 +92,22 @@ describe("ChartViewerShell navigation and synchronization", () => {
     expect(within(panel).getByText("Đang chọn")).toBeInTheDocument();
 
     expect(document.activeElement).toBe(tableMarsBtn);
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+
+    // Deselect and re-select via keyboard
+    fireEvent.click(tableMarsBtn);
+    expect(wheelMars).toHaveAttribute("aria-pressed", "false");
+
+    tableMarsBtn.focus();
+    fireEvent.keyDown(tableMarsBtn, { key: "Enter" });
+    fireEvent.click(tableMarsBtn);
+    expect(wheelMars).toHaveAttribute("aria-pressed", "true");
+    expect(document.activeElement).toBe(tableMarsBtn);
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+
+    scrollToSpy.mockRestore();
   });
 
   it("SH-N3: selecting a non-MVP body (Chiron) or aspect does not mark or mutate panel items", () => {
@@ -177,17 +221,29 @@ describe("ChartViewerShell navigation and synchronization", () => {
     const marsHeaderBtn = within(panel).getByRole("button", {
       name: /^Sao Hỏa/,
     });
+    const wheelMars = getWheelPlanetButton(container, "Mars");
 
-    // Mars is not yet selected, but open panel item
-    fireEvent.click(marsHeaderBtn);
+    // Case A: When Mars is ALREADY selected
+    fireEvent.click(wheelMars);
+    expect(wheelMars).toHaveAttribute("aria-pressed", "true");
     expect(marsHeaderBtn).toHaveAttribute("aria-expanded", "true");
 
     const viewOnChartBtn = screen.getByRole("button", {
       name: "Xem trên biểu đồ: Sao Hỏa",
     });
     fireEvent.click(viewOnChartBtn);
+    expect(document.activeElement).toBe(wheelMars);
+    expect(wheelMars).toHaveAttribute("aria-pressed", "true");
 
-    const wheelMars = getWheelPlanetButton(container, "Mars");
+    // Case B: When Mars is NOT selected
+    const clearBtn = screen.getByRole("button", { name: "Bỏ chọn" });
+    fireEvent.click(clearBtn);
+    expect(wheelMars).toHaveAttribute("aria-pressed", "false");
+
+    // Item remains expanded
+    expect(marsHeaderBtn).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.click(viewOnChartBtn);
     expect(document.activeElement).toBe(wheelMars);
     expect(wheelMars).toHaveAttribute("aria-pressed", "false");
   });
@@ -255,12 +311,13 @@ describe("ChartViewerShell navigation and synchronization", () => {
     fireEvent.keyDown(readBtn, { key: "Escape" });
 
     expect(screen.queryByRole("button", { name: "Đọc diễn giải" })).toBeNull();
-    const section = container.querySelector("section")!;
-    expect(document.activeElement).toBe(section);
+    const selectionDetailSection = screen.getByRole("region", {
+      name: "Chi tiết đang chọn",
+    });
+    expect(document.activeElement).toBe(selectionDetailSection);
   });
 
   it("SH-N10: fast repeat/multi-target navigation is idempotent and has no asynchronous timers", async () => {
-    const user = userEvent.setup();
     const { container } = render(
       <ChartViewerShell vm={vm} interpretation={interpretation} />,
     );
@@ -271,21 +328,41 @@ describe("ChartViewerShell navigation and synchronization", () => {
     fireEvent.click(tableSunBtn);
 
     const readBtn = screen.getByRole("button", { name: "Đọc diễn giải" });
+
+    vi.useFakeTimers();
+
+    // Click triggers revealItem synchronously without advancing timers
     fireEvent.click(readBtn);
 
     const panel = screen.getByRole("region", { name: "Diễn giải" });
     const sunHeaderBtn = within(panel).getByRole("button", {
       name: /^Mặt Trời/,
     });
+    // Focus shifted immediately (synchronous)
     expect(document.activeElement).toBe(sunHeaderBtn);
 
     // Consecutive click is idempotent
     fireEvent.click(readBtn);
     expect(document.activeElement).toBe(sunHeaderBtn);
 
-    // Tab moves focus to next interactive element
+    // Running pending zero-delay event timers leaves 0 pending timers
+    vi.runAllTimers();
+    expect(vi.getTimerCount()).toBe(0);
+
+    vi.useRealTimers();
+    const user = userEvent.setup();
+
+    // Tab moves focus to the next interactive element inside open Sun item ("Xem trên biểu đồ: Mặt Trời")
     await user.tab();
-    expect(document.activeElement).not.toBe(sunHeaderBtn);
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "Xem trên biểu đồ: Mặt Trời" }),
+    );
+
+    // Next Tab moves to the next panel item header (Mặt Trăng)
+    await user.tab();
+    expect(document.activeElement).toBe(
+      within(panel).getByRole("button", { name: /^Mặt Trăng/ }),
+    );
   });
 
   it("SH-N11: stale selection safely resets when selected planet is removed from viewModel", () => {
@@ -364,7 +441,8 @@ describe("ChartViewerShell navigation and synchronization", () => {
     fireEvent.click(viewOnChartBtn);
     expect(countLive()).toBe(1);
 
-    fireEvent.keyDown(container, { key: "Escape" });
+    const shell = screen.getByTestId("chart-viewer-shell");
+    fireEvent.keyDown(shell, { key: "Escape" });
     expect(countLive()).toBe(1);
 
     const liveRegion = container.querySelector('[role="status"]')!;
