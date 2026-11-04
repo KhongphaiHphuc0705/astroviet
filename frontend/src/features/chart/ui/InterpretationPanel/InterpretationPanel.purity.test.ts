@@ -73,4 +73,48 @@ describe("interpretation component source constraints", () => {
     expect(copyCode).not.toContain("Hệ nhà");
     expect(copyCode).not.toContain("Tính lúc");
   });
+
+  it("AR-06: maintains M3 baseline for live region tokens across Panel, Item, Overview, and copy", () => {
+    const livePattern = /aria-live|role="status"|role="alert"|aria-atomic/;
+    for (const name of [
+      "InterpretationItem.tsx",
+      "InterpretationOverview.tsx",
+      "interpretationCopy.ts",
+    ]) {
+      const code = source(name);
+      expect(code).not.toMatch(livePattern);
+    }
+
+    const panelCode = source("InterpretationPanel.tsx");
+    expect(panelCode).not.toMatch(livePattern);
+    // Panel contains exactly one <Alert component
+    const alertMatches = panelCode.match(/<Alert\b/g);
+    expect(alertMatches).toHaveLength(1);
+  });
+
+  it("AR-07: ensures M3 components and focusChartObject contain no async timers or effects", () => {
+    const asyncEffectPattern =
+      /\b(?:setTimeout|setInterval|requestAnimationFrame|queueMicrotask|useEffect|useLayoutEffect)\b/;
+
+    for (const name of componentFiles) {
+      const code = source(name);
+      expect(code).not.toMatch(asyncEffectPattern);
+    }
+
+    const focusHelperPath = resolve(
+      directory,
+      "../ChartViewerShell/focusChartObject.ts",
+    );
+    const focusCode = readFileSync(focusHelperPath, "utf8");
+    expect(focusCode).not.toMatch(asyncEffectPattern);
+  });
+
+  it("AR-08: ensures copy constraints for C-14 and C-15 without colliding with F4", () => {
+    const copyCode = source("interpretationCopy.ts");
+    // C-14/C-15 do not contain "Chi tiết đang chọn", "Bỏ chọn", and do not start with "Chọn "
+    expect(copyCode).not.toContain("Chi tiết đang chọn");
+    expect(copyCode).not.toContain("Bỏ chọn");
+    expect(copyCode).not.toMatch(/["']Chọn\s/);
+    expect(copyCode).not.toMatch(/giờ sinh/i);
+  });
 });
