@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
 
 import { cn } from "@shared/lib/cn";
 import { Badge } from "@shared/ui/Badge";
@@ -13,6 +13,7 @@ export interface SelectionDetailProps {
   selection: Selection;
   vm: ChartViewModel;
   onClear: () => void;
+  onReadInterpretation?: () => void;
   className?: string;
 }
 
@@ -20,6 +21,7 @@ export function SelectionDetail({
   selection,
   vm,
   onClear,
+  onReadInterpretation,
   className,
 }: SelectionDetailProps) {
   const headingId = useId();
@@ -29,6 +31,22 @@ export function SelectionDetail({
     onClear();
     sectionRef.current?.focus();
   }, [onClear]);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        node.focus();
+      }
+    };
+
+    node.addEventListener("keydown", onKeyDown);
+    return () => {
+      node.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   if (selection.kind === "planet") {
     const planet = vm.planets.find((p) => p.key === selection.key);
@@ -91,15 +109,27 @@ export function SelectionDetail({
               </Badge>
             )}
           </div>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={handleClear}
-            aria-label="Bỏ chọn"
-          >
-            Bỏ chọn
-          </Button>
+          <div className="flex items-center gap-2">
+            {onReadInterpretation && (
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={onReadInterpretation}
+              >
+                Đọc diễn giải
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={handleClear}
+              aria-label="Bỏ chọn"
+            >
+              Bỏ chọn
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-body-sm text-secondary">

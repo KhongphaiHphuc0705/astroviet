@@ -22,7 +22,10 @@ import type {
   ChartViewModel,
   PlanetKey,
 } from "../../model/chartViewModel";
-import type { InterpretationModel } from "../../model/interpretation";
+import {
+  getInterpretationItemId,
+  type InterpretationModel,
+} from "../../model/interpretation";
 import {
   buildLiveMessage,
   computeEmphasis,
@@ -37,10 +40,14 @@ import { DEFAULT_ZOOM, zoomIn, zoomOut } from "../../model/zoom";
 import { AspectTable } from "../AspectTable";
 import { AspectLegend, ChartWheel, ChartZoomControls } from "../ChartWheel";
 import { HouseTable } from "../HouseTable";
-import { InterpretationPanel } from "../InterpretationPanel";
+import {
+  InterpretationPanel,
+  type InterpretationPanelHandle,
+} from "../InterpretationPanel";
 import { PlanetTable } from "../PlanetTable";
 import { SelectionDetail } from "../SelectionDetail";
 
+import { focusChartObject } from "./focusChartObject";
 import { formatCalculatedAt } from "./formatCalculatedAt";
 import { HouseDataNotice } from "./HouseDataNotice";
 
@@ -192,6 +199,26 @@ export function ChartViewerShell({
   );
 
   const shellRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<InterpretationPanelHandle>(null);
+
+  const canReadInterpretation = useMemo(() => {
+    if (!interpretation || interpretation.status === "unavailable") {
+      return false;
+    }
+    if (!filterPlanetKey) return false;
+    const itemId = getInterpretationItemId(filterPlanetKey);
+    return Boolean(itemId && interpretation.itemsById[itemId]);
+  }, [interpretation, filterPlanetKey]);
+
+  const handleReadInterpretation = useCallback(() => {
+    if (filterPlanetKey) {
+      panelRef.current?.revealItem(filterPlanetKey);
+    }
+  }, [filterPlanetKey]);
+
+  const handleViewOnChart = useCallback((planetKey: PlanetKey) => {
+    focusChartObject(shellRef.current, planetKey);
+  }, []);
 
   useEffect(() => {
     const node = shellRef.current;
@@ -319,6 +346,9 @@ export function ChartViewerShell({
                 selection={effectiveSelection}
                 vm={vm}
                 onClear={handleClearSelection}
+                onReadInterpretation={
+                  canReadInterpretation ? handleReadInterpretation : undefined
+                }
               />
             </Card>
           </div>
@@ -373,7 +403,15 @@ export function ChartViewerShell({
           </div>
         </div>
       </div>
-      {interpretation && <InterpretationPanel vm={vm} model={interpretation} />}
+      {interpretation && (
+        <InterpretationPanel
+          ref={panelRef}
+          vm={vm}
+          model={interpretation}
+          selectedPlanetKey={filterPlanetKey}
+          onViewOnChart={handleViewOnChart}
+        />
+      )}
     </div>
   );
 }

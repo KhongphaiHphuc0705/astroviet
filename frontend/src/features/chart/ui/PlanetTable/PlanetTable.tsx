@@ -123,6 +123,7 @@ export function PlanetTable({
                       {onSelect ? (
                         <button
                           type="button"
+                          data-planet-key={planet.key}
                           aria-pressed={isSelected}
                           onClick={() => onSelect(planet.key)}
                           onPointerEnter={(e) => {
@@ -232,6 +233,7 @@ export function PlanetTable({
                   {onSelect ? (
                     <button
                       type="button"
+                      data-planet-key={planet.key}
                       aria-pressed={isSelected}
                       onClick={() => onSelect(planet.key)}
                       onPointerEnter={(e) => {
