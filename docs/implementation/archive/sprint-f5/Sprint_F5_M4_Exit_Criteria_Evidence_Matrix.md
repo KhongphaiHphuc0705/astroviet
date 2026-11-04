@@ -1,0 +1,155 @@
+# Sprint F5 — M4 Exit Criteria Evidence Matrix
+
+## Two-way Selection Synchronization & Navigation
+
+- **Vị trí lưu trữ:** `docs/implementation/archive/sprint-f5/Sprint_F5_M4_Exit_Criteria_Evidence_Matrix.md`
+- **Phạm vi:** F5-M4.0 → M4.9 (Đồng bộ chọn hai chiều Chart Wheel ⇄ Planet Table ⇄ Interpretation Panel, hành động "Đọc diễn giải" trong `SelectionDetail`, hành động "Xem trên biểu đồ" trong `InterpretationItem`, điều hướng focus đồng bộ, chính sách Escape, xử lý chọn lỗi thời, giữ nguyên duy nhất 1 polite live region, mở rộng purity AST allowlist AR-06..AR-08, 14 tiêu chí kiểm thử trực quan của Owner, thực thi 11 quyết định O-1..O-11).
+- **Commit mã nguồn được đánh giá:**
+  - `56d9dc5` — `[docs] add m4 implementation plan` (Planning & chốt quyết định O-1..O-11)
+  - `5e2c116` — `[feat] add target navigation helper & table fallback identifier` (Task 2 / M4.2)
+  - `29b0043` — `[feat] add selection synchronization to panel/item` (Task 3 / M4.3)
+  - `c1e857b` — `[feat] add onReadInterpretation & SelectionDetail test` (Task 4 / M4.4)
+  - `90b28c0` — `[feat] integrate into ChartViewerShell & add purity test` (Task 5 & 6 / M4.5, M4.6) (Evidence commit)
+  - `aa1bb4d` — `[feat] add m4 manual test evidences` (Task 8 / M4.8 Visual Evidence)
+  - Evidence CI Run: [Run #41750295281](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/41750295281)
+- **Ngày thực hiện:** 2026-11-04.
+- **Nguồn bằng chứng:**
+  - `[repo]`: Mã nguồn, snapshot component, cấu trúc AST import allowlist, data attributes định danh.
+  - `[C-run]`: Lệnh kiểm tra tự động (Vitest, vitest-axe, v8 coverage, tsc, eslint, prettier).
+  - `[owner]`: Ảnh chụp màn hình kiểm thử trực quan trên môi trường thật (Windows 11, Google Chrome 155, 14 tiêu chí ảnh thực tế).
+- **Trạng thái:** `VERIFIED` · `PARTIALLY VERIFIED` · `UNVERIFIED` · `ACCEPTED GAP`.
+
+---
+
+## Kết luận chung
+
+**`PASS WITH GAPS`** — Toàn bộ tiêu chí kỹ thuật, hợp đồng component và cổng chất lượng của Milestone F5.M4 đã được nghiệm thu đầy đủ và nghiêm ngặt với các Known Gaps được ghi nhận chi tiết:
+
+1. **Kiến trúc đồng bộ một nguồn sự thật (Single Source of Truth) & Ranh giới bất biến:**
+   - Hoàn toàn **không sửa** reducer chọn `selection.ts` và mô hình dữ liệu `interpretation.ts` (`git diff` rỗng 100%).
+   - `ChartViewerShell` duy trì là chủ sở hữu duy nhất của state chọn; không thêm state chọn thứ hai, Context hay event bus nào.
+   - `InterpretationPanel` là component thuần dẫn xuất (`selectedPlanetKey?: string | null`), không import `selection.ts`, không kích hoạt chọn hành tinh.
+2. **Cơ chế điều hướng đồng bộ & Trải nghiệm người dùng liền mạch:**
+   - **Chọn hành tinh (từ wheel hoặc bảng):** Đánh dấu badge "Đang chọn" (`aria-current="true"`) và tự động mở mục tương ứng tại Panel; **tuyệt đối không cuộn trang và không dời focus**.
+   - **Hành vi mở mục (Quyết định O-2/A):** Áp dụng pattern "adjust-state during render" an toàn, tự động mở mục khi selection thay đổi nhưng vẫn tôn trọng quyền đóng/mở thủ công của người dùng cho đến lần đổi selection tiếp theo.
+   - **"Đọc diễn giải" (`SelectionDetail`):** Là nút hành động `<button>` hiển thị có điều kiện khi mục đích tồn tại; kích hoạt chuyển focus tức thì tới nút tiêu đề mục và mở mục (trình duyệt cuộn mượt mà tới đích); bảo toàn thứ tự DOM trước nút "Bỏ chọn".
+   - **"Xem trên biểu đồ" (`InterpretationItem`):** Tên truy cập `Xem trên biểu đồ: {title}`; kích hoạt trả focus về đúng phần tử `<g role="button" data-planet>` trên wheel (hoặc dự phòng `button[data-planet-key]` tại bảng) mà **không dispatch `select`** (không làm thay đổi selection).
+   - **Chính sách Escape (Quyết định O-5):** Giữ nguyên hành vi F4 (xóa selection, các mục đã mở vẫn mở nguyên vẹn); khi Escape tại nút "Đọc diễn giải", focus tự động khôi phục an toàn về container `<section tabIndex={-1}>` của `SelectionDetail`, không rơi về `body`.
+3. **Bảo toàn khả năng tiếp cận (A11y) & Bất biến Live Region:**
+   - Duy trì duy nhất **1 polite live region** trong Shell (D-M8-09); hoàn toàn không thêm live region hay `role="status"`/`role="alert"` mới (`SH-N13`).
+   - Cả hai nút mới đều đạt 0 lỗi vi phạm axe (`vitest-axe`).
+4. **Bộ test toàn diện & Cổng chất lượng xanh:**
+   - Bổ sung **49 tests mới** (46 test trong 5 test files mới + 3 purity rules AR-06..AR-08), nâng tổng quy mô hệ thống lên **144 test files / 1178 tests**.
+   - Line coverage trên các target files M4 đạt **99.01%** (`focusChartObject.ts`: 100%, `InterpretationPanel.tsx`: 100%, `InterpretationItem.tsx`: 92.85%, `SelectionDetail.tsx`: 100%), vượt xa mục tiêu $\ge 90\%$.
+   - Prettier, ESLint và TypeScript typecheck đạt 100% sạch sẽ, 0 warnings, 0 errors.
+5. **Minh chứng kiểm thử trực quan đầy đủ (Visual QA):**
+   - Đã thu thập đủ **14 ảnh chụp màn hình thực tế** trong thư mục `docs/implementation/archive/sprint-f5/evidence/` đáp ứng các kịch bản M-01 → M-06.
+   - Chính thức **ĐÓNG KG-F5M3-01** (Đã đồng bộ selection hoàn chỉnh giữa Biểu đồ/Bảng và Diễn giải).
+
+---
+
+## 1. Bảng xác minh tiêu chí kiểm tra (Verification Matrix V-01 → V-16)
+
+| ID       | Tiêu chí kiểm tra                                                                         | Lệnh / Thủ tục                                                                                                                                                                                                                                      | Kết quả thực tế                                                                                                                                                                          |                  Trạng thái                   |      Nguồn      |
+| -------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------: | :-------------: |
+| **V-01** | AC-13: Chọn Mars từ Wheel ⇒ Panel đánh dấu "Đang chọn" + mở mục, không dời focus hay cuộn | `ChartViewerShell.navigation.test.tsx` (SH-N1), `InterpretationPanel.selection.test.tsx` (PS-01), `InterpretationItem.selection.test.tsx` (IS-01) & Ảnh `m4_select_from_wheel.png`                                                                  | Mars trên wheel có halo; bảng có `aria-pressed="true"`; Panel hiển thị badge "Đang chọn" + `aria-current="true"` và mở mục Mars; `activeElement` giữ nguyên tại wheel, scroll giữ nguyên |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-02** | AC-14: Chọn Mars từ PlanetTable ⇒ kết quả tương đương AC-13                               | `ChartViewerShell.navigation.test.tsx` (SH-N2) & Ảnh `m4_select_from_table.png`                                                                                                                                                                     | Bấm nút ở bảng kích hoạt cùng luồng: wheel nhận halo, panel đánh dấu "Đang chọn" + mở mục; focus giữ nguyên tại nút bảng                                                                 |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-03** | AC-15: "Đọc diễn giải" chuyển focus tới mục Mars, tự mở nếu đang đóng                     | `ChartViewerShell.navigation.test.tsx` (SH-N5), `SelectionDetail.interpretation.test.tsx` (SD-02), `InterpretationPanel.selection.test.tsx` (PS-08, PS-12) & Ảnh `m4_read_interpretation_focus.png`, `m4_read_interpretation_after_press_enter.png` | Nút "Đọc diễn giải" kích hoạt bằng click hoặc Enter/Space; focus chuyển tức thì tới nút tiêu đề mục Mars; mục mở ra; selection trên wheel/bảng giữ nguyên                                |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-04** | AC-15: "Xem trên biểu đồ" trả focus về phần tử Mars trên wheel; selection không đổi       | `ChartViewerShell.navigation.test.tsx` (SH-N6), `focusChartObject.test.ts` (FC-01, FC-02), `InterpretationItem.selection.test.tsx` (IS-03) & Ảnh `m4_view_on_chart_selected_1.png` → `_2.png`, `m4_view_on_chart_unselected_1.png` → `_2.png`       | Focus chuyển tới `<g role="button" data-planet="Mars">` trên wheel; trang cuộn tới wheel; `selection` hoàn toàn không bị mutate (kể cả khi Mars chưa chọn, chỉ hiện preview halo)        |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-05** | AC-15: Dự phòng bảng khi wheel không có phần tử tương tác                                 | `ChartViewerShell.navigation.test.tsx` (SH-N7), `focusChartObject.test.ts` (FC-03, FC-04)                                                                                                                                                           | Khi wheel không có phần tử tương tác (nhãn overflow hoặc unmounted), focus tự động chuyển về `button[data-planet-key="Mars"]` của `PlanetTable` (O-4)                                    | **VERIFIED** (DOM) / **UNVERIFIED** (Browser) |     [C-run]     |
+| **V-06** | AC-16: Chọn không dời focus và không cuộn trang                                           | `ChartViewerShell.navigation.test.tsx` (SH-N1, SH-N2) & Ảnh `m4_select_from_wheel.png`, `m4_select_from_table.png`                                                                                                                                  | Cả click chuột và phím Enter/Space khi chọn không làm gọi `focus()` hay `scrollIntoView()` tới Panel                                                                                     |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-07** | AC-16: Escape hoặc "Bỏ chọn" gỡ đánh dấu; mục đã mở vẫn mở                                | `ChartViewerShell.navigation.test.tsx` (SH-N4, SH-N8), `InterpretationPanel.selection.test.tsx` (PS-04)                                                                                                                                             | Bấm "Bỏ chọn" hoặc phím Escape: selection về `none`, badge "Đang chọn" biến mất; các mục người dùng đã mở vẫn mở nguyên vẹn                                                              |                 **VERIFIED**                  |     [C-run]     |
+| **V-08** | AC-16: Khôi phục focus an toàn khi Escape tại nút "Đọc diễn giải"                         | `ChartViewerShell.navigation.test.tsx` (SH-N9), `SelectionDetail.interpretation.test.tsx` (SD-04) & Ảnh `m4_escape_from_read_button.png`                                                                                                            | Khi focus ở nút "Đọc diễn giải" rồi bấm Escape, nút bị gỡ nhưng focus được khôi phục về `<section tabIndex={-1}>` của `SelectionDetail`, không rơi về `body`                             |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-09** | AC-16: Không có state chọn thứ hai; reducer selection nguyên vẹn                          | `git diff selection.ts interpretation.ts` rỗng; `grep` không có `useReducer` trong `InterpretationPanel`                                                                                                                                            | 100% tuân thủ bất biến kiến trúc; `selection.ts` và `interpretation.ts` nguyên vẹn                                                                                                       |                 **VERIFIED**                  | [repo] [C-run]  |
+| **V-10** | AC-16: Không thêm live region; duy nhất 1 polite region của Shell                         | `ChartViewerShell.navigation.test.tsx` (SH-N13), `InterpretationPanel.purity.test.ts` (AR-06)                                                                                                                                                       | Đếm `[aria-live],[role="status"]` trong Shell luôn = 1 ở trạng thái ready; không lộ văn bản `bodyText` vào live message                                                                  |                 **VERIFIED**                  |     [C-run]     |
+| **V-11** | AC-16: Xử lý chọn lỗi thời & mô hình thay đổi an toàn                                     | `ChartViewerShell.navigation.test.tsx` (SH-N11, SH-N12), `SelectionDetail.interpretation.test.tsx` (SD-01)                                                                                                                                          | Chọn hành tinh rồi thay đổi `vm` không còn hành tinh đó hoặc `interpretation` chuyển sang `unavailable`: nút ẩn êm đẹp, không crash                                                      |                 **VERIFIED**                  |     [C-run]     |
+| **V-12** | AC-24: Tên truy cập và vai trò accessible; heading không nhảy cấp                         | `InterpretationItem.selection.test.tsx` (IS-01, IS-03, IS-A), `SelectionDetail.interpretation.test.tsx` (SD-01, SD-A), `InterpretationPanel.selection.test.tsx` (PS-A)                                                                              | Nút "Đọc diễn giải" và "Xem trên biểu đồ: {title}" có tên truy cập rõ ràng; không thêm heading mới; đạt 0 lỗi vi phạm axe                                                                |                 **VERIFIED**                  |     [C-run]     |
+| **V-13** | AC-25: Bố cục responsive; cả hai nút dùng tốt ở mọi viewport                              | Ảnh `m4_responsive_375.png`, `m4_responsive_768.png`, `m4_responsive_1500.png`                                                                                                                                                                      | Các nút hiển thị vừa vặn, không gây thanh cuộn ngang trang ở 375px, 768px, 1500px                                                                                                        |                 **VERIFIED**                  |     [owner]     |
+| **V-14** | AC-26: Thứ tự Tab hợp lý và viền focus ring nhìn thấy rõ                                  | `ChartViewerShell.navigation.test.tsx` (SH-N10) & Ảnh `m4_focus_ring_dark.png`, `m4_focus_ring_light.png`                                                                                                                                           | Tab tuần tự tự nhiên; viền focus ring hiển thị sắc nét trên cả Light Theme và Dark Theme                                                                                                 |                 **VERIFIED**                  | [C-run] [owner] |
+| **V-15** | Độ tinh khiết & Ràng buộc Purity mở rộng                                                  | `InterpretationPanel.purity.test.ts` (AR-01..AR-08)                                                                                                                                                                                                 | Component 100% ASCII; 0 async timers/effects; import regex allowlist nghiêm ngặt; copy C-14/C-15 sạch sẽ không va chạm từ khóa cấm                                                       |                 **VERIFIED**                  |     [C-run]     |
+| **V-16** | Cổng kiểm tra tĩnh, Regression & Build                                                    | `format:check`, `lint`, `typecheck`, `test:coverage`, `build`                                                                                                                                                                                       | Pass toàn bộ: 0 lỗi Prettier, 0 lỗi ESLint, 0 lỗi TypeScript, toàn bộ test suite pass, production build thành công                                                                       |                 **VERIFIED**                  |     [C-run]     |
+
+---
+
+## 2. Bảng bằng chứng trực quan kiểm thử thủ công (Visual Evidence M4.8)
+
+Toàn bộ ảnh chụp màn hình được lưu trữ phẳng tại thư mục: [`docs/implementation/archive/sprint-f5/evidence/`](file:///d:/Hphucc/Hphuc/astroviet/docs/implementation/archive/sprint-f5/evidence/)
+
+| #      | Tên file ảnh thực tế                           | Kích thước |           Kịch bản đối chiếu            | Kết quả đối chiếu trực quan                                                                                                                     |   Đánh giá   |
+| ------ | ---------------------------------------------- | ---------- | :-------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |
+| **1**  | `m4_select_from_wheel.png`                     | 1500px     |          M-01 (Chọn từ wheel)           | Mars trên wheel có halo focus/selected; panel ở dưới tự động hiển thị badge "Đang chọn" và mở nội dung mục Sao Hỏa; vị trí cuộn trang không đổi | **VERIFIED** |
+| **2**  | `m4_select_from_table.png`                     | 1500px     |           M-01 (Chọn từ bảng)           | Bấm nút Sao Hỏa trong Planet Table: bảng có `aria-pressed`, panel hiển thị badge "Đang chọn" và mở mục; focus giữ nguyên tại bảng               | **VERIFIED** |
+| **3**  | `m4_read_interpretation_focus.png`             | 1500px     |      M-02 ("Đọc diễn giải" focus)       | Phím Tab đưa viền focus ring tới nút "Đọc diễn giải" trong `SelectionDetail`                                                                    | **VERIFIED** |
+| **4**  | `m4_read_interpretation_after_press_enter.png` | 1500px     |        M-02 (Sau khi kích hoạt)         | Sau khi nhấn Enter, trang cuộn mượt tới khu vực Diễn giải; viền focus ring hiển thị chuẩn xác tại nút tiêu đề mục Sao Hỏa; mục mở ra            | **VERIFIED** |
+| **5**  | `m4_view_on_chart_selected_1.png`              | 1500px     |  M-03 ("Xem trên biểu đồ" khi đã chọn)  | Focus ring tại nút "Xem trên biểu đồ" trong mục Sao Hỏa đang mở                                                                                 | **VERIFIED** |
+| **6**  | `m4_view_on_chart_selected_2.png`              | 1500px     |        M-03 (Sau khi kích hoạt)         | Focus trả về phần tử Mars trên wheel; halo hiển thị; selection không đổi                                                                        | **VERIFIED** |
+| **7**  | `m4_view_on_chart_unselected_1.png`            | 1500px     | M-03 ("Xem trên biểu đồ" khi chưa chọn) | Mở thủ công mục Sao Hỏa (selection đang là none) và focus vào nút "Xem trên biểu đồ"                                                            | **VERIFIED** |
+| **8**  | `m4_view_on_chart_unselected_2.png`            | 1500px     |        M-03 (Sau khi kích hoạt)         | Focus chuyển lên wheel phần tử Mars hiển thị preview halo; selection vẫn giữ nguyên là none (`aria-pressed` không đổi)                          | **VERIFIED** |
+| **9**  | `m4_escape_from_read_button.png`               | 1500px     |        M-04 (Escape từ nút đọc)         | Bấm Escape khi focus ở nút "Đọc diễn giải": selection bị xóa, nút biến mất, focus khôi phục an toàn về container `<section>`                    | **VERIFIED** |
+| **10** | `m4_focus_ring_dark.png`                       | 1500px     |      M-05 (Focus ring Dark Theme)       | Viền focus ring tím lavender ánh sáng (`var(--color-indigo-300)`, tương phản cao WCAG AAA) nổi bật quanh nút điều hướng                         | **VERIFIED** |
+| **11** | `m4_focus_ring_light.png`                      | 1500px     |      M-05 (Focus ring Light Theme)      | Viền focus ring xanh chàm (`var(--color-indigo-600)`, tương phản 8.08:1) sắc nét và rõ ràng trên nền sáng                                       | **VERIFIED** |
+| **12** | `m4_responsive_375.png`                        | 375px      |        M-06 (Mobile responsive)         | Bố cục di động 375px: cả 2 nút "Đọc diễn giải" và "Xem trên biểu đồ" hiển thị vừa vặn, không gây tràn ngang layout                              | **VERIFIED** |
+| **13** | `m4_responsive_768.png`                        | 768px      |        M-06 (Tablet responsive)         | Bố cục tablet 768px: co giãn hài hòa, khoảng cách ngón tay bấm tiện dụng                                                                        | **VERIFIED** |
+| **14** | `m4_responsive_1500.png`                       | 1500px     |        M-06 (Desktop responsive)        | Bố cục desktop toàn màn hình chuẩn mực                                                                                                          | **VERIFIED** |
+
+### Đánh giá các tiêu chí không có ảnh chụp (M-07, M-08)
+
+- **M-07 (Trình đọc màn hình Narrator/NVDA):** Đánh giá `ACCEPTED GAP` (Ghi nhận **KG-F5M4-01**). Kiểm thử tự động đã bao phủ hợp đồng a11y: 0 vi phạm axe trên cả 2 nút, duy nhất 1 polite live region được duy trì (`SH-N13`), nhãn nút rõ ràng (`IS-03`, `SD-01`). Kiểm thử tường thuật âm thanh thực tế với screen reader được hoãn sang M6/M7.
+- **M-08 (Dự phòng bảng khi wheel không tương tác):** Đánh giá `UNVERIFIED` trong trình duyệt thật (Ghi nhận **KG-F5M4-02**). Do trên biểu đồ natal MVP thực tế, wheel luôn vẽ các nút nhãn hành tinh tương tác được nên không thể kích hoạt fallback bằng tay trong UI; hành vi này đã được kiểm chứng đầy đủ qua mô phỏng DOM trong unit test `FC-03`, `FC-04`, `SH-N7`.
+
+---
+
+## 3. Bảng thực thi 11 quyết định của Owner (Section 13 O-1 → O-11)
+
+| Quyết định | Nội dung đã được duyệt                                    | Thực tế triển khai                                                                                                                                                                                                        |  Trạng thái  |
+| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |
+| **O-1**    | Loại điều khiển của "Đọc diễn giải" và "Xem trên biểu đồ" | Sử dụng thẻ `<button>` chuẩn hành động (không dùng `<a href>`), không làm đổi URL hay lịch sử trình duyệt, hỗ trợ Enter/Space tự nhiên                                                                                    | **VERIFIED** |
+| **O-2**    | Ngữ nghĩa "mở khi chọn" (Option A)                        | Triển khai pattern "adjust-state during render" trong `InterpretationPanel.tsx`: khi `selectedPlanetKey` đổi sang hành tinh khác, tự động thêm vào `expandedIds` một lần; người dùng vẫn có thể bấm thu gọn mục đang chọn | **VERIFIED** |
+| **O-3**    | "Xem trên biểu đồ" không làm đổi selection                | Kích hoạt chỉ dời focus tới wheel (kích hoạt preview halo); tuyệt đối không dispatch `select`, bảo toàn `aria-pressed`                                                                                                    | **VERIFIED** |
+| **O-4**    | Bổ sung `data-planet-key` vào nút bảng `PlanetTable`      | Thêm thuộc tính định danh thuần `data-planet-key={planet.key}` tại cả chế độ bảng và thẻ cards của `PlanetTable.tsx` làm đích fallback an toàn                                                                            | **VERIFIED** |
+| **O-5**    | Chính sách Escape trong khu vực Diễn giải                 | Giữ nguyên hành vi F4 (xóa selection, mục đã mở vẫn mở); khi Escape tại nút "Đọc diễn giải", khôi phục focus về container `<section>` của `SelectionDetail`                                                               | **VERIFIED** |
+| **O-6**    | Hoãn kịch bản E2E sang Milestone M7                       | M4 tập trung vào unit test, contract purity test và QA thủ công; không thêm file E2E mới ngoài luồng phụ thuộc                                                                                                            | **VERIFIED** |
+| **O-7**    | Tên truy cập nút "Xem trên biểu đồ"                       | Định dạng accessible name `Xem trên biểu đồ: {title}` (phân biệt các hành tinh và bắt đầu bằng nhãn nhìn thấy được)                                                                                                       | **VERIFIED** |
+| **O-8**    | Chuỗi Copy C-14, C-15, C-16                               | C-14 = "Đang chọn", C-15 = "Xem trên biểu đồ" tập trung tại `interpretationCopy.ts`; C-16 = "Đọc diễn giải" đặt inline tại `SelectionDetail.tsx` theo chuẩn F4                                                            | **VERIFIED** |
+| **O-9**    | "Đọc diễn giải" ẩn khi không có đích đến                  | Kiểm tra `canReadInterpretation` tại Shell: ẩn nút khi không có prop diễn giải, khi status là `unavailable` hoặc khi hành tinh không thuộc 10 thân MVP                                                                    | **VERIFIED** |
+| **O-10**   | Phương thức điều hướng Shell → Panel                      | `InterpretationPanel` sử dụng `forwardRef` + `useImperativeHandle` công khai phương thức đồng bộ `revealItem(itemId)`                                                                                                     | **VERIFIED** |
+| **O-11**   | Lưu phẳng ảnh bằng chứng M4                               | Toàn bộ 14 file ảnh bằng chứng được lưu phẳng tại `docs/implementation/archive/sprint-f5/evidence/m4_*.png`                                                                                                               | **VERIFIED** |
+
+---
+
+## 4. Chi tiết Bảng Coverage theo file (M4 Target Files)
+
+Lệnh thực thi:
+
+```bash
+npm run test:coverage -- --coverage.include=src/features/chart/ui/ChartViewerShell/focusChartObject.ts --coverage.include=src/features/chart/ui/InterpretationPanel/InterpretationPanel.tsx --coverage.include=src/features/chart/ui/InterpretationPanel/InterpretationItem.tsx --coverage.include=src/features/chart/ui/SelectionDetail/SelectionDetail.tsx --coverage.reporter=text
+```
+
+Kết quả đo lường thực tế từ Vitest v8 Coverage:
+
+| File                                                                |  % Stmts   |  % Branch  | % Funcs  |  % Lines   | Uncovered Lines / Gaps                                   |
+| ------------------------------------------------------------------- | :--------: | :--------: | :------: | :--------: | -------------------------------------------------------- |
+| **All files (Trung bình)**                                          | **94.11%** | **89.51%** | **100%** | **99.01%** | **Vượt xa mục tiêu $\ge 90\%$**                          |
+| `src/features/chart/ui/ChartViewerShell/focusChartObject.ts`        |    100%    |   88.88%   |   100%   |    100%    | L19, L33 (nhánh fallback kiểm tra null phòng thủ)        |
+| `src/features/chart/ui/InterpretationPanel/InterpretationPanel.tsx` |   92.72%   |   86.95%   |   100%   |    100%    | L65, L90, L160-162 (nhánh phòng thủ khi itemsById trống) |
+| `src/features/chart/ui/InterpretationPanel/InterpretationItem.tsx`  |   87.5%    |   91.17%   |   100%   |   92.85%   | L38 (fallback khi prop `selected` là undefined)          |
+| `src/features/chart/ui/SelectionDetail/SelectionDetail.tsx`         |   96.77%   |   92.3%    |   100%   |    100%    | L37, L246 (nhánh phòng thủ prop tùy chọn)                |
+
+---
+
+## 5. Danh mục Known Gaps của Milestone F4/F5
+
+### Gaps được ĐÓNG trong Milestone này
+
+- **`KG-F5M3-01` — ĐÃ ĐÓNG:** _"Chưa đồng bộ selection giữa Biểu đồ/Bảng và Panel Diễn giải"_ — Đã được giải quyết triệt để trong M4 qua cơ chế đồng bộ hai chiều, tự động mở mục, hành động "Đọc diễn giải" và "Xem trên biểu đồ".
+
+### Gaps mới được ghi nhận trong M4
+
+- **`KG-F5M4-01` — Kiểm thử âm thanh Screen Reader (M-07) hoãn sang M6/M7 (`ACCEPTED GAP`):**
+  - _Mô tả:_ Việc kiểm tra chuỗi đọc bằng tai trên Windows Narrator/NVDA chưa được ghi âm thanh trong phiên này; hợp đồng a11y đã được chứng minh qua 0 lỗi vi phạm axe và kiểm tra 1 polite live region duy nhất (`SH-N13`).
+  - _Kế hoạch:_ Thực hiện kiểm thử toàn diện kèm nhật ký âm thanh ở Milestone M6 (Hardening) và M7 (E2E).
+- **`KG-F5M4-02` — Dự phòng bảng khi wheel không tương tác (M-08) chưa thể tái lập trên trình duyệt thật (`UNVERIFIED`):**
+  - _Mô tả:_ Do wheel ở 10 thân MVP luôn render đầy đủ các nút nhãn hành tinh, không thể ép wheel biến mất nút trên UI thật mà không can thiệp code; hành vi fallback đã được chứng minh qua test DOM `FC-03`, `FC-04`, `SH-N7`.
+  - _Kế hoạch:_ Giữ nguyên kiểm thử tự động, theo dõi thêm ở các màn hình siêu nhỏ trong M6.
+- **`KG-F5M4-03` — Hành vi SVG focus & scrolling trên Safari/Firefox:**
+  - _Mô tả:_ Kiểm thử trực quan M4 được tiến hành trên Google Chrome 155 (Windows 11). Sự khác biệt về cuộn SVG trên trình duyệt Safari/WebKit và Firefox được hoãn tới đợt QA đa trình duyệt.

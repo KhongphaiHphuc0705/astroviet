@@ -227,11 +227,11 @@ Mọi viewport: luồng dọc một cột (không tab). Dưới `md`: Overview c
 ## 8. Interaction and State Model
 
 ### 8.1 Mô hình chọn
-**Giữ nguyên một nguồn sự thật**: `interactionState.selection` trong `ChartViewerShell` (reducer `selection.ts`). F5 **không** thêm state chọn thứ hai, Context hay store. Khu vực Diễn giải nhận `selection` (đã `resolveSelection`) và `onSelectPlanet` qua props.
+**Giữ nguyên một nguồn sự thật**: `interactionState.selection` trong `ChartViewerShell` (reducer `selection.ts`). F5 **không** thêm state chọn thứ hai, Context hay store. Khu vực Diễn giải nhận `selectedPlanetKey` (đã `resolveSelection`) và `onViewOnChart` qua props.
 
-State cục bộ mới (chỉ UI, trong `InterpretationPanel`): `expandedKeys: Set<ItemId>` do người dùng mở/đóng. `ItemId` là định danh UI ổn định (`planet:Sun`, `angle:Ascendant`), **không** phải `subjectKey`.
+State cục bộ mới (chỉ UI, trong `InterpretationPanel`): `expandedIds: ReadonlySet<string>` do người dùng mở/đóng. `ItemId` là định danh UI ổn định (`planet:Sun`, `angle:Ascendant`), **không** phải `subjectKey`.
 
-**Mục mở mặc định:** các mục Cốt lõi. Khi `selectedItemId` chuyển sang một mục khác (khác giá trị trước đó), thêm mục đó vào tập mở đúng một lần. Người dùng vẫn có thể thu gọn hoặc mở lại mục đang chọn; lần render tiếp theo không ép mục đã thu gọn trở lại. Chọn mục khác rồi quay lại sẽ mở mục vừa được chọn; "Bỏ chọn" không tự đóng mục nào. Selection không được lưu qua route (như F4: reset khi đổi chart, `key={chartId}`).
+**Mục mở mặc định:** các mục Cốt lõi. **Quyết định O-2 (Lựa chọn A - Đã duyệt):** Khi `selectedPlanetKey` chuyển sang một mục khác (khác giá trị trước đó), component áp dụng pattern adjust-state during render để thêm mục đó vào tập mở đúng một lần. Người dùng vẫn có thể thu gọn hoặc mở lại mục đang chọn; lần render tiếp theo không ép mục đã thu gọn trở lại. Chọn mục khác rồi quay lại sẽ mở mục vừa được chọn; "Bỏ chọn" không tự đóng mục nào. Selection không được lưu qua route (như F4: reset khi đổi chart, `key={chartId}`).
 
 Không cần reducer mới cho F5 (Escape/clear đã có).
 
@@ -314,11 +314,13 @@ Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; 
 - **Prerequisite:** M2. **Acceptance:** AC-01…03, 11, 12, 17…23; F4 test không đổi vẫn xanh.
 - **Evidence:** test component + ảnh chụp màn hình các trạng thái (lưu `evidence/`). **DoD:** không có HTML thô; mọi chuỗi nội dung đến từ props.
 
-### F5.M4 — Đồng bộ chọn & điều hướng
-- **Tasks:** selection → đánh dấu + mở mục; "Đọc diễn giải" ở `SelectionDetail`; "Xem trên biểu đồ"; focus; kiểm không thêm live region.
+### F5.M4 — Đồng bộ chọn & điều hướng [DONE — 2026-11-04]
+- **Trạng thái:** **COMPLETED** (Commit chuỗi `56d9dc5` → `aa1bb4d`; 49 test mới xanh; Coverage dòng đạt 99.01%; 14 ảnh bằng chứng tại `docs/implementation/archive/sprint-f5/evidence/`; Đóng triệt để `KG-F5M3-01`; Evidence Matrix tại `docs/implementation/archive/sprint-f5/Sprint_F5_M4_Exit_Criteria_Evidence_Matrix.md`).
+- **Mục tiêu:** Đồng bộ chọn 2 chiều giữa Wheel ⇄ Table ⇄ Panel Diễn giải; nút "Đọc diễn giải" ở `SelectionDetail` và "Xem trên biểu đồ" ở `InterpretationItem`; focus & cuộn tức thì không cướp focus; chính sách Escape; xử lý chọn lỗi thời; giữ nguyên duy nhất 1 polite live region của Shell; 0 thay đổi tại `selection.ts` và `interpretation.ts`.
+- **Tasks:** selection → đánh dấu + mở mục (O-2 Option A); "Đọc diễn giải" ở `SelectionDetail` (O-1, O-8, O-9); "Xem trên biểu đồ" ở `InterpretationItem` (O-3, O-7); `focusChartObject` helper + `data-planet-key` tại `PlanetTable` (O-4); `forwardRef` + `revealItem` (O-10); mở rộng purity AR-06..AR-08; QA thủ công trực quan 14 tiêu chí (O-11).
 - **Prerequisite:** M3. **Acceptance:** AC-13…16, 24…26 (phần bàn phím/focus).
-- **Tests:** Shell integration (chọn qua wheel và qua Planet Table); không focus bị cướp; Escape; stale selection.
-- **DoD:** reducer `selection.ts` không đổi hoặc đổi có chủ đích được ghi.
+- **Tests:** Shell integration (chọn qua wheel và qua Planet Table); không focus bị cướp; Escape khôi phục focus an toàn; stale selection; purity static AST.
+- **DoD:** reducer `selection.ts` và model `interpretation.ts` giữ nguyên 100% diff rỗng. Ghi nhận KG-F5M4-01 (M-07 hoãn M6/M7), KG-F5M4-02 (M-08 unverified trong UI thật), KG-F5M4-03 (Safari/Firefox).
 
 ### F5.M5 — Trạng thái suy giảm & copy
 - **Tasks:** chú thích Nhà trung tính (Overview và `HouseDataNotice`), Cung Mọc "chưa khả dụng", `version=null`, một phần, entry hỏng + `reportError`; ghi KG-F5-01 (Mặt Trăng).
