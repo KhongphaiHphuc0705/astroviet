@@ -2,10 +2,11 @@
 ## Degraded States & Copy Consolidation
 
 - **Vị trí lưu trữ:** `docs/implementation/archive/sprint-f5/Sprint_F5_M5_Exit_Criteria_Evidence_Matrix.md`
-- **Phạm vi:** F5-M5.0 → M5.7 (Xác minh & củng cố 6 trạng thái suy giảm, bảo vệ không hồi quy M3/M4, cô lập lỗi dựng model H-1, đăng ký đầy đủ Known Gap KG-F5-01, 17 test mới D5-*, thực thi các quyết định D-M5-00..D-M5-11).
-- **Trạng thái:** `IN_PROGRESS` (Khởi tạo & hoàn thành Task 0 / M5.0).
-- **Nhánh / Commit bắt đầu:** `dev` @ HEAD `3711587` (`[docs] update m4 evidence matrix`).
-- **Ngày khởi tạo:** 2026-11-05.
+- **Phạm vi:** F5-M5.0 → M5.7 (Xác minh & củng cố 6 trạng thái suy giảm, bảo vệ không hồi quy M3/M4, cô lập lỗi dựng model H-1, đăng ký đầy đủ Known Gap KG-F5-01, 18 test mới D5-*, thực thi các quyết định D-M5-00..D-M5-11).
+- **Trạng thái:** `COMPLETED` (Hoàn thành 100% các tiêu chí đóng Milestone M5.0 → M5.7).
+- **Nhánh / Commit hoàn thành:** `dev` @ HEAD `b213f29` (`[feat] add degraded state tests and H-1 error isolation for M5 tasks 4-6`).
+- **Evidence CI Run:** [Run #42013084790](https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/42013084790)
+- **Ngày hoàn thành:** 2026-11-05.
 
 ---
 
@@ -133,15 +134,33 @@ Theo chỉ đạo của Owner: Đồng ý toàn bộ các đề xuất mặc đ�
 
 ## 7. Tổng Hợp & Đánh Giá Tiêu Chí Đóng Milestone 5 (Task 7 / M5.7)
 
-| Tiêu chí DoD | Mục tiêu | Kết quả thực tế | Trạng thái |
+### 7.1 Kết Quả Đo Lường Các Cổng Chất Lượng (Quality Gate Measurements)
+
+| Cổng kiểm tra | Lệnh thực thi | Kết quả thực tế đo được | Trạng thái |
 |---|---|---|---|
-| **AC-17 .. AC-22 traceability** | Mỗi AC có ít nhất 1 test cụ thể | Phủ đầy đủ qua 18 test D5-* (D5-H01..H03, D5-A01..A03, D5-V01..V04, D5-P01..P03, D5-E01..E03, D5-M01..M02) | **PASS** |
-| **Bảo vệ 6 trạng thái suy giảm** | Full, NoHouse, Contradiction, MissingOne, Unsupported, VerEmpty, Malformed | Tất cả trạng thái đều có test tương ứng và pass 100% | **PASS** |
-| **Toàn vẹn nội dung hợp lệ** | Partial degraded không ảnh hưởng nội dung còn lại | D5-P01, D5-P03, D5-E01 xác minh nội dung hợp lệ hiển thị bình thường | **PASS** |
-| **Cô lập lỗi dữ liệu & model (H-1)** | App không sập khi model ném; báo lỗi 1 lần | D5-E01..E03 & sửa `page.tsx` pass sạch | **PASS** |
-| **Ghi nhận Known Gap KG-F5-01** | Trạng thái OPEN, không nhận giải quyết xong | Đã ghi nhận tại Mục 3 và kiểm chứng bằng D5-M01, D5-M02 | **PASS** |
-| **Zero-diff gate trên model files** | `model/selection.ts` & `model/interpretation.ts` | 0 dòng khác biệt (`git diff --stat` rỗng) | **PASS** |
-| **CI Quality Gates** | Format, Lint, Typecheck, Tests | Format clean, Lint 0 errors, Typecheck 0 errors, 167/167 tests pass | **PASS** |
-| **D-M5-00 .. D-M5-11 Decisions** | Toàn bộ 12 quyết định được phê duyệt & ghi nhận | Đã ghi nhận đầy đủ tại Mục 1 | **PASS** |
+| **Zero Diff Gate** | `git diff --stat origin/dev..HEAD -- frontend/src/features/chart/model/selection.ts frontend/src/features/chart/model/interpretation.ts` | **0 dòng khác biệt (Diff hoàn toàn rỗng)** | **PASS** |
+| **Format** | `npm --prefix frontend run format:check` | `All matched files use Prettier code style!` | **PASS** |
+| **Lint** | `npm --prefix frontend run lint` | `eslint .` (0 errors, 0 warnings) | **PASS** |
+| **Typecheck** | `npm --prefix frontend run typecheck` | `tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit` (0 errors, exit code 0) | **PASS** |
+| **Chart & Pages Vitest Run** | `npm --prefix frontend test -- src/features/chart src/pages/app/charts` | **61 test files / 751 tests passed** (0 failed, 100% xanh) | **PASS** |
+| **Full Frontend Vitest Run** | `npm --prefix frontend test` | **145 test files / 1197 tests passed** (0 failed, duration ~312s) | **PASS** |
+| **Production Build** | `npm --prefix frontend run build` | `tsc && vite build` (2155 modules transformed, built in 7.75s, gzip size chuẩn) | **PASS** |
+| **Playwright Inventory** | `npx playwright test --list` (tại `frontend/`) | **38 tests trong 7 files** (không thay đổi, không thêm E2E ở M5) | **PASS** |
+| **Purity / Grep Gate** | Quét `dangerouslySetInnerHTML` và `isBirthTimeKnown` trong vùng interpretation | Không phát hiện mã rò rỉ; chỉ xuất hiện trong các câu lệnh assert kiểm thử | **PASS** |
+
+### 7.2 Đánh Giá Chi Tiết Theo Definition of Done (DoD §12)
+
+| # | Tiêu chí DoD | Yêu cầu | Bằng chứng đối chiếu | Đánh giá |
+|---|---|---|---|---|
+| 1 | **AC-17 .. AC-22 Traceability** | Mỗi AC có ít nhất 1 test cụ thể mang tên rõ | Phủ đầy đủ qua 18 test D5-* (`D5-H01..H03`, `D5-A01..A03`, `D5-V01..V04`, `D5-P01..P03`, `D5-E01..E03`, `D5-M01..M02`) | **ĐẠT** |
+| 2 | **Phủ 6 Trạng Thái Suy Giảm** | F-Full, F-NoHouse, F-Contradiction, F-MissingOne, F-Unsupported, F-VerEmpty, F-Malformed | Có fixture rõ ràng, logic phân nhánh chính xác và test pass 100% | **ĐẠT** |
+| 3 | **Toàn Vẹn Nội Dung Hợp Lệ** | Trạng thái suy giảm một phần không làm ảnh hưởng nội dung khả dụng khác | D5-P01, D5-P03, D5-E01 xác minh các nội dung hợp lệ vẫn render đầy đủ, số đếm phản ánh chính xác | **ĐẠT** |
+| 4 | **Cô Lập Lỗi Dữ Liệu & Model (H-1)** | Lỗi dữ liệu/mô hình không làm sập viewer F4; báo lỗi đúng 1 lần | H-1 trong `page.tsx` và test D5-E01..E03 xác minh F4 viewer giữ nguyên vẹn khi model ném lỗi | **ĐẠT** |
+| 5 | **Đăng Ký Known Gap KG-F5-01** | Bản ghi đầy đủ, trạng thái OPEN, không tuyên bố đã giải quyết | Đã ghi nhận chi tiết tại Mục 3 của Matrix và Mục 15.3 của F5 Implementation Plan | **ĐẠT** |
+| 6 | **Zero Diff Gate** | Diff rỗng trên 2 file lõi `selection.ts` và `interpretation.ts` | `git diff --stat origin/dev..HEAD` trả về 0 diff | **ĐẠT** |
+| 7 | **Hồi Quy M3/M4 Xanh** | Không làm hỏng hoặc sửa đổi kỳ vọng của test M3/M4 | 751 tests thuộc `features/chart` và `pages/app/charts` pass 100% | **ĐẠT** |
+| 8 | **CI Quality Gates** | Format, Lint, Typecheck, Build, Vitest toàn bộ xanh | Toàn bộ các lệnh CI thực thi với exit code 0 | **ĐẠT** |
+| 9 | **Không Suy Diễn Giờ Sinh / Mặt Trăng** | Không có mã ngoại suy ở Frontend khi API chưa có metadata | D5-M01 (Shell quét DOM) và D5-M02 / AR-09 (Static AST gate) | **ĐẠT** |
+| 10 | **Kiểm Soát Quyết Định Kỹ Thuật** | Ghi nhận đầy đủ 12 quyết định D-M5-00 .. D-M5-11 | Mục 1 đã ghi nhận chi tiết toàn bộ quyết định | **ĐẠT** |
 
 
