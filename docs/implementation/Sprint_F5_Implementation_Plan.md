@@ -327,7 +327,7 @@ Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; 
 - **Mục tiêu:** Củng cố & xác minh 6 trạng thái suy giảm, bảo vệ không hồi quy M3/M4, cô lập lỗi dựng model H-1 khỏi viewer F4, ghi nhận Known Gap KG-F5-01 (Mặt Trăng) và kiểm soát static gate không suy diễn giờ sinh.
 - **Tasks:** chú thích Nhà trung tính và Cung Mọc "chưa khả dụng" (D5-H01..H03, D5-A01..A03); xử lý version null vs 1.0 (D5-V01..V04); trạng thái thiếu một phần partial (D5-P01..P03); cô lập entry hỏng, H-1 và reportError (D5-E01..E03); gate tĩnh và không suy diễn Mặt Trăng (D5-M01, D5-M02).
 - **Prerequisite:** M3, M4. **Acceptance:** AC-17…22.
-- **Tests:** fixture-driven (có/không Nhà, mâu thuẫn, thiếu mục, `version=null`, `"1.0"`+`[]`, entry hỏng, model ném lỗi, Moon biên giới 29.99°).
+- **Tests:** fixture-driven (có/không Nhà, mâu thuẫn, thiếu mục, `version=null`, `"1.0"`+`[]`, entry hỏng, model ném lỗi, Mặt Trăng ở 29.99° Bảo Bình F-MoonEdge).
 
 ### F5.M6 — Responsive & A11y hardening
 - **Tasks:** đo layout trên `dev`, xác nhận hoặc đổi vị trí 7.1; heading hierarchy; reduced motion (nếu có chuyển động); độ dài dòng/khoảng cách; liên kết nhảy; QA thủ công (bàn phím, trình đọc màn hình sẵn có — Windows Narrator như F4), ghi những gì chưa kiểm là Known Gap.
