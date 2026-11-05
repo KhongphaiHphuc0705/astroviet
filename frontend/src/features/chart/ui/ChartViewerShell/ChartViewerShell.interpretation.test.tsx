@@ -160,4 +160,64 @@ describe("ChartViewerShell interpretation integration", () => {
 
     scrollToSpy.mockRestore();
   });
+
+  it("D5-M01: F-NoHouse, F-NullEmpty, and F-MoonEdge never render speculative uncertainty or boundary disclaimers around Moon", () => {
+    // 1. F-NoHouse
+    const vmNoHouses = toChartViewModel(chartNoHouses);
+    const interpNoHouses = buildInterpretationModel(chartNoHouses, vmNoHouses);
+    const { container: containerNoHouses, unmount: unmount1 } = render(
+      <ChartViewerShell vm={vmNoHouses} interpretation={interpNoHouses} />,
+    );
+    expect(containerNoHouses.textContent).not.toMatch(
+      /bất định|không chắc|ranh giới|uncertain/i,
+    );
+    unmount1();
+
+    // 2. F-NullEmpty
+    const nullEmptyDto = {
+      ...chartFull,
+      interpretationVersion: null,
+      interpretations: [],
+    };
+    const vmNullEmpty = toChartViewModel(nullEmptyDto);
+    const interpNullEmpty = buildInterpretationModel(nullEmptyDto, vmNullEmpty);
+    const { container: containerNullEmpty, unmount: unmount2 } = render(
+      <ChartViewerShell vm={vmNullEmpty} interpretation={interpNullEmpty} />,
+    );
+    expect(containerNullEmpty.textContent).not.toMatch(
+      /bất định|không chắc|ranh giới|uncertain/i,
+    );
+    unmount2();
+
+    // 3. F-MoonEdge: Moon positioned close to sign boundary (e.g. 29.99 degrees)
+    const moonEdgeDto = {
+      ...chartFull,
+      planets: chartFull.planets.map((planet) =>
+        planet.name === "Moon"
+          ? {
+              ...planet,
+              longitude: 29.99,
+              sign: "Aries" as const,
+              degreeInSign: 29.99,
+            }
+          : planet,
+      ),
+    };
+    const vmMoonEdge = toChartViewModel(moonEdgeDto);
+    const interpMoonEdge = buildInterpretationModel(moonEdgeDto, vmMoonEdge);
+    const { container: containerMoonEdge, unmount: unmount3 } = render(
+      <ChartViewerShell vm={vmMoonEdge} interpretation={interpMoonEdge} />,
+    );
+
+    const moonSection = screen
+      .getByRole("button", { name: /^Mặt Trăng/ })
+      .closest("article")!;
+    expect(moonSection.textContent).not.toMatch(
+      /bất định|không chắc|ranh giới|uncertain/i,
+    );
+    expect(containerMoonEdge.textContent).not.toMatch(
+      /bất định|không chắc|ranh giới|uncertain/i,
+    );
+    unmount3();
+  });
 });

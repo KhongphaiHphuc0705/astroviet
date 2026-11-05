@@ -9,6 +9,8 @@ import {
   isValidChartId,
   toChartViewModel,
   useChartQuery,
+  type ChartViewModel,
+  type InterpretationModel,
 } from "@features/chart";
 import type { ApiError } from "@shared/api/client";
 import { getErrorMessage } from "@shared/lib/error-messages";
@@ -53,16 +55,31 @@ export default function ChartDetailPage() {
 
   const mapping = useMemo(() => {
     if (!query.data) return null;
+    let vm: ChartViewModel;
     try {
-      const vm = toChartViewModel(query.data);
-      const interpretation = buildInterpretationModel(query.data, vm);
-      return { ok: true as const, vm, interpretation };
+      vm = toChartViewModel(query.data);
     } catch (error) {
       if (error instanceof ChartViewModelError) {
         return { ok: false as const, error };
       }
       throw error;
     }
+
+    let interpretation: InterpretationModel | undefined;
+    let interpretationBuildError: unknown = null;
+    try {
+      interpretation = buildInterpretationModel(query.data, vm);
+    } catch (error) {
+      interpretation = undefined;
+      interpretationBuildError = error;
+    }
+
+    return {
+      ok: true as const,
+      vm,
+      interpretation,
+      interpretationBuildError,
+    };
   }, [query.data]);
 
   const serverErrorMessage = useMemo(() => {
@@ -78,6 +95,16 @@ export default function ChartDetailPage() {
 
   useEffect(() => {
     if (!mapping?.ok) return;
+
+    if (mapping.interpretationBuildError) {
+      reportError(
+        mapping.interpretationBuildError,
+        "interpretation-model-build",
+      );
+    }
+
+    if (!mapping.interpretation) return;
+
     const counts = new Map<string, number>();
     for (const issue of mapping.interpretation.issues) {
       if (issue.category === "defect") {

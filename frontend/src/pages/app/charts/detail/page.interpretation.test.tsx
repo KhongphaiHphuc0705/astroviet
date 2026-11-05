@@ -3,6 +3,7 @@ import { HttpResponse } from "msw";
 import { Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import * as chartModule from "@features/chart";
 import { chartFull, chartNoHouses } from "@features/chart/api/mocks/fixtures";
 import { mockGetChart } from "@features/chart/api/mocks/handlers";
 import * as reportErrorModule from "@shared/lib/report-error";
@@ -181,6 +182,118 @@ describe("ChartDetailPage interpretation integration", () => {
         message: expect.stringContaining("CONTENT_MISSING"),
       }),
       "interpretation-model",
+    );
+  });
+
+  it("D5-P01: F-MissingOne renders missing item copy for missing part, preserves other parts, and reports CONTENT_MISSING once", async () => {
+    const report = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    const missingOneDto = {
+      ...chartFull,
+      interpretations: chartFull.interpretations.filter(
+        (i) => i.subjectKey !== "Mars_in_Sagittarius",
+      ),
+    };
+
+    server.use(mockGetChart(() => HttpResponse.json(missingOneDto)));
+    renderPage();
+
+    expect(
+      await screen.findByRole("region", { name: "Diễn giải" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Có 20 diễn giải cho lá số này"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Chưa có nội dung cho mục này"),
+    ).toBeInTheDocument();
+
+    expect(report).toHaveBeenCalledTimes(1);
+    expect(report).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining("CONTENT_MISSING×1"),
+      }),
+      "interpretation-model",
+    );
+  });
+
+  it("D5-E02: rerendering with identical payload does not duplicate reportError calls", async () => {
+    const report = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    server.use(
+      mockGetChart(() =>
+        HttpResponse.json({
+          ...chartFull,
+          interpretations: [
+            ...chartFull.interpretations,
+            {
+              subjectType: "UnknownSubject",
+              subjectKey: "Unknown_Key",
+              language: "vi",
+              bodyText: "Invalid",
+            },
+          ],
+        }),
+      ),
+    );
+
+    const { rerender } = renderPage();
+
+    expect(
+      await screen.findByRole("region", { name: "Diễn giải" }),
+    ).toBeInTheDocument();
+
+    expect(report).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <Routes>
+        <Route path="/app/charts/:chartId" element={<ChartDetailPage />} />
+      </Routes>,
+    );
+
+    expect(report).toHaveBeenCalledTimes(1);
+  });
+
+  it("D5-E03: F-ModelThrows (H-1) keeps F4 viewer intact, omits interpretation panel, and reports error with interpretation-model-build context", async () => {
+    const report = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    vi.spyOn(chartModule, "buildInterpretationModel").mockImplementationOnce(
+      () => {
+        throw new Error("Simulated unexpected model failure");
+      },
+    );
+
+    server.use(mockGetChart(() => HttpResponse.json(chartFull)));
+    renderPage();
+
+    expect(
+      await screen.findByRole("heading", { name: "Vị trí hành tinh" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Lá số sinh" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Nhà và các góc" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Góc chiếu" }),
+    ).toBeInTheDocument();
+
+    expect(screen.queryByRole("region", { name: "Diễn giải" })).toBeNull();
+
+    expect(report).toHaveBeenCalledTimes(1);
+    expect(report).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Simulated unexpected model failure",
+      }),
+      "interpretation-model-build",
     );
   });
 });

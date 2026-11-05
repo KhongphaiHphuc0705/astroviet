@@ -103,3 +103,45 @@ Theo chỉ đạo của Owner: Đồng ý toàn bộ các đề xuất mặc đ�
   - `D5-V03` (`InterpretationPanel.degraded.test.tsx`): `version = null` nhưng có đủ 21 entry hợp lệ thì Panel hiển thị bình thường 11 mục (3 Cốt lõi + 8 Hành tinh), không hiển thị bất kỳ Alert nào (`PASS`).
   - `D5-V04` (`InterpretationPanel.degraded.test.tsx`): Quét DOM Panel trên cả 4 trạng thái (S-02 Full, S-03 Unpublished, S-05 No houses, S-08 Unavailable), khẳng định không chứa các chuỗi kỹ thuật `1.0`, `version`, `null`, `tone` (`neutral`), hoặc `contentSource` (`Hybrid`) (`PASS`).
 
+---
+
+## 6. Tiến Độ Thực Thi & Bằng Chứng Tasks 4–6 (M5.4 → M5.6)
+
+### Task 4 (M5.4): Trạng thái thiếu một phần (Partial) (AC-20)
+- **Mục tiêu:** Đảm bảo khi thiếu một hoặc nhiều phần diễn giải (nhưng vẫn còn nội dung khác), trạng thái mô hình là `partial`, số đếm phản ánh chính xác các phần khả dụng, các phần thiếu hiển thị thông báo thay thế đúng chuẩn và không sinh thêm `Alert` gây ồn; lỗi `CONTENT_MISSING` được báo cáo theo chính sách gộp 1 lần.
+- **Bằng chứng test:**
+  - `D5-P01` (`page.interpretation.test.tsx`): `F-MissingOne` (thiếu `Mars_in_Sagittarius`): hiển thị dòng thiếu "Chưa có nội dung cho mục này", 20 mục còn lại hiển thị bình thường; `reportError` được gọi đúng 1 lần với defect `CONTENT_MISSING×1` (`PASS`).
+  - `D5-P02` (`InterpretationPanel.degraded.test.tsx`): `F-Unsupported` (thêm entry có `subjectType: "UnknownSubject"`): model ghi nhận issue `SUBJECT_UNSUPPORTED`; Panel hiển thị 21 mục bình thường; text container hoàn toàn sạch, không rò rỉ `UnknownSubject`, `Unknown_Key_12345`, hay raw unknown body text (`PASS`).
+  - `D5-P03` (`InterpretationPanel.degraded.test.tsx`): Khi thiếu đồng thời 3 part (Sun in sign, Mars in house, Venus in sign): `model.status` là `"partial"`, `availableCount = 18`, Overview hiển thị chính xác "Có 18 diễn giải cho lá số này", hoàn toàn không render thêm `Alert` (warning hay info); 3 vị trí thiếu hiển thị "Chưa có nội dung cho mục này"; các nội dung hợp lệ khác hiển thị nguyên vẹn (`PASS`).
+
+### Task 5 (M5.5): Cô lập entry hỏng, `reportError` & thực thi H-1 (AC-21, AC-22)
+- **Mục tiêu:** Cô lập lỗi dữ liệu thô và lỗi ngoại lệ khi dựng mô hình để không bao giờ làm sập route xem lá số F4 (`page.tsx`); đảm bảo báo lỗi qua `reportError` đúng ngữ cảnh và không bị nhân bản khi re-render.
+- **Thay đổi mã nguồn:**
+  - Đã thực thi H-1 trong `frontend/src/pages/app/charts/detail/page.tsx`: tách bước gọi `buildInterpretationModel(query.data, vm)` vào khối `try...catch` riêng biệt. Khi có ngoại lệ, `mapping.ok` vẫn là `true`, `interpretation` nhận `undefined`, và `useEffect` phát tín hiệu `reportError(error, "interpretation-model-build")` đúng 1 lần. Viewer F4 tiếp tục hoạt động mà không có panel diễn giải.
+- **Bằng chứng test:**
+  - `D5-E01` (`InterpretationPanel.degraded.test.tsx`): `F-Malformed` (trộn các entry hỏng: `null`, số, chuỗi, thiếu `subjectKey`, key rác, sai ngôn ngữ, body trắng): các entry hỏng được `buildInterpretationModel` lọc bỏ an toàn; model ghi nhận `ENTRY_MALFORMED`; các entry anh em hợp lệ hiển thị bình thường; không rò rỉ mã lỗi hay nội dung hỏng vào DOM (`PASS`).
+  - `D5-E02` (`page.interpretation.test.tsx`): Khi `ChartDetailPage` re-render với cùng payload dữ liệu, `reportError` không bị gọi lặp lại (giữ đúng 1 lần) (`PASS`).
+  - `D5-E03` (`page.interpretation.test.tsx`): `F-ModelThrows` (H-1): mock `buildInterpretationModel` ném lỗi bất ngờ; viewer F4 hiển thị đầy đủ 4 heading chính ("Lá số sinh", "Vị trí hành tinh", "Nhà và các góc", "Góc chiếu"), vùng Diễn giải bị ẩn an toàn, và `reportError` nhận đúng message lỗi với context `"interpretation-model-build"` (`PASS`).
+
+### Task 6 (M5.6): Gate tĩnh & không suy diễn giờ sinh/Moon (AC-18, KG-F5-01)
+- **Mục tiêu:** Không thực hiện bất kỳ phép ngoại suy nào về giờ sinh hoặc độ bất định vị trí Mặt Trăng tại Frontend khi hợp đồng dữ liệu chưa hỗ trợ (`KG-F5-01`); kiểm soát tĩnh toàn bộ source code component và copy.
+- **Bằng chứng test:**
+  - `D5-M01` (`ChartViewerShell.interpretation.test.tsx`): Quét DOM trên 3 fixture `F-NoHouse`, `F-NullEmpty`, và `F-MoonEdge` (Mặt Trăng ở sát ranh giới cung 29.99°): khẳng định không chứa bất kỳ từ ngữ phỏng đoán nào liên quan tới `/bất định|không chắc|ranh giới|uncertain/i` quanh mục Mặt Trăng hay trong toàn bộ Shell (`PASS`).
+  - `D5-M02 / AR-09` (`InterpretationPanel.purity.test.ts`): Cổng kiểm tra tĩnh cấp mã nguồn khẳng định toàn bộ 3 component (`InterpretationPanel.tsx`, `InterpretationItem.tsx`, `InterpretationOverview.tsx`) và file bản sao `interpretationCopy.ts` không chứa `isBirthTimeKnown`, `birthTime`, hay các logic suy đoán độ bất định/biên độ của Mặt Trăng (`PASS`).
+
+---
+
+## 7. Tổng Hợp & Đánh Giá Tiêu Chí Đóng Milestone 5 (Task 7 / M5.7)
+
+| Tiêu chí DoD | Mục tiêu | Kết quả thực tế | Trạng thái |
+|---|---|---|---|
+| **AC-17 .. AC-22 traceability** | Mỗi AC có ít nhất 1 test cụ thể | Phủ đầy đủ qua 18 test D5-* (D5-H01..H03, D5-A01..A03, D5-V01..V04, D5-P01..P03, D5-E01..E03, D5-M01..M02) | **PASS** |
+| **Bảo vệ 6 trạng thái suy giảm** | Full, NoHouse, Contradiction, MissingOne, Unsupported, VerEmpty, Malformed | Tất cả trạng thái đều có test tương ứng và pass 100% | **PASS** |
+| **Toàn vẹn nội dung hợp lệ** | Partial degraded không ảnh hưởng nội dung còn lại | D5-P01, D5-P03, D5-E01 xác minh nội dung hợp lệ hiển thị bình thường | **PASS** |
+| **Cô lập lỗi dữ liệu & model (H-1)** | App không sập khi model ném; báo lỗi 1 lần | D5-E01..E03 & sửa `page.tsx` pass sạch | **PASS** |
+| **Ghi nhận Known Gap KG-F5-01** | Trạng thái OPEN, không nhận giải quyết xong | Đã ghi nhận tại Mục 3 và kiểm chứng bằng D5-M01, D5-M02 | **PASS** |
+| **Zero-diff gate trên model files** | `model/selection.ts` & `model/interpretation.ts` | 0 dòng khác biệt (`git diff --stat` rỗng) | **PASS** |
+| **CI Quality Gates** | Format, Lint, Typecheck, Tests | Format clean, Lint 0 errors, Typecheck 0 errors, 167/167 tests pass | **PASS** |
+| **D-M5-00 .. D-M5-11 Decisions** | Toàn bộ 12 quyết định được phê duyệt & ghi nhận | Đã ghi nhận đầy đủ tại Mục 1 | **PASS** |
+
+

@@ -207,4 +207,139 @@ describe("InterpretationPanel degraded states", () => {
       unmount();
     }
   });
+
+  it("D5-P02: F-Unsupported ignores unknown subject types from DOM, renders valid items, and records defect issue", () => {
+    const unsupportedDto = {
+      ...chartFull,
+      interpretations: [
+        ...chartFull.interpretations,
+        {
+          subjectType: "UnknownSubject",
+          subjectKey: "Unknown_Key_12345",
+          language: "vi",
+          bodyText: "Raw unknown body text should never render",
+        },
+      ],
+    } as unknown as typeof chartFull;
+
+    const vm = toChartViewModel(unsupportedDto);
+    const model = buildInterpretationModel(unsupportedDto, vm);
+
+    expect(model.issues.some((i) => i.code === "SUBJECT_UNSUPPORTED")).toBe(
+      true,
+    );
+
+    const { container } = render(<InterpretationPanel vm={vm} model={model} />);
+
+    // Valid items still render normally
+    expect(
+      screen.getByText("Có 21 diễn giải cho lá số này"),
+    ).toBeInTheDocument();
+
+    // No leaked raw unknown strings in DOM
+    expect(container.textContent).not.toContain("UnknownSubject");
+    expect(container.textContent).not.toContain("Unknown_Key_12345");
+    expect(container.textContent).not.toContain(
+      "Raw unknown body text should never render",
+    );
+  });
+
+  it("D5-P03: Multiple parts missing sets status to partial, renders missing copy without new Alert, and shows accurate count", () => {
+    // Remove 3 entries: Sun in sign, Mars in house, Venus in sign
+    const missingKeys = new Set([
+      "Sun_in_Capricorn",
+      "Mars_in_House_8",
+      "Venus_in_Aquarius",
+    ]);
+    const multiMissingDto = {
+      ...chartFull,
+      interpretations: chartFull.interpretations.filter(
+        (i) => !missingKeys.has(i.subjectKey),
+      ),
+    };
+
+    const vm = toChartViewModel(multiMissingDto);
+    const model = buildInterpretationModel(multiMissingDto, vm);
+
+    expect(model.status).toBe("partial");
+    // 21 - 3 = 18 available entries
+    expect(model.availableCount).toBe(18);
+
+    render(<InterpretationPanel vm={vm} model={model} />);
+
+    // Count accurately reflects available interpretations
+    expect(
+      screen.getByText("Có 18 diễn giải cho lá số này"),
+    ).toBeInTheDocument();
+
+    // No alert is rendered because partial missing is not an unavailable chart
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.queryByRole("status")).toBeNull();
+
+    // Missing copy appears for the missing parts
+    const missingCopies = screen.getAllByText("Chưa có nội dung cho mục này");
+    expect(missingCopies.length).toBe(3);
+
+    // Other existing interpretations are still rendered intact
+    expect(screen.getByText(/Mặt Trăng ở Bảo Bình/i)).toBeInTheDocument();
+  });
+
+  it("D5-E01: F-Malformed filters out malformed entries cleanly, renders valid siblings, and prevents raw key leaks", () => {
+    const malformedDto = {
+      ...chartFull,
+      interpretations: [
+        ...chartFull.interpretations,
+        null,
+        123,
+        "string-entry",
+        { subjectType: null, subjectKey: "Malformed_1" },
+        {
+          subjectType: "PlanetInSign",
+          subjectKey: "",
+          language: "vi",
+          bodyText: "No key",
+        },
+        {
+          subjectType: "PlanetInSign",
+          subjectKey: "Invalid_Sign_Key",
+          language: "vi",
+          bodyText: "Bad key",
+        },
+        {
+          subjectType: "PlanetInSign",
+          subjectKey: "Sun_in_Capricorn",
+          language: "en",
+          bodyText: "English not supported",
+        },
+        {
+          subjectType: "PlanetInSign",
+          subjectKey: "Sun_in_Capricorn",
+          language: "vi",
+          bodyText: "   ",
+        },
+      ] as unknown as typeof chartFull.interpretations,
+    };
+
+    const vm = toChartViewModel(malformedDto);
+    const model = buildInterpretationModel(malformedDto, vm);
+
+    expect(model.issues.some((i) => i.code === "ENTRY_MALFORMED")).toBe(true);
+    expect(model.status).toBe("ready");
+
+    const { container } = render(<InterpretationPanel vm={vm} model={model} />);
+
+    // Valid siblings render normally
+    expect(
+      screen.getByText("Có 21 diễn giải cho lá số này"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Mặt Trời ở Ma Kết tượng trưng cho tham vọng/i),
+    ).toBeInTheDocument();
+
+    // No malformed or raw keys leaked into DOM
+    expect(container.textContent).not.toContain("Malformed_1");
+    expect(container.textContent).not.toContain("Invalid_Sign_Key");
+    expect(container.textContent).not.toContain("English not supported");
+    expect(container.textContent).not.toContain("string-entry");
+  });
 });
