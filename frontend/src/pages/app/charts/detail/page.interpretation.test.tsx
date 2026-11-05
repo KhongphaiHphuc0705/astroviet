@@ -220,7 +220,7 @@ describe("ChartDetailPage interpretation integration", () => {
     );
   });
 
-  it("D5-E02: rerendering with identical payload does not duplicate reportError calls", async () => {
+  it("D5-E02: rerendering or refetching with identical payload does not duplicate reportError calls", async () => {
     const report = vi
       .spyOn(reportErrorModule, "reportError")
       .mockImplementation(() => {});
@@ -242,7 +242,7 @@ describe("ChartDetailPage interpretation integration", () => {
       ),
     );
 
-    const { rerender } = renderPage();
+    const { queryClient, rerender } = renderPage();
 
     expect(
       await screen.findByRole("region", { name: "Diễn giải" }),
@@ -250,11 +250,17 @@ describe("ChartDetailPage interpretation integration", () => {
 
     expect(report).toHaveBeenCalledTimes(1);
 
+    // 1. Component re-render does not duplicate
     rerender(
       <Routes>
         <Route path="/app/charts/:chartId" element={<ChartDetailPage />} />
       </Routes>,
     );
+
+    expect(report).toHaveBeenCalledTimes(1);
+
+    // 2. Query refetch returning a fresh object payload with identical content does not duplicate
+    await queryClient.refetchQueries();
 
     expect(report).toHaveBeenCalledTimes(1);
   });

@@ -115,50 +115,59 @@ describe("ChartViewerShell interpretation integration", () => {
     const scrollToSpy = vi
       .spyOn(window, "scrollTo")
       .mockImplementation(() => {});
+    const originalScrollIntoView = Element.prototype.scrollIntoView;
     const scrollIntoViewSpy = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoViewSpy;
 
-    const vm = toChartViewModel(chartNoHouses);
-    const interpretation = buildInterpretationModel(chartNoHouses, vm);
-    render(<ChartViewerShell vm={vm} interpretation={interpretation} />);
+    try {
+      const vm = toChartViewModel(chartNoHouses);
+      const interpretation = buildInterpretationModel(chartNoHouses, vm);
+      render(<ChartViewerShell vm={vm} interpretation={interpretation} />);
 
-    const panel = screen.getByRole("region", { name: "Diễn giải" });
-    const sunHeaderBtn = within(panel).getByRole("button", {
-      name: /^Mặt Trời/,
-    });
-    const ascendantHeaderBtn = within(panel).getByRole("button", {
-      name: /^Cung Mọc/,
-    });
+      const panel = screen.getByRole("region", { name: "Diễn giải" });
+      const sunHeaderBtn = within(panel).getByRole("button", {
+        name: /^Mặt Trời/,
+      });
+      const ascendantHeaderBtn = within(panel).getByRole("button", {
+        name: /^Cung Mọc/,
+      });
 
-    expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
-    expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
-    expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
+      expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
+      expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
+      expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
 
-    const tableSunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
-    tableSunBtn.focus();
-    fireEvent.click(tableSunBtn);
+      const tableSunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+      tableSunBtn.focus();
+      fireEvent.click(tableSunBtn);
 
-    expect(document.activeElement).toBe(tableSunBtn);
-    expect(scrollToSpy).not.toHaveBeenCalled();
-    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(tableSunBtn);
+      expect(scrollToSpy).not.toHaveBeenCalled();
+      expect(scrollIntoViewSpy).not.toHaveBeenCalled();
 
-    expect(sunHeaderBtn).toHaveAttribute("aria-current", "true");
-    expect(within(panel).getByText("Đang chọn")).toBeInTheDocument();
-    expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
-    expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
+      expect(sunHeaderBtn).toHaveAttribute("aria-current", "true");
+      expect(within(panel).getByText("Đang chọn")).toBeInTheDocument();
+      expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
+      expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
 
-    const readBtn = screen.getByRole("button", { name: "Đọc diễn giải" });
-    fireEvent.click(readBtn);
+      const readBtn = screen.getByRole("button", { name: "Đọc diễn giải" });
+      fireEvent.click(readBtn);
 
-    expect(document.activeElement).toBe(sunHeaderBtn);
+      expect(document.activeElement).toBe(sunHeaderBtn);
 
-    const shell = screen.getByTestId("chart-viewer-shell");
-    fireEvent.keyDown(shell, { key: "Escape" });
+      // Verify "Bỏ chọn" button exists and is visible before pressing Escape
+      expect(
+        screen.getByRole("button", { name: "Bỏ chọn" }),
+      ).toBeInTheDocument();
 
-    expect(screen.queryByRole("button", { name: "Bỏ chọn" })).toBeNull();
-    expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
+      const shell = screen.getByTestId("chart-viewer-shell");
+      fireEvent.keyDown(shell, { key: "Escape" });
 
-    scrollToSpy.mockRestore();
+      expect(screen.queryByRole("button", { name: "Bỏ chọn" })).toBeNull();
+      expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
+    } finally {
+      Element.prototype.scrollIntoView = originalScrollIntoView;
+      scrollToSpy.mockRestore();
+    }
   });
 
   it("D5-M01: F-NoHouse, F-NullEmpty, and F-MoonEdge never render speculative uncertainty or boundary disclaimers around Moon", () => {
@@ -189,15 +198,17 @@ describe("ChartViewerShell interpretation integration", () => {
     );
     unmount2();
 
-    // 3. F-MoonEdge: Moon positioned close to sign boundary (e.g. 29.99 degrees)
+    // 3. F-MoonEdge: Moon positioned close to sign boundary in Aquarius (degreeInSign 29.99°, longitude 329.99°)
+    // Aquarius spans 300°..330°, so 29.99° in Aquarius is 329.99° longitude.
+    // Preserving Moon_in_Aquarius ensures Moon interpretation is rendered and tested.
     const moonEdgeDto = {
       ...chartFull,
       planets: chartFull.planets.map((planet) =>
         planet.name === "Moon"
           ? {
               ...planet,
-              longitude: 29.99,
-              sign: "Aries" as const,
+              longitude: 329.99,
+              sign: "Aquarius" as const,
               degreeInSign: 29.99,
             }
           : planet,
@@ -212,6 +223,14 @@ describe("ChartViewerShell interpretation integration", () => {
     const moonSection = screen
       .getByRole("button", { name: /^Mặt Trăng/ })
       .closest("article")!;
+
+    // Affirmative assertion: Moon interpretation content is actively displayed
+    expect(moonSection.textContent).toMatch(/Mặt Trăng ở Bảo Bình/i);
+    expect(moonSection.textContent).not.toMatch(
+      /Chưa có nội dung cho mục này/i,
+    );
+
+    // Negative assertions: No speculative uncertainty or boundary disclaimers
     expect(moonSection.textContent).not.toMatch(
       /bất định|không chắc|ranh giới|uncertain/i,
     );

@@ -66,11 +66,13 @@ export default function ChartDetailPage() {
     }
 
     let interpretation: InterpretationModel | undefined;
+    let interpretationBuildFailed = false;
     let interpretationBuildError: unknown = null;
     try {
       interpretation = buildInterpretationModel(query.data, vm);
     } catch (error) {
       interpretation = undefined;
+      interpretationBuildFailed = true;
       interpretationBuildError = error;
     }
 
@@ -78,6 +80,7 @@ export default function ChartDetailPage() {
       ok: true as const,
       vm,
       interpretation,
+      interpretationBuildFailed,
       interpretationBuildError,
     };
   }, [query.data]);
@@ -93,14 +96,21 @@ export default function ChartDetailPage() {
     }
   }, [mapping]);
 
+  const lastReportedInterpretationSignatureRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!mapping?.ok) return;
 
-    if (mapping.interpretationBuildError) {
-      reportError(
-        mapping.interpretationBuildError,
-        "interpretation-model-build",
-      );
+    if (mapping.interpretationBuildFailed) {
+      const buildSignature = `build-error:${String(mapping.interpretationBuildError)}`;
+      if (lastReportedInterpretationSignatureRef.current !== buildSignature) {
+        lastReportedInterpretationSignatureRef.current = buildSignature;
+        reportError(
+          mapping.interpretationBuildError,
+          "interpretation-model-build",
+        );
+      }
+      return;
     }
 
     if (!mapping.interpretation) return;
@@ -115,10 +125,14 @@ export default function ChartDetailPage() {
       const summary = [...counts]
         .map(([code, count]) => `${code}×${count}`)
         .join(", ");
-      reportError(
-        new Error(`Interpretation data issues: ${summary}`),
-        "interpretation-model",
-      );
+      const defectSignature = `defects:${summary}`;
+      if (lastReportedInterpretationSignatureRef.current !== defectSignature) {
+        lastReportedInterpretationSignatureRef.current = defectSignature;
+        reportError(
+          new Error(`Interpretation data issues: ${summary}`),
+          "interpretation-model",
+        );
+      }
     }
   }, [mapping]);
 
