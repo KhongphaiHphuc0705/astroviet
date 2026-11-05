@@ -76,3 +76,30 @@ Theo chỉ đạo của Owner: Đồng ý toàn bộ các đề xuất mặc đ�
 | **M5.5** | T5 — Cô lập entry hỏng, `reportError` & thực thi H-1 | `D5-E01`..`D5-E03` | `page.tsx`, `page.interpretation.test.tsx`, `InterpretationPanel.degraded.test.tsx` |
 | **M5.6** | T6 — Gate tĩnh không suy diễn giờ sinh/Moon | `D5-M01`, `D5-M02` | `ChartViewerShell.interpretation.test.tsx`, `InterpretationPanel.purity.test.ts` |
 | **M5.7** | Đóng Milestone & cập nhật hồ sơ nghiệm thu | Tất cả cổng chất lượng | `Sprint_F5_M5_Exit_Criteria_Evidence_Matrix.md`, `Sprint_F5_Implementation_Plan.md` |
+
+---
+
+## 5. Tiến Độ Thực Thi & Bằng Chứng Từng Task (M5.1 → M5.3)
+
+### Task 1 (M5.1): Khoá hành vi chú thích Nhà trung tính (AC-17)
+- **Mục tiêu:** Đảm bảo khi đủ Nhà thì không có chú thích; khi thiếu Nhà thì có đúng 1 chú thích trung tính tại Panel và phân tách rõ ràng với banner F4 `HouseDataNotice`; cờ mâu thuẫn (`isHouseDataAvailable: true` nhưng thiếu nhà) xử lý an toàn.
+- **Bằng chứng test:**
+  - `D5-H01` (`ChartViewerShell.interpretation.test.tsx`): `chartFull` không hiển thị chú thích Nhà trong vùng Diễn giải (`PASS`).
+  - `D5-H02` (`ChartViewerShell.interpretation.test.tsx`): `chartNoHouses` hiển thị đúng 1 chú thích trong Panel; text của Panel tuyệt đối không chứa `/giờ sinh|birth|vĩ độ|latitude/i`; banner F4 `HouseDataNotice` là vùng riêng biệt bên ngoài Panel (`PASS`).
+  - `D5-H03` (`InterpretationPanel.degraded.test.tsx`): Cờ mâu thuẫn (11 nhà) kích hoạt `vm.flags.houseDataAvailable === false`, Panel hiển thị chú thích trung tính và ẩn hoàn toàn khối "Theo nhà" (`PASS`).
+
+### Task 2 (M5.2): Cung Mọc "chưa khả dụng" & Hồi quy M4 trên fixture không-Nhà (AC-17, AC-13..16, AC-24..26)
+- **Mục tiêu:** Phân biệt rõ "dữ liệu góc vắng" vs "nội dung thiếu"; bảo vệ các tương tác M4 trên lá số không có Nhà (chọn Mặt Trời, badge "Đang chọn", "Đọc diễn giải", phím Escape, không cuộn/dời focus khi chọn).
+- **Bằng chứng test:**
+  - `D5-A01` (`InterpretationPanel.degraded.test.tsx`): `chartNoHouses` hiển thị Cung Mọc với copy `C-11` ("Cung Mọc chưa khả dụng cho lá số này."); nút disclosure mở/đóng bình thường; không có nút "Xem trên biểu đồ" cho Cung Mọc; các hành tinh khác vẫn hiển thị phần "Theo cung" (`PASS`).
+  - `D5-A02` (`InterpretationPanel.degraded.test.tsx`): Lá số có Nhà nhưng thiếu entry Cung Mọc hiển thị "Chưa có nội dung cho mục này", tuyệt đối không hiển thị "chưa khả dụng" (`PASS`).
+  - `D5-A03` (`ChartViewerShell.interpretation.test.tsx`): Trên `chartNoHouses`, chọn Mặt Trời từ bảng cập nhật `aria-current="true"` và badge "Đang chọn", không dời focus và không cuộn trang; nút "Đọc diễn giải" chuyển focus tức thì đến header Mặt Trời; Escape khôi phục trạng thái F4; Cung Mọc không bao giờ nhận badge "Đang chọn" (`PASS`).
+
+### Task 3 (M5.3): Xử lý `version` (`null` vs `"1.0"`) & Tuân thủ AC-19 (AC-19)
+- **Mục tiêu:** Khẳng định `version = null` đi kèm mảng rỗng là trạng thái S-03 `unpublished` (Alert info); `version = "1.0"` đi kèm mảng rỗng là dữ liệu bất thường S-08 (Alert warning) và báo lỗi 1 lần; `version = null` nhưng có mục hợp lệ thì hiển thị bình thường; không bao giờ để lộ các chuỗi kỹ thuật (`version`, `null`, `tone`, `contentSource`) ra DOM.
+- **Bằng chứng test:**
+  - `D5-V01` (`page.interpretation.test.tsx`): `version = null` và `interpretations = []` hiển thị Alert info `role="status"` "Nội dung diễn giải chưa được phát hành"; 3 bảng dữ liệu F4 (Hành tinh, Nhà, Góc chiếu) được bảo tồn nguyên vẹn; 0 lỗi báo qua `reportError` (`PASS`).
+  - `D5-V02` (`InterpretationPanel.degraded.test.tsx` & `page.interpretation.test.tsx`): `version = "1.0"` và `interpretations = []` hiển thị Alert warning `role="alert"` "Hiện chưa thể hiển thị diễn giải cho lá số này." (không phải "chưa phát hành"); `page.tsx` ghi nhận và gọi `reportError` đúng 1 lần với defect `CONTENT_MISSING` (`PASS`).
+  - `D5-V03` (`InterpretationPanel.degraded.test.tsx`): `version = null` nhưng có đủ 21 entry hợp lệ thì Panel hiển thị bình thường 11 mục (3 Cốt lõi + 8 Hành tinh), không hiển thị bất kỳ Alert nào (`PASS`).
+  - `D5-V04` (`InterpretationPanel.degraded.test.tsx`): Quét DOM Panel trên cả 4 trạng thái (S-02 Full, S-03 Unpublished, S-05 No houses, S-08 Unavailable), khẳng định không chứa các chuỗi kỹ thuật `1.0`, `version`, `null`, `tone` (`neutral`), hoặc `contentSource` (`Hybrid`) (`PASS`).
+

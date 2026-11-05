@@ -117,4 +117,70 @@ describe("ChartDetailPage interpretation integration", () => {
       screen.queryByRole("region", { name: "Diễn giải" }),
     ).not.toBeInTheDocument();
   });
+
+  it("D5-V01: F-NullEmpty with version null and empty interpretations renders S-03 unpublished alert, preserves F4 tables, and does not report errors", async () => {
+    const report = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    server.use(
+      mockGetChart(() =>
+        HttpResponse.json({
+          ...chartFull,
+          interpretationVersion: null,
+          interpretations: [],
+        }),
+      ),
+    );
+
+    renderPage();
+
+    const alertText = await screen.findByText(
+      "Nội dung diễn giải chưa được phát hành",
+    );
+    expect(alertText.closest('[role="status"]')).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("heading", { name: "Vị trí hành tinh" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Nhà và các góc" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Góc chiếu" }),
+    ).toBeInTheDocument();
+
+    expect(report).not.toHaveBeenCalled();
+  });
+
+  it("D5-V02: F-VerEmpty with version 1.0 and empty interpretations reports defect error once and renders S-08", async () => {
+    const report = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    server.use(
+      mockGetChart(() =>
+        HttpResponse.json({
+          ...chartFull,
+          interpretationVersion: "1.0",
+          interpretations: [],
+        }),
+      ),
+    );
+
+    renderPage();
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent(
+      "Hiện chưa thể hiển thị diễn giải cho lá số này.",
+    );
+
+    expect(report).toHaveBeenCalledTimes(1);
+    expect(report).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining("CONTENT_MISSING"),
+      }),
+      "interpretation-model",
+    );
+  });
 });

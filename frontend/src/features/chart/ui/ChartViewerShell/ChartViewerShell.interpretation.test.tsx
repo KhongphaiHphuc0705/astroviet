@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { chartFull } from "../../api/mocks/fixtures";
+import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
 import { toChartViewModel } from "../../model/chartViewModel";
 import { buildInterpretationModel } from "../../model/interpretation";
 
@@ -84,5 +84,80 @@ describe("ChartViewerShell interpretation integration", () => {
     expect(sunItemToggle).toHaveAttribute("aria-expanded", "false");
 
     expect(screen.queryByRole("button", { name: "Bỏ chọn" })).toBeNull();
+  });
+
+  it("D5-H01: F-Full does not render house data notice inside interpretation panel", () => {
+    const vm = toChartViewModel(chartFull);
+    const interpretation = buildInterpretationModel(chartFull, vm);
+    render(<ChartViewerShell vm={vm} interpretation={interpretation} />);
+
+    const panel = screen.getByRole("region", { name: "Diễn giải" });
+    expect(within(panel).queryByText(/Dữ liệu Nhà/i)).toBeNull();
+  });
+
+  it("D5-H02: F-NoHouse renders exactly one house notice in panel without mentioning birth time or latitude, keeping F4 notice distinct", () => {
+    const vm = toChartViewModel(chartNoHouses);
+    const interpretation = buildInterpretationModel(chartNoHouses, vm);
+    render(<ChartViewerShell vm={vm} interpretation={interpretation} />);
+
+    const panel = screen.getByRole("region", { name: "Diễn giải" });
+    const panelHouseNotice = within(panel).getByText(
+      "Dữ liệu Nhà và một số góc trong lá số này chưa khả dụng. Bạn vẫn có thể xem các diễn giải theo cung.",
+    );
+    expect(panelHouseNotice).toBeInTheDocument();
+    expect(panel.textContent).not.toMatch(/giờ sinh|birth|vĩ độ|latitude/i);
+
+    const f4Notice = screen.getByText("Dữ liệu Nhà và các góc chưa khả dụng");
+    expect(panel.contains(f4Notice)).toBe(false);
+  });
+
+  it("D5-A03: F-NoHouse M4 regression - selecting planet marks and expands item, Read Interpretation focuses header, Escape clears selection, Ascendant never selected", () => {
+    const scrollToSpy = vi
+      .spyOn(window, "scrollTo")
+      .mockImplementation(() => {});
+    const scrollIntoViewSpy = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoViewSpy;
+
+    const vm = toChartViewModel(chartNoHouses);
+    const interpretation = buildInterpretationModel(chartNoHouses, vm);
+    render(<ChartViewerShell vm={vm} interpretation={interpretation} />);
+
+    const panel = screen.getByRole("region", { name: "Diễn giải" });
+    const sunHeaderBtn = within(panel).getByRole("button", {
+      name: /^Mặt Trời/,
+    });
+    const ascendantHeaderBtn = within(panel).getByRole("button", {
+      name: /^Cung Mọc/,
+    });
+
+    expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
+    expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
+    expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
+
+    const tableSunBtn = screen.getByRole("button", { name: "Chọn Mặt Trời" });
+    tableSunBtn.focus();
+    fireEvent.click(tableSunBtn);
+
+    expect(document.activeElement).toBe(tableSunBtn);
+    expect(scrollToSpy).not.toHaveBeenCalled();
+    expect(scrollIntoViewSpy).not.toHaveBeenCalled();
+
+    expect(sunHeaderBtn).toHaveAttribute("aria-current", "true");
+    expect(within(panel).getByText("Đang chọn")).toBeInTheDocument();
+    expect(sunHeaderBtn).toHaveAttribute("aria-expanded", "true");
+    expect(ascendantHeaderBtn).not.toHaveAttribute("aria-current");
+
+    const readBtn = screen.getByRole("button", { name: "Đọc diễn giải" });
+    fireEvent.click(readBtn);
+
+    expect(document.activeElement).toBe(sunHeaderBtn);
+
+    const shell = screen.getByTestId("chart-viewer-shell");
+    fireEvent.keyDown(shell, { key: "Escape" });
+
+    expect(screen.queryByRole("button", { name: "Bỏ chọn" })).toBeNull();
+    expect(sunHeaderBtn).not.toHaveAttribute("aria-current");
+
+    scrollToSpy.mockRestore();
   });
 });
