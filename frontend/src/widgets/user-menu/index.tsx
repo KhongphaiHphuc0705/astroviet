@@ -20,7 +20,7 @@ export function UserMenu() {
   return (
     <Stack direction="horizontal" align="center" gap="3">
       <ThemeToggle />
-      <span className="text-body-sm text-muted">
+      <span className="hidden text-body-sm text-muted sm:inline">
         {user?.displayName ?? user?.email ?? ""}
       </span>
       <Button
