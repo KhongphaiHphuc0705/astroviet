@@ -322,10 +322,12 @@ Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; 
 - **Tests:** Shell integration (chọn qua wheel và qua Planet Table); không focus bị cướp; Escape khôi phục focus an toàn; stale selection; purity static AST.
 - **DoD:** reducer `selection.ts` và model `interpretation.ts` giữ nguyên 100% diff rỗng. Ghi nhận KG-F5M4-01 (M-07 hoãn M6/M7), KG-F5M4-02 (M-08 unverified trong UI thật), KG-F5M4-03 (Safari/Firefox).
 
-### F5.M5 — Trạng thái suy giảm & copy
-- **Tasks:** chú thích Nhà trung tính (Overview và `HouseDataNotice`), Cung Mọc "chưa khả dụng", `version=null`, một phần, entry hỏng + `reportError`; ghi KG-F5-01 (Mặt Trăng).
-- **Prerequisite:** M3 (có thể song song M4). **Acceptance:** AC-17…22.
-- **Tests:** fixture-driven (có/không Nhà, thiếu mục, `version=null`, entry hỏng).
+### F5.M5 — Trạng thái suy giảm & copy [DONE — 2026-11-05]
+- **Trạng thái:** **COMPLETED** (Commit chuỗi `e088c46` → `b213f29`; 18 test mới D5-* xanh; 61 test files / 751 tests passed; H-1 cô lập lỗi dựng model; đăng ký KG-F5-01; 0 diff `selection.ts`/`interpretation.ts`; Evidence Matrix tại `docs/implementation/archive/sprint-f5/Sprint_F5_M5_Exit_Criteria_Evidence_Matrix.md`).
+- **Mục tiêu:** Củng cố & xác minh 6 trạng thái suy giảm, bảo vệ không hồi quy M3/M4, cô lập lỗi dựng model H-1 khỏi viewer F4, ghi nhận Known Gap KG-F5-01 (Mặt Trăng) và kiểm soát static gate không suy diễn giờ sinh.
+- **Tasks:** chú thích Nhà trung tính và Cung Mọc "chưa khả dụng" (D5-H01..H03, D5-A01..A03); xử lý version null vs 1.0 (D5-V01..V04); trạng thái thiếu một phần partial (D5-P01..P03); cô lập entry hỏng, H-1 và reportError (D5-E01..E03); gate tĩnh và không suy diễn Mặt Trăng (D5-M01, D5-M02).
+- **Prerequisite:** M3, M4. **Acceptance:** AC-17…22.
+- **Tests:** fixture-driven (có/không Nhà, mâu thuẫn, thiếu mục, `version=null`, `"1.0"`+`[]`, entry hỏng, model ném lỗi, Mặt Trăng ở 29.99° Bảo Bình F-MoonEdge).
 
 ### F5.M6 — Responsive & A11y hardening
 - **Tasks:** đo layout trên `dev`, xác nhận hoặc đổi vị trí 7.1; heading hierarchy; reduced motion (nếu có chuyển động); độ dài dòng/khoảng cách; liên kết nhảy; QA thủ công (bàn phím, trình đọc màn hình sẵn có — Windows Narrator như F4), ghi những gì chưa kiểm là Known Gap.
@@ -444,7 +446,7 @@ D-F5-01…09 trong `Confirmation.md` là đề xuất, không mặc định xem 
 
 | ID | Gap | Loại |
 |---|---|---|
-| KG-F5-01 | Không có cảnh báo độ bất định Mặt Trăng khi thiếu giờ sinh (KG-S4-06). `isHouseDataAvailable=false` không xác định nguyên nhân; FG-01 có thể xác nhận giờ sinh nhưng chưa đủ để mô tả uncertainty của Moon nếu chưa có quyết định/hợp đồng FG-07 | Requires Backend / Owner |
+| KG-F5-01 | Không có cảnh báo độ bất định Mặt Trăng khi thiếu giờ sinh (KG-S4-06). `isHouseDataAvailable=false` không xác định nguyên nhân; FG-01 có thể xác nhận giờ sinh nhưng chưa đủ để mô tả uncertainty của Moon nếu chưa có quyết định/hợp đồng FG-07 (Trạng thái M5: OPEN — Đã đăng ký đầy đủ tại Matrix M5, kiểm chứng qua D5-M01/D5-M02 không suy diễn ở FE) | Requires Backend / Owner |
 | KG-F5-02 | Không có diễn giải góc chiếu, Nhà độc lập, cusp, pattern, tổng hợp "đọc toàn bộ lá số" | Backend/Content backlog |
 | KG-F5-03 | Chỉ 10 hành tinh + Ascendant (không Chiron/Lilith/Nodes/MC) | Content scope |
 | KG-F5-04 | `tone` luôn `null`, `contentSource: Hybrid` không hiển thị | Product decision (D-F5-04) |

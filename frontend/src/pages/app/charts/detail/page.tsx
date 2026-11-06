@@ -9,6 +9,8 @@ import {
   isValidChartId,
   toChartViewModel,
   useChartQuery,
+  type ChartViewModel,
+  type InterpretationModel,
 } from "@features/chart";
 import type { ApiError } from "@shared/api/client";
 import { getErrorMessage } from "@shared/lib/error-messages";
@@ -53,16 +55,34 @@ export default function ChartDetailPage() {
 
   const mapping = useMemo(() => {
     if (!query.data) return null;
+    let vm: ChartViewModel;
     try {
-      const vm = toChartViewModel(query.data);
-      const interpretation = buildInterpretationModel(query.data, vm);
-      return { ok: true as const, vm, interpretation };
+      vm = toChartViewModel(query.data);
     } catch (error) {
       if (error instanceof ChartViewModelError) {
         return { ok: false as const, error };
       }
       throw error;
     }
+
+    let interpretation: InterpretationModel | undefined;
+    let interpretationBuildFailed = false;
+    let interpretationBuildError: unknown = null;
+    try {
+      interpretation = buildInterpretationModel(query.data, vm);
+    } catch (error) {
+      interpretation = undefined;
+      interpretationBuildFailed = true;
+      interpretationBuildError = error;
+    }
+
+    return {
+      ok: true as const,
+      vm,
+      interpretation,
+      interpretationBuildFailed,
+      interpretationBuildError,
+    };
   }, [query.data]);
 
   const serverErrorMessage = useMemo(() => {
@@ -76,8 +96,25 @@ export default function ChartDetailPage() {
     }
   }, [mapping]);
 
+  const lastReportedInterpretationSignatureRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!mapping?.ok) return;
+
+    if (mapping.interpretationBuildFailed) {
+      const buildSignature = `build-error:${String(mapping.interpretationBuildError)}`;
+      if (lastReportedInterpretationSignatureRef.current !== buildSignature) {
+        lastReportedInterpretationSignatureRef.current = buildSignature;
+        reportError(
+          mapping.interpretationBuildError,
+          "interpretation-model-build",
+        );
+      }
+      return;
+    }
+
+    if (!mapping.interpretation) return;
+
     const counts = new Map<string, number>();
     for (const issue of mapping.interpretation.issues) {
       if (issue.category === "defect") {
@@ -88,10 +125,14 @@ export default function ChartDetailPage() {
       const summary = [...counts]
         .map(([code, count]) => `${code}×${count}`)
         .join(", ");
-      reportError(
-        new Error(`Interpretation data issues: ${summary}`),
-        "interpretation-model",
-      );
+      const defectSignature = `defects:${summary}`;
+      if (lastReportedInterpretationSignatureRef.current !== defectSignature) {
+        lastReportedInterpretationSignatureRef.current = defectSignature;
+        reportError(
+          new Error(`Interpretation data issues: ${summary}`),
+          "interpretation-model",
+        );
+      }
     }
   }, [mapping]);
 

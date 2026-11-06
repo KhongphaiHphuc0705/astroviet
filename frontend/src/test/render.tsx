@@ -1,3 +1,4 @@
+import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, type RenderOptions } from "@testing-library/react";
 import React, { type ReactElement } from "react";
@@ -8,14 +9,15 @@ import { createQueryClient } from "@shared/api/queryClient";
 
 interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   initialEntries?: MemoryRouterProps["initialEntries"];
+  queryClient?: QueryClient;
 }
 
 export function renderWithProviders(
   ui: ReactElement,
-  { initialEntries = ["/"], ...options }: CustomRenderOptions = {},
+  { initialEntries = ["/"], queryClient, ...options }: CustomRenderOptions = {},
 ) {
   // Create a new QueryClient for each test to prevent cache leakage
-  const testQueryClient = createQueryClient();
+  const testQueryClient = queryClient ?? createQueryClient();
 
   const AllProviders = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -30,7 +32,8 @@ export function renderWithProviders(
     );
   };
 
-  return render(ui, { wrapper: AllProviders, ...options });
+  const result = render(ui, { wrapper: AllProviders, ...options });
+  return Object.assign(result, { queryClient: testQueryClient });
 }
 
 // Re-export everything from testing-library

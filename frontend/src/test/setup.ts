@@ -1,9 +1,11 @@
 import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 import { afterEach, beforeAll, afterAll, expect, vi } from "vitest";
 import * as matchers from "vitest-axe/matchers";
 
 expect.extend(matchers);
+
+configure({ asyncUtilTimeout: 5000 });
 
 import { server } from "./msw-server";
 

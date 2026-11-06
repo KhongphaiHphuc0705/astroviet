@@ -117,4 +117,16 @@ describe("interpretation component source constraints", () => {
     expect(copyCode).not.toMatch(/["']Chọn\s/);
     expect(copyCode).not.toMatch(/giờ sinh/i);
   });
+
+  it("D5-M02 / AR-09: KG-F5-01 static gate - no birth time inference, isBirthTimeKnown, or Moon uncertainty heuristics in components or copy", () => {
+    const targetFiles = [...componentFiles, "interpretationCopy.ts"];
+    for (const name of targetFiles) {
+      const code = source(name);
+      // No birth time references
+      expect(code).not.toMatch(/isBirthTimeKnown|birthTime|birth_time/i);
+      // No moon heuristics or uncertainty speculation
+      expect(code).not.toMatch(/moonUncertain|isMoonUncertain|moonBoundary/i);
+      expect(code).not.toMatch(/bất định|không chắc chắn|ranh giới.*trăng/i);
+    }
+  });
 });
