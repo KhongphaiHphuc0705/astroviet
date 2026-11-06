@@ -48,6 +48,7 @@ export function InterpretationOverview({
                 <a
                   href={`#${getInterpretationGroupHeadingId(group.id)}`}
                   onClick={(event) => handleLinkClick(event, group.id)}
+                  className="rounded-sm text-body-sm font-medium text-accent-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   {INTERPRETATION_COPY.groups[group.id]} ({group.itemIds.length}
                   )

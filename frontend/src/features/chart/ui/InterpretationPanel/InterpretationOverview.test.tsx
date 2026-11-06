@@ -140,3 +140,40 @@ it("OV-A: should pass axe", async () => {
   );
   expect(await axe(container)).toHaveNoViolations();
 });
+
+it("A6-J01: overview links have focus ring classes and trigger onGroupLinkClick on primary activation", async () => {
+  const user = userEvent.setup();
+  const onClick = vi.fn();
+  render(
+    <InterpretationOverview
+      availableCount={21}
+      groups={groups}
+      houseDataAvailable
+      onGroupLinkClick={onClick}
+    />,
+  );
+  const link = screen.getByRole("link", { name: "Cốt lõi (3)" });
+  expect(link.className).toContain("focus-visible:ring-focus");
+  expect(link.className).toContain("focus-visible:ring-2");
+  await user.click(link);
+  expect(onClick).toHaveBeenCalledWith("core");
+});
+
+it("A6-J02: preserves default navigation on modifier click without triggering onGroupLinkClick callback", () => {
+  const onClick = vi.fn();
+  render(
+    <InterpretationOverview
+      availableCount={21}
+      groups={groups}
+      houseDataAvailable
+      onGroupLinkClick={onClick}
+    />,
+  );
+  const link = screen.getByRole("link", { name: "Cốt lõi (3)" });
+  fireEvent.click(link, { ctrlKey: true });
+  fireEvent.click(link, { metaKey: true });
+  fireEvent.click(link, { shiftKey: true });
+  fireEvent.click(link, { altKey: true });
+  fireEvent.click(link, { button: 1 });
+  expect(onClick).not.toHaveBeenCalled();
+});

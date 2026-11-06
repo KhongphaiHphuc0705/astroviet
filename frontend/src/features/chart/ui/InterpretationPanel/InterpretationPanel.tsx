@@ -147,7 +147,7 @@ export const InterpretationPanel = forwardRef<
                   ref={(node) => {
                     headings.current[group.id] = node;
                   }}
-                  className="mb-2 text-heading-sm font-semibold focus:outline-none"
+                  className="mb-2 scroll-mt-20 rounded-sm text-heading-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   {INTERPRETATION_COPY.groups[group.id]}
                 </h3>

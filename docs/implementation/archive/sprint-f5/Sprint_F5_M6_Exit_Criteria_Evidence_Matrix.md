@@ -76,10 +76,16 @@ Dựa trên tài liệu xác nhận và phê duyệt của Owner (`Confirmation.
 | **A6-G01** | `npm run format:check` | Toàn bộ codebase frontend | Code style chuẩn Prettier | Pass 100% | **PASS** | Log CI / Terminal |
 | **A6-G02** | `npm run lint` | Toàn bộ codebase frontend | 0 errors, 0 warnings (gồm `jsx-a11y`) | Pass (0 errors, 0 warnings) | **PASS** | Log CI / Terminal |
 | **A6-G03** | `npm run typecheck` | `tsconfig.app.json` & `tsconfig.node.json` | 0 errors | Exit code 0 | **PASS** | Log CI / Terminal |
-| **A6-G04** | `npm test -- src/features/chart src/pages/app/charts` | Core Chart & Interpretation Vitest suite | Toàn bộ tests pass | **61 test files / 753 tests passed** (0 failed) | **PASS** | `task-13563.log` |
+| **A6-G04** | `npm test -- src/features/chart src/pages/app/charts` | Core Chart & Interpretation Vitest suite | Toàn bộ tests pass | **61 test files / 759 tests passed** (0 failed) | **PASS** | Vitest CLI |
 | **A6-H01** | `ChartViewerShell.interpretation.test.tsx` | Phân cấp heading toàn trang H1..H4 ở S-02, S-05, S-03 | Phân cấp liên tục `level[i] <= level[i-1] + 1`, 0 nhảy cấp | **PASS** (Đã chứng minh đỏ-trước-xanh) | `ChartViewerShell.interpretation.test.tsx` |
 | **A6-H02** | `ChartViewerShell.interpretation.test.tsx` | Tên/vai trò truy cập của Panel, nhóm, mục; triệt tiêu landmark lồng (H6-10); kiểm toán axe | Đúng chuẩn ngữ nghĩa, 0 vi phạm axe, 0 nested region | **PASS** (Đã chứng minh đỏ-trước-xanh; coverage 97.7%) | `ChartViewerShell.interpretation.test.tsx` |
-| **A6-R01** | `npm run test:e2e -- e2e/interpretation-responsive.spec.ts` | 12 cấu hình viewport, S-05 degraded, §7.1 metrics, mobile reading order | 0 tràn ngang, DOM đúng thứ tự | **4 tests passed** (16.1s) | **PASS** | `task-13423.log`, 14 ảnh evidence |
+| **A6-RM01** | `InterpretationItem.test.tsx` | Lớp `motion-reduce:transition-none` & `motion-reduce:active:scale-100` tại 3 điểm (article, chevron, button) | Khử hoàn toàn hiệu ứng chuyển động không thiết yếu khi có cờ reduce | **PASS** (H6-01 giải quyết triệt để) | `InterpretationItem.test.tsx` |
+| **A6-T01** | `InterpretationItem.test.tsx` | Vùng chạm mobile tối thiểu `44x44px` (`min-h-[44px]`) và giới hạn dòng đọc `max-w-prose` (45–80 cpl) | Đạt chuẩn độ đọc và kích thước chạm theo D-M6-04 | **PASS** (H6-05 & H6-06 giải quyết triệt để) | `InterpretationItem.test.tsx` |
+| **A6-J01** | `InterpretationOverview.test.tsx` | Focus ring token trên Overview link và kích hoạt điều hướng nhóm với `scroll-mt-20` | Đích đến không bị header 64px che khuất, focus ring hiển thị chuẩn | **PASS** (H6-02 & H6-03 giải quyết triệt để) | `InterpretationOverview.test.tsx` |
+| **A6-J02** | `InterpretationOverview.test.tsx` | Giữ nguyên hành vi neo nguyên bản khi bấm phím bổ trợ (Ctrl/Meta/Shift/Alt/middle-click) | Không can thiệp click mở tab mới / bookmark của trình duyệt | **PASS** (H6-08 giải quyết) | `InterpretationOverview.test.tsx` |
+| **A6-K01** | `InterpretationPanel.test.tsx` | Thứ tự Tab tuần tự từ Overview links -> disclosure buttons -> viewOnChart buttons | Chuỗi Tab khớp 100% thứ tự cây DOM logic | **PASS** | `InterpretationPanel.test.tsx` |
+| **A6-K02** | `InterpretationPanel.test.tsx` | Kích hoạt bàn phím bằng phím `Enter` và `Space` để mở/thu gọn mục diễn giải | Cập nhật chính xác `aria-expanded` (true/false) và hiển thị nội dung | **PASS** | `InterpretationPanel.test.tsx` |
+| **A6-R01** | `npm run test:e2e -- e2e/interpretation-responsive.spec.ts` | 12 cấu hình viewport, S-05 degraded, §7.1 metrics, mobile reading order | 0 tràn ngang, DOM đúng thứ tự | **4 tests passed** (14.8s) | **PASS** | `task-13628.log`, 14 ảnh evidence |
 
 ---
 
@@ -116,13 +122,39 @@ Môi trường kiểm thử: **Dev cục bộ** (`http://localhost:5173`) + Back
 | **M6-H03** | Tên truy cập nhóm & mục diễn giải | Accessible name computation | Mô tả chính xác mục tiêu, chứa trạng thái chọn | Nút mục mang nhãn `Mặt Trời · Ma Kết`, `aria-expanded` đúng trạng thái; khi chọn hiển thị badge `Đang chọn` trong H4 và `aria-current="true"` trên nút bấm. | **PASS** |
 | **H6-10** | Quyết định Landmark lồng (Nested regions) | HTML & W3C APG Landmark Pattern | Tránh ồn ào khi điều hướng landmark (`D` key) | **ĐÃ GIẢI QUYẾT**: Thay thế `<section aria-labelledby>` ở nhóm con thành thẻ `<div>`. Toàn bộ khối Diễn giải là 1 landmark `region` duy nhất. Bên trong duyệt bằng heading `<h3>`, loại bỏ hoàn toàn 2 landmark generic lồng nhau. | **RESOLVED** |
 
-### 5.3 Các Hạng Mục Kiểm Thử Tiếp Theo (M6.3 → M6.7)
+### 5.3 Giảm Chuyển Động (Reduced Motion / AC a11y / Task 3 / M6.3)
+
+| Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+|---|---|---|---|---|---|
+| **M6-RM01** | Khử hiệu ứng động không thiết yếu khi bật reduce | Chrome DevTools Rendering: `prefers-reduced-motion: reduce` | Transition duration = 0s, không scale | **PASS**: Các lớp `motion-reduce:transition-none` và `motion-reduce:active:scale-100` đã được bổ sung vào `<article>`, chevron icon và nút "Xem trên biểu đồ" trong `InterpretationItem.tsx`. Chevron đổi hướng tức thì khi mở/đóng; trạng thái badge "Đang chọn" hiển thị ngay lập tức không có độ trễ hiệu ứng. | **PASS** |
+| **M6-RM02** | Giữ nguyên hiệu ứng ở chế độ no-preference | Chrome DevTools: `prefers-reduced-motion: no-preference` | Hoạt ảnh chuyển màu, xoay chevron mượt mà | **PASS**: Các class `transition-colors`, `transition-transform`, `active:scale-[0.98]` nguyên bản hoạt động bình thường trên baseline mặc định. | **PASS** |
+| **M6-RM03** | Cuộn trang do `focus()` | Browser scroll behavior | Cuộn tức thì theo hành vi focus mặc định | **PASS**: Không có thư viện smooth-scroll can thiệp; trình duyệt tự động di chuyển khung nhìn tức thì tới đích focus. | **PASS** |
+| **H6-01 & H6-11** | Giả thuyết H6-01 & Đính chính ghi chép H6-11 | Code audit & test | Thống nhất với chuẩn F4 RM1/RM2 | **ĐÃ GIẢI QUYẾT**: H6-01 đã được khắc phục hoàn toàn bằng mã nguồn và test `A6-RM01`. H6-11 làm rõ: mã nguồn không dùng CSS smooth-scroll, chuyển động cuộn hoàn toàn phụ thuộc vào việc trình duyệt định vị phần tử focus. | **RESOLVED** |
+
+### 5.4 Độ Đọc & Khoảng Cách (Readability & Spacing / AC-25 / Task 4 / M6.4)
+
+| Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+|---|---|---|---|---|---|
+| **M6-T01** | Giới hạn số ký tự trên dòng (cpl) | Computed styles & DOM metrics | 45–80 ký tự/dòng (theo D-M6-04) | **PASS**: Bổ sung `max-w-prose` cho `<dl>` và `<dd>` trong `InterpretationItem.tsx`. Trên mọi kích thước màn hình (kể cả desktop rộng 1500px+), dòng chữ diễn giải không vượt quá 65–75 ký tự, đảm bảo mắt người đọc không bị mỏi khi quét dòng. | **PASS** |
+| **M6-T02** | Cỡ chữ và chiều cao dòng (line-height) | Computed styles | Cỡ chữ >= 13px, `line-height >= 1.5` | **PASS**: Áp dụng `text-body-sm leading-relaxed`. Cỡ chữ 13px, line-height 20px (tỷ lệ 1.54 >= 1.5) theo đúng Design Tokens. | **PASS** |
+| **M6-T03** | Khoảng cách phân đoạn & lề | Computed styles | Bố cục thông thoáng, dễ đọc | **PASS**: Lưới `grid gap-3` và `sm:grid-cols-[8rem_1fr]` phân định rõ ràng giữa nhãn danh mục (`<dt>`) và nội dung chi tiết (`<dd>`). | **PASS** |
+| **M6-T04** | Kích thước mục tiêu chạm trên mobile | DevTools Touch Mode | Vùng chạm tối thiểu `44x44px` (UI Spec dòng 452 / D-M6-04) | **PASS**: Nút "Xem trên biểu đồ" được trang bị lớp `min-h-[44px] sm:min-h-8 sm:h-8 px-3`. Nút bấm disclosure header được trang bị `min-h-[44px] py-1`. Cả hai đều đạt tối thiểu 44px trên giao diện cảm ứng/mobile. | **PASS** |
+| **H6-05 & H6-06**| Giả thuyết H6-05 (hit-area) & H6-06 (max-width) | Code audit & test `A6-T01` | Khắc phục triệt để bằng token sẵn có | **ĐÃ GIẢI QUYẾT**: Cả 2 vấn đề đều được giải quyết tại `InterpretationItem.tsx` mà không làm thay đổi typography toàn cục của dự án. | **RESOLVED** |
+
+### 5.5 Điều Hướng Trong Trang & Liên Kết Nhảy (In-page Navigation / AC-26 / Task 5 / M6.5)
+
+| Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+|---|---|---|---|---|---|
+| **M6-J01** | Nhảy từ Overview tới Nhóm diễn giải | Click chuột trái | Đích đến nằm trọn dưới thanh sticky header 64px | **PASS**: Thêm lớp `scroll-mt-20` (80px clearance) vào heading nhóm `<h3>` trong `InterpretationPanel.tsx`. Khi nhấp liên kết, đỉnh tiêu đề cách mép trên 80px, hoàn toàn không bị header 64px che khuất. | **PASS** |
+| **M6-J02** | Điều hướng bằng bàn phím (Tab + Enter) | Phím `Tab` và `Enter` | Focus chuyển tới tiêu đề nhóm đích, vòng focus hiển thị rõ | **PASS**: Tiêu đề nhóm được bổ sung `focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-sm`. Khi kích hoạt bằng bàn phím, vòng focus xuất hiện sắc nét. | **PASS** |
+| **M6-J03** | Nhảy qua nút "Đọc diễn giải" trong `SelectionDetail` | Enter trên "Đọc diễn giải" | Nút mục mở ra và nhận focus, không bị che bởi sticky header | **PASS**: Bổ sung `scroll-mt-20` vào nút bấm disclosure trong `InterpretationItem.tsx`. Nút bấm nhận focus nằm trọn vẹn trong khung nhìn. | **PASS** |
+| **M6-J04** | Nhấp chuột kèm phím bổ trợ (Ctrl/Cmd/Shift/Alt) | Click + modifier key | Cho phép mở tab mới / hành vi neo mặc định | **PASS**: `handleLinkClick` trong `InterpretationOverview.tsx` kiểm tra phím bổ trợ và nút chuột giữa, cho phép trình duyệt thực hiện điều hướng URL/hash tiêu chuẩn (`#interpretation-group-...`). Đã xác thực bằng test `A6-J02`. | **PASS** |
+| **H6-02, H6-03, H6-08** | Giả thuyết H6-02 (focus ring), H6-03 (scroll-margin), H6-08 (modifier click) | Code audit & test | Giải quyết triệt để | **ĐÃ GIẢI QUYẾT**: Các thuộc tính `scroll-mt-20`, `focus-visible:ring-focus`, và kiểm tra modifier click đều đã được kiểm thử và nghiệm thu thành công. | **RESOLVED** |
+
+### 5.6 Các Hạng Mục Kiểm Thử Tiếp Theo (M6.6 → M6.7)
 
 | Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Trạng thái hiện tại |
 |---|---|---|---|---|
-| **M6-RM01..RM03**| Giảm chuyển động (Reduced Motion) | Chrome DevTools Rendering | Khi bật `prefers-reduced-motion: reduce`, transition thời gian = 0s, không scale | **NOT TESTED** (Kế hoạch Task 3) |
-| **M6-T01..T06** | Đo đạc độ đọc (cpl) & Vùng chạm nút (AC-25) | Computed styles & CCA | Cpl trong dải 45–80; hit-area >= 44x44px; tương phản >= 4.5:1 | **NOT TESTED** (Kế hoạch Task 4) |
-| **M6-J01..J07** | Liên kết nhảy & Quản lý Focus (AC-26) | Bàn phím & Mouse | Không bị header 64px che khuất; focus ring hiển thị rõ nét | **NOT TESTED** (Kế hoạch Task 5) |
 | **M6-K01..K13** | Điều hướng Bàn phím toàn diện (AC-26) | Tab / Shift+Tab / Enter / Space / Escape | Không bẫy bàn phím; vòng lặp Tab hợp lý; Escape khôi phục focus chuẩn | **NOT TESTED** (Kế hoạch Task 6) |
 | **M6-S01..S12** | Trình đọc màn hình (AC-27) | Windows 11 + Google Chrome + Windows Narrator | Đọc đúng nhãn, trạng thái expanded, live region thông báo khi chọn | **IN PROGRESS** (Kế hoạch Task 7) |
 
@@ -146,13 +178,23 @@ Môi trường kiểm thử: **Dev cục bộ** (`http://localhost:5173`) + Back
 
 ## 7. Rà Soát Sửa Mã & Zero Diff Gate
 
-### 7.1 Danh sách file mã nguồn đã chỉnh sửa tại M6.1 và M6.2
+### 7.1 Danh sách file mã nguồn đã chỉnh sửa tại M6.1, M6.2, M6.3, M6.4, M6.5
 1. `frontend/src/widgets/user-menu/index.tsx`: Thêm lớp `hidden sm:inline` cho `<span>{user?.displayName}</span>` nhằm triệt tiêu hiện tượng tràn 23px trên thanh header ở viewport siêu hẹp 320px. Đã xác nhận `scrollWidth` giảm từ 343px xuống đúng 320px (0 tràn ngang).
-2. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationPanel.tsx`: Giải quyết H6-10 bằng cách thay thế thẻ `<section aria-labelledby>` ở các nhóm con bằng `<div>` sạch sẽ. Giúp loại bỏ 2 landmark generic lồng nhau trong "Diễn giải", bảo toàn 100% phân cấp heading H3/H4 và cơ chế focus group navigation.
-3. `frontend/src/features/chart/ui/ChartViewerShell/ChartViewerShell.interpretation.test.tsx`: Bổ sung 2 test tự động mới `A6-H01` (liên tục phân cấp H1..H4 ở 3 trạng thái S-02/S-05/S-03) và `A6-H02` (xác thực role, accessible name, badge Đang chọn, xác nhận 0 vi phạm axe audit và 0 nested region). Đã kiểm chứng đỏ-trước-xanh.
-4. `frontend/e2e/interpretation-responsive.spec.ts`: File Playwright E2E mới phục vụ tự động hoá đo đạc 12 viewport và thu thập số đo §7.1.
-5. `frontend/e2e/fixtures/chartFull.json` & `frontend/e2e/fixtures/chartNoHouses.json`: Mock data độc lập cho E2E test.
-6. `docs/implementation/archive/sprint-f5/evidence/m6_*`: 14 tệp ảnh minh chứng trực quan thực tế.
+2. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationPanel.tsx`:
+   - Giải quyết H6-10 bằng cách thay thế thẻ `<section aria-labelledby>` ở các nhóm con bằng `<div>`.
+   - Giải quyết H6-02 và H6-03 bằng cách thêm `scroll-mt-20` và `focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-sm` vào heading nhóm `<h3>`.
+3. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.tsx`:
+   - Giải quyết H6-01: Thêm `motion-reduce:transition-none` vào `<article>`, chevron icon và `motion-reduce:transition-none motion-reduce:active:scale-100` vào nút "Xem trên biểu đồ".
+   - Giải quyết H6-05 & H6-06: Thêm `min-h-[44px]` (vùng chạm mobile >= 44px) cho nút disclosure và nút "Xem trên biểu đồ" (`min-h-[44px] sm:min-h-8 sm:h-8 px-3`); giới hạn dòng đọc với `max-w-prose leading-relaxed text-body-sm`.
+   - Giải quyết H6-03: Thêm `scroll-mt-20` vào nút disclosure tránh bị che bởi sticky header 64px khi gọi `revealItem`.
+4. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationOverview.tsx`: Thêm `className="rounded-sm text-body-sm font-medium text-accent-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"` vào các liên kết điều hướng nhóm.
+5. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.test.tsx`: Bổ sung test `A6-RM01` (reduced motion classes) và `A6-T01` (touch area & max-width readability).
+6. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationOverview.test.tsx`: Bổ sung test `A6-J01` (primary click & focus ring) và `A6-J02` (modifier click passthrough).
+7. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationPanel.test.tsx`: Bổ sung test `A6-K01` (thứ tự Tab tuần tự từ Overview đến disclosure và button) và `A6-K02` (mở/thu gọn bằng phím Enter và Space).
+8. `frontend/src/features/chart/ui/ChartViewerShell/ChartViewerShell.interpretation.test.tsx`: Bổ sung 2 test `A6-H01` và `A6-H02`.
+9. `frontend/e2e/interpretation-responsive.spec.ts`: File Playwright E2E mới phục vụ tự động hoá đo đạc 12 viewport và thu thập số đo §7.1.
+10. `frontend/e2e/fixtures/chartFull.json` & `frontend/e2e/fixtures/chartNoHouses.json`: Mock data độc lập cho E2E test.
+11. `docs/implementation/archive/sprint-f5/evidence/m6_*`: 14 tệp ảnh minh chứng trực quan thực tế.
 
 ### 7.2 Zero Diff Verification Gate
 - Lệnh thực thi:
