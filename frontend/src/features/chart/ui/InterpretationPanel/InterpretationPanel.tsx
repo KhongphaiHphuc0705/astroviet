@@ -140,10 +140,7 @@ export const InterpretationPanel = forwardRef<
           />
           <div className="mt-5 grid gap-5">
             {model.groups.map((group) => (
-              <section
-                key={group.id}
-                aria-labelledby={getInterpretationGroupHeadingId(group.id)}
-              >
+              <div key={group.id}>
                 <h3
                   id={getInterpretationGroupHeadingId(group.id)}
                   tabIndex={-1}
@@ -183,7 +180,7 @@ export const InterpretationPanel = forwardRef<
                     );
                   })}
                 </ul>
-              </section>
+              </div>
             ))}
           </div>
         </>

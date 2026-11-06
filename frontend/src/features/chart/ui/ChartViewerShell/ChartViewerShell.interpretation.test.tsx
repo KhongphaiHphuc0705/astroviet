@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 
 import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
 import { toChartViewModel } from "../../model/chartViewModel";
@@ -238,5 +239,133 @@ describe("ChartViewerShell interpretation integration", () => {
       /bất định|không chắc|ranh giới|uncertain/i,
     );
     unmount3();
+  });
+
+  it("A6-H01: heading hierarchy is continuous and has no level skips across S-02, S-05, and S-03", () => {
+    function assertContinuousHierarchy(container: HTMLElement) {
+      const headings = Array.from(
+        container.querySelectorAll("h1, h2, h3, h4, h5, h6"),
+      ) as HTMLElement[];
+      expect(headings.length).toBeGreaterThan(0);
+
+      const levels = headings.map((h) => parseInt(h.tagName.substring(1), 10));
+
+      // First heading must be level 1 (h1)
+      expect(levels[0]).toBe(1);
+
+      // No level skips: level[i] <= level[i-1] + 1
+      for (let i = 1; i < levels.length; i++) {
+        const current = levels[i]!;
+        const prev = levels[i - 1]!;
+        expect(
+          current <= prev + 1,
+          `Heading level jumped from h${prev} to h${current} at index ${i} (${headings[i]?.textContent?.trim()})`,
+        ).toBe(true);
+      }
+    }
+
+    // 1. S-02: Full chart with houses & interpretation
+    const vmFull = toChartViewModel(chartFull);
+    const interpFull = buildInterpretationModel(chartFull, vmFull);
+    const { container: containerS02, unmount: unmountS02 } = render(
+      <div>
+        <h1 tabIndex={-1}>Lá số sinh</h1>
+        <ChartViewerShell vm={vmFull} interpretation={interpFull} />
+      </div>,
+    );
+    assertContinuousHierarchy(containerS02);
+    unmountS02();
+
+    // 2. S-05: Degraded chart without house data
+    const vmNoHouses = toChartViewModel(chartNoHouses);
+    const interpNoHouses = buildInterpretationModel(chartNoHouses, vmNoHouses);
+    const { container: containerS05, unmount: unmountS05 } = render(
+      <div>
+        <h1 tabIndex={-1}>Lá số sinh</h1>
+        <ChartViewerShell vm={vmNoHouses} interpretation={interpNoHouses} />
+      </div>,
+    );
+    assertContinuousHierarchy(containerS05);
+    unmountS05();
+
+    // 3. S-03: Degraded chart with unavailable interpretation
+    const unavailDto = {
+      ...chartFull,
+      interpretationVersion: null,
+      interpretations: [],
+    };
+    const vmUnavail = toChartViewModel(unavailDto);
+    const interpUnavail = buildInterpretationModel(unavailDto, vmUnavail);
+    const { container: containerS03, unmount: unmountS03 } = render(
+      <div>
+        <h1 tabIndex={-1}>Lá số sinh</h1>
+        <ChartViewerShell vm={vmUnavail} interpretation={interpUnavail} />
+      </div>,
+    );
+    assertContinuousHierarchy(containerS03);
+    unmountS03();
+  });
+
+  it("A6-H02: accessible names and roles conform to semantic specification with 0 axe violations", async () => {
+    const vm = toChartViewModel(chartFull);
+    const interp = buildInterpretationModel(chartFull, vm);
+
+    const { container } = render(
+      <div>
+        <h1 tabIndex={-1}>Lá số sinh</h1>
+        <ChartViewerShell vm={vm} interpretation={interp} />
+      </div>,
+    );
+
+    // 1. Panel heading is level 2 with accessible name "Diễn giải"
+    const panelHeading = screen.getByRole("heading", {
+      name: "Diễn giải",
+      level: 2,
+    });
+    expect(panelHeading).toBeInTheDocument();
+
+    // 2. Group headings are level 3 with names "Cốt lõi" and "Các hành tinh"
+    const coreHeading = screen.getByRole("heading", {
+      name: "Cốt lõi",
+      level: 3,
+    });
+    const planetsHeading = screen.getByRole("heading", {
+      name: "Các hành tinh",
+      level: 3,
+    });
+    expect(coreHeading).toBeInTheDocument();
+    expect(planetsHeading).toBeInTheDocument();
+
+    // 3. H6-10 Verification: Sub-groups do NOT declare nested region landmarks
+    // The only region under InterpretationPanel is the panel itself
+    expect(screen.queryByRole("region", { name: "Cốt lõi" })).toBeNull();
+    expect(screen.queryByRole("region", { name: "Các hành tinh" })).toBeNull();
+
+    // 4. Item headings are level 4 and contain accessible disclosure buttons
+    const panel = screen.getByRole("region", { name: "Diễn giải" });
+    const sunButton = within(panel).getByRole("button", {
+      name: /^Mặt Trời/,
+    });
+    expect(sunButton).toHaveAttribute("aria-expanded", "true");
+    const sunHeading = sunButton.closest("h4");
+    expect(sunHeading).not.toBeNull();
+
+    // 5. Selected item shows badge in heading and aria-current on disclosure button
+    // Selecting Mars from PlanetTable
+    const marsTableBtn = screen.getByRole("button", {
+      name: "Chọn Sao Hỏa",
+    });
+    fireEvent.click(marsTableBtn);
+
+    const marsDisclosureBtn = within(panel).getByRole("button", {
+      name: /^Sao Hỏa/,
+    });
+    expect(marsDisclosureBtn).toHaveAttribute("aria-current", "true");
+    const marsHeading = marsDisclosureBtn.closest("h4");
+    expect(marsHeading?.textContent).toContain("Đang chọn");
+
+    // 6. Axe accessibility check on full composite document
+    const axeResult = await axe(container);
+    expect(axeResult).toHaveNoViolations();
   });
 });

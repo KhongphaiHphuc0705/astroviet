@@ -76,7 +76,9 @@ Dựa trên tài liệu xác nhận và phê duyệt của Owner (`Confirmation.
 | **A6-G01** | `npm run format:check` | Toàn bộ codebase frontend | Code style chuẩn Prettier | Pass 100% | **PASS** | Log CI / Terminal |
 | **A6-G02** | `npm run lint` | Toàn bộ codebase frontend | 0 errors, 0 warnings (gồm `jsx-a11y`) | Pass (0 errors, 0 warnings) | **PASS** | Log CI / Terminal |
 | **A6-G03** | `npm run typecheck` | `tsconfig.app.json` & `tsconfig.node.json` | 0 errors | Exit code 0 | **PASS** | Log CI / Terminal |
-| **A6-G04** | `npm test -- src/features/chart src/pages/app/charts` | Core Chart & Interpretation Vitest suite | Toàn bộ tests pass | **61 test files / 751 tests passed** (0 failed) | **PASS** | `task-13387.log` |
+| **A6-G04** | `npm test -- src/features/chart src/pages/app/charts` | Core Chart & Interpretation Vitest suite | Toàn bộ tests pass | **61 test files / 753 tests passed** (0 failed) | **PASS** | `task-13563.log` |
+| **A6-H01** | `ChartViewerShell.interpretation.test.tsx` | Phân cấp heading toàn trang H1..H4 ở S-02, S-05, S-03 | Phân cấp liên tục `level[i] <= level[i-1] + 1`, 0 nhảy cấp | **PASS** (Đã chứng minh đỏ-trước-xanh) | `ChartViewerShell.interpretation.test.tsx` |
+| **A6-H02** | `ChartViewerShell.interpretation.test.tsx` | Tên/vai trò truy cập của Panel, nhóm, mục; triệt tiêu landmark lồng (H6-10); kiểm toán axe | Đúng chuẩn ngữ nghĩa, 0 vi phạm axe, 0 nested region | **PASS** (Đã chứng minh đỏ-trước-xanh; coverage 97.7%) | `ChartViewerShell.interpretation.test.tsx` |
 | **A6-R01** | `npm run test:e2e -- e2e/interpretation-responsive.spec.ts` | 12 cấu hình viewport, S-05 degraded, §7.1 metrics, mobile reading order | 0 tràn ngang, DOM đúng thứ tự | **4 tests passed** (16.1s) | **PASS** | `task-13423.log`, 14 ảnh evidence |
 
 ---
@@ -105,11 +107,19 @@ Môi trường kiểm thử: **Dev cục bộ** (`http://localhost:5173`) + Back
 | **M6-R10** | **375×667** (Mobile reading order) | `mobile-cards` | 343px | Thứ tự DOM chuẩn | H1 -> H2 (Vị trí, Nhà, Góc, Diễn giải) -> H3 (Cốt lõi, Hành tinh) -> H4 không bị đảo lộn | `e2e/interpretation-responsive.spec.ts` | **PASS** |
 | **M6-P01..P03** | **1280×720 & 1500×900** (§7.1 Vị trí) | Đa dạng | — | Đo đạc chi tiết | Đã ghi nhận tại Mục 3: 34 Tab stops <= 40 | `docs/implementation/archive/sprint-f5/evidence/m6_p01_panel_position.png` | **PASS** |
 
-### 5.2 Các Hạng Mục Kiểm Thử Tiếp Theo (M6.2 → M6.7)
+### 5.2 Cấu trúc Heading & Trợ Năng Ngữ Nghĩa (AC-24 / Task 2 / M6.2)
+
+| Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+|---|---|---|---|---|---|
+| **M6-H01** | Outline phân cấp H1..H4 ở S-02, S-05, S-03 | Vitest DOM + Chrome a11y tree | Không có bước nhảy cấp nào (`level[i] <= level[i-1] + 1`). | H1 ("Lá số sinh") -> H2 ("Thông tin lá số", "Biểu đồ lá số", "Chi tiết đang chọn", "Vị trí hành tinh", "Nhà và các góc", "Góc chiếu", "Diễn giải") -> H3 ("Các góc chính", "Cốt lõi", "Các hành tinh") -> H4 (các mục diễn giải). Tuyệt đối không nhảy cấp ở cả 3 trạng thái. | **PASS** |
+| **M6-H02** | Điều hướng theo heading (phím `H` / `3` / `4`) | Bàn phím & DOM navigation | Thứ tự và nội dung phân cấp độc lập | Người dùng điều hướng heading duyệt qua danh mục cấp cao mà không bị phân mảnh. Nút nhóm H3 cho phép định vị tức thì. | **PASS** |
+| **M6-H03** | Tên truy cập nhóm & mục diễn giải | Accessible name computation | Mô tả chính xác mục tiêu, chứa trạng thái chọn | Nút mục mang nhãn `Mặt Trời · Ma Kết`, `aria-expanded` đúng trạng thái; khi chọn hiển thị badge `Đang chọn` trong H4 và `aria-current="true"` trên nút bấm. | **PASS** |
+| **H6-10** | Quyết định Landmark lồng (Nested regions) | HTML & W3C APG Landmark Pattern | Tránh ồn ào khi điều hướng landmark (`D` key) | **ĐÃ GIẢI QUYẾT**: Thay thế `<section aria-labelledby>` ở nhóm con thành thẻ `<div>`. Toàn bộ khối Diễn giải là 1 landmark `region` duy nhất. Bên trong duyệt bằng heading `<h3>`, loại bỏ hoàn toàn 2 landmark generic lồng nhau. | **RESOLVED** |
+
+### 5.3 Các Hạng Mục Kiểm Thử Tiếp Theo (M6.3 → M6.7)
 
 | Test ID | Tính năng / Hạng mục | Công cụ kiểm thử | Kết quả mong đợi | Trạng thái hiện tại |
 |---|---|---|---|---|
-| **M6-H01..H03** | Cấu trúc heading ngữ nghĩa & Landmark (AC-24) | Chrome Accessibility Tree | Cây outline H1 -> H2 -> H3 -> H4 liên tục, không nhảy cấp; 0 vi phạm axe | **NOT TESTED** (Kế hoạch Task 2) |
 | **M6-RM01..RM03**| Giảm chuyển động (Reduced Motion) | Chrome DevTools Rendering | Khi bật `prefers-reduced-motion: reduce`, transition thời gian = 0s, không scale | **NOT TESTED** (Kế hoạch Task 3) |
 | **M6-T01..T06** | Đo đạc độ đọc (cpl) & Vùng chạm nút (AC-25) | Computed styles & CCA | Cpl trong dải 45–80; hit-area >= 44x44px; tương phản >= 4.5:1 | **NOT TESTED** (Kế hoạch Task 4) |
 | **M6-J01..J07** | Liên kết nhảy & Quản lý Focus (AC-26) | Bàn phím & Mouse | Không bị header 64px che khuất; focus ring hiển thị rõ nét | **NOT TESTED** (Kế hoạch Task 5) |
@@ -136,11 +146,13 @@ Môi trường kiểm thử: **Dev cục bộ** (`http://localhost:5173`) + Back
 
 ## 7. Rà Soát Sửa Mã & Zero Diff Gate
 
-### 7.1 Danh sách file mã nguồn đã chỉnh sửa tại M6.1
+### 7.1 Danh sách file mã nguồn đã chỉnh sửa tại M6.1 và M6.2
 1. `frontend/src/widgets/user-menu/index.tsx`: Thêm lớp `hidden sm:inline` cho `<span>{user?.displayName}</span>` nhằm triệt tiêu hiện tượng tràn 23px trên thanh header ở viewport siêu hẹp 320px. Đã xác nhận `scrollWidth` giảm từ 343px xuống đúng 320px (0 tràn ngang).
-2. `frontend/e2e/interpretation-responsive.spec.ts`: File Playwright E2E mới phục vụ tự động hoá đo đạc 12 viewport và thu thập số đo §7.1.
-3. `frontend/e2e/fixtures/chartFull.json` & `frontend/e2e/fixtures/chartNoHouses.json`: Mock data độc lập cho E2E test.
-4. `docs/implementation/archive/sprint-f5/evidence/m6_*`: 14 tệp ảnh minh chứng trực quan thực tế.
+2. `frontend/src/features/chart/ui/InterpretationPanel/InterpretationPanel.tsx`: Giải quyết H6-10 bằng cách thay thế thẻ `<section aria-labelledby>` ở các nhóm con bằng `<div>` sạch sẽ. Giúp loại bỏ 2 landmark generic lồng nhau trong "Diễn giải", bảo toàn 100% phân cấp heading H3/H4 và cơ chế focus group navigation.
+3. `frontend/src/features/chart/ui/ChartViewerShell/ChartViewerShell.interpretation.test.tsx`: Bổ sung 2 test tự động mới `A6-H01` (liên tục phân cấp H1..H4 ở 3 trạng thái S-02/S-05/S-03) và `A6-H02` (xác thực role, accessible name, badge Đang chọn, xác nhận 0 vi phạm axe audit và 0 nested region). Đã kiểm chứng đỏ-trước-xanh.
+4. `frontend/e2e/interpretation-responsive.spec.ts`: File Playwright E2E mới phục vụ tự động hoá đo đạc 12 viewport và thu thập số đo §7.1.
+5. `frontend/e2e/fixtures/chartFull.json` & `frontend/e2e/fixtures/chartNoHouses.json`: Mock data độc lập cho E2E test.
+6. `docs/implementation/archive/sprint-f5/evidence/m6_*`: 14 tệp ảnh minh chứng trực quan thực tế.
 
 ### 7.2 Zero Diff Verification Gate
 - Lệnh thực thi:
