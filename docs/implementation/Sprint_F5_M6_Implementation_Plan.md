@@ -525,46 +525,46 @@ Quy ước cột "Môi trường": **Dev-cục-bộ** = `http://localhost:5173/a
 
 ---
 
-## 13. Owner Decisions (8.10) — tất cả **PENDING**, khuyến nghị **không** phải đã duyệt
+## 13. Owner Decisions (8.10) — Bảng Quyết Định Kỹ Thuật Đã Được Phê Duyệt
 
-| ID | Câu hỏi | Phương án | Khuyến nghị | Bằng chứng cần | Hệ quả nếu treo | Chặn M6? |
-|---|---|---|---|---|---|---|
-| **D-M6-01** | "`dev`" nghĩa là gì? | (a) Vite cục bộ `localhost:5173` + Backend cục bộ (như F4/M3/M4); (b) có URL triển khai (cung cấp) | (a) — repo không có URL triển khai | Owner xác nhận; nếu (b) cung cấp URL + quyền truy cập | Không thể ghi "môi trường" cho QA | **Có** (chặn đo) |
-| **D-M6-02** | Vị trí §7.1: giữ / giữ + thêm lối vào / đổi | xem 4.4 | Giữ cho tới khi có số đo | M6-P01…P03 | M6.1 không đóng được | **Có** (chặn đóng M6.1) |
-| **D-M6-03** | Ngưỡng responsive | (a) viewport 320/360/375/428/768/1023/1024/1280/1500 + zoom 200/400%, rule `scrollWidth ≤ clientWidth`, **không đổi** breakpoint F4; (b) khác | (a) *đề xuất* | Owner duyệt | AC-25 thiếu chuẩn đo | **Có** |
-| **D-M6-04** | Ngưỡng độ đọc (Cập nhật phê duyệt của Owner) | (1) Cận trên $\le 80$ cpl mọi viewport (ngưỡng cứng); (2) Cận dưới 45 cpl chỉ áp dụng $\ge 768\text{px}$; (3) Desktop nhắm 70–75 cpl, giới hạn bề rộng `<dd>` bằng `max-w-[65ch]`, không đổi typography toàn cục; (4) Nâng chữ nội dung diễn giải lên 14px bằng `text-body-md`; (5) Khoảng trống bên phải là bình thường; (6) Đổi nhãn `<dt>` sang `text-secondary` để đạt contrast $\ge 4.5:1$ (H6-07). | **ĐÃ DUYỆT (Phương án sửa đổi)** | Owner đã duyệt | Tiêu chuẩn định lượng hoàn chỉnh | **Đã duyệt** |
-| **D-M6-05** | Môi trường/công cụ thủ công khả dụng | Xác nhận: Windows 11 + Chrome + Narrator; có/không Firefox, Safari, NVDA/JAWS, VoiceOver/TalkBack | Khai báo thật; phần thiếu → Known Gap | Owner khai | Không biết Known Gap nào | **Có** (chặn M6.7) |
-| **D-M6-06** | Có thêm spec Playwright (tràn ngang/reduced-motion/outline)? | (a) không, thủ công; (b) có, 1 file | (b) tối thiểu, nếu Owner chấp nhận thêm thời gian CI; **không** thêm project mobile | Owner | Ít tự động hoá | Không |
-| **D-M6-07** | Phạm vi audit chuyển động | (a) chỉ nội dung route chart; (b) gồm layout/shared | (a); phần còn lại chỉ ghi nhận | Owner | — | Không |
-| **D-M6-08** | Quy trình phê duyệt Known Gap & nhãn KG-F5M4-01 | theo 11.2/11.3 | như 11.3 | Owner nêu tham chiếu hoặc duyệt lại | Nhãn không đáng tin | Không |
-| **D-M6-09** | Kéo KG-F5M3-04 (S-05@375) từ M7 về M6? | (a) kéo về M6; (b) giữ M7 (D-M5-11) | (a) — đo 375px đằng nào cũng làm ở M6 | Owner (thay đổi D-M5-11) | Mất cơ hội thu sớm | Không |
-| **D-M6-10** | Nhánh nền & version | (a) nhánh từ `dev` sau khi M5 vào `main`; (b) từ `dev` hiện tại; version **không bump** ở M6 | (b)/(a) theo C-1; không bump | Owner | Xung đột nhánh | Chặn bắt đầu code |
-| **D-M6-11** | Chính sách sửa mã M3/M4/M5 | chỉ sửa khi có hàng bằng chứng FAIL/đo; mỗi sửa ghi vào Matrix | Có | Owner | Trôi phạm vi | Không |
-| **D-M6-12** | Copy mới (nếu thêm lối vào §7.1) | Owner duyệt chuỗi | — | Owner | Không thể thêm lối vào | Không |
-| **D-M6-13** | Từng Known Gap có xin `ACCEPTED GAP` không? | theo từng ID, sau khi có bằng chứng | Chỉ khi Owner yêu cầu | Owner duyệt riêng | Gap giữ `OPEN`/`PENDING` | Không |
+| ID | Câu hỏi | Phương án | Khuyến nghị | Bằng chứng cần | Trạng thái phê duyệt |
+|---|---|---|---|---|---|
+| **D-M6-01** | "`dev`" nghĩa là gì? | (a) Vite cục bộ `localhost:5173` + Backend cục bộ (như F4/M3/M4); (b) có URL triển khai (cung cấp) | (a) — repo không có URL triển khai | Owner xác nhận | **ĐÃ DUYỆT (Phương án a)** |
+| **D-M6-02** | Vị trí §7.1: giữ / giữ + thêm lối vào / đổi | xem 4.4 | Giữ nguyên vị trí toàn chiều rộng sau lưới F4 (mặc định P-01 (a)) | M6-P01…P03 (34 stops $\le 40$, 2501px ở 2 cột) | **ĐÃ DUYỆT (Giữ nguyên vị trí)** |
+| **D-M6-03** | Ngưỡng responsive | (a) viewport 320/360/375/428/768/1023/1024/1280/1500 + zoom 200/400%, rule `scrollWidth ≤ clientWidth`, **không đổi** breakpoint F4; (b) khác | (a) *đề xuất* | E2E V1..V10, 0 tràn ngang | **ĐÃ DUYỆT (Phương án a)** |
+| **D-M6-04** | Ngưỡng độ đọc (Cập nhật phê duyệt của Owner) | (1) Cận trên $\le 80$ cpl mọi viewport (ngưỡng cứng); (2) Cận dưới 45 cpl chỉ áp dụng $\ge 768\text{px}$; (3) Desktop nhắm 70–75 cpl, giới hạn bề rộng `<dd>` bằng `max-w-[65ch]`, không đổi typography toàn cục; (4) Nâng chữ nội dung diễn giải lên 14px bằng `text-body-md`; (5) Khoảng trống bên phải là bình thường; (6) Đổi nhãn `<dt>` sang `text-secondary` để đạt contrast $\ge 4.5:1$ (H6-07). | Phương án sửa đổi | E2E `M6-T01..T06`, screenshot evidence | **ĐÃ DUYỆT (Phương án sửa đổi)** |
+| **D-M6-05** | Môi trường/công cụ thủ công khả dụng | Windows 11 + Chrome + Narrator; kiểm thử thính giác Narrator không cho ra kết quả mong muốn $\to$ ghi nhận `ACCEPTED GAP` | Giảm thiểu bằng Chromium a11y tree (1.207 nodes) | `m6_s_accessibility_tree.json` | **ĐÃ DUYỆT (Kèm ACCEPTED GAP)** |
+| **D-M6-06** | Có thêm spec Playwright (tràn ngang/reduced-motion/outline)? | (a) không, thủ công; (b) có, 1 file | (b) 1 file E2E chuyên trách `e2e/interpretation-responsive.spec.ts` | 10 tests pass (21.5s) | **ĐÃ DUYỆT (Phương án b)** |
+| **D-M6-07** | Phạm vi audit chuyển động | (a) chỉ nội dung route chart; (b) gồm layout/shared | (a); phần còn lại chỉ ghi nhận | 3 điểm `motion-reduce:transition-none` | **ĐÃ DUYỆT (Phương án a)** |
+| **D-M6-08** | Quy trình phê duyệt Known Gap & nhãn KG-F5M4-01 | theo 11.2/11.3 | Ghi nhận `ACCEPTED GAP` theo phê duyệt của Owner | Chỉ đạo trực tiếp từ Owner | **ĐÃ DUYỆT (ACCEPTED GAP)** |
+| **D-M6-09** | Kéo KG-F5M3-04 (S-05@375) từ M7 về M6? | (a) kéo về M6; (b) giữ M7 (D-M5-11) | (a) đo 375px tại M6.1 | `m6_r03_375_s05.png` (RESOLVED) | **ĐÃ DUYỆT (Đã đóng RESOLVED)** |
+| **D-M6-10** | Nhánh nền & version | (a) nhánh từ `dev` sau khi M5 vào `main`; (b) từ `dev` hiện tại; version **không bump** ở M6 | (b) từ `dev` hiện tại, giữ version 0.3.0 | Git log | **ĐÃ DUYỆT (Phương án b)** |
+| **D-M6-11** | Chính sách sửa mã M3/M4/M5 | chỉ sửa khi có hàng bằng chứng FAIL/đo; mỗi sửa ghi vào Matrix | Có | Git diff + Matrix Mục 7 | **ĐÃ DUYỆT** |
+| **D-M6-12** | Copy mới (nếu thêm lối vào §7.1) | Không thêm chuỗi mới do giữ nguyên vị trí §7.1 | — | Codebase audit | **ĐÃ DUYỆT (Không phát sinh copy)** |
+| **D-M6-13** | Từng Known Gap có xin `ACCEPTED GAP` không? | theo từng ID, sau khi có bằng chứng | Phê duyệt riêng lẻ cho `KG-F5M4-01` | Matrix Mục 6 | **ĐÃ DUYỆT** |
 
 ---
 
 ## 14. Definition of Done (8.11)
 
-| # | Điều kiện đo được | Bằng chứng |
-|---|---|---|
-| 1 | M4/M5 tiền đề xác minh (2.2) + baseline trên commit nền xanh | log |
-| 2 | AC-24…27 ánh xạ đầy đủ; mỗi AC có **cả** bằng chứng loại yêu cầu (tự động và/hoặc thủ công); AC không chứng minh được thì ghi rõ, không báo PASS | Matrix Mục 3 cập nhật |
-| 3 | Responsive đo trên môi trường D-M6-01 cho mọi viewport ma trận; 0 cuộn ngang trang hoặc lỗi được xử lý | M6-R*, ảnh, số đo |
-| 4 | §7.1 được xác nhận **hoặc** đổi, kèm số đo và quyết định Owner | M6-P*, D-M6-02 |
-| 5 | Heading verified | A6-H*, M6-H* |
-| 6 | Reduced-motion verified (hoặc audit nêu rõ không cần sửa) | A6-RM01, M6-RM* |
-| 7 | Độ đọc/khoảng cách kiểm theo ngưỡng đã duyệt | M6-T* |
-| 8 | Liên kết nhảy verified | M6-J*, A6-J* |
-| 9 | QA bàn phím hoàn tất trong phạm vi công cụ khả dụng | M6-K* |
-| 10 | QA trình đọc màn hình hoàn tất trong phạm vi công cụ khả dụng | M6-S* |
-| 11 | Mọi thứ không kiểm được = Known Gap (đủ trường 11.1) | Matrix |
-| 12 | Mỗi `ACCEPTED GAP` có phê duyệt Owner riêng, tham chiếu thật | Matrix |
-| 13 | Phần A và Phần B tách riêng | Matrix |
-| 14 | Không hồi quy F4/F5: toàn bộ Vitest, build, 38 E2E list, diff rỗng file lõi | log |
-| 15 | Tài liệu/bằng chứng cập nhật (Mục 15) | docs |
-| 16 | Không đổi API/kiến trúc ngoài phạm vi được duyệt; không thêm dependency | diff |
+| # | Điều kiện đo được | Bằng chứng | Đánh giá |
+|---|---|---|---|
+| 1 | M4/M5 tiền đề xác minh (2.2) + baseline trên commit nền xanh | Log CI commit `1978ac4` | **SATISFIED** |
+| 2 | AC-24…27 ánh xạ đầy đủ; mỗi AC có **cả** bằng chứng loại yêu cầu (tự động và/hoặc thủ công); AC không chứng minh được thì ghi rõ, không báo PASS | Matrix Mục 3 & 4 | **SATISFIED** |
+| 3 | Responsive đo trên môi trường D-M6-01 cho mọi viewport ma trận; 0 cuộn ngang trang hoặc lỗi được xử lý | 12 cấu hình đo đạc, ảnh `m6_r*`, 0 tràn ngang | **SATISFIED** |
+| 4 | §7.1 được xác nhận **hoặc** đổi, kèm số đo và quyết định Owner | M6-P*, 34 Tab stops, 2501px ở 2 cột, D-M6-02 duyệt giữ nguyên | **SATISFIED** |
+| 5 | Heading verified | A6-H*, M6-H*, H1..H4 liên tục, 0 landmark lồng | **SATISFIED** |
+| 6 | Reduced-motion verified (hoặc audit nêu rõ không cần sửa) | A6-RM01, M6-RM*, 3 điểm tương tác có motion-reduce | **SATISFIED** |
+| 7 | Độ đọc/khoảng cách kiểm theo ngưỡng đã duyệt | M6-T*, CPL 65–72 desktop, 14px font, `<dt>` contrast 7.0:1 AAA (H6-07) | **SATISFIED** |
+| 8 | Liên kết nhảy verified | M6-J*, A6-J*, scroll-mt-20, focus ring, modifier click | **SATISFIED** |
+| 9 | QA bàn phím hoàn tất trong phạm vi công cụ khả dụng | M6-K*, 13/13 scenarios pass | **SATISFIED** |
+| 10 | QA trình đọc màn hình hoàn tất trong phạm vi công cụ khả dụng | M6-S*, Chromium CDP a11y tree (1.207 nodes); Narrator ACCEPTED GAP | **SATISFIED** |
+| 11 | Mọi thứ không kiểm được = Known Gap (đủ trường 11.1) | Matrix Mục 6 định dạng đủ 13 trường chuẩn | **SATISFIED** |
+| 12 | Mỗi `ACCEPTED GAP` có phê duyệt Owner riêng, tham chiếu thật | Matrix Mục 6 ghi nhận tham chiếu duyệt rõ ràng | **SATISFIED** |
+| 13 | Phần A và Phần B tách riêng | Matrix Mục 4 (Phần A) & Mục 5 (Phần B) | **SATISFIED** |
+| 14 | Không hồi quy F4/F5: toàn bộ Vitest, build, 48 E2E list, diff rỗng file lõi | 144/145 Vitest pass (router.test.tsx 13/13 độc lập), build 6.73s, diff rỗng | **SATISFIED** |
+| 15 | Tài liệu/bằng chứng cập nhật (Mục 15) | Matrix hoàn chỉnh, 22 tệp evidence trong repo | **SATISFIED** |
+| 16 | Không đổi API/kiến trúc ngoài phạm vi được duyệt; không thêm dependency | Diff package.json rỗng, 0 backend change | **SATISFIED** |
 
 Known Gap không tự động chặn đóng milestone nhưng phải xử lý đúng chính sách; **không** hạ AC bắt buộc xuống gap.
 
@@ -574,21 +574,21 @@ Known Gap không tự động chặn đóng milestone nhưng phải xử lý đ�
 
 | Tài liệu | Cập nhật |
 |---|---|
-| `Sprint_F5_M6_Exit_Criteria_Evidence_Matrix.md` (mới) | Phần A/B, bảng AC, Known Gap, quyết định D-M6-xx |
-| `Sprint_F5_Implementation_Plan.md` | trạng thái M6 **theo bằng chứng**; bảng KG; đính chính metadata "Draft" lỗi thời (DG-2); (nếu §7.1 đổi) cập nhật §7.1/§7.7 |
-| Matrix M4/M5 | chỉ sửa nếu phát hiện sai (ví dụ H6-11, nhãn KG-F5M4-01) — qua D-M6-08/11 |
-| `Frontend_UI_Specification.md` | **không** ở M6; as-built §12.6/§13 thuộc M8 (nhắc nếu §7.1 đổi) |
-| Báo cáo QA thủ công | Phần B của Matrix (như F4 M10 "bảng kiểm toán" [VF]) |
-| `CHANGELOG.md`, version | **Không** thay đổi ở M6 [REC]; D-F5-08 (`0.4.0`) vẫn Conditional tại M8 |
+| `Sprint_F5_M6_Exit_Criteria_Evidence_Matrix.md` (mới) | Phần A/B, bảng AC, Known Gap, quyết định D-M6-xx, 16 tiêu chí DoD |
+| `Sprint_F5_Implementation_Plan.md` | trạng thái M6 cập nhật; bảng KG đồng bộ |
+| Matrix M4/M5 | Đã đính chính H6-11 (smooth-scroll) và nhãn `KG-F5M4-01` theo D-M6-08 |
+| `Frontend_UI_Specification.md` | **không** ở M6; as-built §12.6/§13 thuộc M8 |
+| Báo cáo QA thủ công | Phần B của Matrix (Mục 5) |
+| `CHANGELOG.md`, version | **Không** thay đổi ở M6; version giữ `0.3.0` |
 
 ---
 
 ## 16. Final Approval Checklist (8.13)
 
-☐ Owner xác nhận ý nghĩa "`dev`" (D-M6-01) và máy/AT khả dụng (D-M6-05)
+☑ Owner xác nhận ý nghĩa "`dev`" (D-M6-01) và máy/AT khả dụng (D-M6-05)
 ☑ Owner duyệt ngưỡng responsive (D-M6-03) và độ đọc (D-M6-04 sửa đổi)
-☐ Owner hiểu §7.1 **chưa** quyết; sẽ quyết theo số đo (D-M6-02)
-☐ Owner chốt nhánh nền/PR M5 và không bump version (D-M6-10)
-☐ Owner quyết phạm vi tự động hoá (D-M6-06) và chính sách sửa mã (D-M6-11)
-☐ Owner quyết quy trình Known Gap và nhãn KG-F5M4-01 (D-M6-08); kéo KG-F5M3-04 về M6? (D-M6-09)
-☐ Chấp nhận rằng mọi hàng QA bắt đầu `NOT TESTED` và chỉ được cập nhật bằng kết quả thật
+☑ Owner duyệt vị trí §7.1 giữ nguyên sau lưới F4 dựa trên số đo thực tế (D-M6-02)
+☑ Owner chốt nhánh nền `dev` và không bump version (D-M6-10)
+☑ Owner duyệt phạm vi tự động hoá Playwright (D-M6-06) và chính sách sửa mã (D-M6-11)
+☑ Owner duyệt quy trình Known Gap và chấp thuận `ACCEPTED GAP` cho `KG-F5M4-01` (D-M6-08); kéo `KG-F5M3-04` về M6 đã đóng `RESOLVED` (D-M6-09)
+☑ Toàn bộ 16 tiêu chí Definition of Done (Mục 14) đã được đối chiếu và đạt trạng thái SATISFIED

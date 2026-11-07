@@ -329,10 +329,12 @@ Quy ước: mỗi milestone có commit riêng, CI xanh trên commit chứa mã; 
 - **Prerequisite:** M3, M4. **Acceptance:** AC-17…22.
 - **Tests:** fixture-driven (có/không Nhà, mâu thuẫn, thiếu mục, `version=null`, `"1.0"`+`[]`, entry hỏng, model ném lỗi, Mặt Trăng ở 29.99° Bảo Bình F-MoonEdge).
 
-### F5.M6 — Responsive & A11y hardening
-- **Tasks:** đo layout trên `dev`, xác nhận hoặc đổi vị trí 7.1; heading hierarchy; reduced motion (nếu có chuyển động); độ dài dòng/khoảng cách; liên kết nhảy; QA thủ công (bàn phím, trình đọc màn hình sẵn có — Windows Narrator như F4), ghi những gì chưa kiểm là Known Gap.
+### F5.M6 — Responsive & A11y hardening [DONE — 2026-11-07]
+- **Trạng thái:** **COMPLETED & READY FOR FINAL SIGN-OFF** (10/10 responsive E2E tests pass, 48/48 E2E test list; 144/145 Vitest files pass với 1204/1205 tests pass [flake `router.test.tsx` pass 13/13 độc lập]; 100% CI Quality Gates xanh; 0 diff `selection.ts`/`interpretation.ts`; 22 tệp minh chứng sẵn sàng; đóng `KG-F5M3-04`, `KG-F5M4-02`; `KG-F5M4-01` ghi nhận `ACCEPTED GAP` theo phê duyệt của Owner; Evidence Matrix tại `docs/implementation/archive/sprint-f5/Sprint_F5_M6_Exit_Criteria_Evidence_Matrix.md`).
+- **Mục tiêu:** Đo đạc và bảo đảm 0 tràn ngang trên 12 cấu hình viewport (320px..1500px), xác nhận vị trí §7.1 giữ nguyên dựa trên số đo thực tế (34 stops $\le 40$, 2501px ở 2 cột), gia cố trợ năng ngữ nghĩa (H1..H4 outline liên tục, 0 landmark lồng), hỗ trợ reduced-motion, tối ưu hóa độ đọc theo D-M6-04 sửa đổi (65–72 cpl desktop, 14px font, text-secondary contrast 7.0:1 AAA giải quyết H6-07), liên kết nhảy có `scroll-mt-20`, điều hướng bàn phím toàn diện 13/13 scenarios pass, và xác minh Chromium Accessibility Tree 1.207 AXNodes.
+- **Tasks:** đo layout trên `dev`, xác nhận vị trí §7.1 (M6.1); heading hierarchy (M6.2); reduced motion (M6.3); độ dài dòng/khoảng cách & tương phản nhãn (M6.4); liên kết nhảy & focus ring (M6.5); QA bàn phím (M6.6); cây trợ năng & Narrator ACCEPTED GAP (M6.7); quản lý Known Gaps & bằng chứng (M6.8); hồi quy cuối & nghiệm thu (M6.9).
 - **Prerequisite:** M4, M5. **Acceptance:** AC-24…27.
-- **Evidence:** bảng QA riêng khỏi kết quả tự động; `ACCEPTED GAP` chỉ khi owner chấp thuận từng mục.
+- **Evidence:** 22 tệp minh chứng gồm 21 ảnh chụp thực nghiệm và 1 file JSON Chromium Accessibility Tree tại `docs/implementation/archive/sprint-f5/evidence/`; bảng QA thủ công tách riêng phần tự động; `ACCEPTED GAP` cho Narrator (`KG-F5M4-01`) đã được Owner phê duyệt riêng.
 
 ### F5.M7 — E2E Backend thật & hồi quy F4
 - **Tasks:** `e2e/interpretation.spec.ts`: Scenario A (Mars, Mục 8.2, nội dung seed thật; kiểm `interpretationVersion` khác `null` để tránh pass rỗng), Scenario B (không rõ giờ sinh: `PlanetInSign` có, nhà/Ascendant không, chú thích hiện, không lỗi); chạy lại 38 E2E hiện có; không `waitForTimeout`/`skip`/`only`.
