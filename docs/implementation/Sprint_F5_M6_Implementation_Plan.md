@@ -532,7 +532,7 @@ Quy ước cột "Môi trường": **Dev-cục-bộ** = `http://localhost:5173/a
 | **D-M6-01** | "`dev`" nghĩa là gì? | (a) Vite cục bộ `localhost:5173` + Backend cục bộ (như F4/M3/M4); (b) có URL triển khai (cung cấp) | (a) — repo không có URL triển khai | Owner xác nhận; nếu (b) cung cấp URL + quyền truy cập | Không thể ghi "môi trường" cho QA | **Có** (chặn đo) |
 | **D-M6-02** | Vị trí §7.1: giữ / giữ + thêm lối vào / đổi | xem 4.4 | Giữ cho tới khi có số đo | M6-P01…P03 | M6.1 không đóng được | **Có** (chặn đóng M6.1) |
 | **D-M6-03** | Ngưỡng responsive | (a) viewport 320/360/375/428/768/1023/1024/1280/1500 + zoom 200/400%, rule `scrollWidth ≤ clientWidth`, **không đổi** breakpoint F4; (b) khác | (a) *đề xuất* | Owner duyệt | AC-25 thiếu chuẩn đo | **Có** |
-| **D-M6-04** | Ngưỡng độ đọc (không có trong Spec trừ line-height ≥1.5 và hit-area 44px) | (a) 45–80 ký tự/dòng; line-height ≥1.5 [có sẵn]; cỡ chữ bodyText giữ 13px hoặc ≥14px (token `body-md` có sẵn); vùng chạm ≥44px mobile [có sẵn]; (b) khác | (a) *đề xuất, cần xác nhận* | Owner chọn | Tiêu chí "định lượng" thiếu | **Có** |
+| **D-M6-04** | Ngưỡng độ đọc (Cập nhật phê duyệt của Owner) | (1) Cận trên $\le 80$ cpl mọi viewport (ngưỡng cứng); (2) Cận dưới 45 cpl chỉ áp dụng $\ge 768\text{px}$; (3) Desktop nhắm 70–75 cpl, giới hạn bề rộng `<dd>` bằng `max-w-[65ch]`, không đổi typography toàn cục; (4) Nâng chữ nội dung diễn giải lên 14px bằng `text-body-md`; (5) Khoảng trống bên phải là bình thường; (6) Đổi nhãn `<dt>` sang `text-secondary` để đạt contrast $\ge 4.5:1$ (H6-07). | **ĐÃ DUYỆT (Phương án sửa đổi)** | Owner đã duyệt | Tiêu chuẩn định lượng hoàn chỉnh | **Đã duyệt** |
 | **D-M6-05** | Môi trường/công cụ thủ công khả dụng | Xác nhận: Windows 11 + Chrome + Narrator; có/không Firefox, Safari, NVDA/JAWS, VoiceOver/TalkBack | Khai báo thật; phần thiếu → Known Gap | Owner khai | Không biết Known Gap nào | **Có** (chặn M6.7) |
 | **D-M6-06** | Có thêm spec Playwright (tràn ngang/reduced-motion/outline)? | (a) không, thủ công; (b) có, 1 file | (b) tối thiểu, nếu Owner chấp nhận thêm thời gian CI; **không** thêm project mobile | Owner | Ít tự động hoá | Không |
 | **D-M6-07** | Phạm vi audit chuyển động | (a) chỉ nội dung route chart; (b) gồm layout/shared | (a); phần còn lại chỉ ghi nhận | Owner | — | Không |
@@ -586,7 +586,7 @@ Known Gap không tự động chặn đóng milestone nhưng phải xử lý đ�
 ## 16. Final Approval Checklist (8.13)
 
 ☐ Owner xác nhận ý nghĩa "`dev`" (D-M6-01) và máy/AT khả dụng (D-M6-05)
-☐ Owner duyệt ngưỡng responsive (D-M6-03) và độ đọc (D-M6-04)
+☑ Owner duyệt ngưỡng responsive (D-M6-03) và độ đọc (D-M6-04 sửa đổi)
 ☐ Owner hiểu §7.1 **chưa** quyết; sẽ quyết theo số đo (D-M6-02)
 ☐ Owner chốt nhánh nền/PR M5 và không bump version (D-M6-10)
 ☐ Owner quyết phạm vi tự động hoá (D-M6-06) và chính sách sửa mã (D-M6-11)

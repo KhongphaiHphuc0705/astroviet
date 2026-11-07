@@ -45,8 +45,8 @@ function PartRow({ label, part }: { label: string; part: InterpretationPart }) {
   if (!text) return null;
   return (
     <div className="grid gap-1 sm:grid-cols-[8rem_1fr]">
-      <dt className="font-semibold text-subtle">{label}</dt>
-      <dd className="max-w-prose text-body-sm leading-relaxed text-primary">
+      <dt className="font-semibold text-secondary">{label}</dt>
+      <dd className="max-w-[65ch] text-body-md leading-relaxed text-primary">
         {text}
       </dd>
     </div>
@@ -111,7 +111,7 @@ export function InterpretationItem({
         )}
       </h4>
       <div id={panelId} hidden={!expanded}>
-        <dl className="mt-3 grid max-w-prose gap-3 text-body-sm">
+        <dl className="mt-3 grid gap-3">
           <PartRow label={INTERPRETATION_COPY.parts.bySign} part={bySign} />
           {byHouse &&
             !(

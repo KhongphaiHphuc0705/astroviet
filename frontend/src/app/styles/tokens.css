@@ -72,6 +72,8 @@
     --font-size-body-sm: 13px;
     --font-size-body-md: 14px;
     --font-size-body-lg: 16px;
+    --text-body-md: var(--font-size-body-md);
+    --text-body-lg: var(--font-size-body-lg);
     --text-label: 13px;
     --text-data-lg: 20px;
     --text-data-md: 15px;

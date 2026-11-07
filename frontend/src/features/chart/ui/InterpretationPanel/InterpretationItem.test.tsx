@@ -158,10 +158,13 @@ it("A6-T01: enforces mobile touch target and readability max-width constraints",
   });
   expect(viewBtn.className).toContain("min-h-[44px]");
 
-  // Body text dd is constrained by max-w-prose for 45-80 cpl readability
-  const dl = container.querySelector("dl");
-  expect(dl?.className).toContain("max-w-prose");
+  // Term dt uses text-secondary for high contrast (H6-07)
+  const dt = container.querySelector("dt");
+  expect(dt?.className).toContain("text-secondary");
+
+  // Body text dd is constrained by max-w-[65ch] and text-body-md for 70-75 cpl desktop readability
   const dd = container.querySelector("dd");
-  expect(dd?.className).toContain("max-w-prose");
+  expect(dd?.className).toContain("max-w-[65ch]");
+  expect(dd?.className).toContain("text-body-md");
   expect(dd?.className).toContain("leading-relaxed");
 });
