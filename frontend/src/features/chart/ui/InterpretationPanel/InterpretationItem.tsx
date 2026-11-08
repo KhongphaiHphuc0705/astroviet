@@ -46,7 +46,7 @@ function PartRow({ label, part }: { label: string; part: InterpretationPart }) {
   return (
     <div className="grid gap-1 sm:grid-cols-[8rem_1fr]">
       <dt className="font-semibold text-secondary">{label}</dt>
-      <dd className="max-w-[65ch] text-body-md leading-relaxed text-primary">
+      <dd className="max-w-[65ch] text-[14px] leading-relaxed text-primary">
         {text}
       </dd>
     </div>
