@@ -4,7 +4,9 @@
 > **Target Version:** `0.4.0`  
 > **Status:** READY FOR REVIEW (COMPLETED WITH ALL GATES VERIFIED)  
 > **Execution Date:** 2026-11-09  
-> **Branch:** `dev`  
+> **Branch:** `dev` 
+> **Evidence Commit:** `6761ae4`
+> **Evidence CI Run:** `https://github.com/KhongphaiHphuc0705/astroviet/actions/runs/42646226197` 
 
 ---
 
