@@ -114,3 +114,57 @@ it("IT-A: should pass axe when disclosure is open and closed", async () => {
   rerender(<InterpretationItem {...defaults} expanded />);
   expect(await axe(container)).toHaveNoViolations();
 });
+
+it("A6-RM01: enforces motion-reduce utility classes on article, chevron, and viewOnChart button", () => {
+  const { container } = render(
+    <InterpretationItem {...defaults} expanded onViewOnChart={vi.fn()} />,
+  );
+
+  // 1. Article has motion-reduce:transition-none
+  const article = container.querySelector("article");
+  expect(article).not.toBeNull();
+  expect(article?.className).toContain("motion-reduce:transition-none");
+
+  // 2. Chevron icon has motion-reduce:transition-none
+  const chevron = container.querySelector("svg");
+  expect(chevron).not.toBeNull();
+  expect(chevron?.getAttribute("class")).toContain(
+    "motion-reduce:transition-none",
+  );
+
+  // 3. View on chart button has motion-reduce:transition-none and motion-reduce:active:scale-100
+  const viewBtn = screen.getByRole("button", {
+    name: "Xem trên biểu đồ: Mặt Trời",
+  });
+  expect(viewBtn.className).toContain("motion-reduce:transition-none");
+  expect(viewBtn.className).toContain("motion-reduce:active:scale-100");
+});
+
+it("A6-T01: enforces mobile touch target and readability max-width constraints", () => {
+  const { container } = render(
+    <InterpretationItem {...defaults} expanded onViewOnChart={vi.fn()} />,
+  );
+
+  // Disclosure button meets min 44px touch target on mobile and scroll margin
+  const disclosureBtn = screen.getByRole("button", {
+    name: "Mặt Trời · Ma Kết",
+  });
+  expect(disclosureBtn.className).toContain("min-h-[44px]");
+  expect(disclosureBtn.className).toContain("scroll-mt-20");
+
+  // View on chart button meets min 44px on mobile (min-h-[44px] sm:min-h-8)
+  const viewBtn = screen.getByRole("button", {
+    name: "Xem trên biểu đồ: Mặt Trời",
+  });
+  expect(viewBtn.className).toContain("min-h-[44px]");
+
+  // Term dt uses text-secondary for high contrast (H6-07)
+  const dt = container.querySelector("dt");
+  expect(dt?.className).toContain("text-secondary");
+
+  // Body text dd is constrained by max-w-[65ch] and text-[14px] for 70-75 cpl desktop readability
+  const dd = container.querySelector("dd");
+  expect(dd?.className).toContain("max-w-[65ch]");
+  expect(dd?.className).toContain("text-[14px]");
+  expect(dd?.className).toContain("leading-relaxed");
+});

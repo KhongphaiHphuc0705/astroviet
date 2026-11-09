@@ -1,7 +1,7 @@
 // PN-01 to PN-A: panel states, model-backed content, interactions, and accessibility.
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
 import { chartFull, chartNoHouses } from "../../api/mocks/fixtures";
@@ -209,4 +209,69 @@ it("PN-A: should pass axe for full and no-house chart states", async () => {
   expect(await axe(container)).toHaveNoViolations();
   rerender(<InterpretationPanel {...build(chartNoHouses)} />);
   expect(await axe(container)).toHaveNoViolations();
+});
+
+it("A6-K01: preserves logical Tab sequence from Overview links through disclosure headers and action buttons", async () => {
+  const user = userEvent.setup();
+  const onViewOnChart = vi.fn();
+  const { vm, model } = build(chartFull);
+  render(
+    <InterpretationPanel vm={vm} model={model} onViewOnChart={onViewOnChart} />,
+  );
+
+  // Tab 1: Overview Core link
+  await user.tab();
+  expect(document.activeElement).toBe(
+    screen.getByRole("link", { name: "Cốt lõi (3)" }),
+  );
+
+  // Tab 2: Overview Planets link
+  await user.tab();
+  expect(document.activeElement).toBe(
+    screen.getByRole("link", { name: "Các hành tinh (8)" }),
+  );
+
+  // Tab 3: First Core item (Mặt Trời, expanded by default)
+  await user.tab();
+  expect(document.activeElement).toBe(
+    screen.getByRole("button", { name: /^Mặt Trời/ }),
+  );
+
+  // Tab 4: View on chart button inside expanded Mặt Trời
+  await user.tab();
+  expect(document.activeElement).toBe(
+    screen.getByRole("button", { name: "Xem trên biểu đồ: Mặt Trời" }),
+  );
+
+  // Tab 5: Second Core item (Mặt Trăng)
+  await user.tab();
+  expect(document.activeElement).toBe(
+    screen.getByRole("button", { name: /^Mặt Trăng/ }),
+  );
+});
+
+it("A6-K02: toggles disclosure items via Enter and Space keys with accurate aria-expanded reflection", async () => {
+  const user = userEvent.setup();
+  const { vm, model } = build(chartFull);
+  render(<InterpretationPanel vm={vm} model={model} />);
+
+  // Mercury starts collapsed
+  const mercuryBtn = screen.getByRole("button", { name: /^Sao Thủy/ });
+  expect(mercuryBtn).toHaveAttribute("aria-expanded", "false");
+
+  // Focus Mercury button
+  mercuryBtn.focus();
+  expect(document.activeElement).toBe(mercuryBtn);
+
+  // Press Enter to expand
+  await user.keyboard("{Enter}");
+  expect(mercuryBtn).toHaveAttribute("aria-expanded", "true");
+
+  // Press Space to collapse
+  await user.keyboard(" ");
+  expect(mercuryBtn).toHaveAttribute("aria-expanded", "false");
+
+  // Press Space to re-expand
+  await user.keyboard(" ");
+  expect(mercuryBtn).toHaveAttribute("aria-expanded", "true");
 });

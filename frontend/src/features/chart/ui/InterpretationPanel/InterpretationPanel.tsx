@@ -140,17 +140,14 @@ export const InterpretationPanel = forwardRef<
           />
           <div className="mt-5 grid gap-5">
             {model.groups.map((group) => (
-              <section
-                key={group.id}
-                aria-labelledby={getInterpretationGroupHeadingId(group.id)}
-              >
+              <div key={group.id}>
                 <h3
                   id={getInterpretationGroupHeadingId(group.id)}
                   tabIndex={-1}
                   ref={(node) => {
                     headings.current[group.id] = node;
                   }}
-                  className="mb-2 text-heading-sm font-semibold focus:outline-none"
+                  className="mb-2 scroll-mt-20 rounded-sm text-heading-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
                   {INTERPRETATION_COPY.groups[group.id]}
                 </h3>
@@ -183,7 +180,7 @@ export const InterpretationPanel = forwardRef<
                     );
                   })}
                 </ul>
-              </section>
+              </div>
             ))}
           </div>
         </>

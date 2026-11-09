@@ -45,8 +45,10 @@ function PartRow({ label, part }: { label: string; part: InterpretationPart }) {
   if (!text) return null;
   return (
     <div className="grid gap-1 sm:grid-cols-[8rem_1fr]">
-      <dt className="font-semibold">{label}</dt>
-      <dd>{text}</dd>
+      <dt className="font-semibold text-secondary">{label}</dt>
+      <dd className="max-w-[65ch] text-[14px] leading-relaxed text-primary">
+        {text}
+      </dd>
     </div>
   );
 }
@@ -71,7 +73,7 @@ export function InterpretationItem({
   return (
     <article
       className={cn(
-        "border-b border-subtle py-3 transition-colors last:border-b-0",
+        "border-b border-subtle py-3 transition-colors last:border-b-0 motion-reduce:transition-none",
         selected &&
           "bg-surface-raised/40 ring-accent-primary/60 rounded-md px-2 ring-1",
       )}
@@ -85,7 +87,7 @@ export function InterpretationItem({
           aria-label={accessibleName}
           aria-current={selected ? "true" : undefined}
           onClick={() => onToggle(id)}
-          className="flex flex-1 items-center gap-3 rounded-sm text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          className="flex min-h-[44px] flex-1 scroll-mt-20 items-center gap-3 rounded-sm py-1 text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           {glyph && <span aria-hidden="true">{glyph}</span>}
           <span>
@@ -96,7 +98,10 @@ export function InterpretationItem({
           </span>
           <ChevronDown
             aria-hidden="true"
-            className={`ml-auto h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
+            className={cn(
+              "ml-auto h-4 w-4 transition-transform motion-reduce:transition-none",
+              expanded && "rotate-180",
+            )}
           />
         </button>
         {selected && (
@@ -106,7 +111,7 @@ export function InterpretationItem({
         )}
       </h4>
       <div id={panelId} hidden={!expanded}>
-        <dl className="mt-3 grid gap-3 text-body-sm">
+        <dl className="mt-3 grid gap-3">
           <PartRow label={INTERPRETATION_COPY.parts.bySign} part={bySign} />
           {byHouse &&
             !(
@@ -132,7 +137,7 @@ export function InterpretationItem({
               type="button"
               onClick={() => onViewOnChart(id)}
               aria-label={formatViewOnChartLabel(title)}
-              className="inline-flex h-8 items-center justify-center rounded-md border border-subtle bg-surface px-3 text-body-sm font-medium transition-all hover:bg-surface-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-focus active:scale-[0.98]"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-subtle bg-surface px-3 text-body-sm font-medium transition-all hover:bg-surface-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-focus active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 sm:h-8 sm:min-h-8"
             >
               {INTERPRETATION_COPY.viewOnChart}
             </button>

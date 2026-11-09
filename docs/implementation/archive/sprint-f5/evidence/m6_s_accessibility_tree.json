@@ -1,0 +1,3842 @@
+{
+  "totalAxNodes": 1197,
+  "ariaSnapshot": "- link \"Chuyển đến nội dung chính\":\n  - /url: \"#main-content\"\n- banner:\n  - text: AstroViet\n  - switch \"Giao diện tối\"\n  - text: E2E Tester\n  - button \"Đăng xuất\"\n- complementary:\n  - navigation \"Điều hướng chính\":\n    - link \"Bảng điều khiển\":\n      - /url: /\n    - link \"Hồ sơ sinh\":\n      - /url: /app/profiles\n    - link \"Lá số của tôi\":\n      - /url: /app/charts\n    - link \"Cài đặt\":\n      - /url: /\n  - button \"Thu gọn sidebar\": « Thu gọn\n- main:\n  - link \"← Hồ sơ sinh\":\n    - /url: /app/profiles\n  - heading \"Lá số sinh\" [level=1]\n  - status\n  - link \"Chuyển tới bảng dữ liệu\":\n    - /url: \"#chart-data-tables\"\n  - heading \"Thông tin lá số\" [level=2]\n  - term: Hệ nhà\n  - definition: Placidus\n  - term: Tính lúc\n  - definition:\n    - time: 16:56 10 thg 10, 2026\n  - term: Phiên bản engine\n  - definition: chart-engine-v0.2.0+swisseph-wasm-0.1.0\n  - heading \"Biểu đồ lá số\" [level=2]\n  - switch \"Hiện đường góc chiếu\" [checked]\n  - text: Hiện đường góc chiếu Bật hoặc tắt các đường nối góc chiếu giữa các hành tinh trên biểu đồ.\n  - list \"Chú giải kiểu đường góc chiếu\":\n    - listitem: Hợp (Trung tính) — Cung liền, dày\n    - listitem: Lục hợp (Hài hòa) — Nét chấm, mảnh\n    - listitem: Tam hợp (Hài hòa) — Nét liền, mảnh\n    - listitem: Đối xung (Căng thẳng) — Nét gạch dài, vừa\n  - figure \"Hiển thị vòng 12 cung, nhà, các góc, vị trí hành tinh và các đường góc chiếu. Các đường nối thể hiện góc chiếu giữa các hành tinh. Kiểu nét giúp phân biệt nhóm góc chiếu; xem chú giải để biết ý nghĩa từng kiểu.\":\n    - region \"Khung biểu đồ, có thể cuộn khi phóng to hoặc màn hình hẹp\":\n      - group \"Biểu đồ Natal\":\n        - img \"Cung Mọc (Ascendant)\": ASC\n        - img \"Thiên Đỉnh (Midheaven)\": MC\n        - img \"Cung Lặn (Descendant)\": DSC\n        - img \"Thiên Để (Imum Coeli)\": IC\n        - button \"Chọn Mặt Trời, ở Ma Kết, 10°31′, nhà 9\"\n        - button \"Chọn Mặt Trăng, ở Bảo Bình, 29°20′, nhà 11\"\n        - button \"Chọn Sao Thủy, nghịch hành, ở Ma Kết, 25°45′, nhà 10\"\n        - button \"Chọn Sao Kim, nghịch hành, ở Bảo Bình, 6°15′, nhà 10\"\n        - button \"Chọn Sao Hỏa, ở Nhân Mã, 9°47′, nhà 8\"\n        - button \"Chọn Sao Mộc, nghịch hành, ở Cự Giải, 5°11′, nhà 3\"\n        - button \"Chọn Sao Thổ, ở Ma Kết, 15°37′, nhà 10\"\n        - button \"Chọn Sao Thiên Vương, ở Ma Kết, 5°46′, nhà 9\"\n        - button \"Chọn Sao Hải Vương, ở Ma Kết, 12°01′, nhà 10\"\n        - button \"Chọn Sao Diêm Vương, ở Thiên Yết, 17°05′, nhà 7\"\n    - text: Hiển thị vòng 12 cung, nhà, các góc, vị trí hành tinh và các đường góc chiếu. Các đường nối thể hiện góc chiếu giữa các hành tinh. Kiểu nét giúp phân biệt nhóm góc chiếu; xem chú giải để biết ý nghĩa từng kiểu.\n  - region \"Chi tiết đang chọn\":\n    - heading \"Chi tiết đang chọn\" [level=2]\n    - paragraph: Chọn một hành tinh hoặc góc chiếu để xem chi tiết.\n  - region \"Vị trí hành tinh\":\n    - heading \"Vị trí hành tinh\" [level=2]\n    - table \"Vị trí hành tinh — Natal Chart, 10 hàng\":\n      - caption: Vị trí hành tinh — Natal Chart, 10 hàng\n      - rowgroup:\n        - row \"Hành tinh Cung Độ Nhà Nghịch hành\":\n          - columnheader \"Hành tinh\"\n          - columnheader \"Cung\"\n          - columnheader \"Độ\"\n          - columnheader \"Nhà\"\n          - columnheader \"Nghịch hành\"\n      - rowgroup:\n        - row \"Chọn Mặt Trời Ma Kết 10°31′ Nhà thứ 9 Không nghịch hành\":\n          - rowheader \"Chọn Mặt Trời\":\n            - button \"Chọn Mặt Trời\": Mặt Trời\n          - cell \"Ma Kết\"\n          - cell \"10°31′\"\n          - cell \"Nhà thứ 9\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Mặt Trăng Bảo Bình 29°20′ Nhà thứ 11 Không nghịch hành\":\n          - rowheader \"Chọn Mặt Trăng\":\n            - button \"Chọn Mặt Trăng\": Mặt Trăng\n          - cell \"Bảo Bình\"\n          - cell \"29°20′\"\n          - cell \"Nhà thứ 11\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Sao Thủy Ma Kết 25°45′ Nhà thứ 10 Nghịch hành\":\n          - rowheader \"Chọn Sao Thủy\":\n            - button \"Chọn Sao Thủy\": Sao Thủy\n          - cell \"Ma Kết\"\n          - cell \"25°45′\"\n          - cell \"Nhà thứ 10\"\n          - cell \"Nghịch hành\"\n        - row \"Chọn Sao Kim Bảo Bình 6°15′ Nhà thứ 10 Nghịch hành\":\n          - rowheader \"Chọn Sao Kim\":\n            - button \"Chọn Sao Kim\": Sao Kim\n          - cell \"Bảo Bình\"\n          - cell \"6°15′\"\n          - cell \"Nhà thứ 10\"\n          - cell \"Nghịch hành\"\n        - row \"Chọn Sao Hỏa Nhân Mã 9°47′ Nhà thứ 8 Không nghịch hành\":\n          - rowheader \"Chọn Sao Hỏa\":\n            - button \"Chọn Sao Hỏa\": Sao Hỏa\n          - cell \"Nhân Mã\"\n          - cell \"9°47′\"\n          - cell \"Nhà thứ 8\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Sao Mộc Cự Giải 5°11′ Nhà thứ 3 Nghịch hành\":\n          - rowheader \"Chọn Sao Mộc\":\n            - button \"Chọn Sao Mộc\": Sao Mộc\n          - cell \"Cự Giải\"\n          - cell \"5°11′\"\n          - cell \"Nhà thứ 3\"\n          - cell \"Nghịch hành\"\n        - row \"Chọn Sao Thổ Ma Kết 15°37′ Nhà thứ 10 Không nghịch hành\":\n          - rowheader \"Chọn Sao Thổ\":\n            - button \"Chọn Sao Thổ\": Sao Thổ\n          - cell \"Ma Kết\"\n          - cell \"15°37′\"\n          - cell \"Nhà thứ 10\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Sao Thiên Vương Ma Kết 5°46′ Nhà thứ 9 Không nghịch hành\":\n          - rowheader \"Chọn Sao Thiên Vương\":\n            - button \"Chọn Sao Thiên Vương\": Sao Thiên Vương\n          - cell \"Ma Kết\"\n          - cell \"5°46′\"\n          - cell \"Nhà thứ 9\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Sao Hải Vương Ma Kết 12°01′ Nhà thứ 10 Không nghịch hành\":\n          - rowheader \"Chọn Sao Hải Vương\":\n            - button \"Chọn Sao Hải Vương\": Sao Hải Vương\n          - cell \"Ma Kết\"\n          - cell \"12°01′\"\n          - cell \"Nhà thứ 10\"\n          - cell \"Không nghịch hành\"\n        - row \"Chọn Sao Diêm Vương Thiên Yết 17°05′ Nhà thứ 7 Không nghịch hành\":\n          - rowheader \"Chọn Sao Diêm Vương\":\n            - button \"Chọn Sao Diêm Vương\": Sao Diêm Vương\n          - cell \"Thiên Yết\"\n          - cell \"17°05′\"\n          - cell \"Nhà thứ 7\"\n          - cell \"Không nghịch hành\"\n  - region \"Nhà và các góc\":\n    - heading \"Nhà và các góc\" [level=2]\n    - text: Placidus\n    - table \"Nhà theo hệ Placidus — Natal Chart, 12 hàng\":\n      - caption: Nhà theo hệ Placidus — Natal Chart, 12 hàng\n      - rowgroup:\n        - row \"Nhà Cusp (độ) Cung\":\n          - columnheader \"Nhà\"\n          - columnheader \"Cusp (độ)\"\n          - columnheader \"Cung\"\n      - rowgroup:\n        - row \"Nhà thứ 1 14°53′ Bạch Dương\":\n          - rowheader \"Nhà thứ 1\"\n          - cell \"14°53′\"\n          - cell \"Bạch Dương\"\n        - row \"Nhà thứ 2 18°30′ Kim Ngưu\":\n          - rowheader \"Nhà thứ 2\"\n          - cell \"18°30′\"\n          - cell \"Kim Ngưu\"\n        - row \"Nhà thứ 3 15°45′ Song Tử\":\n          - rowheader \"Nhà thứ 3\"\n          - cell \"15°45′\"\n          - cell \"Song Tử\"\n        - row \"Nhà thứ 4 10°31′ Cự Giải\":\n          - rowheader \"Nhà thứ 4\"\n          - cell \"10°31′\"\n          - cell \"Cự Giải\"\n        - row \"Nhà thứ 5 6°34′ Sư Tử\":\n          - rowheader \"Nhà thứ 5\"\n          - cell \"6°34′\"\n          - cell \"Sư Tử\"\n        - row \"Nhà thứ 6 7°29′ Xử Nữ\":\n          - rowheader \"Nhà thứ 6\"\n          - cell \"7°29′\"\n          - cell \"Xử Nữ\"\n        - row \"Nhà thứ 7 14°53′ Thiên Bình\":\n          - rowheader \"Nhà thứ 7\"\n          - cell \"14°53′\"\n          - cell \"Thiên Bình\"\n        - row \"Nhà thứ 8 18°30′ Thiên Yết\":\n          - rowheader \"Nhà thứ 8\"\n          - cell \"18°30′\"\n          - cell \"Thiên Yết\"\n        - row \"Nhà thứ 9 15°45′ Nhân Mã\":\n          - rowheader \"Nhà thứ 9\"\n          - cell \"15°45′\"\n          - cell \"Nhân Mã\"\n        - row \"Nhà thứ 10 10°31′ Ma Kết\":\n          - rowheader \"Nhà thứ 10\"\n          - cell \"10°31′\"\n          - cell \"Ma Kết\"\n        - row \"Nhà thứ 11 6°34′ Bảo Bình\":\n          - rowheader \"Nhà thứ 11\"\n          - cell \"6°34′\"\n          - cell \"Bảo Bình\"\n        - row \"Nhà thứ 12 7°29′ Song Ngư\":\n          - rowheader \"Nhà thứ 12\"\n          - cell \"7°29′\"\n          - cell \"Song Ngư\"\n    - heading \"Các góc chính\" [level=3]\n    - table \"Các góc chính — Natal Chart, 4 hàng\":\n      - caption: Các góc chính — Natal Chart, 4 hàng\n      - rowgroup:\n        - row \"Góc Cung Độ\":\n          - columnheader \"Góc\"\n          - columnheader \"Cung\"\n          - columnheader \"Độ\"\n      - rowgroup:\n        - row \"ASCCung Mọc Bạch Dương 14°53′\":\n          - rowheader \"ASCCung Mọc\"\n          - cell \"Bạch Dương\"\n          - cell \"14°53′\"\n        - row \"MCThiên Đỉnh Ma Kết 10°31′\":\n          - rowheader \"MCThiên Đỉnh\"\n          - cell \"Ma Kết\"\n          - cell \"10°31′\"\n        - row \"DSCCung Lặn Thiên Bình 14°53′\":\n          - rowheader \"DSCCung Lặn\"\n          - cell \"Thiên Bình\"\n          - cell \"14°53′\"\n        - row \"ICThiên Để Cự Giải 10°31′\":\n          - rowheader \"ICThiên Để\"\n          - cell \"Cự Giải\"\n          - cell \"10°31′\"\n  - region \"Góc chiếu\":\n    - heading \"Góc chiếu\" [level=2]\n    - table \"Góc chiếu giữa các hành tinh — Natal Chart, 9 hàng, sắp theo orb tăng dần\":\n      - caption: Góc chiếu giữa các hành tinh — Natal Chart, 9 hàng, sắp theo orb tăng dần\n      - rowgroup:\n        - row \"Hành tinh A Góc chiếu Hành tinh B Orb Trạng thái\":\n          - columnheader \"Hành tinh A\"\n          - columnheader \"Góc chiếu\"\n          - columnheader \"Hành tinh B\"\n          - columnheader \"Orb\"\n          - columnheader \"Trạng thái\"\n      - rowgroup:\n        - row \"Chọn góc chiếu Đối xung giữa Sao Mộc và Sao Thiên Vương Đối xung , căng thẳng Sao Thiên Vương 0°34′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Đối xung giữa Sao Mộc và Sao Thiên Vương\":\n            - button \"Chọn góc chiếu Đối xung giữa Sao Mộc và Sao Thiên Vương\": Sao Mộc\n          - cell \"Đối xung , căng thẳng\"\n          - cell \"Sao Thiên Vương\"\n          - cell \"0°34′\"\n          - cell \"Đang tới gần\"\n        - row \"Chọn góc chiếu Lục hợp giữa Sao Diêm Vương và Sao Thổ Lục hợp , hài hòa Sao Thổ 1°27′ Đang rời xa\":\n          - rowheader \"Chọn góc chiếu Lục hợp giữa Sao Diêm Vương và Sao Thổ\":\n            - button \"Chọn góc chiếu Lục hợp giữa Sao Diêm Vương và Sao Thổ\": Sao Diêm Vương\n          - cell \"Lục hợp , hài hòa\"\n          - cell \"Sao Thổ\"\n          - cell \"1°27′\"\n          - cell \"Đang rời xa\"\n        - row \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Mặt Trời Hợp , trung tính Mặt Trời 1°30′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Mặt Trời\":\n            - button \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Mặt Trời\": Sao Hải Vương\n          - cell \"Hợp , trung tính\"\n          - cell \"Mặt Trời\"\n          - cell \"1°30′\"\n          - cell \"Đang tới gần\"\n        - row \"Chọn góc chiếu Lục hợp giữa Sao Hỏa và Sao Kim Lục hợp , hài hòa Sao Kim 3°32′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Lục hợp giữa Sao Hỏa và Sao Kim\":\n            - button \"Chọn góc chiếu Lục hợp giữa Sao Hỏa và Sao Kim\": Sao Hỏa\n          - cell \"Lục hợp , hài hòa\"\n          - cell \"Sao Kim\"\n          - cell \"3°32′\"\n          - cell \"Đang tới gần\"\n        - row \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Sao Thổ Hợp , trung tính Sao Thổ 3°35′ Đang rời xa\":\n          - rowheader \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Sao Thổ\":\n            - button \"Chọn góc chiếu Hợp giữa Sao Hải Vương và Sao Thổ\": Sao Hải Vương\n          - cell \"Hợp , trung tính\"\n          - cell \"Sao Thổ\"\n          - cell \"3°35′\"\n          - cell \"Đang rời xa\"\n        - row \"Chọn góc chiếu Hợp giữa Mặt Trời và Sao Thiên Vương Hợp , trung tính Sao Thiên Vương 4°44′ Đang rời xa\":\n          - rowheader \"Chọn góc chiếu Hợp giữa Mặt Trời và Sao Thiên Vương\":\n            - button \"Chọn góc chiếu Hợp giữa Mặt Trời và Sao Thiên Vương\": Mặt Trời\n          - cell \"Hợp , trung tính\"\n          - cell \"Sao Thiên Vương\"\n          - cell \"4°44′\"\n          - cell \"Đang rời xa\"\n        - row \"Chọn góc chiếu Hợp giữa Sao Thổ và Mặt Trời Hợp , trung tính Mặt Trời 5°06′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Hợp giữa Sao Thổ và Mặt Trời\":\n            - button \"Chọn góc chiếu Hợp giữa Sao Thổ và Mặt Trời\": Sao Thổ\n          - cell \"Hợp , trung tính\"\n          - cell \"Mặt Trời\"\n          - cell \"5°06′\"\n          - cell \"Đang tới gần\"\n        - row \"Chọn góc chiếu Đối xung giữa Sao Mộc và Mặt Trời Đối xung , căng thẳng Mặt Trời 5°19′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Đối xung giữa Sao Mộc và Mặt Trời\":\n            - button \"Chọn góc chiếu Đối xung giữa Sao Mộc và Mặt Trời\": Sao Mộc\n          - cell \"Đối xung , căng thẳng\"\n          - cell \"Mặt Trời\"\n          - cell \"5°19′\"\n          - cell \"Đang tới gần\"\n        - row \"Chọn góc chiếu Tam hợp giữa Sao Mộc và Mặt Trăng Tam hợp , hài hòa Mặt Trăng 5°50′ Đang tới gần\":\n          - rowheader \"Chọn góc chiếu Tam hợp giữa Sao Mộc và Mặt Trăng\":\n            - button \"Chọn góc chiếu Tam hợp giữa Sao Mộc và Mặt Trăng\": Sao Mộc\n          - cell \"Tam hợp , hài hòa\"\n          - cell \"Mặt Trăng\"\n          - cell \"5°50′\"\n          - cell \"Đang tới gần\"\n  - region \"Diễn giải\":\n    - heading \"Diễn giải\" [level=2]\n    - paragraph: Có 21 diễn giải cho lá số này\n    - navigation \"Các nhóm diễn giải\":\n      - list:\n        - listitem:\n          - link \"Cốt lõi (3)\":\n            - /url: \"#interpretation-group-core\"\n        - listitem:\n          - link \"Các hành tinh (8)\":\n            - /url: \"#interpretation-group-planets\"\n    - paragraph: Diễn giải góc chiếu và nhận định tổng hợp toàn lá số hiện chưa có nội dung.\n    - paragraph: Chiêm tinh là một góc nhìn để bạn khám phá và suy ngẫm về bản thân, không phải kết luận tuyệt đối về con người hay tương lai. Hãy đón nhận những nội dung phù hợp với trải nghiệm của chính bạn.\n    - heading \"Cốt lõi\" [level=3]\n    - list:\n      - listitem:\n        - article:\n          - heading \"Mặt Trời · Ma Kết\" [level=4]:\n            - button \"Mặt Trời · Ma Kết\" [expanded]\n          - term: Theo cung\n          - definition: Mặt Trời ở Ma Kết tượng trưng cho tham vọng, sự kỷ luật và trách nhiệm cao trong công việc. Bạn thường có xu hướng làm việc bền bỉ, xây dựng từng bước vững chắc để đạt được thành tựu dài hạn. Cần chú ý rằng áp lực tự đặt ra đôi khi có thể khiến bạn bỏ quên việc tận hưởng những niềm vui nhỏ bé trong cuộc sống.\n          - term: Theo nhà · Nhà 9\n          - definition: Mặt Trời ở Nhà 9 tượng trưng cho khát khao mở rộng tầm nhìn thông qua triết học, giáo dục đại học hoặc những chuyến đi xa. Bạn thường có xu hướng tìm kiếm chân lý, đam mê khám phá các nền văn hóa mới và sẵn sàng truyền bá niềm tin của mình. Cần lưu ý rằng sự tự tin vào lý tưởng cá nhân đôi khi có thể khiến bạn trở nên giáo điều và thiếu bao dung.\n          - 'button \"Xem trên biểu đồ: Mặt Trời\"': Xem trên biểu đồ\n      - listitem:\n        - article:\n          - heading \"Mặt Trăng · Bảo Bình\" [level=4]:\n            - button \"Mặt Trăng · Bảo Bình\" [expanded]\n          - term: Theo cung\n          - definition: Mặt Trăng ở Bảo Bình mang lại nhu cầu độc lập, tư duy khách quan và sự trân trọng những khác biệt cá nhân. Bạn thường có xu hướng quan sát cảm xúc từ xa, thích giao lưu trong các cộng đồng tư tưởng và trân trọng tự do cá nhân. Cần chú ý rằng việc phân tích cảm xúc qua lăng kính logic có thể khiến bạn đôi khi khó kết nối sâu sắc với người khác.\n          - term: Theo nhà · Nhà 11\n          - definition: Mặt Trăng ở Nhà 11 mang lại nhu cầu gắn kết với cộng đồng, lý tưởng xã hội và những tình bạn sâu sắc. Bạn thường có xu hướng tìm kiếm sự an toàn trong các hội nhóm, thích chia sẻ ước mơ và luôn ủng hộ những phong trào mang tính nhân đạo. Cần chú ý rằng việc phân tán năng lượng cho quá nhiều mối quan hệ đôi khi có thể khiến bạn bỏ quên những người thực sự thân thiết.\n          - 'button \"Xem trên biểu đồ: Mặt Trăng\"': Xem trên biểu đồ\n      - listitem:\n        - article:\n          - heading \"Cung Mọc · Bạch Dương\" [level=4]:\n            - button \"Cung Mọc · Bạch Dương\" [expanded]\n          - term: Theo cung\n          - definition: Cung Mọc Bạch Dương mang đến ấn tượng đầu tiên về sự năng động, quyết đoán và tràn đầy nhiệt huyết. Bạn thường có xu hướng tiếp cận cuộc sống một cách trực diện, hành động nhanh nhẹn và luôn toát ra phong thái của người dẫn đầu. Cần lưu ý rằng sự vội vã đôi khi có thể khiến bạn bỏ qua những chi tiết tinh tế trong giao tiếp.\n    - heading \"Các hành tinh\" [level=3]\n    - list:\n      - listitem:\n        - article:\n          - heading \"Sao Thủy · Ma Kết\" [level=4]:\n            - button \"Sao Thủy · Ma Kết\"\n      - listitem:\n        - article:\n          - heading \"Sao Kim · Bảo Bình\" [level=4]:\n            - button \"Sao Kim · Bảo Bình\"\n      - listitem:\n        - article:\n          - heading \"Sao Hỏa · Nhân Mã\" [level=4]:\n            - button \"Sao Hỏa · Nhân Mã\"\n      - listitem:\n        - article:\n          - heading \"Sao Mộc · Cự Giải\" [level=4]:\n            - button \"Sao Mộc · Cự Giải\"\n      - listitem:\n        - article:\n          - heading \"Sao Thổ · Ma Kết\" [level=4]:\n            - button \"Sao Thổ · Ma Kết\"\n      - listitem:\n        - article:\n          - heading \"Sao Thiên Vương · Ma Kết\" [level=4]:\n            - button \"Sao Thiên Vương · Ma Kết\"\n      - listitem:\n        - article:\n          - heading \"Sao Hải Vương · Ma Kết\" [level=4]:\n            - button \"Sao Hải Vương · Ma Kết\"\n      - listitem:\n        - article:\n          - heading \"Sao Diêm Vương · Thiên Yết\" [level=4]:\n            - button \"Sao Diêm Vương · Thiên Yết\"",
+  "axTreeSample": [
+    {
+      "nodeId": "2",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "RootWebArea"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 144
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số sinh — AstroViet",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Lá số sinh — AstroViet"
+            },
+            "nativeSource": "title"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "focused",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/charts/a9d7dcb2-68ed-4b67-b6ee-c62690009f24"
+          }
+        }
+      ],
+      "childIds": [
+        "18"
+      ],
+      "backendDOMNodeId": 2,
+      "frameId": "41FFE8B68C21479AD5E165A632D95384"
+    },
+    {
+      "nodeId": "18",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "2",
+      "childIds": [
+        "30"
+      ],
+      "backendDOMNodeId": 18
+    },
+    {
+      "nodeId": "30",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "18",
+      "childIds": [
+        "31",
+        "1271"
+      ],
+      "backendDOMNodeId": 30
+    },
+    {
+      "nodeId": "31",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "30",
+      "childIds": [
+        "32"
+      ],
+      "backendDOMNodeId": 31
+    },
+    {
+      "nodeId": "1271",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "30",
+      "childIds": [],
+      "backendDOMNodeId": 1271
+    },
+    {
+      "nodeId": "32",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "31",
+      "childIds": [
+        "33",
+        "34",
+        "71"
+      ],
+      "backendDOMNodeId": 32
+    },
+    {
+      "nodeId": "33",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển đến nội dung chính",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Chuyển đến nội dung chính"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/charts/a9d7dcb2-68ed-4b67-b6ee-c62690009f24#main-content"
+          }
+        }
+      ],
+      "parentId": "32",
+      "childIds": [
+        "1273"
+      ],
+      "backendDOMNodeId": 33
+    },
+    {
+      "nodeId": "34",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "banner"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 94
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "32",
+      "childIds": [
+        "35",
+        "42"
+      ],
+      "backendDOMNodeId": 34
+    },
+    {
+      "nodeId": "71",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "32",
+      "childIds": [
+        "72",
+        "142"
+      ],
+      "backendDOMNodeId": 71
+    },
+    {
+      "nodeId": "72",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "complementary"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 22
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "71",
+      "childIds": [
+        "73",
+        "102"
+      ],
+      "backendDOMNodeId": 72
+    },
+    {
+      "nodeId": "142",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "main"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 118
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        }
+      ],
+      "parentId": "71",
+      "childIds": [
+        "143"
+      ],
+      "backendDOMNodeId": 142
+    },
+    {
+      "nodeId": "1273",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển đến nội dung chính",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Chuyển đến nội dung chính"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "33",
+      "childIds": [
+        "-1000000002"
+      ],
+      "backendDOMNodeId": 1273
+    },
+    {
+      "nodeId": "35",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "34",
+      "childIds": [
+        "41"
+      ],
+      "backendDOMNodeId": 35
+    },
+    {
+      "nodeId": "41",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "35",
+      "childIds": [
+        "1274"
+      ],
+      "backendDOMNodeId": 41
+    },
+    {
+      "nodeId": "42",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "34",
+      "childIds": [
+        "43"
+      ],
+      "backendDOMNodeId": 42
+    },
+    {
+      "nodeId": "43",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "42",
+      "childIds": [
+        "44",
+        "68",
+        "69"
+      ],
+      "backendDOMNodeId": 43
+    },
+    {
+      "nodeId": "44",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "switch"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 163
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Giao diện tối",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Giao diện tối"
+            },
+            "attribute": "aria-label",
+            "attributeValue": {
+              "type": "string",
+              "value": "Giao diện tối"
+            }
+          },
+          {
+            "type": "relatedElement",
+            "superseded": true,
+            "nativeSource": "label"
+          },
+          {
+            "type": "contents",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Chuyển sang giao diện tối"
+            },
+            "attribute": "title",
+            "attributeValue": {
+              "type": "string",
+              "value": "Chuyển sang giao diện tối"
+            },
+            "superseded": true
+          }
+        ]
+      },
+      "description": {
+        "type": "computedString",
+        "value": "Chuyển sang giao diện tối"
+      },
+      "properties": [
+        {
+          "name": "invalid",
+          "value": {
+            "type": "token",
+            "value": "false"
+          }
+        },
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "checked",
+          "value": {
+            "type": "tristate",
+            "value": "false"
+          }
+        }
+      ],
+      "parentId": "43",
+      "childIds": [],
+      "backendDOMNodeId": 44
+    },
+    {
+      "nodeId": "68",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "43",
+      "childIds": [
+        "1275"
+      ],
+      "backendDOMNodeId": 68
+    },
+    {
+      "nodeId": "1275",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "E2E Tester",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "E2E Tester"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "68",
+      "childIds": [
+        "-1000000004"
+      ],
+      "backendDOMNodeId": 1275
+    },
+    {
+      "nodeId": "69",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "button"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 9
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Đăng xuất",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "relatedElement",
+            "nativeSource": "label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Đăng xuất"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "invalid",
+          "value": {
+            "type": "token",
+            "value": "false"
+          }
+        },
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        }
+      ],
+      "parentId": "43",
+      "childIds": [
+        "70"
+      ],
+      "backendDOMNodeId": 69
+    },
+    {
+      "nodeId": "73",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "navigation"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 130
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Điều hướng chính",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Điều hướng chính"
+            },
+            "attribute": "aria-label",
+            "attributeValue": {
+              "type": "string",
+              "value": "Điều hướng chính"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "72",
+      "childIds": [
+        "74",
+        "81",
+        "89",
+        "97"
+      ],
+      "backendDOMNodeId": 73
+    },
+    {
+      "nodeId": "102",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "72",
+      "childIds": [
+        "103"
+      ],
+      "backendDOMNodeId": 102
+    },
+    {
+      "nodeId": "103",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "button"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 9
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Thu gọn sidebar",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Thu gọn sidebar"
+            },
+            "attribute": "aria-label",
+            "attributeValue": {
+              "type": "string",
+              "value": "Thu gọn sidebar"
+            }
+          },
+          {
+            "type": "relatedElement",
+            "superseded": true,
+            "nativeSource": "label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "« Thu gọn"
+            },
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "invalid",
+          "value": {
+            "type": "token",
+            "value": "false"
+          }
+        },
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        }
+      ],
+      "parentId": "102",
+      "childIds": [
+        "1281"
+      ],
+      "backendDOMNodeId": 103
+    },
+    {
+      "nodeId": "143",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "142",
+      "childIds": [
+        "144",
+        "146",
+        "147"
+      ],
+      "backendDOMNodeId": 143
+    },
+    {
+      "nodeId": "144",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "143",
+      "childIds": [
+        "145"
+      ],
+      "backendDOMNodeId": 144
+    },
+    {
+      "nodeId": "146",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số sinh",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Lá số sinh"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "focused",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 1
+          }
+        }
+      ],
+      "parentId": "143",
+      "childIds": [
+        "1288"
+      ],
+      "backendDOMNodeId": 146
+    },
+    {
+      "nodeId": "147",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "143",
+      "childIds": [
+        "148",
+        "149",
+        "150",
+        "163",
+        "1049"
+      ],
+      "backendDOMNodeId": 147
+    },
+    {
+      "nodeId": "148",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "status"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 159
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "live",
+          "value": {
+            "type": "token",
+            "value": "polite"
+          }
+        },
+        {
+          "name": "atomic",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        },
+        {
+          "name": "relevant",
+          "value": {
+            "type": "tokenList",
+            "value": "additions text"
+          }
+        }
+      ],
+      "parentId": "147",
+      "childIds": [],
+      "backendDOMNodeId": 148
+    },
+    {
+      "nodeId": "149",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển tới bảng dữ liệu",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Chuyển tới bảng dữ liệu"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/charts/a9d7dcb2-68ed-4b67-b6ee-c62690009f24#chart-data-tables"
+          }
+        }
+      ],
+      "parentId": "147",
+      "childIds": [
+        "1289"
+      ],
+      "backendDOMNodeId": 149
+    },
+    {
+      "nodeId": "150",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Thông tin lá số",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Thông tin lá số"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":r4:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 151,
+                  "idref": ":r4:",
+                  "text": "Thông tin lá số"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 151,
+                "idref": ":r4:",
+                "text": "Thông tin lá số"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "147",
+      "childIds": [
+        "151",
+        "152"
+      ],
+      "backendDOMNodeId": 150
+    },
+    {
+      "nodeId": "163",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "147",
+      "childIds": [
+        "164"
+      ],
+      "backendDOMNodeId": 163
+    },
+    {
+      "nodeId": "164",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "163",
+      "childIds": [
+        "165",
+        "476"
+      ],
+      "backendDOMNodeId": 164
+    },
+    {
+      "nodeId": "165",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "164",
+      "childIds": [
+        "166"
+      ],
+      "backendDOMNodeId": 165
+    },
+    {
+      "nodeId": "166",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Biểu đồ lá số",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Biểu đồ lá số"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":r5:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 167,
+                  "idref": ":r5:",
+                  "text": "Biểu đồ lá số"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 167,
+                "idref": ":r5:",
+                "text": "Biểu đồ lá số"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "165",
+      "childIds": [
+        "167",
+        "168",
+        "195",
+        "473"
+      ],
+      "backendDOMNodeId": 166
+    },
+    {
+      "nodeId": "476",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        }
+      ],
+      "parentId": "164",
+      "childIds": [
+        "477",
+        "680",
+        "864"
+      ],
+      "backendDOMNodeId": 476
+    },
+    {
+      "nodeId": "1049",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "region"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 143
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Diễn giải",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Diễn giải"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": "interpretation-panel-title",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 1050,
+                  "idref": "interpretation-panel-title",
+                  "text": "Diễn giải"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 1050,
+                "idref": "interpretation-panel-title",
+                "text": "Diễn giải"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "147",
+      "childIds": [
+        "1050",
+        "1051",
+        "1061"
+      ],
+      "backendDOMNodeId": 1049
+    },
+    {
+      "nodeId": "-1000000002",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển đến nội dung chính"
+      },
+      "properties": [],
+      "parentId": "1273",
+      "childIds": []
+    },
+    {
+      "nodeId": "1274",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "AstroViet",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "AstroViet"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "41",
+      "childIds": [
+        "-1000000003"
+      ],
+      "backendDOMNodeId": 1274
+    },
+    {
+      "nodeId": "-1000000004",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "E2E Tester"
+      },
+      "properties": [],
+      "parentId": "1275",
+      "childIds": []
+    },
+    {
+      "nodeId": "70",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "69",
+      "childIds": [
+        "1276"
+      ],
+      "backendDOMNodeId": 70
+    },
+    {
+      "nodeId": "1276",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Đăng xuất",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Đăng xuất"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "70",
+      "childIds": [
+        "-1000000005"
+      ],
+      "backendDOMNodeId": 1276
+    },
+    {
+      "nodeId": "74",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Bảng điều khiển",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Bảng điều khiển"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/"
+          }
+        }
+      ],
+      "parentId": "73",
+      "childIds": [
+        "80"
+      ],
+      "backendDOMNodeId": 74
+    },
+    {
+      "nodeId": "81",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Hồ sơ sinh",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Hồ sơ sinh"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/profiles"
+          }
+        }
+      ],
+      "parentId": "73",
+      "childIds": [
+        "88"
+      ],
+      "backendDOMNodeId": 81
+    },
+    {
+      "nodeId": "89",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số của tôi",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Lá số của tôi"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/charts"
+          }
+        }
+      ],
+      "parentId": "73",
+      "childIds": [
+        "96"
+      ],
+      "backendDOMNodeId": 89
+    },
+    {
+      "nodeId": "97",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Cài đặt",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Cài đặt"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/"
+          }
+        }
+      ],
+      "parentId": "73",
+      "childIds": [
+        "101"
+      ],
+      "backendDOMNodeId": 97
+    },
+    {
+      "nodeId": "1281",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "« Thu gọn",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "« Thu gọn"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "103",
+      "childIds": [
+        "-1000000010"
+      ],
+      "backendDOMNodeId": 1281
+    },
+    {
+      "nodeId": "145",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "link"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 110
+      },
+      "name": {
+        "type": "computedString",
+        "value": "← Hồ sơ sinh",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "← Hồ sơ sinh"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "url",
+          "value": {
+            "type": "string",
+            "value": "http://localhost:5173/app/profiles"
+          }
+        }
+      ],
+      "parentId": "144",
+      "childIds": [
+        "1287"
+      ],
+      "backendDOMNodeId": 145
+    },
+    {
+      "nodeId": "1288",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số sinh",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Lá số sinh"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "146",
+      "childIds": [
+        "-1000000012"
+      ],
+      "backendDOMNodeId": 1288
+    },
+    {
+      "nodeId": "1289",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển tới bảng dữ liệu",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Chuyển tới bảng dữ liệu"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "149",
+      "childIds": [
+        "-1000000013"
+      ],
+      "backendDOMNodeId": 1289
+    },
+    {
+      "nodeId": "151",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Thông tin lá số",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Thông tin lá số"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 2
+          }
+        }
+      ],
+      "parentId": "150",
+      "childIds": [
+        "1290"
+      ],
+      "backendDOMNodeId": 151
+    },
+    {
+      "nodeId": "152",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "DescriptionList"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 30
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "150",
+      "childIds": [
+        "153",
+        "156",
+        "160"
+      ],
+      "backendDOMNodeId": 152
+    },
+    {
+      "nodeId": "167",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Biểu đồ lá số",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Biểu đồ lá số"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 2
+          }
+        }
+      ],
+      "parentId": "166",
+      "childIds": [
+        "1297"
+      ],
+      "backendDOMNodeId": 167
+    },
+    {
+      "nodeId": "168",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "166",
+      "childIds": [
+        "169",
+        "178"
+      ],
+      "backendDOMNodeId": 168
+    },
+    {
+      "nodeId": "169",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "168",
+      "childIds": [
+        "170",
+        "174"
+      ],
+      "backendDOMNodeId": 169
+    },
+    {
+      "nodeId": "170",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "169",
+      "childIds": [
+        "171",
+        "172"
+      ],
+      "backendDOMNodeId": 170
+    },
+    {
+      "nodeId": "174",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "169",
+      "childIds": [
+        "175",
+        "176"
+      ],
+      "backendDOMNodeId": 174
+    },
+    {
+      "nodeId": "175",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "labelFor",
+          "value": {
+            "type": "idref",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 171,
+                "idref": ":r7:"
+              }
+            ]
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "174",
+      "childIds": [
+        "1298"
+      ],
+      "backendDOMNodeId": 175
+    },
+    {
+      "nodeId": "1298",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "presentationalRole",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "175",
+      "childIds": [],
+      "backendDOMNodeId": 1298
+    },
+    {
+      "nodeId": "176",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "generic"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 88
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "174",
+      "childIds": [
+        "177"
+      ],
+      "backendDOMNodeId": 176
+    },
+    {
+      "nodeId": "178",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "list"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 111
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chú giải kiểu đường góc chiếu",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Chú giải kiểu đường góc chiếu"
+            },
+            "attribute": "aria-label",
+            "attributeValue": {
+              "type": "string",
+              "value": "Chú giải kiểu đường góc chiếu"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "168",
+      "childIds": [
+        "179",
+        "183",
+        "187",
+        "191"
+      ],
+      "backendDOMNodeId": 178
+    },
+    {
+      "nodeId": "195",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "figure"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 84
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "166",
+      "childIds": [
+        "196",
+        "472"
+      ],
+      "backendDOMNodeId": 195
+    },
+    {
+      "nodeId": "473",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "region"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 143
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chi tiết đang chọn",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Chi tiết đang chọn"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":rd:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 474,
+                  "idref": ":rd:",
+                  "text": "Chi tiết đang chọn"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 474,
+                "idref": ":rd:",
+                "text": "Chi tiết đang chọn"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "166",
+      "childIds": [
+        "474",
+        "475"
+      ],
+      "backendDOMNodeId": 473
+    },
+    {
+      "nodeId": "477",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "region"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 143
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Vị trí hành tinh",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Vị trí hành tinh"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":rf:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 478,
+                  "idref": ":rf:",
+                  "text": "Vị trí hành tinh"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 478,
+                "idref": ":rf:",
+                "text": "Vị trí hành tinh"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "476",
+      "childIds": [
+        "478",
+        "479"
+      ],
+      "backendDOMNodeId": 477
+    },
+    {
+      "nodeId": "680",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "region"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 143
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Nhà và các góc",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Nhà và các góc"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":rh:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 682,
+                  "idref": ":rh:",
+                  "text": "Nhà và các góc"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 682,
+                "idref": ":rh:",
+                "text": "Nhà và các góc"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "476",
+      "childIds": [
+        "681",
+        "684",
+        "813"
+      ],
+      "backendDOMNodeId": 680
+    },
+    {
+      "nodeId": "864",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "region"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 143
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Góc chiếu",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "value": {
+              "type": "computedString",
+              "value": "Góc chiếu"
+            },
+            "attribute": "aria-labelledby",
+            "attributeValue": {
+              "type": "idrefList",
+              "value": ":rj:",
+              "relatedNodes": [
+                {
+                  "backendDOMNodeId": 865,
+                  "idref": ":rj:",
+                  "text": "Góc chiếu"
+                }
+              ]
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label",
+            "superseded": true
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "labelledby",
+          "value": {
+            "type": "nodeList",
+            "relatedNodes": [
+              {
+                "backendDOMNodeId": 865,
+                "idref": ":rj:",
+                "text": "Góc chiếu"
+              }
+            ]
+          }
+        }
+      ],
+      "parentId": "476",
+      "childIds": [
+        "865",
+        "866",
+        "867"
+      ],
+      "backendDOMNodeId": 864
+    },
+    {
+      "nodeId": "1050",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Diễn giải",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Diễn giải"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 2
+          }
+        }
+      ],
+      "parentId": "1049",
+      "childIds": [
+        "1677"
+      ],
+      "backendDOMNodeId": 1050
+    },
+    {
+      "nodeId": "1051",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "1049",
+      "childIds": [
+        "1052",
+        "1053",
+        "1059",
+        "1060"
+      ],
+      "backendDOMNodeId": 1051
+    },
+    {
+      "nodeId": "1052",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "paragraph"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 133
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1051",
+      "childIds": [
+        "1678"
+      ],
+      "backendDOMNodeId": 1052
+    },
+    {
+      "nodeId": "1053",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "navigation"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 130
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Các nhóm diễn giải",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "value": {
+              "type": "computedString",
+              "value": "Các nhóm diễn giải"
+            },
+            "attribute": "aria-label",
+            "attributeValue": {
+              "type": "string",
+              "value": "Các nhóm diễn giải"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1051",
+      "childIds": [
+        "1054"
+      ],
+      "backendDOMNodeId": 1053
+    },
+    {
+      "nodeId": "1059",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "paragraph"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 133
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1051",
+      "childIds": [
+        "1687"
+      ],
+      "backendDOMNodeId": 1059
+    },
+    {
+      "nodeId": "1060",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "paragraph"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 133
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1051",
+      "childIds": [
+        "1688"
+      ],
+      "backendDOMNodeId": 1060
+    },
+    {
+      "nodeId": "1061",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "1049",
+      "childIds": [
+        "1062",
+        "1116"
+      ],
+      "backendDOMNodeId": 1061
+    },
+    {
+      "nodeId": "1062",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "1061",
+      "childIds": [
+        "1063",
+        "1064"
+      ],
+      "backendDOMNodeId": 1062
+    },
+    {
+      "nodeId": "1063",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Cốt lõi",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Cốt lõi"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 3
+          }
+        }
+      ],
+      "parentId": "1062",
+      "childIds": [
+        "1689"
+      ],
+      "backendDOMNodeId": 1063
+    },
+    {
+      "nodeId": "1064",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "list"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 111
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1062",
+      "childIds": [
+        "1065",
+        "1084",
+        "1103"
+      ],
+      "backendDOMNodeId": 1064
+    },
+    {
+      "nodeId": "1116",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "1061",
+      "childIds": [
+        "1117",
+        "1118"
+      ],
+      "backendDOMNodeId": 1116
+    },
+    {
+      "nodeId": "1117",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "heading"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 96
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Các hành tinh",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Các hành tinh"
+            }
+          },
+          {
+            "type": "attribute",
+            "attribute": "title",
+            "superseded": true
+          }
+        ]
+      },
+      "properties": [
+        {
+          "name": "focusable",
+          "value": {
+            "type": "booleanOrUndefined",
+            "value": true
+          }
+        },
+        {
+          "name": "level",
+          "value": {
+            "type": "integer",
+            "value": 3
+          }
+        }
+      ],
+      "parentId": "1116",
+      "childIds": [
+        "1710"
+      ],
+      "backendDOMNodeId": 1117
+    },
+    {
+      "nodeId": "1118",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "list"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 111
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "attribute",
+            "attribute": "title"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "1116",
+      "childIds": [
+        "1119",
+        "1138",
+        "1157",
+        "1176",
+        "1195",
+        "1214",
+        "1233",
+        "1252"
+      ],
+      "backendDOMNodeId": 1118
+    },
+    {
+      "nodeId": "-1000000003",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "AstroViet"
+      },
+      "properties": [],
+      "parentId": "1274",
+      "childIds": []
+    },
+    {
+      "nodeId": "-1000000005",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Đăng xuất"
+      },
+      "properties": [],
+      "parentId": "1276",
+      "childIds": []
+    },
+    {
+      "nodeId": "80",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "74",
+      "childIds": [
+        "1277"
+      ],
+      "backendDOMNodeId": 80
+    },
+    {
+      "nodeId": "1277",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Bảng điều khiển",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Bảng điều khiển"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "80",
+      "childIds": [
+        "-1000000006"
+      ],
+      "backendDOMNodeId": 1277
+    },
+    {
+      "nodeId": "88",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "81",
+      "childIds": [
+        "1278"
+      ],
+      "backendDOMNodeId": 88
+    },
+    {
+      "nodeId": "1278",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Hồ sơ sinh",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Hồ sơ sinh"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "88",
+      "childIds": [
+        "-1000000007"
+      ],
+      "backendDOMNodeId": 1278
+    },
+    {
+      "nodeId": "96",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "89",
+      "childIds": [
+        "1279"
+      ],
+      "backendDOMNodeId": 96
+    },
+    {
+      "nodeId": "1279",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số của tôi",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Lá số của tôi"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "96",
+      "childIds": [
+        "-1000000008"
+      ],
+      "backendDOMNodeId": 1279
+    },
+    {
+      "nodeId": "101",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "97",
+      "childIds": [
+        "1280"
+      ],
+      "backendDOMNodeId": 101
+    },
+    {
+      "nodeId": "1280",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Cài đặt",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Cài đặt"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "101",
+      "childIds": [
+        "-1000000009"
+      ],
+      "backendDOMNodeId": 1280
+    },
+    {
+      "nodeId": "-1000000010",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "« Thu gọn"
+      },
+      "properties": [],
+      "parentId": "1281",
+      "childIds": []
+    },
+    {
+      "nodeId": "1287",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "← Hồ sơ sinh",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "← Hồ sơ sinh"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "145",
+      "childIds": [
+        "-1000000011"
+      ],
+      "backendDOMNodeId": 1287
+    },
+    {
+      "nodeId": "-1000000012",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Lá số sinh"
+      },
+      "properties": [],
+      "parentId": "1288",
+      "childIds": []
+    },
+    {
+      "nodeId": "-1000000013",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "InlineTextBox"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 101
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Chuyển tới bảng dữ liệu"
+      },
+      "properties": [],
+      "parentId": "1289",
+      "childIds": []
+    },
+    {
+      "nodeId": "1290",
+      "ignored": false,
+      "role": {
+        "type": "internalRole",
+        "value": "StaticText"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 158
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Thông tin lá số",
+        "sources": [
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Thông tin lá số"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "151",
+      "childIds": [
+        "-1000000014"
+      ],
+      "backendDOMNodeId": 1290
+    },
+    {
+      "nodeId": "153",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "152",
+      "childIds": [
+        "154",
+        "155"
+      ],
+      "backendDOMNodeId": 153
+    },
+    {
+      "nodeId": "154",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "term"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 169
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Hệ nhà",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Hệ nhà"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "153",
+      "childIds": [
+        "1291"
+      ],
+      "backendDOMNodeId": 154
+    },
+    {
+      "nodeId": "155",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "definition"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 29
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "153",
+      "childIds": [
+        "1292"
+      ],
+      "backendDOMNodeId": 155
+    },
+    {
+      "nodeId": "156",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "152",
+      "childIds": [
+        "157",
+        "158"
+      ],
+      "backendDOMNodeId": 156
+    },
+    {
+      "nodeId": "157",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "term"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 169
+      },
+      "name": {
+        "type": "computedString",
+        "value": "Tính lúc",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          },
+          {
+            "type": "contents",
+            "value": {
+              "type": "computedString",
+              "value": "Tính lúc"
+            }
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "156",
+      "childIds": [
+        "1293"
+      ],
+      "backendDOMNodeId": 157
+    },
+    {
+      "nodeId": "158",
+      "ignored": false,
+      "role": {
+        "type": "role",
+        "value": "definition"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 29
+      },
+      "name": {
+        "type": "computedString",
+        "value": "",
+        "sources": [
+          {
+            "type": "relatedElement",
+            "attribute": "aria-labelledby"
+          },
+          {
+            "type": "attribute",
+            "attribute": "aria-label"
+          }
+        ]
+      },
+      "properties": [],
+      "parentId": "156",
+      "childIds": [
+        "159"
+      ],
+      "backendDOMNodeId": 158
+    },
+    {
+      "nodeId": "160",
+      "ignored": true,
+      "ignoredReasons": [
+        {
+          "name": "uninteresting",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "role": {
+        "type": "role",
+        "value": "none"
+      },
+      "chromeRole": {
+        "type": "internalRole",
+        "value": 0
+      },
+      "parentId": "152",
+      "childIds": [
+        "161",
+        "162"
+      ],
+      "backendDOMNodeId": 160
+    }
+  ]
+}
