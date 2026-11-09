@@ -314,7 +314,7 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
     await expect(tableMars).toHaveAttribute("aria-pressed", "true");
     await expect(tableMars).toHaveAttribute("aria-label", "Chọn Sao Hỏa");
 
-    const liveRegion = page.locator('div[role="status"]');
+    const liveRegion = page.locator('div[role="status"][aria-live="polite"]');
     await expect(liveRegion).toContainText("Đã chọn");
     const liveText = (await liveRegion.textContent()) ?? "";
     expect(liveText).not.toContain(seedSignItem.bodyText.slice(0, 30));
@@ -330,13 +330,17 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
     await expect(marsHeaderBtn).toHaveAttribute("aria-expanded", "true");
     await expect(panel.getByText("Đang chọn")).toBeVisible();
 
-    // Verify text matching seed
-    const signDd = panel.locator('div:has(dt:text("Theo cung")) dd');
+    // Verify text matching seed via aria-controls disclosure panel
+    const panelId = await marsHeaderBtn.getAttribute("aria-controls");
+    expect(panelId).toBeTruthy();
+    const marsDisclosure = page.locator(`[id="${panelId}"]`);
+
+    const signDd = marsDisclosure.locator('dt:text("Theo cung") + dd');
     await expect(signDd).toBeVisible();
     const signDdText = (await signDd.textContent())?.trim();
     expect(signDdText).toBe(seedSignItem.bodyText.trim());
 
-    const houseDd = panel.locator('div:has(dt:text-matches("^Theo nhà")) dd');
+    const houseDd = marsDisclosure.locator('dt:text-matches("^Theo nhà") + dd');
     await expect(houseDd).toBeVisible();
     const houseDdText = (await houseDd.textContent())?.trim();
     expect(houseDdText).toBe(seedHouseItem.bodyText.trim());
@@ -379,7 +383,7 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
     await expect(marsHeaderBtn).toHaveAttribute("aria-expanded", "true");
     await expect(marsHeaderBtn).toBeFocused();
 
-    const liveRegion = page.locator('div[role="status"]');
+    const liveRegion = page.locator('div[role="status"][aria-live="polite"]');
     await expect(liveRegion).toContainText("Đã bỏ chọn.");
   });
 
@@ -614,7 +618,10 @@ test.describe("Real Backend Scenario B: Degraded / Unknown Birth Time Journey", 
     // Core planet items (e.g. Mặt Trời / Sun) have "Theo cung" text matching seed
     const sunHeaderBtn = panel.getByRole("button", { name: /^Mặt Trời/ });
     await expect(sunHeaderBtn).toBeVisible();
-    const sunSignDd = panel.locator('div:has(dt:text("Theo cung")) dd').first();
+    const sunPanelId = await sunHeaderBtn.getAttribute("aria-controls");
+    expect(sunPanelId).toBeTruthy();
+    const sunDisclosure = page.locator(`[id="${sunPanelId}"]`);
+    const sunSignDd = sunDisclosure.locator('dt:text("Theo cung") + dd');
     await expect(sunSignDd).toBeVisible();
     expect((await sunSignDd.textContent())?.trim().length).toBeGreaterThan(0);
   });
@@ -632,9 +639,9 @@ test.describe("Real Backend Scenario B: Degraded / Unknown Birth Time Journey", 
       page.getByRole("columnheader", { name: "Nhà" }),
     ).not.toBeVisible();
 
-    // House Table is absent
+    // House Table data is absent (HouseDataNotice rendered in place of table)
     await expect(
-      page.getByRole("heading", { name: "Nhà và các góc" }),
+      page.getByRole("columnheader", { name: "Cusp (độ)" }),
     ).not.toBeVisible();
 
     // F4 HouseDataNotice banner is visible
