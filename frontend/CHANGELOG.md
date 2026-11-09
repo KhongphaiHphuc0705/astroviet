@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-11-09
+
+### Added
+
+- **Sprint F5 Completion — Natal Chart Interpretation Experience (`FE-S5.1`–`FE-S5.8`)**:
+  - **CI Seed Content & Contract Probe Integration (`FE-S5.1` / M1)**:
+    - Integration of CI seed pipeline for Vietnamese interpretation texts (`interpretations.vi.json`, 252 items).
+    - Contract validation probe asserting `interpretationVersion === "1.0"` and 21 standard natal items.
+  - **Pure Interpretation Domain ViewModel & Parsing (`FE-S5.2` / M2)**:
+    - `interpretation.ts`: strictly decoupled domain parser mapping backend `ChartResponse.interpretations` into typed view models (`PlanetInSign`, `PlanetInHouse`, `AngleInSign`).
+    - Robust item key generation, sorting (Sun, Moon, Ascendant first, then inner and outer planets), and deep immutability (`deepFreeze`).
+  - **Interpretation Panel & Collapsible UI (`FE-S5.3` / M3)**:
+    - Accessible collapsible panel (`InterpretationPanel`) with jump navigation overview (`InterpretationOverview`), category grouping ("Cốt lõi" pre-expanded, "Các hành tinh"), and individual item cards (`InterpretationItem`).
+    - Plain-text typography constraints (`max-w-[65ch]`, 14px body text, 45–80 chars/line) and legal disclaimer footer (`InterpretationDisclaimer`).
+  - **Cross-Component Selection Synchronization (`FE-S5.4` / M4)**:
+    - Unified bidirectional selection between SVG Wheel, Data Tables, and Interpretation Panel.
+    - Contextual jump links ("Đọc diễn giải" on selected objects, "Xem trên biểu đồ" inside interpretation cards) preserving smooth focus recovery.
+  - **Degraded States & Error Resilience (`FE-S5.5` / M5)**:
+    - Graceful degradation for charts with unknown birth time (`isHouseDataAvailable=false`): suppresses house interpretations with explanatory note while keeping sign interpretations intact.
+    - Fault-tolerant parsing with unmapped item isolation, non-blocking fallback views, and silent client error reporting (`reportError`).
+  - **Responsive Layout & Accessibility Hardening (`FE-S5.6` / M6)**:
+    - Responsive adaptation across mobile cards, tablet single-column, and desktop two-column layouts.
+    - Semantic accessibility tree verification (`role="region"`, `role="list"`, `aria-expanded`, `aria-controls`), focus rings, and WCAG AA contrast compliance.
+    - System-wide `prefers-reduced-motion` compliance.
+  - **End-to-End Testing & Regression Suite (`FE-S5.7` / M7)**:
+    - Full E2E test suite covering Real Backend scenarios (Scenario A: standard calculation with seed verification; Scenario B: degraded state with unknown birth time) and F4 regression verification.
+
+### Changed
+
+- Refined responsive header and user menu layout for small mobile screens (<640px).
+
 ## [0.3.0] - 2026-10-28
 
 ### Added

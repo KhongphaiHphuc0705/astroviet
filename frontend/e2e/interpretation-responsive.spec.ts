@@ -178,8 +178,20 @@ test.describe("M6.1: Responsive Viewport Measurements and Overflow Checks", () =
 
     for (const vp of viewports) {
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      // Short settle time for resize / container queries
-      await page.waitForTimeout(300);
+      // Settle time for resize / container queries without arbitrary timeout
+      await page.waitForFunction(
+        ({ w, h }) =>
+          window.innerWidth === w &&
+          window.innerHeight === h &&
+          document.readyState === "complete",
+        { w: vp.width, h: vp.height },
+      );
+      await page.evaluate(
+        () =>
+          new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          ),
+      );
 
       // Evaluate geometry and overflow
       const metrics = await page.evaluate(() => {
