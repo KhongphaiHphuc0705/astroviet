@@ -409,3 +409,256 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
     errorObserver.assertClean();
   });
 });
+
+test.describe("Real Backend Scenario B: Degraded / Unknown Birth Time Journey", () => {
+  const emailB = `e2e-interp-b-${Date.now()}@test.local`;
+  let page: Page;
+  let errorObserver: ReturnType<typeof attachErrorObservers>;
+  let chartResponseJsonB: Record<string, unknown>;
+
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    page = await context.newPage();
+    errorObserver = attachErrorObservers(page);
+  });
+
+  test.afterAll(async () => {
+    await page.context().close();
+  });
+
+  test("B1: Register and login as new isolated user", async () => {
+    await registerAndLogin(page, emailB);
+    expect(page.url()).toContain("/app");
+  });
+
+  test("B2: Create birth profile with unknown birth time and probe request", async () => {
+    await page.goto("/app/profiles");
+    await page.getByRole("link", { name: "Tạo hồ sơ mới" }).click();
+    await page.waitForURL("**/app/profiles/new");
+
+    // Step 1: Name
+    await page.getByLabel("Họ và tên *").fill("Hồ sơ Không Giờ Sinh");
+    await page.getByRole("button", { name: "Tiếp tục" }).click();
+
+    // Step 2: Date
+    await page.getByLabel("Ngày sinh *").fill("1998-05-12");
+
+    // Uncheck "Tôi biết rõ giờ sinh của mình"
+    const timeCheckbox = page.getByLabel("Tôi biết rõ giờ sinh của mình");
+    await timeCheckbox.uncheck();
+
+    // Verify birthTime input is disabled
+    const timeInput = page.getByLabel("Giờ sinh *");
+    await expect(timeInput).toBeDisabled();
+
+    // Mock external location search API (permitted under D-M7-04)
+    await page.route("**/api/v1/locations/search**", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([
+          {
+            placeName: "Da Nang, Vietnam",
+            latitude: 16.0544,
+            longitude: 108.2022,
+            historicalTimezoneId: "Asia/Ho_Chi_Minh",
+          },
+        ]),
+      }),
+    );
+
+    await page.getByRole("combobox", { name: "Nơi sinh" }).fill("Da Nang");
+    const suggestion = page.getByRole("option").first();
+    await expect(suggestion).toBeVisible({ timeout: 5000 });
+    await suggestion.click();
+    await page.unroute("**/api/v1/locations/search**");
+
+    // Probe create profile request payload
+    const createProfilePromise = page.waitForRequest(
+      (req) =>
+        req.url().includes("/api/v1/birth-profiles") && req.method() === "POST",
+    );
+
+    await page.getByRole("button", { name: "Hoàn tất" }).click();
+
+    const createReq = await createProfilePromise;
+    const reqPayload = createReq.postDataJSON() as {
+      isBirthTimeKnown?: boolean;
+      birthTime?: string | null;
+    };
+    expect(reqPayload.isBirthTimeKnown).toBe(false);
+    expect(reqPayload.birthTime).toBeNull();
+
+    await expect(page.getByText(/Tạo hồ sơ thành công/i)).toBeVisible();
+    await page.waitForURL("**/app/profiles");
+    await expect(page.getByText("Hồ sơ Không Giờ Sinh")).toBeVisible();
+  });
+
+  test("B3: Calculate chart and verify degraded Real Backend response with seed provenance", async () => {
+    const calcCardBtn = page
+      .getByRole("button", { name: /tính lá số cho hồ sơ/i })
+      .first();
+    await calcCardBtn.click();
+
+    const dialog = page.getByRole("dialog", { name: "Tính lá số" });
+    await expect(dialog).toBeVisible();
+
+    const calculatePromise = page.waitForResponse(
+      (res) =>
+        res.url().includes("/api/v1/charts/natal") &&
+        res.request().method() === "POST",
+    );
+
+    const submitBtn = dialog.getByRole("button", { name: "Tính lá số" });
+    await submitBtn.click();
+
+    const response = await calculatePromise;
+    expect([200, 201]).toContain(response.status());
+    chartResponseJsonB = (await response.json()) as Record<string, unknown>;
+
+    // Assert degraded contract: isHouseDataAvailable === false, houses=[], angles=[]
+    expect(chartResponseJsonB["isHouseDataAvailable"]).toBe(false);
+    expect(chartResponseJsonB["houses"]).toHaveLength(0);
+    expect(chartResponseJsonB["angles"]).toHaveLength(0);
+
+    expect(typeof chartResponseJsonB["interpretationVersion"]).toBe("string");
+    expect(chartResponseJsonB["interpretationVersion"]).not.toBeNull();
+    expect(chartResponseJsonB["interpretationVersion"]).toBe(seedData.version);
+
+    const interpB = (chartResponseJsonB["interpretations"] ?? []) as Array<{
+      subjectType: string;
+      subjectKey: string;
+      language: string;
+      bodyText: string;
+    }>;
+    expect(interpB).toHaveLength(10);
+
+    const planetInSignB = interpB.filter(
+      (item) => item.subjectType === "PlanetInSign",
+    );
+    const angleInSignB = interpB.filter(
+      (item) => item.subjectType === "AngleInSign",
+    );
+    const planetInHouseB = interpB.filter(
+      (item) => item.subjectType === "PlanetInHouse",
+    );
+
+    expect(planetInSignB).toHaveLength(10);
+    expect(angleInSignB).toHaveLength(0);
+    expect(planetInHouseB).toHaveLength(0);
+
+    // Verify all 10 PlanetInSign match seed
+    const planets = (chartResponseJsonB["planets"] ?? []) as Array<{
+      name: string;
+      sign: string;
+      house: number | null;
+    }>;
+    expect(planets.length).toBeGreaterThan(0);
+
+    for (const planet of planets) {
+      expect(planet.house).toBeNull();
+      const expectedKey = `${planet.name}_in_${planet.sign}`;
+      const seedItem = seedMap.get(expectedKey);
+      expect(seedItem, `Missing seed for key ${expectedKey}`).toBeDefined();
+
+      const respItem = planetInSignB.find((i) => i.subjectKey === expectedKey);
+      expect(respItem, `Missing response for key ${expectedKey}`).toBeDefined();
+      expect(respItem!.bodyText.trim()).toBe(seedItem!.bodyText.trim());
+    }
+
+    if (process.env.GITHUB_STEP_SUMMARY) {
+      fs.appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        `\n- **Scenario B (B3):** interpretationVersion=${String(chartResponseJsonB["interpretationVersion"])}, count=${interpB.length} (PlanetInSign=${planetInSignB.length}, degraded/no-birth-time), seedMatch=true\n`,
+      );
+    }
+
+    await page.waitForURL(/\/app\/charts\/[0-9a-fA-F-]+/);
+    await expect(
+      page.getByRole("heading", { name: "Lá số sinh", level: 1 }),
+    ).toBeVisible();
+  });
+
+  test("B4: Verify degraded Interpretation Panel UI, no House sections, and neutral notice", async () => {
+    const shell = page.getByTestId("chart-viewer-shell");
+    await expect(shell).toBeVisible({ timeout: 15000 });
+
+    const panel = page.getByRole("region", { name: "Diễn giải" });
+    await expect(panel).toBeVisible({ timeout: 15000 });
+
+    // Neutral house notice displayed exactly once inside the panel
+    const houseNotice = panel.getByText(
+      "Dữ liệu Nhà và một số góc trong lá số này chưa khả dụng. Bạn vẫn có thể xem các diễn giải theo cung.",
+    );
+    await expect(houseNotice).toHaveCount(1);
+    await expect(houseNotice).toBeVisible();
+
+    // Zero "Theo nhà" sections in the panel
+    const houseSections = panel.locator('dt:text-matches("^Theo nhà")');
+    await expect(houseSections).toHaveCount(0);
+
+    // Ascendant item: exists, indicates unavailable copy, and has no "Xem trên biểu đồ" button
+    const ascHeaderBtn = panel.getByRole("button", { name: /^Cung Mọc/ });
+    await expect(ascHeaderBtn).toBeVisible();
+
+    const ascUnavailableText = panel.getByText(
+      "Cung Mọc chưa khả dụng cho lá số này.",
+    );
+    await expect(ascUnavailableText).toBeVisible();
+
+    const ascViewBtn = panel.getByRole("button", {
+      name: /Xem trên biểu đồ.*Cung Mọc/i,
+    });
+    await expect(ascViewBtn).toHaveCount(0);
+
+    // Core planet items (e.g. Mặt Trời / Sun) have "Theo cung" text matching seed
+    const sunHeaderBtn = panel.getByRole("button", { name: /^Mặt Trời/ });
+    await expect(sunHeaderBtn).toBeVisible();
+    const sunSignDd = panel.locator('div:has(dt:text("Theo cung")) dd').first();
+    await expect(sunSignDd).toBeVisible();
+    expect((await sunSignDd.textContent())?.trim().length).toBeGreaterThan(0);
+  });
+
+  test("B5: Verify F4 degraded state interoperability and clean UI state", async () => {
+    // Wheel is rendered and interactive
+    const wheelFigure = page.getByTestId("chart-wheel");
+    await expect(wheelFigure).toBeVisible();
+
+    // Planet Table is rendered without House column
+    await expect(
+      page.getByRole("heading", { name: "Vị trí hành tinh" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("columnheader", { name: "Nhà" }),
+    ).not.toBeVisible();
+
+    // House Table is absent
+    await expect(
+      page.getByRole("heading", { name: "Nhà và các góc" }),
+    ).not.toBeVisible();
+
+    // F4 HouseDataNotice banner is visible
+    await expect(
+      page.getByText("Dữ liệu Nhà và các góc chưa khả dụng"),
+    ).toBeVisible();
+
+    // Selecting a planet on wheel synchronizes with panel
+    const wheelVenus = page.locator(
+      '[data-testid="chart-wheel"] [role="button"][data-planet="Venus"]',
+    );
+    await wheelVenus.click();
+    await expect(wheelVenus).toHaveAttribute("aria-pressed", "true");
+
+    const panel = page.getByRole("region", { name: "Diễn giải" });
+    const venusHeaderBtn = panel.getByRole("button", { name: /^Sao Kim/ });
+    await expect(venusHeaderBtn).toHaveAttribute("aria-current", "true");
+    await expect(venusHeaderBtn).toHaveAttribute("aria-expanded", "true");
+
+    // Zero error alerts in clean degraded state
+    await expect(page.getByRole("alert")).toHaveCount(0);
+  });
+
+  test("B6: Verify 0 unhandled errors throughout Scenario B", async () => {
+    errorObserver.assertClean();
+  });
+});
