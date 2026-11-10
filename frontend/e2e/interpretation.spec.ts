@@ -307,6 +307,9 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
     );
     await expect(wheelMars).toBeVisible();
 
+    // Ensure element is in view before measuring baseline scroll
+    await wheelMars.scrollIntoViewIfNeeded();
+
     // Measure scroll position before selection (Mục 8.2 bước 4: không tự cuộn / không dời focus)
     const scrollBefore = await page.evaluate(() => window.scrollY);
 
@@ -419,6 +422,11 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
 
     const reloadMarsBtn = panel.getByRole("button", { name: /^Sao Hỏa/ });
     await expect(reloadMarsBtn).toBeVisible();
+    await expect(reloadMarsBtn).toHaveAttribute("aria-expanded", "false");
+
+    // Expand Mars item to view persisted interpretation
+    await reloadMarsBtn.click();
+    await expect(reloadMarsBtn).toHaveAttribute("aria-expanded", "true");
 
     // Verify Mars interpretation text persists and matches seed after reload
     const panelId = await reloadMarsBtn.getAttribute("aria-controls");
