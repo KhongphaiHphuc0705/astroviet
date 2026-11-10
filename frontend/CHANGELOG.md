@@ -7,30 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - 2026-11-09
 
+Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.1`–`FE-S5.7`).
+
+**Known Limitations:**
+
+- **KG-F5-01 (Moon boundary precision):** In degraded charts without known birth time, Moon and fast-moving points may carry minor positional uncertainties; speculative boundary disclaimers are suppressed in favor of neutral data notices.
+- **KG-F5M4-01 / AC-27 (Screen reader audio):** Windows Narrator live-region announcement audio is an Accepted Gap; semantic live-region structure is verified via Chromium accessibility tree.
+- **Cross-browser automation:** Automated E2E verification is currently concentrated on Chromium desktop; Safari/Firefox automated suites are pending future milestones.
+- **Interpretation domain scope:** Release 1.0 focuses on `PlanetInSign`, `PlanetInHouse`, and `AngleInSign` (Ascendant); standalone aspect and house cusp interpretations are not included in this release.
+
 ### Added
 
-- **Sprint F5 Completion — Natal Chart Interpretation Experience (`FE-S5.1`–`FE-S5.8`)**:
+- **Natal Chart Interpretation Experience (`FE-S5.1`–`FE-S5.7`)**:
   - **CI Seed Content & Contract Probe Integration (`FE-S5.1` / M1)**:
     - Integration of CI seed pipeline for Vietnamese interpretation texts (`interpretations.vi.json`, 252 items).
     - Contract validation probe asserting `interpretationVersion === "1.0"` and 21 standard natal items.
   - **Pure Interpretation Domain ViewModel & Parsing (`FE-S5.2` / M2)**:
     - `interpretation.ts`: strictly decoupled domain parser mapping backend `ChartResponse.interpretations` into typed view models (`PlanetInSign`, `PlanetInHouse`, `AngleInSign`).
-    - Robust item key generation, sorting (Sun, Moon, Ascendant first, then inner and outer planets), and deep immutability (`deepFreeze`).
+    - Deterministic item key generation, sorting (Sun, Moon, Ascendant first, then inner and outer planets), and frozen configuration structures (`Object.freeze` on `INTERPRETATION_GROUP_SPECS`).
   - **Interpretation Panel & Collapsible UI (`FE-S5.3` / M3)**:
-    - Accessible collapsible panel (`InterpretationPanel`) with jump navigation overview (`InterpretationOverview`), category grouping ("Cốt lõi" pre-expanded, "Các hành tinh"), and individual item cards (`InterpretationItem`).
-    - Plain-text typography constraints (`max-w-[65ch]`, 14px body text, 45–80 chars/line) and legal disclaimer footer (`InterpretationDisclaimer`).
+    - Accessible collapsible panel (`InterpretationPanel`) with jump navigation overview (`InterpretationOverview`), category grouping ("Cốt lõi" pre-expanded, "Các hành tinh"), individual item cards (`InterpretationItem`), and disclaimer note within overview.
   - **Cross-Component Selection Synchronization (`FE-S5.4` / M4)**:
     - Unified bidirectional selection between SVG Wheel, Data Tables, and Interpretation Panel.
-    - Contextual jump links ("Đọc diễn giải" on selected objects, "Xem trên biểu đồ" inside interpretation cards) preserving smooth focus recovery.
+    - Contextual jump links ("Đọc diễn giải" on selected objects, "Xem trên biểu đồ" inside interpretation cards) preserving focus recovery to source elements.
   - **Degraded States & Error Resilience (`FE-S5.5` / M5)**:
     - Graceful degradation for charts with unknown birth time (`isHouseDataAvailable=false`): suppresses house interpretations with explanatory note while keeping sign interpretations intact.
     - Fault-tolerant parsing with unmapped item isolation, non-blocking fallback views, and silent client error reporting (`reportError`).
   - **Responsive Layout & Accessibility Hardening (`FE-S5.6` / M6)**:
     - Responsive adaptation across mobile cards, tablet single-column, and desktop two-column layouts.
-    - Semantic accessibility tree verification (`role="region"`, `role="list"`, `aria-expanded`, `aria-controls`), focus rings, and WCAG AA contrast compliance.
-    - System-wide `prefers-reduced-motion` compliance.
+    - Plain-text readability typography: local `max-w-[65ch]` width constraint on `<dd>`, 14px body text, target 45–80 chars/line on desktop viewports.
+    - Semantic accessibility tree verification (`role="region"`, `role="list"`, `aria-expanded`, `aria-controls`), focus rings, and color contrast verification.
+    - `prefers-reduced-motion` support for chart route and interpretation disclosures (D-M6-07 a).
   - **End-to-End Testing & Regression Suite (`FE-S5.7` / M7)**:
-    - Full E2E test suite covering Real Backend scenarios (Scenario A: standard calculation with seed verification; Scenario B: degraded state with unknown birth time) and F4 regression verification.
+    - Real Backend E2E test suite (`interpretation.spec.ts`) covering standard calculation with seed verification (Scenario A), degraded state with unknown birth time (Scenario B), and F4 regression verification across 60 tests.
 
 ### Changed
 
