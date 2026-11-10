@@ -306,8 +306,19 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
       '[data-testid="chart-wheel"] [role="button"][data-planet="Mars"]',
     );
     await expect(wheelMars).toBeVisible();
+
+    // Measure scroll position before selection (Mục 8.2 bước 4: không tự cuộn / không dời focus)
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+
     await wheelMars.click();
     await expect(wheelMars).toHaveAttribute("aria-pressed", "true");
+
+    // Focus remains on wheelMars without displacement
+    await expect(wheelMars).toBeFocused();
+
+    // Viewport did not scroll automatically upon selection
+    const scrollAfter = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThanOrEqual(5);
 
     const tableMars = page.locator('table button[data-planet-key="Mars"]');
     await expect(tableMars).toBeVisible();
@@ -408,6 +419,25 @@ test.describe("Real Backend Scenario A: Successful Natal Chart Interpretation Jo
 
     const reloadMarsBtn = panel.getByRole("button", { name: /^Sao Hỏa/ });
     await expect(reloadMarsBtn).toBeVisible();
+
+    // Verify Mars interpretation text persists and matches seed after reload
+    const panelId = await reloadMarsBtn.getAttribute("aria-controls");
+    expect(panelId).toBeTruthy();
+    const reloadMarsDisclosure = page.locator(`[id="${panelId}"]`);
+
+    const signDd = reloadMarsDisclosure.locator('dt:text("Theo cung") + dd');
+    await expect(signDd).toBeVisible();
+    expect((await signDd.textContent())?.trim()).toBe(
+      seedSignItem.bodyText.trim(),
+    );
+
+    const houseDd = reloadMarsDisclosure.locator(
+      'dt:text-matches("^Theo nhà") + dd',
+    );
+    await expect(houseDd).toBeVisible();
+    expect((await houseDd.textContent())?.trim()).toBe(
+      seedHouseItem.bodyText.trim(),
+    );
 
     // Verify 0 page errors, 0 API >= 400 errors, and 0 [reportError] console entries
     errorObserver.assertClean();
@@ -601,29 +631,33 @@ test.describe("Real Backend Scenario B: Degraded / Unknown Birth Time Journey", 
     const houseSections = panel.locator('dt:text-matches("^Theo nhà")');
     await expect(houseSections).toHaveCount(0);
 
-    // Ascendant item: exists, indicates unavailable copy, and has no "Xem trên biểu đồ" button
-    const ascHeaderBtn = panel.getByRole("button", { name: /^Cung Mọc/ });
-    await expect(ascHeaderBtn).toBeVisible();
+    // Ascendant item: checked by identifier [id="angle:Ascendant"] and contract (no view button)
+    const ascArticle = panel.locator('[id="angle:Ascendant"]');
+    await expect(ascArticle).toBeVisible();
 
-    const ascUnavailableText = panel.getByText(
-      "Cung Mọc chưa khả dụng cho lá số này.",
-    );
-    await expect(ascUnavailableText).toBeVisible();
-
-    const ascViewBtn = panel.getByRole("button", {
-      name: /Xem trên biểu đồ.*Cung Mọc/i,
+    const ascViewBtn = ascArticle.getByRole("button", {
+      name: /Xem trên biểu đồ/i,
     });
     await expect(ascViewBtn).toHaveCount(0);
 
-    // Core planet items (e.g. Mặt Trời / Sun) have "Theo cung" text matching seed
-    const sunHeaderBtn = panel.getByRole("button", { name: /^Mặt Trời/ });
-    await expect(sunHeaderBtn).toBeVisible();
-    const sunPanelId = await sunHeaderBtn.getAttribute("aria-controls");
-    expect(sunPanelId).toBeTruthy();
-    const sunDisclosure = page.locator(`[id="${sunPanelId}"]`);
-    const sunSignDd = sunDisclosure.locator('dt:text("Theo cung") + dd');
-    await expect(sunSignDd).toBeVisible();
-    expect((await sunSignDd.textContent())?.trim().length).toBeGreaterThan(0);
+    // All 10 planets in degraded state have "Theo cung" text in DOM matching seed exactly
+    const planets = (chartResponseJsonB["planets"] ?? []) as Array<{
+      name: string;
+      sign: string;
+    }>;
+    expect(planets.length).toBe(10);
+
+    for (const planet of planets) {
+      const planetArticle = panel.locator(`[id="planet:${planet.name}"]`);
+      await expect(planetArticle).toBeVisible();
+
+      const signDd = planetArticle.locator('dt:text("Theo cung") + dd');
+      const signDdText = (await signDd.textContent())?.trim();
+      const expectedKey = `${planet.name}_in_${planet.sign}`;
+      const seedItem = seedMap.get(expectedKey);
+      expect(seedItem, `Missing seed for key ${expectedKey}`).toBeDefined();
+      expect(signDdText).toBe(seedItem!.bodyText.trim());
+    }
   });
 
   test("B5: Verify F4 degraded state interoperability and clean UI state", async () => {
@@ -635,14 +669,14 @@ test.describe("Real Backend Scenario B: Degraded / Unknown Birth Time Journey", 
     await expect(
       page.getByRole("heading", { name: "Vị trí hành tinh" }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("columnheader", { name: "Nhà" }),
-    ).not.toBeVisible();
+    await expect(page.getByRole("columnheader", { name: "Nhà" })).toHaveCount(
+      0,
+    );
 
     // House Table data is absent (HouseDataNotice rendered in place of table)
     await expect(
       page.getByRole("columnheader", { name: "Cusp (độ)" }),
-    ).not.toBeVisible();
+    ).toHaveCount(0);
 
     // F4 HouseDataNotice banner is visible
     await expect(
