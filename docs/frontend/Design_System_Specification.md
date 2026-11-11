@@ -529,7 +529,7 @@ Architecture Spec §15 đánh giá sẵn sàng ở cấp **tổ chức code**; m
 | Hạng mục tương lai | Mức sẵn sàng | Ghi chú |
 |---|---|---|
 | **Natal Chart / Chart Viewer** | ✅ Sẵn sàng đầy đủ | Toàn bộ Composite cần thiết (`ChartWheel`, `PlanetTable`, `HouseTable`, `AspectTable`...) đã đặc tả chi tiết UI Spec §12 — không cần Primitive mới, chỉ cần Component Lifecycle "Implement" |
-| **Interpretation Viewer** | ✅ Sẵn sàng đầy đủ | `InterpretationCard` (UI Spec §12.6) + `Accordion` (Primitive có sẵn) đủ bao phủ nhu cầu hiển thị |
+| **Interpretation Viewer** | ✅ Sẵn sàng đầy đủ | `InterpretationPanel` (UI Spec §12.6) với các disclosure item độc lập theo WAI-ARIA, tích hợp trong `ChartViewerShell` tại Sprint F5 |
 | **Dashboard** ("Chart của tôi", UI Spec §13 mục 6) | ✅ Sẵn sàng đầy đủ | `Grid` + `Card interactive` + `EmptyState` (mục 18.3 UI Spec) đã đủ — không phát sinh Primitive mới |
 | **Admin** | ⚠️ **Chưa sẵn sàng — khoảng trống thực sự** | Xem 18.2 |
 
