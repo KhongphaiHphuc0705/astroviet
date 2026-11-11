@@ -348,7 +348,7 @@ Nếu Owner không xác nhận source of truth ⇒ **Owner Decision Required**, 
 | M8 | `docs/implementation/Sprint_F5_Implementation_Plan.md` | **Update** | trạng thái M6–M8, bỏ "Draft" lỗi thời, dòng A-1 lỗi thời | D-M8-08 | [VF] metadata dòng 1–12; dòng 89 |
 | M8 | `frontend/README.md` | **Update (tuỳ chọn, D-M8-08)** | câu "E2E bị skip trong CI" lỗi thời | D-M8-08 | [VF] dòng 69 |
 | Đóng | `docs/implementation/Sprint_F5_M6_Implementation_Plan.md`, plan này | **Delete (hành động Owner sau nghiệm thu)** | quy ước xoá plan tạm | Owner ký | [VF] M6 plan còn trong repo |
-| — | `backend/**`, `frontend/src/**`, `selection.ts`, `interpretation.ts` | **Không đổi** | ràng buộc phạm vi | — | prompt §13 |
+| — | `backend/**`, `frontend/src/**`, `selection.ts`, `interpretation.ts` | **Không đổi** (ngoại lệ có chủ đích: 1 dòng `id={id}` trong `InterpretationItem.tsx` và assertion trong `InterpretationItem.test.tsx`) | ràng buộc phạm vi | — | prompt §13 |
 
 ---
 
@@ -447,7 +447,7 @@ Nhãn: **[VF]** = đã xác minh từ `package.json`/workflow/hoặc tôi đã c
 | A-2 | bảng "mệnh đề → nguồn" trong Matrix M8 |
 | CHANGELOG | mỗi bullet ↔ matrix/commit; heading đúng D-M8-03 |
 | Version (chỉ nếu duyệt) | `node -p "require('./frontend/package.json').version"` ; đọc `package-lock.json` (`version`, `packages[""].version`) bằng script; kỳ vọng cả ba = `0.4.0`; `git diff --stat` chỉ `package.json`, `package-lock.json`, CHANGELOG |
-| Không đổi Backend/API | `git diff --stat <base>..HEAD -- backend` rỗng; `git diff --stat <base>..HEAD -- frontend/src` rỗng |
+| Không đổi Backend/API | `git diff --stat <base>..HEAD -- backend` rỗng; `git diff --stat <base>..HEAD -- frontend/src` rỗng (ngoại lệ có chủ đích: 1 dòng `id={id}` trong `InterpretationItem.tsx` và assertion trong `InterpretationItem.test.tsx`) |
 | Registry đầy đủ | mọi KG trong F5 plan §15.3 + matrix M3–M6 xuất hiện với trạng thái có evidence |
 | Matrix đầy đủ | script: mỗi `AC-01`…`AC-30` xuất hiện trong Matrix M8 (Proposed) |
 | AC-30/§18 | checklist Mục 20–21 |

@@ -17,8 +17,8 @@
 
 | Acceptance Criteria | Description | Verification Method | Status | Evidence Reference |
 |---|---|---|---|---|
-| **AC-28** | Real Backend Natal Chart Interpretation Journey (Scenario A: Mars with Real Seed Provenance) | Automated E2E test `interpretation.spec.ts` (A1..A6) on CI with live PostgreSQL + FastAPI backend + Seed pipeline | **VERIFIED (CI)** | - Test A1..A6 PASS in serial mode<br>- Step Summary line: `Scenario A (A3)`<br>- Total tests: 60 passed (expected=60, unexpected=0, flaky=0, skipped=0) |
-| **AC-29** | Real Backend Degraded State Journey (Scenario B: Unknown Birth Time) + 38 F4 & 10 M6 Regression | Automated E2E test `interpretation.spec.ts` (B1..B6) on CI + full regression suite (38 F4 tests across 7 files + 10 M6 responsive tests) | **VERIFIED (CI / Local)** | - Test B1..B6 PASS in serial mode<br>- Step Summary line: `Scenario B (B3)`<br>- 38 F4 tests pass without skips<br>- 10 M6 offline tests pass with `--workers=1` |
+| **AC-28** | Real Backend Natal Chart Interpretation Journey (Scenario A: Mars with Real Seed Provenance) | Automated E2E test `interpretation.spec.ts` (A1..A6) on CI with live PostgreSQL + Node.js/Express backend + Seed pipeline | **VERIFIED (CI)** | - Test A1..A6 PASS in serial mode<br>- Step Summary line: `Scenario A (A3)`<br>- Total tests on CI runner: 60 passed |
+| **AC-29** | Real Backend Degraded State Journey (Scenario B: Unknown Birth Time) + 38 F4 & 10 M6 Regression | Automated E2E test `interpretation.spec.ts` (B1..B6) on CI + full regression suite (38 F4 tests across 7 files + 10 M6 responsive tests) | **VERIFIED (CI for Real Backend; Local for 16 offline tests)** | - Test B1..B6 PASS in serial mode<br>- Step Summary line: `Scenario B (B3)`<br>- 16 offline tests (10 M6 responsive + 6 F4) verified locally with `workers: 1`<br>- 32 F4 Real Backend tests + 12 M7 tests verified on CI runner (60 passed total) |
 
 ### 1.1 GitHub Step Summary Evidence (from CI Execution)
 
@@ -27,20 +27,19 @@
 - **Scenario B (B3):** interpretationVersion=1.0, count=10 (PlanetInSign=10, degraded/no-birth-time), seedMatch=true
 ```
 
-### 1.2 Playwright Test Execution Summary (Final Run)
+### 1.2 Playwright Test Execution Summary (CI Final Run)
 
 ```text
-Running 60 tests using 6 workers (serial mode for Real Backend)
+Nguồn: GitHub Actions CI runner (`Run E2E Tests` step với workers: 1)
+Running 60 tests using 1 worker
 ...
   60 passed (1.4m)
-
-Execution Stats:
-- Total tests: 60 (38 F4 + 10 M6 + 12 M7)
-- Expected: 60
-- Unexpected: 0
-- Flaky: 0
-- Skipped: 0
 ```
+
+Ghi chú phân bổ test suite:
+- **12 tests M7** (`interpretation.spec.ts`): Scenario A (A1..A6) và Scenario B (B1..B6) chạy tuần tự với live Backend & Postgres.
+- **38 tests F4** (across 7 files): 32 tests Real Backend + 6 tests offline.
+- **10 tests M6** (`interpretation-responsive.spec.ts`): Offline tests với `page.route` mock.
 
 ---
 
@@ -128,6 +127,7 @@ Total: 12 tests in 1 file (serial execution):
 | `frontend/e2e/interpretation-responsive.spec.ts` | Modified | Resolved D-M7-01: replaced `waitForTimeout(300)` with deterministic `waitForFunction`. |
 | `frontend/e2e/interpretation.spec.ts` | Created | Added 12 Real Backend E2E tests for Scenario A and Scenario B with seed provenance verification. |
 | `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.tsx` | Modified | Added `id={id}` to `<article>` to support stable UI hooks (`[id="angle:Ascendant"]`, `[id="planet:<Name>"]`). |
+| `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.test.tsx` | Modified | Added 1 assertion in IT-01 verifying article id attribute (`id="planet:Sun"`). |
 | `docs/implementation/archive/sprint-f5/Sprint_F5_M7_Exit_Criteria_Evidence_Matrix.md` | Created | Evidence matrix capturing AC-28/AC-29, test lists, and quality gate results. |
 | `docs/implementation/archive/sprint-f5/evidence/m6_r01_320.png` | Updated | Re-captured M6 responsive screenshot after D-M7-01 fix. |
 | `docs/implementation/archive/sprint-f5/evidence/m6_r05_768.png` | Updated | Re-captured M6 responsive screenshot after D-M7-01 fix. |
@@ -140,6 +140,22 @@ Total: 12 tests in 1 file (serial execution):
 
 ## 6. Record of Key Architectural Decisions
 
-- **D-F5-08 (Version Bump):** Phê duyệt bump version lên `0.4.0` đồng bộ tại baseline M7.0 (`1e9f4c2`). Bản ghi nguyên văn được lưu tại Evidence Matrix M7 và Báo cáo đóng Sprint F5.
-- **D-M7-01 (Deterministic Waiting):** Loại bỏ hoàn toàn `waitForTimeout(300)` trong spec responsive M6, thay bằng `requestAnimationFrame` và `waitForFunction`.
-- **D-M7-04 (GeoNames Search Mock Boundary):** Cho phép mock duy nhất endpoint ngoại vi `/api/v1/locations/search` trong spec E2E để tránh phụ thuộc mạng bên thứ ba, bảo đảm 100% API nội bộ (auth, profile, chart, interpretation) chạy qua backend thật.
+### D-F5-08 — Version 0.4.0 (Owner Approved 2026-11-09)
+
+| Trường | Nội dung |
+|---|---|
+| Trạng thái phê duyệt | **APPROVED BY OWNER (2026-11-09)** |
+| Quyết định nguyên văn | Quyết định trực tiếp của Product Owner trong phiên làm việc 2026-11-09: *"D-F5-08: bump version lên 0.4.0"* |
+| Tác động thực hiện | Đồng bộ version `0.4.0` tại `frontend/package.json` và `frontend/package-lock.json` qua `npm version 0.4.0 --no-git-tag-version --ignore-scripts` + cập nhật `frontend/CHANGELOG.md` |
+| Trạng thái Gate | **ĐÃ GIẢI TỎA (UNBLOCKED)** |
+
+### D-M7-01 — Deterministic Waiting (Owner Approved 2026-11-09)
+- **Nội dung:** Loại bỏ hoàn toàn `waitForTimeout(300)` trong spec responsive M6, thay bằng `requestAnimationFrame` và `waitForFunction`.
+
+### D-M7-04 — GeoNames Search Mock Boundary (Owner Approved 2026-11-09)
+- **Nội dung:** Cho phép mock duy nhất endpoint ngoại vi `/api/v1/locations/search` trong spec E2E để tránh phụ thuộc mạng bên thứ ba, bảo đảm 100% API nội bộ (auth, profile, chart, interpretation) chạy qua backend thật.
+
+### Ngoại lệ phạm vi có chủ đích (Deliberate Scope Exception: InterpretationItem.tsx)
+- **Nội dung:** Bổ sung 1 dòng `id={id}` trên thẻ `<article>` trong `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.tsx` và 1 assertion trong `frontend/src/features/chart/ui/InterpretationPanel/InterpretationItem.test.tsx`.
+- **Mục đích:** Cung cấp định danh DOM ổn định (`[id="angle:Ascendant"]`, `[id="planet:<Name>"]`) theo đúng thiết kế Plan M7-8 mục 4.3 (vốn ghi nhãn [VF] giả định có sẵn từ trước) mà không gây trùng lặp ID hay ảnh hưởng tới cấu trúc HTML/CSS/A11y khác.
+- **Ràng buộc M8:** Đây là ngoại lệ có chủ đích duy nhất được ghi nhận đối với gate *"git diff frontend/src rỗng"* của Milestone M8.

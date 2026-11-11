@@ -11,9 +11,9 @@ Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.
 
 **Known Limitations:**
 
-- **KG-F5-01 (Moon boundary precision):** In degraded charts without known birth time, Moon and fast-moving points may carry minor positional uncertainties; speculative boundary disclaimers are suppressed in favor of neutral data notices.
+- **KG-F5-01 (Moon boundary precision):** In charts with unknown birth time, Backend provides no uncertainty signal for the Moon, so Frontend does not render a separate Moon-specific boundary warning.
 - **KG-F5M4-01 / AC-27 (Screen reader audio):** Windows Narrator live-region announcement audio is an Accepted Gap; semantic live-region structure is verified via Chromium accessibility tree.
-- **Cross-browser automation:** Automated E2E verification is currently concentrated on Chromium desktop; Safari/Firefox automated suites are pending future milestones.
+- **Cross-browser scope:** Automated E2E test suite currently runs on Chromium desktop; chưa được kiểm trên Safari/Firefox.
 - **Interpretation domain scope:** Release 1.0 focuses on `PlanetInSign`, `PlanetInHouse`, and `AngleInSign` (Ascendant); standalone aspect and house cusp interpretations are not included in this release.
 
 ### Added
@@ -36,10 +36,10 @@ Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.
   - **Responsive Layout & Accessibility Hardening (`FE-S5.6` / M6)**:
     - Responsive adaptation across mobile cards, tablet single-column, and desktop two-column layouts.
     - Plain-text readability typography: local `max-w-[65ch]` width constraint on `<dd>`, 14px body text, target 45–80 chars/line on desktop viewports.
-    - Semantic accessibility tree verification (`role="region"`, `role="list"`, `aria-expanded`, `aria-controls`), focus rings, and color contrast verification.
+    - Semantic accessibility tree verification (`role="region"`, `<ul>` list structure, `aria-expanded`, `aria-controls`), focus rings, and color contrast verification.
     - `prefers-reduced-motion` support for chart route and interpretation disclosures (D-M6-07 a).
   - **End-to-End Testing & Regression Suite (`FE-S5.7` / M7)**:
-    - Real Backend E2E test suite (`interpretation.spec.ts`) covering standard calculation with seed verification (Scenario A), degraded state with unknown birth time (Scenario B), and F4 regression verification across 60 tests.
+    - Real Backend E2E test suite (`interpretation.spec.ts`, 12 tests) covering standard calculation with seed verification (Scenario A) and degraded state with unknown birth time (Scenario B), accompanied by full suite regression verification (60 tests total across the project).
 
 ### Changed
 
