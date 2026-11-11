@@ -6,10 +6,10 @@
 |---|---|
 | **Tiêu đề** | FE Sprint F5 — Interpretation UI — Implementation Plan |
 | **Sprint** | F5 (sau F4 *Natal Chart Viewer*; Backend Sprint 4 *Interpretation Engine* là nguồn dữ liệu) |
-| **Trạng thái** | **Draft — Pending Owner Approval** (chưa được duyệt; không milestone nào được bắt đầu trước khi owner duyệt) |
-| **Ngày** | 2026-10-30 |
+| **Trạng thái** | **COMPLETED WITH ACCEPTED LIMITATIONS** (M1–M8 hoàn tất; đóng theo D-M8-10; chờ Owner ký nghiệm thu) |
+| **Ngày** | 2026-10-30 (Cập nhật đóng Sprint: 2026-11-11) |
 | **Nhánh / HEAD đã audit** | `dev` @ `cfd4247` ("finalize sprint f4 closure & complete gaps registry") |
-| **Phiên bản xác minh** | `frontend/package.json` = `0.3.0`; `backend/package.json` = `0.4.0` |
+| **Phiên bản xác minh** | `frontend/package.json` = `0.4.0`; `backend/package.json` = `0.4.0` |
 | **Tác giả** | Claude (vai trò: Senior Frontend Architect / QA / Technical Planner) |
 | **Tài liệu liên quan** | `docs/implementation/Sprint_F4_Implementation_Plan.md` (v1.1, `SPRINT F4 CLOSED`), `docs/implementation/archive/sprint-f4/Sprint_F4_M10_Exit_Criteria_Evidence_Matrix.md`, `docs/frontend/Frontend_UI_Specification.md`, `docs/product/PRD.md` (FR-07), `docs/implementation/Sprint_4_Interpretation_Engine_Implementation_Plan.md`, `Confirmation.md` (D-F5-01…09 là đề xuất; xem trạng thái và điều kiện trong tài liệu nguồn) |
 
@@ -18,6 +18,7 @@
 | Phiên bản | Ngày | Nội dung |
 |---|---|---|
 | 0.1 | 2026-10-30 | Bản nháp đầu, dựa trên audit repo `dev` @ `cfd4247` và các quyết định owner ngày 2026-10-30 |
+| 1.0 | 2026-11-11 | Hoàn tất triển khai toàn bộ Milestone M1–M8, cập nhật trạng thái đóng Sprint F5 dạng as-built |
 
 **Khuyến nghị triển khai đã đối chiếu trong lần review này** — chưa thay thế phê duyệt chính thức của Owner:
 
@@ -86,7 +87,7 @@ Mọi mục dưới đây là **sự kiện đã xác minh trên bản clone `de
 
 | ID | Phát hiện | Hệ quả | Xử lý trong plan |
 |---|---|---|---|
-| A-1 | `frontend-ci.yml` chỉ chạy `prisma:deploy`; nội dung diễn giải nạp bằng script riêng `prisma:seed:content` (`backend/package.json`, `backend/prisma/seed-content.ts`), CI **không** gọi. Lookup trả `{version:null, items:[]}` nếu chưa có bản Published (`interpretation-lookup.service.ts`) | E2E "Mars" sẽ **không có dữ liệu**, hoặc pass rỗng | **F5.M1** thêm bước seed + khẳng định `interpretationVersion` khác `null` |
+| A-1 | `frontend-ci.yml` chỉ chạy `prisma:deploy`; nội dung diễn giải nạp bằng script riêng `prisma:seed:content` (`backend/package.json`, `backend/prisma/seed-content.ts`), CI **không** gọi. Lookup trả `{version:null, items:[]}` nếu chưa có bản Published (`interpretation-lookup.service.ts`) | E2E "Mars" sẽ **không có dữ liệu**, hoặc pass rỗng | **Đã giải quyết tại F5.M1 & F5.M7:** Thêm bước seed vào CI và kiểm chứng Real Backend E2E thành công. |
 | A-2 | `Frontend_UI_Specification.md` §12.6 "Interpretation Card" mô tả `source: human|ai` (badge AI), `content` rich text, accordion "kỹ thuật", và lỗi interpretation **tách API** | Mâu thuẫn hợp đồng thật: không có trường `source`, nội dung là text thuần, diễn giải **nằm trong** `ChartResponse` (lỗi DB → cả request chart lỗi, R3) | Hợp đồng thật thắng; sửa spec ở F5.M8 (as-built, tối thiểu) |
 | A-3 | `Selection` không có kind `angle`/`house`; góc (Ascendant) hiện chỉ hiển thị, không chọn được | F5-04/F5-10 muốn Ascendant có điểm vào | Quyết định P-02 (Mục 15): Ascendant có điểm vào trong khu vực Diễn giải, **không** thêm selection trên wheel ở F5 |
 | A-4 | PRD FR-07: "vị trí hành tinh/nhà/góc chiếu" ghép với diễn giải; Backend MVP **không** có diễn giải góc chiếu, Nhà độc lập, tổng hợp | Phạm vi PRD rộng hơn dữ liệu | D-F5-01: chỉ giao cái có; phần còn lại vào backlog (Mục 4, 14) |
