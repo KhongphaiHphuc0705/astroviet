@@ -66,7 +66,7 @@ npm run dev
 - `npm run test:coverage`: Chạy test và tạo báo cáo độ bao phủ mã nguồn.
 - `npm run test:e2e`: Chạy Playwright E2E tests (yêu cầu local backend đang chạy).
 
-_Pipeline CI sẽ chạy toàn bộ các lệnh test unit/component/coverage tự động trên mọi PR nhắm vào nhánh chính. Tuy nhiên E2E test (`auth.spec.ts`, `birth-profile.spec.ts`) sẽ bị skip trong CI do CI chưa thiết lập hạ tầng Backend/Postgres._
+_Pipeline CI sẽ chạy toàn bộ các lệnh test unit/component/coverage và Playwright E2E tests với live Backend & PostgreSQL services trên mọi PR nhắm vào nhánh chính._
 
 ## 9. Linting
 
