@@ -13,7 +13,7 @@ Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.
 
 - **KG-F5-01 (Moon boundary precision):** In charts with unknown birth time, Backend provides no uncertainty signal for the Moon, so Frontend does not render a separate Moon-specific boundary warning.
 - **KG-F5M4-01 / AC-27 (Screen reader audio):** Windows Narrator live-region announcement audio is an Accepted Gap; semantic live-region structure is verified via Chromium accessibility tree.
-- **Cross-browser scope:** Automated E2E test suite currently runs on Chromium desktop; chưa được kiểm trên Safari/Firefox.
+- **Cross-browser scope:** Automated E2E test suite currently runs on Chromium desktop; not yet tested on Safari/Firefox.
 - **Interpretation domain scope:** Release 1.0 focuses on `PlanetInSign`, `PlanetInHouse`, and `AngleInSign` (Ascendant); standalone aspect and house cusp interpretations are not included in this release.
 
 ### Added

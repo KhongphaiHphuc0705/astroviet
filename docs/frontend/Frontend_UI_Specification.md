@@ -854,23 +854,26 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 
 - **Purpose**: Hiển thị toàn bộ diễn giải chiêm tinh dạng text thuần của lá số sinh theo phân nhóm trực quan ("Cốt lõi" gồm Mặt Trời, Mặt Trăng, Cung Mọc mặc định mở; "Các hành tinh" đóng mặc định).
 - **Architecture & Component Tree**: Gồm `InterpretationPanel` (vùng chính), `InterpretationOverview` (danh sách liên kết nhảy nhanh theo nhóm kèm chú thích pháp lý), và các thẻ `InterpretationItem` (disclosure card cho từng hành tinh/cung mọc).
-- **Data Source & Contract**: Dữ liệu lấy trực tiếp từ mảng `interpretations[]` trong `ChartResponse` (`GET /api/v1/charts/:id`, TanStack Query key `['charts', chartId]`), không gọi endpoint API riêng. Bao gồm 3 loại đối tượng: `PlanetInSign` (`{Planet}_in_{Sign}`), `PlanetInHouse` (`{Planet}_in_House_{n}`), và `AngleInSign` (`Ascendant_in_{Sign}`).
+- **Data Source & Contract**: Dữ liệu lấy trực tiếp từ mảng `interpretations[]` trong `ChartResponse` (`GET /api/v1/charts/:id`, TanStack Query key `['charts', 'detail', id]`), không gọi endpoint API riêng. Bao gồm 3 loại đối tượng: `PlanetInSign` (`{Planet}_in_{Sign}`), `PlanetInHouse` (`{Planet}_in_House_{n}`), và `AngleInSign` (`Ascendant_in_{Sign}`).
 - **Content & Presentation**:
   - Nội dung text thuần (`bodyText`), không render HTML hay rich-text.
   - Không hiển thị các trường nội bộ như `tone`, `language`, `interpretationVersion` hay badge phân biệt nguồn (`source`/AI) trên giao diện.
   - Typography: áp dụng giới hạn bề rộng đọc `max-w-[65ch]`, font-size 14px (`text-[14px]`), line-height thoáng (`leading-relaxed`), nhắm mục tiêu 45–80 ký tự/dòng trên màn hình lớn.
 - **Interactions & Cross-Component Synchronization**:
-  - Đồng bộ chọn hai chiều với SVG Chart Wheel và Planet Table: chọn một hành tinh sẽ tự động mở thẻ tương ứng, cuộn vào khung nhìn, và gắn thuộc tính `aria-current="true"` kèm huy hiệu "Đang chọn".
+  - Đồng bộ chọn hai chiều với SVG Chart Wheel và Planet Table: chọn một hành tinh sẽ tự động mở thẻ tương ứng và gắn thuộc tính `aria-current="true"` kèm huy hiệu "Đang chọn" mà không tự ý cuộn trang hay dời focus (P-03/AC-16).
   - Nút ngữ cảnh: "Đọc diễn giải" trên thanh SelectionDetail điều hướng và mở disclosure; nút "Xem trên biểu đồ" bên trong mỗi `InterpretationItem` chọn lại đối tượng trên bánh xe và phục hồi focus an toàn.
 - **Degraded States & Error Resilience**:
-  - Lá số không rõ giờ sinh (`isHouseDataAvailable: false`): Cung Mọc và phần diễn giải theo Nhà bị ẩn/báo không khả dụng kèm thông báo giải thích trung tính; các diễn giải theo Cung Hoàng Đạo vẫn hiển thị đầy đủ.
+  - Lá số không rõ giờ sinh (`isHouseDataAvailable: false`): Cung Mọc hiển thị thông báo trung tính "Cung Mọc chưa khả dụng cho lá số này." và ẩn nút "Xem trên biểu đồ"; phần diễn giải theo Nhà bị ẩn/báo không khả dụng; các diễn giải theo Cung Hoàng Đạo vẫn hiển thị đầy đủ.
+  - Chưa phát hành (`unpublished: true` / `version: null` và `interpretations: []`): Hiển thị `Alert variant="info"` với thông báo "Nội dung diễn giải chưa được phát hành", các bảng F4 vẫn hoạt động bình thường.
+  - Không khả dụng chung (`model.status === "unavailable"`): Hiển thị `Alert variant="warning"` với thông báo "Hiện chưa thể hiển thị diễn giải cho lá số này.".
+  - Thiếu mục cụ thể (missing item): Phần diễn giải bị thiếu hiển thị text "Chưa có nội dung cho mục này" và ghi nhận lỗi ngầm qua `reportError` đúng 1 lần; các mục khác hiển thị bình thường.
   - Lỗi mạng/API: Diễn giải đi kèm phản hồi tính toán lá số (F4); lỗi API chart sẽ hiển thị Error View của toàn trang.
-  - Lỗi dữ liệu/thiếu mục (unmapped/missing/corrupted entry): Được cô lập an toàn tại tầng parser domain, không gây crash giao diện, ghi nhận lỗi ngầm qua `reportError`.
+  - Lỗi dữ liệu/entry hỏng: Dữ liệu malformed hoặc trùng lặp được cô lập an toàn tại tầng parser domain, không gây crash giao diện, ghi nhận lỗi ngầm qua `reportError`.
 - **Accessibility**:
-  - Phân cấp tiêu đề rõ ràng: `h2` ("Diễn giải chiêm tinh", "Nhà và các góc"), `h3` (nhóm "Cốt lõi", "Các hành tinh"), `h4` (tên từng hành tinh).
-  - Vùng điều hướng Overview: `nav aria-label="Điều hướng nhanh diễn giải"`, danh sách `<ul>`, liên kết nhảy với `scroll-mt` để bù trừ sticky header, hỗ trợ focus ring rõ ràng (`focus-visible:ring-2`).
-  - Disclosure thẻ mục: Nút `<button aria-expanded aria-controls>` native, điều khiển container `<div id={panelId} role="region">`.
-  - Hỗ trợ `prefers-reduced-motion` tắt chuyển động cuộn/animation, diện tích chạm tối thiểu ≥44px trên thiết bị di động.
+  - Phân cấp tiêu đề rõ ràng: `h2` ("Diễn giải"), `h3` (nhóm "Cốt lõi", "Các hành tinh"), `h4` (tên từng hành tinh). ("Nhà và các góc" là tiêu đề thuộc bảng dữ liệu F4).
+  - Vùng điều hướng Overview: `nav aria-label="Các nhóm diễn giải"`, danh sách `<ul>`, liên kết nhảy với `scroll-mt` để bù trừ sticky header, hỗ trợ focus ring rõ ràng (`focus-visible:ring-2`).
+  - Disclosure thẻ mục: Nút `<button aria-expanded aria-controls>` native, điều khiển container `<div id={panelId} hidden={!expanded}>` (không dùng `role="region"` trên div con để tránh lồng landmark dư thừa).
+  - Hỗ trợ `prefers-reduced-motion` vô hiệu hóa animation chuyển màu (`motion-reduce:transition-none`) và hiệu ứng co giãn nút (`motion-reduce:active:scale-100`), diện tích chạm tối thiểu ≥44px trên thiết bị di động.
 - **Phạm vi ngoài F5**: Diễn giải góc chiếu (aspect), cấu trúc đặc biệt (pattern), và tổng hợp (summary) chưa triển khai ở F5 (thuộc backlog giai đoạn tiếp theo).
 
 ### 12.7. Pattern Card
@@ -1016,7 +1019,7 @@ Nguyên tắc chốt: **phân loại state theo nguồn**, không dùng 1 công 
 
 ### 15.2. TanStack Query — quy ước
 
-- Query key namespace theo domain: `['charts', chartId]` (chứa toàn bộ dữ liệu lá số bao gồm cả mảng `interpretations`), `['profiles']`, `['profile', profileId]`. *(Lưu ý: Diễn giải nằm trong query chart, không có query key interpretation riêng)*.
+- Query key namespace theo domain: `['charts', 'detail', id]` (chứa toàn bộ dữ liệu lá số bao gồm cả mảng `interpretations`), `['charts', 'list', params]`, `['profiles']`, `['profile', profileId]`. *(Lưu ý: Diễn giải nằm trong query detail của chart, không có query key interpretation riêng)*.
 - `staleTime` cho Chart data: **Infinity** — vì Chart là **immutable** (mục 5 Project Summary, đã snapshot khi tạo), không cần refetch trừ khi invalidate thủ công.
 - `staleTime` cho `profiles` (BirthProfile, **mutable**): mặc định TanStack Query (0, refetch khi cần) vì có thể bị sửa.
 - Mutation (Register, Login, Save Chart, Update Profile) dùng `useMutation` + `invalidateQueries` tương ứng sau khi thành công, kết hợp Toast (mục 9.4) báo kết quả.
