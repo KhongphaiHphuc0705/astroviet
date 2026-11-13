@@ -167,7 +167,7 @@ frontend/
 │   │   ├── birth-profile/            # CRUD Birth Profile — ánh xạ Backend module cùng tên
 │   │   ├── chart-generation/          # Birth Form → gọi API tạo Chart (Sprint tương lai)
 │   │   ├── chart-viewer/               # Tab điều hướng, filter Aspect Table, tương tác Chart Wheel
-│   │   ├── interpretation/              # Hiển thị + fetch Interpretation Card
+│   │   ├── interpretation/              # Hiển thị diễn giải (tại Sprint F5 được tổ chức trong features/chart)
 │   │   └── knowledge-base/               # Danh sách/chi tiết bài viết
 │   │
 │   ├── entities/                   # Domain building block — hiển thị thuần túy, tái sử dụng CAO
@@ -554,7 +554,7 @@ ApiError {
 | **Root** | `app/providers/ErrorBoundaryProvider` (mục 4.5), bọc ngoài cùng `RouterProvider` | Lỗi render không route nào lường trước (bug thật sự, không phải lỗi API) | `PageErrorState` toàn màn hình (UI Spec §18.4) + nút reload |
 | **Route-level** | `errorElement` của từng route (mục 6.6) | Lỗi cục bộ trong 1 page (ví dụ `chartId` không hợp lệ khi parse param) | `PageErrorState` trong `ContentContainer`, Navbar/Sidebar vẫn sống (UI Spec §11.7) |
 
-**Không** đặt Error Boundary ở cấp từng Feature component nhỏ lẻ (ví dụ quanh mỗi `InterpretationCard`) — trường hợp lỗi cục bộ đó (mục 10.4 dưới) xử lý bằng **trạng thái, không phải exception** (TanStack Query trả `isError` cho component tự quyết định hiển thị gì, đúng UI Spec §12.6 "chỉ Card này hiện lỗi cục bộ" — đây là data-driven rendering, không phải React Error Boundary).
+**Không** đặt Error Boundary ở cấp từng Feature component nhỏ lẻ (ví dụ quanh từng `InterpretationItem`) — các trường hợp dữ liệu bất thường hoặc thiếu mục được xử lý bằng **data-driven rendering và trạng thái model**, không dùng exception (diễn giải nằm trong `ChartResponse`, lỗi API chart hiển thị Error View của route; các trường hợp unmapped item được cô lập an toàn tại tầng parser domain và báo qua `reportError`, đúng UI Spec §12.6).
 
 ### 10.4. Form Validation Errors — nguồn kép (Client + Server)
 
@@ -629,7 +629,7 @@ Ngoài ra, `shared/api/client.ts` có **response interceptor** bắt lỗi `401`
 ### 12.3. XSS Prevention
 
 - **Không** dùng `dangerouslySetInnerHTML` cho bất kỳ nội dung nào có nguồn gốc từ input người dùng hoặc CMS/API mà không qua sanitize.
-- Nội dung duy nhất trong hệ thống là rich text/markdown (bài viết Knowledge Base, có thể cả `InterpretationCard.content` nếu Backend cho phép định dạng — UI Spec §12.6): render qua markdown parser có sanitize built-in (ví dụ `react-markdown` mặc định không dùng `dangerouslySetInnerHTML`, hoặc `rehype-sanitize` nếu cần HTML thô) — quyết định thư viện cụ thể để lại lúc code hóa `knowledge-base` feature, nguyên tắc kiến trúc là **sanitize bắt buộc tại 1 điểm duy nhất**, không rải parse rải rác.
+- Nội dung rich text/markdown trong hệ thống chỉ áp dụng cho bài viết Knowledge Base (diễn giải chiêm tinh tại Sprint F5 sử dụng text thuần `bodyText`, không chứa định dạng markdown/HTML — UI Spec §12.6): render qua markdown parser có sanitize built-in (ví dụ `react-markdown` mặc định không dùng `dangerouslySetInnerHTML`, hoặc `rehype-sanitize` nếu cần HTML thô) — quyết định thư viện cụ thể để lại lúc code hóa `knowledge-base` feature, nguyên tắc kiến trúc là **sanitize bắt buộc tại 1 điểm duy nhất**, không rải parse rải rác.
 - React tự động escape nội dung text thông thường (JSX `{value}`) — rủi ro XSS thực sự chỉ tập trung ở 2 điểm trên, dễ audit vì đã cô lập.
 
 ### 12.4. CSRF Considerations
@@ -716,9 +716,9 @@ Thứ tự này tối ưu **fail-fast**: lỗi rẻ tiền phát hiện (lint, t
 
 Kiến trúc đã hỗ trợ sẵn mà **không cần tái cấu trúc**: `entities/astrology/chart-wheel` nhận `chartData`/`secondaryChartData` (UI Spec §12.5) qua props thuần túy, không biết "đây là Natal hay Synastry" — sự khác biệt nằm hoàn toàn ở tầng `features/chart-viewer` (fetch đúng endpoint, truyền đúng shape data). Thêm 1 Chart Type mới = thêm logic trong `features/chart-viewer/api` + `hooks`, **không đổi** bất kỳ Composite nào trong `entities/`.
 
-### 15.2. Interpretation Engine (Human/AI source)
+### 15.2. Interpretation Engine (Nguồn dữ liệu diễn giải)
 
-Backend đã quyết định "Server tự quyết định nguồn, Client không chọn" (Project Summary). Kiến trúc Frontend phản ánh đúng: `InterpretationCard` (UI Spec §12.6) chỉ hiển thị field `source` đã có sẵn trong response, **không có** UI/state nào cho phép người dùng chọn nguồn — không cần thay đổi kiến trúc nếu Backend sau này thêm nguồn thứ 3 (ví dụ Hybrid), chỉ cần Badge hiển thị thêm 1 variant.
+Hợp đồng dữ liệu thật (`ChartInterpretationDto` trong `ChartResponse`) xác nhận nội dung diễn giải được tính toán và phục vụ trực tiếp từ seed database phía Backend, không có trường `source` (`human`|`ai`) và không có UI chọn nguồn phía Client. Frontend tuân thủ nguyên tắc không tự phát sinh UI phân biệt nguồn khi Backend không cung cấp trường dữ liệu này (UI Spec §12.6). Nếu tương lai Backend bổ sung trường phân loại nguồn, Client chỉ cần mở rộng DTO mapping mà không cần thay đổi kiến trúc tích hợp `features/chart`.
 
 ### 15.3. Internationalization (i18n)
 

@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-11-09
+
+Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.1`–`FE-S5.7`).
+
+**Known Limitations:**
+
+- **KG-F5-01 (Moon boundary precision):** In charts with unknown birth time, Backend provides no uncertainty signal for the Moon, so Frontend does not render a separate Moon-specific boundary warning.
+- **KG-F5M4-01 / AC-27 (Screen reader audio):** Windows Narrator live-region announcement audio is an Accepted Gap; semantic live-region structure is verified via Chromium accessibility tree.
+- **Cross-browser scope:** Automated E2E test suite currently runs on Chromium desktop; not yet tested on Safari/Firefox.
+- **Interpretation domain scope:** Release 1.0 focuses on `PlanetInSign`, `PlanetInHouse`, and `AngleInSign` (Ascendant); standalone aspect and house cusp interpretations are not included in this release.
+
+### Added
+
+- **Natal Chart Interpretation Experience (`FE-S5.1`–`FE-S5.7`)**:
+  - **CI Seed Content & Contract Probe Integration (`FE-S5.1` / M1)**:
+    - Integration of CI seed pipeline for Vietnamese interpretation texts (`interpretations.vi.json`, 252 items).
+    - Contract validation probe asserting `interpretationVersion === "1.0"` and 21 standard natal items.
+  - **Pure Interpretation Domain ViewModel & Parsing (`FE-S5.2` / M2)**:
+    - `interpretation.ts`: strictly decoupled domain parser mapping backend `ChartResponse.interpretations` into typed view models (`PlanetInSign`, `PlanetInHouse`, `AngleInSign`).
+    - Deterministic item key generation, sorting (Sun, Moon, Ascendant first, then inner and outer planets), and frozen configuration structures (`Object.freeze` on `INTERPRETATION_GROUP_SPECS`).
+  - **Interpretation Panel & Collapsible UI (`FE-S5.3` / M3)**:
+    - Accessible collapsible panel (`InterpretationPanel`) with jump navigation overview (`InterpretationOverview`), category grouping ("Cốt lõi" pre-expanded, "Các hành tinh"), individual item cards (`InterpretationItem`), and disclaimer note within overview.
+  - **Cross-Component Selection Synchronization (`FE-S5.4` / M4)**:
+    - Unified bidirectional selection between SVG Wheel, Data Tables, and Interpretation Panel.
+    - Contextual jump links ("Đọc diễn giải" on selected objects, "Xem trên biểu đồ" inside interpretation cards) preserving focus recovery to source elements.
+  - **Degraded States & Error Resilience (`FE-S5.5` / M5)**:
+    - Graceful degradation for charts with unknown birth time (`isHouseDataAvailable=false`): suppresses house interpretations with explanatory note while keeping sign interpretations intact.
+    - Fault-tolerant parsing with unmapped item isolation, non-blocking fallback views, and silent client error reporting (`reportError`).
+  - **Responsive Layout & Accessibility Hardening (`FE-S5.6` / M6)**:
+    - Responsive adaptation across mobile cards, tablet single-column, and desktop two-column layouts.
+    - Plain-text readability typography: local `max-w-[65ch]` width constraint on `<dd>`, 14px body text, target 45–80 chars/line on desktop viewports.
+    - Semantic accessibility tree verification (`role="region"`, `<ul>` list structure, `aria-expanded`, `aria-controls`), focus rings, and color contrast verification.
+    - `prefers-reduced-motion` support for chart route and interpretation disclosures (D-M6-07 a).
+  - **End-to-End Testing & Regression Suite (`FE-S5.7` / M7)**:
+    - Real Backend E2E test suite (`interpretation.spec.ts`, 12 tests) covering standard calculation with seed verification (Scenario A) and degraded state with unknown birth time (Scenario B), accompanied by full suite regression verification (60 tests total across the project).
+
+### Changed
+
+- Refined responsive header and user menu layout for small mobile screens (<640px).
+
 ## [0.3.0] - 2026-10-28
 
 ### Added

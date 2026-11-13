@@ -31,6 +31,7 @@ const defaults = {
 
 it("IT-01: should start collapsed when expanded is false", () => {
   render(<InterpretationItem {...defaults} />);
+  expect(screen.getByRole("article")).toHaveAttribute("id", "planet:Sun");
   expect(
     screen.getByRole("button", { name: "Mặt Trời · Ma Kết" }),
   ).toHaveAttribute("aria-expanded", "false");

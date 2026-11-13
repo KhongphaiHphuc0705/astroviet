@@ -75,7 +75,7 @@ The Ring **không xuất hiện quá 1 lần trên mỗi màn hình chính** —
 
 | Persona | Ưu tiên UI |
 |---|---|
-| Người mới (Guest/User mới) | Birth Form đơn giản, Interpretation Card dễ đọc bằng tiếng Việt phổ thông, ẩn thuật ngữ kỹ thuật theo mặc định (có thể mở rộng "Xem chi tiết kỹ thuật"). |
+| Người mới (Guest/User mới) | Birth Form đơn giản, diễn giải lá số (`InterpretationPanel`) dễ đọc bằng tiếng Việt phổ thông, cấu trúc phân nhóm rõ ràng (Cốt lõi mở sẵn). *(Ghi chú: tính năng "Xem chi tiết kỹ thuật" xếp vào backlog sau F5)*. |
 | Người đã biết Astrology | Có thể chuyển nhanh giữa các loại chart (Natal/Transit/Synastry...), xem Aspect Table đầy đủ orb. |
 | Astrologer chuyên nghiệp | Cần độ chính xác số liệu tối đa (degree/minute/second), có thể chọn House System, xem Pattern Card (Grand Trine, T-Square...). |
 
@@ -686,14 +686,14 @@ Ba primitive dùng để dựng mọi layout mà **không** viết CSS Flexbox/G
 
 #### Accordion
 
-- **Purpose**: Ẩn/hiện nội dung theo nhóm để giảm mật độ hiển thị ban đầu (ví dụ FAQ, hoặc "Xem chi tiết kỹ thuật" trong Interpretation Card cho người mới).
+- **Purpose**: Ẩn/hiện nội dung theo nhóm để giảm mật độ hiển thị ban đầu (ví dụ FAQ, hoặc các khối chi tiết mở rộng tương lai). *(Lưu ý: InterpretationPanel tại F5 sử dụng disclosure button native WAI-ARIA độc lập, không dùng Accordion primitive)*.
 - **Props**: `items` (array `{ value, trigger, content }`), `type` (`single`|`multiple` — 1 hoặc nhiều panel mở cùng lúc), `defaultValue`, `collapsible` (cho `type="single"`, cho phép đóng hết).
 - **Variants**: `default` (có Divider giữa các item), `bordered` (mỗi item là 1 Card riêng).
 - **Sizes**: không có size scale.
 - **States**: mỗi item có `collapsed`, `expanded`, `focus-visible` trên trigger.
 - **Accessibility**: trigger là `<button aria-expanded>` điều khiển panel qua `aria-controls`; panel có `role="region"` + `aria-labelledby`.
 - **Responsive**: không đổi cấu trúc theo breakpoint, chỉ giảm padding.
-- **Usage Example**: "Xem chi tiết kỹ thuật" trong `InterpretationCard` dùng Accordion `type="single" collapsible`, mặc định đóng cho persona "Người mới".
+- **Usage Example**: Khối chi tiết mở rộng dạng `Accordion` `type="single" collapsible` (ví dụ FAQ hoặc chi tiết kỹ thuật trong backlog sau F5).
 
 ---
 
@@ -850,22 +850,37 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 - **Empty**: không áp dụng trong luồng chuẩn.
 - **Error**: nếu tính toán Swiss Ephemeris thất bại (dữ liệu ngày sinh ngoài phạm vi ephemeris hỗ trợ), thay Wheel bằng `EmptyState` kiểu error, không cố render Wheel rỗng/méo.
 
-### 12.6. Interpretation Card
+### 12.6. Interpretation Panel (FE-S5.1–FE-S5.7 as-built)
 
-- **Purpose**: Hiển thị đoạn diễn giải văn bản theo đúng thứ tự đã chốt (Planet in Sign → Planet in House → Aspect → Pattern → Elements → Modalities → Summary, mục 11 Project Summary).
-- **Props**: `subject` (đối tượng đang diễn giải: 1 hành tinh, 1 aspect, hoặc "summary" tổng), `source` (`human`|`ai` — hiện `Badge` nhỏ góc trên nếu `ai`, minh bạch nguồn nội dung theo đúng quyết định "Server tự quyết định, Client không chọn" — Client chỉ hiển thị, không có UI để người dùng chọn nguồn), `content` (rich text ngắn), `technicalDetail` (optional, nội dung kỹ thuật đặt trong `Accordion` collapsed mặc định — phục vụ persona "Người mới" mục 1.4).
-- **States**: `default`, `expanded` (khi accordion kỹ thuật mở).
-- **Accessibility**: nội dung văn bản dài phải đảm bảo contrast + line-height chuẩn (mục 4.4); Badge nguồn AI có `aria-label="Nội dung do AI tạo"` không chỉ dựa icon.
-- **Responsive**: full-width trong Stack dọc trên mọi breakpoint (không có layout ngang riêng).
-- **Loading**: `Skeleton variant="text" count={3}`.
-- **Empty**: trường hợp chưa có interpretation cho 1 subject cụ thể (dữ liệu chưa author hết) → hiện text nhẹ "Nội dung diễn giải đang được cập nhật" thay vì Card trống trơn.
-- **Error**: nếu API interpretation lỗi riêng (tách API với chart calculation) → không chặn phần Chart Wheel/Table đã tải được, chỉ Card này hiện lỗi cục bộ nhỏ với nút "Thử lại".
+- **Purpose**: Hiển thị toàn bộ diễn giải chiêm tinh dạng text thuần của lá số sinh theo phân nhóm trực quan ("Cốt lõi" gồm Mặt Trời, Mặt Trăng, Cung Mọc mặc định mở; "Các hành tinh" đóng mặc định).
+- **Architecture & Component Tree**: Gồm `InterpretationPanel` (vùng chính), `InterpretationOverview` (danh sách liên kết nhảy nhanh theo nhóm kèm chú thích pháp lý), và các thẻ `InterpretationItem` (disclosure card cho từng hành tinh/cung mọc).
+- **Data Source & Contract**: Dữ liệu lấy trực tiếp từ mảng `interpretations[]` trong `ChartResponse` (`GET /api/v1/charts/:id`, TanStack Query key `['charts', 'detail', id]`), không gọi endpoint API riêng. Bao gồm 3 loại đối tượng: `PlanetInSign` (`{Planet}_in_{Sign}`), `PlanetInHouse` (`{Planet}_in_House_{n}`), và `AngleInSign` (`Ascendant_in_{Sign}`).
+- **Content & Presentation**:
+  - Nội dung text thuần (`bodyText`), không render HTML hay rich-text.
+  - Không hiển thị các trường nội bộ như `tone`, `language`, `interpretationVersion` hay badge phân biệt nguồn (`source`/AI) trên giao diện.
+  - Typography: áp dụng giới hạn bề rộng đọc `max-w-[65ch]`, font-size 14px (`text-[14px]`), line-height thoáng (`leading-relaxed`), nhắm mục tiêu 45–80 ký tự/dòng trên màn hình lớn.
+- **Interactions & Cross-Component Synchronization**:
+  - Đồng bộ chọn hai chiều với SVG Chart Wheel và Planet Table: chọn một hành tinh sẽ tự động mở thẻ tương ứng và gắn thuộc tính `aria-current="true"` kèm huy hiệu "Đang chọn" mà không tự ý cuộn trang hay dời focus (P-03/AC-16).
+  - Nút ngữ cảnh: "Đọc diễn giải" trên thanh SelectionDetail điều hướng và mở disclosure; nút "Xem trên biểu đồ" bên trong mỗi `InterpretationItem` chọn lại đối tượng trên bánh xe và phục hồi focus an toàn.
+- **Degraded States & Error Resilience**:
+  - Lá số không rõ giờ sinh (`isHouseDataAvailable: false`): Cung Mọc hiển thị thông báo trung tính "Cung Mọc chưa khả dụng cho lá số này." và ẩn nút "Xem trên biểu đồ"; phần diễn giải theo Nhà bị ẩn/báo không khả dụng; các diễn giải theo Cung Hoàng Đạo vẫn hiển thị đầy đủ.
+  - Chưa phát hành (`unpublished: true` / `version: null` và `interpretations: []`): Hiển thị `Alert variant="info"` với thông báo "Nội dung diễn giải chưa được phát hành", các bảng F4 vẫn hoạt động bình thường.
+  - Không khả dụng chung (`model.status === "unavailable"`): Hiển thị `Alert variant="warning"` với thông báo "Hiện chưa thể hiển thị diễn giải cho lá số này.".
+  - Thiếu mục cụ thể (missing item): Phần diễn giải bị thiếu hiển thị text "Chưa có nội dung cho mục này" và ghi nhận lỗi ngầm qua `reportError` đúng 1 lần; các mục khác hiển thị bình thường.
+  - Lỗi mạng/API: Diễn giải đi kèm phản hồi tính toán lá số (F4); lỗi API chart sẽ hiển thị Error View của toàn trang.
+  - Lỗi dữ liệu/entry hỏng: Dữ liệu malformed hoặc trùng lặp được cô lập an toàn tại tầng parser domain, không gây crash giao diện, ghi nhận lỗi ngầm qua `reportError`.
+- **Accessibility**:
+  - Phân cấp tiêu đề rõ ràng: `h2` ("Diễn giải"), `h3` (nhóm "Cốt lõi", "Các hành tinh"), `h4` (tên từng hành tinh). ("Nhà và các góc" là tiêu đề thuộc bảng dữ liệu F4).
+  - Vùng điều hướng Overview: `nav aria-label="Các nhóm diễn giải"`, danh sách `<ul>`, liên kết nhảy với `scroll-mt` để bù trừ sticky header, hỗ trợ focus ring rõ ràng (`focus-visible:ring-2`).
+  - Disclosure thẻ mục: Nút `<button aria-expanded aria-controls>` native, điều khiển container `<div id={panelId} hidden={!expanded}>` (không dùng `role="region"` trên div con để tránh lồng landmark dư thừa).
+  - Hỗ trợ `prefers-reduced-motion` vô hiệu hóa animation chuyển màu (`motion-reduce:transition-none`) và hiệu ứng co giãn nút (`motion-reduce:active:scale-100`), diện tích chạm tối thiểu ≥44px trên thiết bị di động.
+- **Phạm vi ngoài F5**: Diễn giải góc chiếu (aspect), cấu trúc đặc biệt (pattern), và tổng hợp (summary) chưa triển khai ở F5 (thuộc backlog giai đoạn tiếp theo).
 
 ### 12.7. Pattern Card
 
 - **Purpose**: Nêu bật 1 Pattern được phát hiện (Grand Trine, T-Square, Stellium, Yod, Mystic Rectangle, Kite, Grand Cross, Bucket, Locomotive, Splash, See-Saw).
 - **Props**: `patternType`, `involvedPlanets` (array `PlanetBadge`), `description`, `diagram` (optional mini SVG preview highlight pattern đó trên hình dạng Wheel thu nhỏ).
-- **Variants**: dùng `Card variant="outline-accent"` làm nền tảng (mục 9.3) — Pattern là phát hiện "đáng chú ý" nên luôn nổi bật hơn Interpretation Card thường.
+- **Variants**: dùng `Card variant="outline-accent"` làm nền tảng (mục 9.3) — Pattern là phát hiện "đáng chú ý" nên luôn nổi bật hơn các thẻ diễn giải thường. *(Lưu ý: Pattern Card thuộc backlog sau F5)*.
 - **States**: `default`, `hover` (nếu click để jump tới highlight pattern đó trên Chart Wheel chính, đồng bộ 12.5).
 - **Accessibility**: `diagram` mini là trang trí bổ trợ, `aria-hidden="true"` — thông tin đầy đủ nằm ở `involvedPlanets` + `description` dạng text.
 - **Responsive**: danh sách Pattern Card xếp trong `Grid columns={{ xs: 1, md: 2 }}`.
@@ -936,7 +951,7 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 | 8 | `/app/profiles/new` | Tạo hồ sơ sinh | `AppLayout` | ❌ redirect `/login` | ✅ | Form tạo hồ sơ sinh 2 bước | ✅ Đã triển khai |
 | 9 | `/app/profiles/:id/edit` | Sửa hồ sơ sinh | `AppLayout` | ❌ redirect `/login` | ✅ | Form chỉnh sửa hồ sơ sinh | ✅ Đã triển khai |
 | 10 | `/app/charts` | Lá số của tôi (Danh sách) | `AppLayout` | ❌ redirect `/login` | ✅ | Danh sách lá số đã tính, phân trang, lọc | ✅ Đã triển khai (FE-S4.11) |
-| 11 | `/app/charts/:chartId` | Chi tiết lá số sinh | `AppLayout` | ❌ redirect `/login` | ✅ | `ChartViewerShell`: Wheel + 3 Tables + Selection | ✅ Đã triển khai (F4 lõi) |
+| 11 | `/app/charts/:chartId` | Chi tiết lá số sinh | `AppLayout` | ❌ redirect `/login` | ✅ | `ChartViewerShell`: Wheel + 3 Tables + Selection + **Interpretation Panel** | ✅ Đã triển khai (F4 lõi + F5 Interpretation UI) |
 | 12 | `/app/settings` | Cài đặt | `AppLayout` | ❌ redirect `/login` | ✅ | House System mặc định, Theme, Ngôn ngữ | ⏳ Backlog / F5+ |
 | 13 | `/knowledge` | Kiến thức Astrology | `MarketingLayout` | ✅ | ✅ | Danh sách bài viết (`Pagination`) | ⏳ Backlog / F5+ |
 | 14 | `/knowledge/:slug` | Chi tiết bài viết | `MarketingLayout` | ✅ | ✅ | Nội dung markdown-rendered | ⏳ Backlog / F5+ |
@@ -1004,7 +1019,7 @@ Nguyên tắc chốt: **phân loại state theo nguồn**, không dùng 1 công 
 
 ### 15.2. TanStack Query — quy ước
 
-- Query key namespace theo domain: `['chart', chartId]`, `['chart', chartId, 'interpretation']`, `['profiles']`, `['profile', profileId]`.
+- Query key namespace theo domain: `['charts', 'detail', id]` (chứa toàn bộ dữ liệu lá số bao gồm cả mảng `interpretations`), `['charts', 'list', params]`, `['profiles']`, `['profile', profileId]`. *(Lưu ý: Diễn giải nằm trong query detail của chart, không có query key interpretation riêng)*.
 - `staleTime` cho Chart data: **Infinity** — vì Chart là **immutable** (mục 5 Project Summary, đã snapshot khi tạo), không cần refetch trừ khi invalidate thủ công.
 - `staleTime` cho `profiles` (BirthProfile, **mutable**): mặc định TanStack Query (0, refetch khi cần) vì có thể bị sửa.
 - Mutation (Register, Login, Save Chart, Update Profile) dùng `useMutation` + `invalidateQueries` tương ứng sau khi thành công, kết hợp Toast (mục 9.4) báo kết quả.

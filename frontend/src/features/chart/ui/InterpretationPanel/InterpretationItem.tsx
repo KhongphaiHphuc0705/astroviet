@@ -72,6 +72,7 @@ export function InterpretationItem({
 
   return (
     <article
+      id={id}
       className={cn(
         "border-b border-subtle py-3 transition-colors last:border-b-0 motion-reduce:transition-none",
         selected &&
