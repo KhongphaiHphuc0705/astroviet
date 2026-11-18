@@ -190,7 +190,7 @@ describe("labels and glyph registry (F4-M2.1)", () => {
 
       expect(resolveAspectType("Conjunction")).toStrictEqual({
         key: "Conjunction",
-        labelVi: "Hợp",
+        labelVi: "Trùng tụ",
         glyph: "\u260C",
         known: true,
       });
@@ -202,7 +202,7 @@ describe("labels and glyph registry (F4-M2.1)", () => {
       });
       expect(resolveAspectType("Square")).toStrictEqual({
         key: "Square",
-        labelVi: "Vuông chiếu",
+        labelVi: "Vuông góc",
         glyph: "\u25A1",
         known: true,
       });
@@ -214,7 +214,7 @@ describe("labels and glyph registry (F4-M2.1)", () => {
       });
       expect(resolveAspectType("Opposition")).toStrictEqual({
         key: "Opposition",
-        labelVi: "Đối xung",
+        labelVi: "Đối đỉnh",
         glyph: "\u260D",
         known: true,
       });

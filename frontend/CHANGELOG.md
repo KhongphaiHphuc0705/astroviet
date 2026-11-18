@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Aspect Type Vietnamese Labels (Sprint F6 / F6.0b)**:
+  - Standardized 3 aspect type Vietnamese labels in `ASPECT_TYPE_LABELS` (`features/chart/model/labels.ts`) to align with canonical astrological terminology: Conjunction ("Hợp" → "Trùng tụ"), Square ("Vuông chiếu" → "Vuông góc"), and Opposition ("Đối xung" → "Đối đỉnh"). Sextile ("Lục hợp") and Trine ("Tam hợp") remain unchanged.
+  - Updated aspect badge, legend preview, and tests to reflect the canonical labels across all chart viewer surfaces.
+  - Documented canonical aspect label taxonomy in UI Specification §12.11 as the single source of truth.
+
 ## [0.4.0] - 2026-11-09
 
 Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.1`–`FE-S5.7`).

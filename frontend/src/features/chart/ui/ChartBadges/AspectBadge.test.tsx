@@ -45,7 +45,7 @@ describe("AspectBadge (nhóm B7, B8)", () => {
       <AspectBadge type={square} nature={resolveAspectNature("Challenging")} />,
     );
     expect(
-      screen.getByText("Vuông chiếu").closest("[data-tone]"),
+      screen.getByText("Vuông góc").closest("[data-tone]"),
     ).toHaveAttribute("data-tone", "tense");
     expect(screen.getByText(", căng thẳng")).toHaveClass("sr-only");
 
@@ -55,7 +55,7 @@ describe("AspectBadge (nhóm B7, B8)", () => {
         nature={resolveAspectNature("Neutral")}
       />,
     );
-    expect(screen.getByText("Hợp").closest("[data-tone]")).toHaveAttribute(
+    expect(screen.getByText("Trùng tụ").closest("[data-tone]")).toHaveAttribute(
       "data-tone",
       "neutral",
     );
@@ -76,7 +76,7 @@ describe("AspectBadge (nhóm B7, B8)", () => {
       <AspectBadge type={opposition} nature={challenging} showLabel={false} />,
     );
 
-    const img = screen.getByRole("img", { name: "Đối xung, căng thẳng" });
+    const img = screen.getByRole("img", { name: "Đối đỉnh, căng thẳng" });
     expect(img).toBeInTheDocument();
   });
 
