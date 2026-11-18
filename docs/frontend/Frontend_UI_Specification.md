@@ -921,11 +921,11 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 
   | AspectType | Biểu tượng (Glyph) | Góc chiếu | Phân nhóm tính chất (Nature Tone) | Nhãn tiếng Việt chuẩn (`labelVi`) |
   |---|:---:|:---:|---|---|
-  | `Conjunction` | ☌ | $0^\circ$ | Neutral (Trung tính) | **Trùng tụ** |
-  | `Sextile` | ⚹ | $60^\circ$ | Harmonious (Hài hòa) | **Lục hợp** |
-  | `Square` | □ | $90^\circ$ | Tense / Challenging (Căng thẳng) | **Vuông góc** |
-  | `Trine` | △ | $120^\circ$ | Harmonious (Hài hòa) | **Tam hợp** |
-  | `Opposition` | ☍ | $180^\circ$ | Tense / Challenging (Căng thẳng) | **Đối đỉnh** |
+  | `Conjunction` | ☌ | 0° | Neutral (Trung tính) | **Trùng tụ** |
+  | `Sextile` | ⚹ | 60° | Harmonious (Hài hòa) | **Lục hợp** |
+  | `Square` | □ | 90° | Tense / Challenging (Căng thẳng) | **Vuông góc** |
+  | `Trine` | △ | 120° | Harmonious (Hài hòa) | **Tam hợp** |
+  | `Opposition` | ☍ | 180° | Tense / Challenging (Căng thẳng) | **Đối đỉnh** |
 
   *(Lưu ý: Toàn bộ hệ thống UI, chú giải, badge và nội dung bài viết Knowledge Base bắt buộc sử dụng thống nhất 5 nhãn chuẩn này; các tên gọi khác như "Hợp", "Vuông chiếu", "Đối xung" chỉ được đề cập dưới dạng alias trong phần chú thích nếu cần)*.
 - **Loading/Empty/Error**: không áp dụng.

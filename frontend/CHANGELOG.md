@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Aspect Type Vietnamese Labels (Sprint F6 / F6.0b)**:
-  - Standardized 3 aspect type Vietnamese labels in `ASPECT_TYPE_LABELS` (`features/chart/model/labels.ts`) to align with canonical astrological terminology: Conjunction ("Hợp" → "Trùng tụ"), Square ("Vuông chiếu" → "Vuông góc"), and Opposition ("Đối xung" → "Đối đỉnh"). Sextile ("Lục hợp") and Trine ("Tam hợp") remain unchanged.
-  - Updated aspect badge, legend preview, and tests to reflect the canonical labels across all chart viewer surfaces.
-  - Documented canonical aspect label taxonomy in UI Specification §12.11 as the single source of truth.
+  - Cập nhật 3 nhãn góc chiếu tiếng Việt trong `ASPECT_TYPE_LABELS` (`features/chart/model/labels.ts`) theo nhãn do Owner duyệt: Conjunction ("Hợp" → "Trùng tụ"), Square ("Vuông chiếu" → "Vuông góc"), và Opposition ("Đối xung" → "Đối đỉnh"). Sextile ("Lục hợp") và Trine ("Tam hợp") giữ nguyên.
+  - Cập nhật các component AspectBadge, AspectLegend, và các unit test liên quan.
+  - Ghi nhận 5 nhãn góc chiếu chuẩn vào UI Specification §12.11 làm nguồn chuẩn duy nhất.
 
 ## [0.4.0] - 2026-11-09
 

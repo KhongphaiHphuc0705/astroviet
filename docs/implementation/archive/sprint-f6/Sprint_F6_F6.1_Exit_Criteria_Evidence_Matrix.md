@@ -2,7 +2,7 @@
 
 > **Sprint:** F6 — Knowledge Base (MVP, Frontend-only)  
 > **Milestone:** F6.1 — Audit & Requirements Traceability Matrix (RTM)  
-> **Target Version:** `0.4.0` (Sprint F6 changes under `[Unreleased]`)  
+> **Target Version:** `[Unreleased]` (Hiện tại `package.json` là `0.4.0` đã phát hành ở Sprint F5 ngày 2026-11-09; toàn bộ thay đổi F6 ghi nhận dưới mục `[Unreleased]`, chưa bump version; Git tag `v0.4.0` chưa có trên origin — hiện chỉ có `v0.3.0`, câu hỏi Q2 còn mở)  
 > **Execution Date:** 2026-11-18  
 > **Branch / Head Commit:** `dev`  
 > **Status:** **PASS — AUDIT & TRACEABILITY BASELINE FINALIZED**  
@@ -15,7 +15,7 @@
 2. Chốt giải pháp xử lý 11 xung đột tài liệu (`C1`–`C11`).
 3. Khóa danh mục thành phần tái sử dụng (`shared/ui`, layouts, helpers) để tránh trùng lặp mã.
 4. Đánh giá chuỗi cung ứng dependency (`react-markdown@10.1.0`, 0 framework mới, 0 plugin lạ).
-5. Khóa kiến trúc Prerender P1 và chiến lược Hydration Client.
+5. Khóa kiến trúc Prerender P1 (kèm Suspense boundary parity ở cây SSR) và chiến lược Hydration Client.
 
 ---
 
@@ -82,7 +82,7 @@ Toàn bộ 40 tiêu chí được phân loại theo Milestone triển khai và p
 | **C8** | Không hardcode domain vs thiếu cấu hình URL | Bổ sung biến môi trường `VITE_SITE_URL` (hỗ trợ cờ `PRERENDER_STRICT`) | Thực hiện tại F6.5 |
 | **C9** | Kiểm tra prerender không dùng mock vs E2E chạy trên dev server (CSR) | Script tự kiểm tra độc lập trên build thật + script kiểm chứng hydration cục bộ | Thực hiện tại F6.5 |
 | **C10** | Architecture Spec §5.1 ghi "CSR-only" vs prerender build-time KB | Cập nhật Architecture Spec §5.1 làm rõ ngoại lệ prerender cho KB (`D-F6-K`) | Cập nhật tại F6.7 |
-| **C11** | Prompt yêu cầu triển khai vs Owner yêu cầu lập plan trước | Đã lập Plan v1.1, chốt quyết định và baseline trước khi sinh mã | Hoàn tất tại F6.0/F6.1 |
+| **C11** | Prompt yêu cầu triển khai vs Owner yêu cầu lập plan trước | Đã lập Plan v1.2, chốt quyết định và baseline trước khi sinh mã | Hoàn tất tại F6.0/F6.1 |
 
 ---
 
@@ -107,6 +107,7 @@ Toàn bộ 40 tiêu chí được phân loại theo Milestone triển khai và p
   - Tác động chuỗi cung ứng: $+82$ packages bắc cầu (hệ sinh thái `unified` / `remark` / `micromark`).
 - **Thư viện không cài đặt:** `remark-gfm` (tuân thủ chỉ thị `D-F6-OWN-1`, bảo lưu cổng kiểm soát `D-F6-G` tại F6.6).
 - **Công cụ Prerender:** $0$ dependency mới (tận dụng Vite 6 SSR build, `react-dom/server`, `StaticRouter` có sẵn).
+- **Hiện trạng bảo mật baseline:** 34 lỗ hổng (trong đó có 4 ở production: axios, zod, follow-redirects, fast-uri; 30 ở dev dependencies). Sẽ chạy lại `npm audit` sau khi cài `react-markdown` để kiểm soát biến động.
 
 ---
 
@@ -114,4 +115,5 @@ Toàn bộ 40 tiêu chí được phân loại theo Milestone triển khai và p
 
 - Toàn bộ 40 Acceptance Criteria đã có ma trận truy vết chi tiết và khả thi 100%.
 - Các xung đột tài liệu đã có hướng xử lý dứt khoát, không còn điểm nghẽn.
+- Kiến trúc prerender đã được hoàn thiện với giải pháp bọc `<Suspense fallback={<SuspenseFallback/>}><StaticPage/></Suspense>` đảm bảo hydration parity với router client.
 - Sẵn sàng tiến hành Milestone F6.2 (Content Model & Markdown Pipeline).

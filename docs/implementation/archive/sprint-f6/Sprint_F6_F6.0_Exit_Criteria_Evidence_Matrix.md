@@ -2,7 +2,7 @@
 
 > **Sprint:** F6 — Knowledge Base (MVP, Frontend-only)  
 > **Milestone:** F6.0 — Entry Gate & Quality Baseline  
-> **Target Version:** `0.4.0` (Sprint F6 changes under `[Unreleased]`)  
+> **Target Version:** `[Unreleased]` (Hiện tại `package.json` là `0.4.0` đã phát hành ở Sprint F5 ngày 2026-11-09; toàn bộ thay đổi của Sprint F6 được ghi nhận dưới mục `[Unreleased]`, chưa bump version; Git release tag `v0.4.0` chưa có trên origin — hiện chỉ có `v0.3.0`, câu hỏi Q2 còn mở)  
 > **Execution Date:** 2026-11-18  
 > **Branch / Head Commit:** `dev` @ `23f965a`  
 > **Status:** **PASS — ENTRY GATE COMPLETED**  
@@ -14,7 +14,7 @@
 Xác lập cổng đầu vào kỹ thuật cho Sprint F6:
 1. Xác nhận trạng thái nhánh nền `dev` đã đồng bộ với `main` sau Sprint F5 (PR #67).
 2. Đo đạc và ghi nhận đầy đủ bộ chỉ số chất lượng baseline (format, lint, typecheck, test, build, E2E count, audit) trước khi thay đổi bất kỳ file mã nguồn nào của Sprint F6.
-3. Ghi nhận toàn bộ các quyết định phê duyệt của Owner đã được chốt (bao gồm giải quyết mâu thuẫn hydration `D-F6-A1`).
+3. Ghi nhận toàn bộ các quyết định phê duyệt của Owner đã được chốt (bao gồm quyết định `D-F6-A1` chốt ngày 2026-11-18 về nhánh hydrate có điều kiện).
 
 ---
 
@@ -28,12 +28,13 @@ Xác lập cổng đầu vào kỹ thuật cho Sprint F6:
 | **Unit & Integration Tests (Vitest)** | `npm run test` | **145 passed (145 files)**<br>**1.205 passed (1.205 tests)** | **PASS** | Thời gian chạy 227.20s; 0 test fail, 0 flaky |
 | **Production Build (Vite)** | `npm run build` | `built in 7.48s` | **PASS** | 2.155 modules transformed; `dist/index.html` và assets băm sinh đầy đủ |
 | **Playwright E2E Suite Count** | `CI=1 npx playwright test --list` | **60 tests in 9 files** | **PASS** | Khớp 100% với baseline đóng Sprint F5 (`interpretation.spec.ts` 12, `interpretation-responsive.spec.ts` 7, `chart.spec.ts` 17, `chart-list.spec.ts` 8, `birth-profile.spec.ts` 4, `auth.spec.ts` 3, `layout.spec.ts` 2, `Select.spec.ts` 2, `smoke.spec.ts` 2) |
-| **Dependency Security Audit** | `npm audit` | 34 vulnerabilities (10 moderate, 21 high, 3 critical) | **RECORDED** | Toàn bộ thuộc dev dependencies / transitive cũ trước F6; ghi nhận baseline trước khi cài `react-markdown` |
+| **Dependency Security Audit** | `npm audit` / `npm audit --omit=dev` | **Tổng: 34 lỗ hổng** (10 moderate, 21 high, 3 critical)<br>• **Production:** 4 lỗ hổng (1 moderate, 3 high): `axios` (high, trực tiếp), `zod` (high, trực tiếp), `follow-redirects` (high, gián tiếp), `fast-uri` (moderate, gián tiếp).<br>• **Dev dependencies:** 30 lỗ hổng (9 moderate, 18 high, 3 critical). | **RECORDED** | Kết quả phụ thuộc vào ngày chạy và cơ sở dữ liệu GitHub Advisory; ghi nhận chính xác phân bổ trước khi cài `react-markdown` |
 
 ---
 
-## 3. Nhật ký các Quyết định của Owner đã Chốt (Decisions Baseline)
+## 3. Nhật ký Quyết định & Điểm Làm rõ của Owner
 
+### 3.1 Quyết định đã duyệt [AD]
 | Quyết định | Nội dung phê duyệt | Trạng thái | Nguồn phê duyệt |
 |---|---|---|---|
 | **D-F6-OWN-1** | Cài đặt `react-markdown@10.1.0`; **chưa** cài `remark-gfm` ở MVP (chỉ xem xét ở F6.6 nếu bài viết cần bảng) | **ĐÃ DUYỆT [AD]** | Owner Confirmation 2026-11-14 |
@@ -51,7 +52,16 @@ Xác lập cổng đầu vào kỹ thuật cho Sprint F6:
 | **D-F6-C1** | Chuẩn hoá 15 tiêu đề bài viết sang tiếng Việt bám sát glossary sản phẩm (`labels.ts`) | **ĐÃ DUYỆT [AD]** | Owner Confirmation |
 | **D-F6-C2** | Thứ tự danh mục: đặt "Khái niệm cơ bản" lên đầu tiên | **ĐÃ DUYỆT [AD]** | Owner phản hồi 2026-11-16 |
 | **D-F6-L1..L3** | Micro-change F6.0b: Đổi nhãn góc chiếu (`Hợp` → `Trùng tụ`, `Vuông chiếu` → `Vuông góc`, `Đối xung` → `Đối đỉnh`); nguồn chuẩn UI Spec §12.11 | **ĐÃ DUYỆT [AD]** | Owner phản hồi 2026-11-16 |
-| **D-F6-A1** | Giải quyết điều kiện P1 & Hydrate: Giữ nguyên hành vi CSR hiện tại, `main.tsx` chỉ thêm một nhánh có điều kiện gọi `src/app/hydrate.ts` | **ĐÃ DUYỆT [AD]** | Owner phản hồi 2026-11-18 |
+| **D-F6-A1** | Giải quyết điều kiện P1 & Hydrate: Không đổi hành vi CSR hiện tại; `main.tsx` chỉ thêm một nhánh có điều kiện gọi module tách biệt `src/app/hydrate.ts` | **ĐÃ DUYỆT [AD]** | Owner phản hồi 2026-11-18 |
+
+### 3.2 Điểm làm rõ kỹ thuật đề xuất [REC] (Chưa duyệt, không chặn)
+| Điểm làm rõ | Nội dung đề xuất | Trạng thái |
+|---|---|:---:|
+| **D-F6-A2** | Khi `PRERENDER_STRICT=true`: yêu cầu `https:` và host không phải `localhost`/IP nội bộ | Đề xuất [REC] |
+| **D-F6-A3** | Sinh `dist/knowledge/index.html` (nội dung giống `knowledge.html`) cho URL `/knowledge/` | Đề xuất [REC] |
+| **D-F6-A4** | URL sai định dạng luôn làm build fail (kể cả non-strict); chỉ thiếu URL mới fallback localhost | Đề xuất [REC] |
+| **D-F6-A5** | Test nhãn cũ chỉ cấm tự động `Vuông chiếu`/`Đối xung`; nhãn "Hợp" kiểm soát qua checklist biên tập | Đề xuất [REC] |
+| **D-F6-A6** | Test `KB-U23` import `ASPECT_TYPE_LABELS` từ `features/chart` (ngoại lệ chỉ trong test) để kiểm bài `major-aspects` | Đề xuất [REC] |
 
 ---
 

@@ -5,9 +5,9 @@
 | | |
 |---|---|
 | **Dự án** | AstroViet — Frontend Sprint F6: Knowledge Base (MVP, Frontend-only) |
-| **Trạng thái tài liệu** | **PLAN v1.1 — các quyết định chặn tiến độ đã được Owner duyệt (Mục 3, Mục 14); chờ Owner duyệt v1.1.** Chưa triển khai: không sửa mã, test, cấu hình, dependency, tài liệu as-built, version hay lockfile trong repo |
+| **Trạng thái tài liệu** | **PLAN v1.2 — 100% quyết định chặn tiến độ đã được Owner duyệt (Mục 3, Mục 14; gồm D-F6-A1 ngày 2026-11-18).** Đang triển khai các milestone ban đầu. |
 | **Repo / nhánh đã audit** | `KhongphaiHphuc0705/astroviet`, nhánh `dev`, HEAD `23f965a` (2026-11-13, "[docs] update ui spec, registry, changelog, m8 matrix & f5 final report" — commit này đã được amend so với `7104081`; plan M7-8 đã bị xoá khỏi repo theo quy ước) |
-| **Ngày lập / phiên bản** | v1.0: 2026-11-14 · **v1.1: 2026-11-16** (cập nhật theo `Confirmation.md` nhận 2026-11-15 và phản hồi của Owner 2026-11-16) |
+| **Ngày lập / phiên bản** | v1.0: 2026-11-14 · v1.1: 2026-11-16 · **v1.2: 2026-11-18** (chốt D-F6-A1, Suspense boundary parity ở SSR tree, loadEnv prerender) |
 | **Tên & vị trí đề xuất** | `docs/implementation/Sprint_F6_Implementation_Plan.md` (plan tạm ở `docs/implementation/`, xoá khi đóng sprint — quy ước F5). Matrix/Registry/Report lưu ở `docs/implementation/archive/sprint-f6/` |
 | **Về prompt đính kèm** | File có tiêu đề "Implementation Prompt" (yêu cầu *triển khai*). Theo yêu cầu của Owner trong phiên này ("tạo plan") và preference "xác nhận quyết định trước khi sinh mã", tài liệu này **chỉ lập kế hoạch**; không có dòng mã nào được thêm vào repo |
 
@@ -91,9 +91,10 @@ Cho Guest duyệt, lọc theo 5 chủ đề và đọc 10–15 (mục tiêu 15) 
 | D-F6-L1 | Đổi nhãn góc chiếu thành **micro-change riêng (F6.0b)** trước F6.6: Hợp → **Trùng tụ**, Vuông chiếu → **Vuông góc**, Đối xung → **Đối đỉnh**; Lục hợp, Tam hợp giữ nguyên | phản hồi 2026-11-16 |
 | D-F6-L2 | Chỉ sửa UI Spec (ví dụ aria-label §12.11); **giữ nguyên** tài liệu lưu trữ lịch sử (Matrix/plan F4–F5, `m6_s_accessibility_tree.json`) | phản hồi 2026-11-16 |
 | D-F6-L3 | Ghi 5 nhãn cuối vào **một nơi duy nhất** — UI Spec §12.11 — làm nguồn chuẩn; thêm test nội dung KB cảnh báo nhãn cũ | phản hồi 2026-11-16 |
+| D-F6-A1 | Không đổi hành vi CSR hiện tại: `main.tsx` chỉ thêm một nhánh có điều kiện gọi module tách biệt `src/app/hydrate.ts` | phản hồi 2026-11-18 |
 
 ### 3.2 Không còn quyết định chặn
-Các mục chặn trước đây (P1, P2, P4, U1, C1, C2) đã được duyệt. v1.1 phát sinh **6 điểm làm rõ nhỏ** (Mục 14.2); chỉ **D-F6-A1** chặn F6.5.
+Toàn bộ các quyết định chặn trước đây (P1, P2, P4, U1, C1, C2, và D-F6-A1) đã được Owner phê duyệt dứt khoát [AD]. Các điểm làm rõ kỹ thuật A2–A6 (Mục 14.2) là các chi tiết đề xuất không chặn tiến độ.
 
 ---
 
@@ -251,7 +252,7 @@ npm run build
      └─ node scripts/prerender.mjs
           ├─ đọc manifest (qua SSR bundle) → danh sách route chính xác
           ├─ resolveSiteUrl() (6.7) → base URL duy nhất cho canonical/OG/sitemap/robots
-          ├─ mỗi route: renderToString(<StaticRouter><MarketingLayout><Page/></MarketingLayout></StaticRouter>)
+          ├─ mỗi route: renderToString(<StaticRouter location={route}><MarketingLayout><Suspense fallback={<SuspenseFallback/>}><StaticPage/></Suspense></MarketingLayout></StaticRouter>)
           │     + head (title, description, canonical, OG) từ model/seo.ts (cùng nguồn với runtime)
           │     + marker trên #root: data-prerendered="1" data-prerender-route="<route>" data-prerender-version="<n>"
           ├─ ghi file (layout bên dưới) + sitemap.xml + robots.txt
@@ -272,7 +273,7 @@ dist/
 2. `shouldHydrate` đúng khi **đồng thời**: `#root` có `data-prerendered`; `pathname` (đã chuẩn hoá, bỏ `/` cuối) thuộc `/knowledge` hoặc `/knowledge/<slug>` và **bằng** `data-prerender-route`; `data-prerender-version` bằng hằng số dùng chung với SSR entry; `#root` có đúng một `h1`. Sai bất kỳ điều kiện nào ⇒ `createRoot`.
 3. `hydrateRoot(root, <StrictMode><App/></StrictMode>, { onRecoverableError })`; `onRecoverableError` gọi `reportError(error, "hydration")` (hạ tầng sẵn có, ghi console) — **ghi nhận, không "khôi phục"**.
 4. **Không** gọi `createRoot` lần hai trên cùng container; **không** có teardown/remount tự động (chưa thiết kế/kiểm thử) — nếu cổng không đạt thì **fallback duyệt = (a)**: không bật nhánh hydrate, giữ `createRoot`, chấp nhận HTML prerender bị thay khi React khởi chạy (SEO vẫn đầy đủ).
-5. Route lazy: server render trang bằng import tĩnh; client giữ `lazy()` — React 18 giữ HTML server của Suspense boundary cho đến khi chunk tải xong (kỳ vọng, **chỉ được coi là đạt khi cổng xác nhận**).
+5. Route lazy & Suspense boundary parity: Client router (`router.tsx` dòng 70–75) bọc các route con của `MarketingLayout` bằng `<Suspense fallback={<SuspenseFallback/>}><Outlet/></Suspense>`. `renderToString` của React 18 phát sinh comment marker cho Suspense boundary (`<!--$?-->` / `<!--/$-->`). Do đó, cây server SSR bắt buộc phải bọc trang tĩnh import trực tiếp trong `<Suspense fallback={<SuspenseFallback/>}><StaticPage/></Suspense>` y hệt wrapper client để tránh hydration mismatch làm React loại bỏ DOM prerender. Tuyệt đối không dùng lại `routesConfig` cho server vì `lazy()` sẽ render spinner trong `renderToString`.
 6. Parity DOM bắt buộc: `MarketingLayout` render lần đầu ở trạng thái auth `resolving` (không có nút Đăng nhập/Đăng ký) cả server lẫn client [VF mã + SPIKE]; ngày cập nhật định dạng **xác định** (không phụ thuộc múi giờ); không dùng `Date.now()`/random trong render.
 
 **Cổng hydration (D-F6-P2b) — `scripts/verify-hydration.mjs`**
@@ -286,7 +287,7 @@ dist/
 **Tự kiểm vs E2E:** E2E giữ trên `npm run dev` (D-F6-T1); prerender được bảo đảm bằng script tự kiểm (chạy trong `npm run build`, CI chạy) + test hàm thuần + `KB-U-ssr`; cổng hydration là bằng chứng cục bộ tách biệt.
 
 ### 6.7 Cấu hình môi trường (D-F6-P4/P4b)
-`VITE_SITE_URL` (**mới**): thêm vào `env.ts` dạng `optional URL` (không làm vỡ test hiện có) và `.env.example` (`http://localhost:5173`, CI đã `cp .env.example .env`). Cờ **`PRERENDER_STRICT`** do pipeline deploy đặt. Một hàm thuần `resolveSiteUrl(env)` (có test, dùng cho canonical/OG/sitemap/robots):
+`VITE_SITE_URL` (**mới**): thêm vào `env.ts` dạng `optional URL` (không làm vỡ test hiện có) và `.env.example` (`http://localhost:5173`, CI đã `cp .env.example .env`). Cờ **`PRERENDER_STRICT`** do pipeline deploy đặt (không có tiền tố `VITE_`). Script `scripts/prerender.mjs` chạy trong môi trường Node.js: biến môi trường được tải bằng cách hợp nhất `process.env` và `loadEnv(mode, process.cwd(), '')` (tiện ích từ Vite) để đọc đầy đủ cả biến không có tiền tố `VITE_` lẫn các biến cấu hình từ file `.env`. Một hàm thuần `resolveSiteUrl(env)` (có test, dùng cho canonical/OG/sitemap/robots):
 
 | `PRERENDER_STRICT` | `VITE_SITE_URL` | Kết quả |
 |---|---|---|
@@ -580,17 +581,17 @@ Soft-404 slug lạ (SPA fallback trả 200; `noindex` runtime) — cải thiện
 ## 14. Owner Decisions
 
 ### 14.1 Đã duyệt
-Toàn bộ quyết định ở **Mục 3.1** (gồm `Confirmation.md` và phản hồi 2026-11-16) là **[AD]**. Không còn quyết định chặn trừ D-F6-A1 bên dưới.
+Toàn bộ quyết định ở **Mục 3.1** (gồm `Confirmation.md`, phản hồi 2026-11-16, và quyết định D-F6-A1 ngày 2026-11-18) là **[AD]**. Không còn quyết định nào chặn tiến độ.
 
-### 14.2 Điểm làm rõ phát sinh ở v1.1 (mặc định = [REC], chưa duyệt)
-| ID | Điểm làm rõ | Mặc định đề xuất | Chặn? |
-|---|---|---|---|
-| **D-F6-A1** | Điều kiện P1#1 ("không thay đổi entry CSR hiện tại") và P2 (hydrate ở client) — hydrate bắt buộc sửa `main.tsx`. Diễn giải: *không đổi hành vi CSR hiện tại*; `main.tsx` chỉ thêm **một nhánh có điều kiện** gọi `src/app/hydrate.ts` | đồng ý diễn giải này | **Chặn F6.5** |
-| D-F6-A2 | Khi `PRERENDER_STRICT=true`: yêu cầu `https:` và host không phải `localhost`/IP nội bộ | có | không |
-| D-F6-A3 | Sinh `knowledge/index.html` (giống `knowledge.html`) cho `/knowledge/` | có | không |
-| D-F6-A4 | URL sai định dạng **luôn** làm build fail (kể cả non-strict); chỉ trường hợp *thiếu* mới dùng fallback localhost | có | không |
-| D-F6-A5 | Test nhãn cũ chỉ cấm `Vuông chiếu`/`Đối xung` (trừ cụm alias); "Hợp" **không** kiểm tự động (trùng từ thông dụng) ⇒ checklist biên tập | có | không |
-| D-F6-A6 | KB-U23 import `ASPECT_TYPE_LABELS` từ `features/chart` (ngoại lệ chỉ trong test) để bài `major-aspects` dùng đúng nhãn chuẩn | có | không |
+### 14.2 Điểm làm rõ kỹ thuật (mặc định = [REC], chưa duyệt)
+| ID | Điểm làm rõ | Mặc định đề xuất | Trạng thái | Chặn? |
+|---|---|---|---|---|
+| **D-F6-A1** | Điều kiện P1#1 ("không thay đổi entry CSR hiện tại") và P2 (hydrate ở client) — hydrate bắt buộc sửa `main.tsx`. Diễn giải: *không đổi hành vi CSR hiện tại*; `main.tsx` chỉ thêm **một nhánh có điều kiện** gọi `src/app/hydrate.ts` | đồng ý diễn giải này | **ĐÃ DUYỆT [AD]** (2026-11-18) | **Không chặn** |
+| D-F6-A2 | Khi `PRERENDER_STRICT=true`: yêu cầu `https:` và host không phải `localhost`/IP nội bộ | có | Đề xuất [REC] | không |
+| D-F6-A3 | Sinh `knowledge/index.html` (giống `knowledge.html`) cho `/knowledge/` | có | Đề xuất [REC] | không |
+| D-F6-A4 | URL sai định dạng **luôn** làm build fail (kể cả non-strict); chỉ trường hợp *thiếu* mới dùng fallback localhost | có | Đề xuất [REC] | không |
+| D-F6-A5 | Test nhãn cũ chỉ cấm `Vuông chiếu`/`Đối xung` (trừ cụm alias); "Hợp" **không** kiểm tự động (trùng từ thông dụng) ⇒ checklist biên tập | có | Đề xuất [REC] | không |
+| D-F6-A6 | KB-U23 import `ASPECT_TYPE_LABELS` từ `features/chart` (ngoại lệ chỉ trong test) để bài `major-aspects` dùng đúng nhãn chuẩn | có | Đề xuất [REC] | không |
 
 ### 14.3 Chuỗi UI đã duyệt (D-F6-U1)
 h1 "Kiến thức chiêm tinh"; mô tả "Tìm hiểu các khái niệm nền tảng của chiêm tinh phương Tây: hành tinh, cung hoàng đạo, nhà và góc chiếu."; nhóm lọc "Lọc theo chủ đề" + nút "Tất cả"; "Hiển thị {n} bài viết"; empty "Chưa có bài viết trong chủ đề này" + nút "Xem tất cả bài viết"; not found "Không tìm thấy bài viết" + "Bài viết bạn tìm không tồn tại hoặc đã được di chuyển."; "← Tất cả bài viết"; "Cập nhật {ngày}" (`dd/MM/yyyy`); `aria-label="Chân trang"` (không hiển thị). Meta list (đề xuất, thuộc cùng nhóm copy): "Các bài viết giải thích khái niệm chiêm tinh phương Tây: hành tinh, cung, nhà và góc chiếu."
@@ -642,7 +643,7 @@ F6.0 → **F6.0b (đổi nhãn)** → F6.2 (bước đầu: xác minh `import.me
 ### 16.4 Nguồn audit & những gì tôi đã chạy
 - **Đọc trực tiếp:** PRD (FR-12…14, §3.1, §8), `Frontend_Architecture_Specification.md` (§5.1, §12.3, §15.5, cây thư mục), `Frontend_UI_Specification.md` (§11, §13, §14.1, §18.3), `Project_Architecture_Specification.md` (§Deployment), F5 plan (AC-24), `package.json`, `vite.config.ts`, `tsconfig.app.json`, `eslint.config.js`, `index.html`, `main.tsx`, `router.tsx`, `env.ts`, `MarketingLayout`, `HomePage`, `NotFoundPage`, `shared/ui/*`, `labels.ts`, `e2e/*`, `frontend-ci.yml`, `CHANGELOG.md`.
 - **Lệnh/Spike đã chạy (không đụng repo):** `npm view react-markdown` (10.1.0, peer `react >=18`); dự án thử `/tmp/spike` (Vite 6.4.3 + React 18.3.1 + `react-router-dom` 7.18.2 + `react-markdown` 10.1.0): SSR build, prerender 2 bài, `StaticRouter`, `import.meta.glob` raw, an toàn HTML/URL, đo bundle (+≈121 kB raw / +37 kB gzip), `vite preview` với file `.html` phẳng; bản sao `/tmp/fe-spike` (symlink `node_modules`): SSR build + render `MarketingLayout` thật trong Node thành công; cài riêng `react-markdown` (+82 gói); grep thuật ngữ/engine.
-- **Chưa làm / chưa biết:** hydration của app thật; hosting/Nginx/domain; `npm audit`; mọi test/E2E/CI của F6 (chưa có mã); xác minh `import.meta.glob` trong Vitest; trạng thái `.gitignore` cho `dist-ssr`; quyết định Owner ở Mục 14.
+- **Chưa làm / chưa biết:** hydration của app thật; hosting/Nginx/domain; mọi test/E2E/CI của F6 (chưa có mã); xác minh `import.meta.glob` trong Vitest (đã xác nhận `dist-ssr` có ở dòng 12 `frontend/.gitignore` [VF]); quyết định Owner ở Mục 14.
 - **Bổ sung ở v1.1 (đã chạy, không đụng repo):** kiểm tag/merge (`v0.3.0` là tag duy nhất trên origin; PR #67 đã merge `dev`→`main`); spike `vite preview` với layout `knowledge/index.html` so với `knowledge.html` (kết quả F13); quét repo cho nhãn góc chiếu (một nguồn duy nhất, 3 file test, 1 dòng UI Spec); đọc `main.tsx`, `frontend/.gitignore`, UI Spec §12.11; tham khảo web về thuật ngữ góc chiếu tiếng Việt (chưa thống nhất: "Hợp/Trùng tụ", "Đối xung/Đối đỉnh/góc đối", "Vuông chiếu/Góc vuông").
 
 **Xác nhận:** tài liệu này **không** sửa mã, test, cấu hình, dependency, tài liệu as-built, version hay lockfile của repo; **chưa được Owner duyệt**.
