@@ -916,7 +916,18 @@ Xem đặc tả chi tiết dùng chung toàn hệ thống ở **mục 18** — m
 - **Purpose**: Biểu tượng hình học chuẩn cho 1 loại Aspect (☌ Conjunction, ☍ Opposition, □ Square, △ Trine, ⚹ Sextile).
 - **Props**: `aspectType`, `size`, `showLabel`.
 - **Variants**: màu phân nhóm theo tính chất — **Harmonious** (Trine, Sextile) dùng `indigo`; **Tense** (Square, Opposition) dùng `brass` đậm; **Neutral** (Conjunction) dùng `slate` — đây là mã hóa dữ liệu chiêm tinh, tách biệt khỏi Semantic Colors mục 3.4 (không dùng danger/success vì Square/Opposition không "xấu" theo nghĩa tuyệt đối trong astrology, chỉ là "căng thẳng/cần chú ý").
-- **Accessibility**: `aria-label` đầy đủ tên aspect bằng tiếng Việt (ví dụ "Vuông chiếu" cho Square).
+- **Accessibility**: `aria-label` đầy đủ tên aspect bằng tiếng Việt (ví dụ "Vuông góc" cho Square).
+- **Bảng 5 nhãn góc chiếu chuẩn (Canonical Aspect Labels — Nguồn chuẩn duy nhất)**:
+
+  | AspectType | Biểu tượng (Glyph) | Góc chiếu | Phân nhóm tính chất (Nature Tone) | Nhãn tiếng Việt chuẩn (`labelVi`) |
+  |---|:---:|:---:|---|---|
+  | `Conjunction` | ☌ | 0° | Neutral (Trung tính) | **Trùng tụ** |
+  | `Sextile` | ⚹ | 60° | Harmonious (Hài hòa) | **Lục hợp** |
+  | `Square` | □ | 90° | Tense / Challenging (Căng thẳng) | **Vuông góc** |
+  | `Trine` | △ | 120° | Harmonious (Hài hòa) | **Tam hợp** |
+  | `Opposition` | ☍ | 180° | Tense / Challenging (Căng thẳng) | **Đối đỉnh** |
+
+  *(Lưu ý: Toàn bộ hệ thống UI, chú giải, badge và nội dung bài viết Knowledge Base bắt buộc sử dụng thống nhất 5 nhãn chuẩn này; các tên gọi khác như "Hợp", "Vuông chiếu", "Đối xung" chỉ được đề cập dưới dạng alias trong phần chú thích nếu cần)*.
 - **Loading/Empty/Error**: không áp dụng.
 
 ### 12.12. Element Chart

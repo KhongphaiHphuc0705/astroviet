@@ -76,11 +76,11 @@ export const SIGN_LABELS = {
 >;
 
 export const ASPECT_TYPE_LABELS = {
-  Conjunction: { labelVi: "Hợp", glyph: "\u260C" },
+  Conjunction: { labelVi: "Trùng tụ", glyph: "\u260C" },
   Sextile: { labelVi: "Lục hợp", glyph: "\u26B9" },
-  Square: { labelVi: "Vuông chiếu", glyph: "\u25A1" },
+  Square: { labelVi: "Vuông góc", glyph: "\u25A1" },
   Trine: { labelVi: "Tam hợp", glyph: "\u25B3" },
-  Opposition: { labelVi: "Đối xung", glyph: "\u260D" },
+  Opposition: { labelVi: "Đối đỉnh", glyph: "\u260D" },
 } as const satisfies Record<
   AspectType,
   { readonly labelVi: string; readonly glyph: string }

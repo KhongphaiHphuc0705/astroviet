@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Aspect Type Vietnamese Labels (Sprint F6 / F6.0b)**:
+  - Cập nhật 3 nhãn góc chiếu tiếng Việt trong `ASPECT_TYPE_LABELS` (`features/chart/model/labels.ts`) theo nhãn do Owner duyệt: Conjunction ("Hợp" → "Trùng tụ"), Square ("Vuông chiếu" → "Vuông góc"), và Opposition ("Đối xung" → "Đối đỉnh"). Sextile ("Lục hợp") và Trine ("Tam hợp") giữ nguyên.
+  - Cập nhật các component AspectBadge, AspectLegend, và các unit test liên quan.
+  - Ghi nhận 5 nhãn góc chiếu chuẩn vào UI Specification §12.11 làm nguồn chuẩn duy nhất.
+
 ## [0.4.0] - 2026-11-09
 
 Initial release of the Natal Chart Interpretation Experience (Sprint F5: `FE-S5.1`–`FE-S5.7`).

@@ -59,8 +59,8 @@ The backend is designed as a **Modular Monolith**, allowing future migration tow
 ### Knowledge Base
 
 - Astrology Articles
-- Learning Resources
-- Search
+- Learning Resources & Category Filtering
+- Static Prerender for SEO
 
 ---
 

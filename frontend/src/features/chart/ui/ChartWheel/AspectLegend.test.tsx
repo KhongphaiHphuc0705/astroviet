@@ -30,11 +30,11 @@ describe("AspectLegend (L1 - L4)", () => {
 
     // Verify content of first entry (Conjunction)
     expect(
-      screen.getByText(/Hợp \(Trung tính\) — Cung liền, dày/),
+      screen.getByText(/Trùng tụ \(Trung tính\) — Cung liền, dày/),
     ).toBeInTheDocument();
     // Verify Square (Challenging)
     expect(
-      screen.getByText(/Vuông chiếu \(Căng thẳng\) — Nét đứt, vừa/),
+      screen.getByText(/Vuông góc \(Căng thẳng\) — Nét đứt, vừa/),
     ).toBeInTheDocument();
   });
 
