@@ -92,6 +92,14 @@ Cho Guest duyệt, lọc theo 5 chủ đề và đọc 10–15 (mục tiêu 15) 
 | D-F6-L2 | Chỉ sửa UI Spec (ví dụ aria-label §12.11); **giữ nguyên** tài liệu lưu trữ lịch sử (Matrix/plan F4–F5, `m6_s_accessibility_tree.json`) | phản hồi 2026-11-16 |
 | D-F6-L3 | Ghi 5 nhãn cuối vào **một nơi duy nhất** — UI Spec §12.11 — làm nguồn chuẩn; thêm test nội dung KB cảnh báo nhãn cũ | phản hồi 2026-11-16 |
 | D-F6-A1 | Không đổi hành vi CSR hiện tại: `main.tsx` chỉ thêm một nhánh có điều kiện gọi module tách biệt `src/app/hydrate.ts` | phản hồi 2026-11-18 |
+| D-F6.2-01 | Cấu trúc `model/` + `ui/` theo thực tế repo `features/chart` (không tạo `services/`, `data/`, `lib/`) | `Confirmation.md` 2026-11-20 |
+| D-F6.2-02 | Glob **lazy theo bài** kết hợp API service async (thay vì eager trong chunk) | `Confirmation.md` 2026-11-20 |
+| D-F6.2-03 | Manifest F6.2 dùng Phương án B (1 bài mẫu `what-is-astrology.md` để test pipeline + content lint, kèm Known Gap KG-F6-01/02) | `Confirmation.md` 2026-11-20 |
+| D-F6.2-04 | Ảnh chỉ cho phép cục bộ `public/knowledge/images/` + khóa slug dành riêng `index`, `images` | `Confirmation.md` 2026-11-20 |
+| D-F6.2-05 | Link ngoài chỉ cho phép scheme `https:`; từ chối `http:`, `mailto:`, `tel:` | `Confirmation.md` 2026-11-20 |
+| D-F6.2-06 | Hỗ trợ tối thiểu `pre > code` và inline code (không highlight cú pháp) | `Confirmation.md` 2026-11-20 |
+| D-F6.2-07 | Định dạng tiêu đề thống nhất với repo: `{Tiêu đề} — AstroViet` | `Confirmation.md` 2026-11-20 |
+| D-F6.2-08 | `react-markdown` ghim phiên bản chính xác `@10.1.0` với `--save-exact` | `Confirmation.md` 2026-11-20 |
 
 ### 3.2 Không còn quyết định chặn
 Toàn bộ các quyết định chặn trước đây (P1, P2, P4, U1, C1, C2, và D-F6-A1) đã được Owner phê duyệt dứt khoát [AD]. Các điểm làm rõ kỹ thuật A2–A6 (Mục 14.2) là các chi tiết đề xuất không chặn tiến độ.

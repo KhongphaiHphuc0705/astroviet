@@ -440,25 +440,25 @@ Tên script thực tế **khớp** DoD của prompt; không thêm script mới �
 
 ## 14. Acceptance Criteria Traceability Matrix (F6.2)
 
-Trạng thái **toàn bộ = PENDING** (chưa triển khai). Evidence ID tham chiếu mục 20.
+Trạng thái **toàn bộ các AC thuộc F6.2 = PASS**. Chi tiết evidence ghi nhận tại `archive/sprint-f6/Sprint_F6_F6.2_Exit_Criteria_Evidence_Matrix.md`.
 
 | AC | Yêu cầu (rút gọn) | Triển khai | Test | Exit criteria | Trạng thái |
 |---|---|---|---|---|---|
-| KB-AC-07 | Metadata đủ field, type ≠ runtime validation | `types.ts`, `validateManifest.ts`, `manifest.ts` | KB-U01 | mọi vi phạm có `code`; manifest thật `valid` | PENDING |
-| KB-AC-08 | Mỗi entry ↔ đúng một file | `contentIntegrity.ts`, `contentFiles.ts` | KB-U04, U27 | `missingFiles` rỗng trên thật; fixture hỏng bị bắt | PENDING |
-| KB-AC-09 | Mỗi file ↔ manifest (không orphan) | như trên | KB-U05, U27 | `orphanFiles`/`malformedKeys` rỗng; fixture hỏng bị bắt | PENDING |
-| KB-AC-10 | Slug duy nhất, 5 danh mục, thứ tự xác định, không phụ thuộc glob | `validateManifest.ts` | KB-U02, U03, U06 | hoán vị/đảo key ⇒ cùng kết quả | PENDING |
-| KB-AC-11 | Resolve theo slug; unknown rõ ràng; thiếu file ≠ unknown; lọc danh mục | `knowledgeContentService.ts` | KB-U07, U08, U09a/b | ba trạng thái phân biệt; không `null`/rỗng im lặng | PENDING |
-| KB-AC-12 | HTML thô không thực thi/không DOM tuỳ ý | `MarkdownRenderer.tsx` | KB-U10, U12b | DOM không có script/`on*`/iframe | PENDING |
-| KB-AC-14 (model) | Đủ 5 danh mục | `types.ts` | KB-U03 | đúng 5, đúng thứ tự | PENDING |
-| KB-AC-20 | Body bắt đầu H2; H1 xử lý xác định | policy + lint | KB-U16, U29 | không `h1` trong output; vi phạm bị lint bắt | PENDING |
-| KB-AC-22 | Link nội bộ dùng `Link` | renderer | KB-U11 | điều hướng không reload (MemoryRouter) | PENDING |
-| KB-AC-23 | Link ngoài an toàn | policy + renderer | KB-U11 | chỉ `https:` + `rel` | PENDING |
-| KB-AC-25 | Ảnh: alt, lazy, nguồn quy định | policy + renderer | KB-U12, U17 | ảnh xấu không render | PENDING |
-| KB-AC-33 | Parity hai chiều chạy được trong môi trường test | `contentIntegrity.ts` | KB-U04/U05/U27 | chạy trong `npm test`; không cần 15 bài | PENDING |
-| KB-AC-34 | Test HTML/script/URL (script, img onerror, HTML, js:/data: link & ảnh) | renderer | KB-U10–U12 | đủ 6 nhóm trong prompt §8.4, DOM-based | PENDING |
-| KB-AC-35 | Test heading hierarchy | renderer + lint | KB-U16, U29 | H2/H3/H4 đúng; không nhảy cấp ở bài thật | PENDING |
-| KB-AC-26/27/28 | **nền** cho title/description/canonical | `seo.ts` | KB-U18, U19 | hàm thuần đúng; **PASS đầy đủ ở F6.5** | PENDING (một phần) |
+| KB-AC-07 | Metadata đủ field, type ≠ runtime validation | `types.ts`, `validateManifest.ts`, `manifest.ts` | KB-U01 | mọi vi phạm có `code`; manifest thật `valid` | **PASS** |
+| KB-AC-08 | Mỗi entry ↔ đúng một file | `contentIntegrity.ts`, `contentFiles.ts` | KB-U04, U27 | `missingFiles` rỗng trên thật; fixture hỏng bị bắt | **PASS** |
+| KB-AC-09 | Mỗi file ↔ manifest (không orphan) | như trên | KB-U05, U27 | `orphanFiles`/`malformedKeys` rỗng; fixture hỏng bị bắt | **PASS** |
+| KB-AC-10 | Slug duy nhất, 5 danh mục, thứ tự xác định, không phụ thuộc glob | `validateManifest.ts` | KB-U02, U03, U06 | hoán vị/đảo key ⇒ cùng kết quả | **PASS** |
+| KB-AC-11 | Resolve theo slug; unknown rõ ràng; thiếu file ≠ unknown; lọc danh mục | `knowledgeContentService.ts` | KB-U07, U08, U09a/b | ba trạng thái phân biệt; không `null`/rỗng im lặng | **PASS** |
+| KB-AC-12 | HTML thô không thực thi/không DOM tuỳ ý | `MarkdownRenderer.tsx` | KB-U10, U12b | DOM không có script/`on*`/iframe | **PASS** |
+| KB-AC-14 (model) | Đủ 5 danh mục | `types.ts` | KB-U03 | đúng 5, đúng thứ tự | **PASS** |
+| KB-AC-20 | Body bắt đầu H2; H1 xử lý xác định | policy + lint | KB-U16, U29 | không `h1` trong output; vi phạm bị lint bắt | **PASS** |
+| KB-AC-22 | Link nội bộ dùng `Link` | renderer | KB-U11 | điều hướng không reload (MemoryRouter) | **PASS** |
+| KB-AC-23 | Link ngoài an toàn | policy + renderer | KB-U11 | chỉ `https:` + `rel` | **PASS** |
+| KB-AC-25 | Ảnh: alt, lazy, nguồn quy định | policy + renderer | KB-U12, U17 | ảnh xấu không render | **PASS** |
+| KB-AC-33 | Parity hai chiều chạy được trong môi trường test | `contentIntegrity.ts` | KB-U04/U05/U27 | chạy trong `npm test`; không cần 15 bài | **PASS** |
+| KB-AC-34 | Test HTML/script/URL (script, img onerror, HTML, js:/data: link & ảnh) | renderer | KB-U10–U12 | đủ 6 nhóm trong prompt §8.4, DOM-based | **PASS** |
+| KB-AC-35 | Test heading hierarchy | renderer + lint | KB-U16, U29 | H2/H3/H4 đúng; không nhảy cấp ở bài thật | **PASS** |
+| KB-AC-26/27/28 | **nền** cho title/description/canonical | `seo.ts` | KB-U18, U19 | hàm thuần đúng; **PASS đầy đủ ở F6.5** | **PASS (nền)** |
 **Không** thuộc F6.2: KB-AC-13, 15–19, 21, 24, 29–32, 36–40.
 
 ---
@@ -576,16 +576,16 @@ T0.1 ─► T0.2 ─┬─► T1.1 ─► T1.2 ─► T2.1 ─► T2.2 ───
 
 **Không có quyết định chặn việc bắt đầu F6.2.0–F6.2.2.** Các mục dưới có mặc định [REC]; nên xác nhận khi duyệt plan (đặc biệt 01, 03, 04, 05, 06) trước F6.2.1/F6.2.3.
 
-| ID | Nội dung | Mặc định [REC] | Thời điểm cần | Chặn? |
+| ID | Nội dung | Quyết định [AD] | Thời điểm duyệt | Trạng thái |
 |---|---|---|---|---|
-| D-F6.2-01 | Cấu trúc `model/` + `ui/` (không `services/ data/ lib/`), ghi nhận lệch Standards `components/` ↔ repo `ui/` (X1) | đồng ý | trước T1.1 | Không (đổi tên thư mục rẻ) |
-| D-F6.2-02 | Glob **lazy theo bài** + service async (thay vì eager trong chunk, C6) | lazy | trước F6.5 | Không |
-| D-F6.2-03 | Manifest F6.2: **(B)** 1 bài mẫu thật hay **(A)** rỗng | B (Known Gap) | trước T1.2 | Không |
-| D-F6.2-04 | Ảnh chỉ cục bộ `public/knowledge/images/` + slug dành riêng `index`,`images` (siết F6 plan §6.4) | đồng ý | trước T3.2 | Không |
-| D-F6.2-05 | Link ngoài chỉ `https:`; `http:`/`mailto:`/`tel:` không cho | đồng ý | trước T3.2 | Không |
-| D-F6.2-06 | Hỗ trợ tối thiểu code block/inline code (không highlight) | đồng ý | trước T3.3 | Không |
-| D-F6.2-07 | Title `{Tiêu đề} — AstroViet` (theo repo) thay `\|` của F6 plan | đồng ý | trước T4.1 | Không |
-| D-F6.2-08 | `react-markdown` ghim `--save-exact` | đồng ý | T3.1 | Không |
+| D-F6.2-01 | Cấu trúc `model/` + `ui/` (không `services/ data/ lib/`), ghi nhận lệch Standards `components/` ↔ repo `ui/` (X1) | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-02 | Glob **lazy theo bài** + service async (thay vì eager trong chunk, C6) | **LAZY [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-03 | Manifest F6.2: **(B)** 1 bài mẫu thật hay **(A)** rỗng | **PHƯƠNG ÁN B [AD]** (KG-F6-01/02) | 2026-11-20 | Đã triển khai |
+| D-F6.2-04 | Ảnh chỉ cục bộ `public/knowledge/images/` + slug dành riêng `index`,`images` (siết F6 plan §6.4) | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-05 | Link ngoài chỉ `https:`; `http:`/`mailto:`/`tel:` không cho | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-06 | Hỗ trợ tối thiểu code block/inline code (không highlight) | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-07 | Title `{Tiêu đề} — AstroViet` (theo repo) thay `\|` của F6 plan | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
+| D-F6.2-08 | `react-markdown` ghim `--save-exact` | **ĐỒNG Ý [AD]** | 2026-11-20 | Đã triển khai |
 | (kế thừa) | D-F6-A2…A6 vẫn [REC] chưa duyệt; không ảnh hưởng F6.2 | — | F6.5/F6.6 | Không |
 **Có thể quyết định trong triển khai:** giới hạn độ dài `title`/`slug`; ngưỡng `validateImageAlt`. **Có thể hoãn sau F6.2:** heading id/anchor trong trang; ảnh remote/CDN (Arch §12.3 chừa chỗ); `og:site_name`/`og:locale`; `usePageMeta`.
 
@@ -683,4 +683,4 @@ Ghi chú: gzip tự tính (level 9) có thể lệch nhẹ so với số Vite b�
 | Không ghi PASS khi chưa evidence | ✔ (mọi AC = PENDING) |
 | Không invent domain production | ✔ (`siteUrl` là tham số; F6.5 sở hữu `resolveSiteUrl`) |
 | Không đổi Backend / repo | ✔ (spike chỉ trong clone và `/tmp/fe-f62`; **không có thay đổi nào trong repo của Owner**) |
-| Tuyên bố F6.2 hoàn thành | ✘ — đây chỉ là plan chờ Owner review |
+| Tuyên bố F6.2 hoàn thành | ✔ (đã triển khai đủ T0–T6; 114 test KB pass; quality gates xanh) |
