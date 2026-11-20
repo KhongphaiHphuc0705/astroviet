@@ -8,13 +8,19 @@ export type ContentLoadResult =
 
 export interface ContentRegistry {
   listKeys(): readonly string[];
+  listRawKeys(): readonly string[];
   load(category: KnowledgeCategory, slug: string): Promise<ContentLoadResult>;
+}
+
+function compareStringsAscii(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
 }
 
 export function createContentRegistry(
   glob: Readonly<Record<string, () => Promise<string>>>,
 ): ContentRegistry {
   const loadersByNormalizedKey = new Map<string, () => Promise<string>>();
+  const rawKeys = Object.keys(glob).sort(compareStringsAscii);
 
   for (const [rawKey, loader] of Object.entries(glob)) {
     const normalized = normalizeGlobKey(rawKey);
@@ -23,11 +29,17 @@ export function createContentRegistry(
     }
   }
 
-  const sortedKeys = Array.from(loadersByNormalizedKey.keys()).sort();
+  const sortedKeys = Array.from(loadersByNormalizedKey.keys()).sort(
+    compareStringsAscii,
+  );
 
   return {
     listKeys(): readonly string[] {
       return sortedKeys;
+    },
+
+    listRawKeys(): readonly string[] {
+      return rawKeys;
     },
 
     async load(

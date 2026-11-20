@@ -1,9 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import {
-  contentKeyFor,
-  normalizeGlobKey,
   checkContentParity,
+  contentKeyFor,
+  KnowledgeContentIntegrityError,
+  normalizeGlobKey,
 } from "./contentIntegrity";
 import type { KnowledgeArticleMetadata } from "./types";
 
@@ -141,6 +142,22 @@ describe("Content Integrity Helpers (KB-U04, KB-U05)", () => {
       expect(result.malformedKeys).toContain(
         "../content/planets/Nested/deep.md",
       );
+    });
+  });
+
+  describe("KnowledgeContentIntegrityError", () => {
+    it("should instantiate with message and default/custom error code", () => {
+      const err = new KnowledgeContentIntegrityError("Parity failed");
+      expect(err).toBeInstanceOf(Error);
+      expect(err.name).toBe("KnowledgeContentIntegrityError");
+      expect(err.message).toBe("Parity failed");
+      expect(err.code).toBe("CONTENT_PARITY_FAILED");
+
+      const customErr = new KnowledgeContentIntegrityError(
+        "Custom message",
+        "CUSTOM_CODE",
+      );
+      expect(customErr.code).toBe("CUSTOM_CODE");
     });
   });
 });

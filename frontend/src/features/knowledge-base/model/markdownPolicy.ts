@@ -1,3 +1,22 @@
+export type LinkRejectionReason =
+  | "empty-link"
+  | "url-too-long"
+  | "invalid-characters"
+  | "protocol-relative"
+  | "unsupported-relative"
+  | "unsupported-scheme"
+  | "credentials-not-allowed"
+  | "missing-hostname"
+  | "malformed-url"
+  | "broken-internal";
+
+export type ImageRejectionReason =
+  | "empty-src"
+  | "src-too-long"
+  | "invalid-path"
+  | "unsupported-image-source"
+  | "invalid-alt";
+
 export type ClassifiedLink =
   | {
       readonly type: "internal-article";
@@ -6,11 +25,11 @@ export type ClassifiedLink =
     }
   | { readonly type: "internal-list"; readonly to: "/knowledge" }
   | { readonly type: "external"; readonly href: string }
-  | { readonly type: "rejected"; readonly reason: string };
+  | { readonly type: "rejected"; readonly reason: LinkRejectionReason };
 
 export type ClassifiedImage =
   | { readonly type: "local"; readonly src: string }
-  | { readonly type: "rejected"; readonly reason: string };
+  | { readonly type: "rejected"; readonly reason: ImageRejectionReason };
 
 /* eslint-disable no-control-regex */
 const HOSTILE_CHARS_REGEX =

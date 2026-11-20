@@ -17,6 +17,7 @@ describe("KnowledgeContentService (KB-U07, KB-U08, KB-U09a, KB-U09b)", () => {
   ): ContentRegistry => {
     return {
       listKeys: () => Object.keys(files),
+      listRawKeys: () => Object.keys(files),
       load: async (_category: KnowledgeCategory, slug: string) => {
         if (options?.failKeys?.includes(slug)) {
           return {
@@ -124,6 +125,7 @@ describe("KnowledgeContentService (KB-U07, KB-U08, KB-U09a, KB-U09b)", () => {
       const loadSpy = vi.fn();
       const registry: ContentRegistry = {
         listKeys: () => [],
+        listRawKeys: () => [],
         load: loadSpy,
       };
 

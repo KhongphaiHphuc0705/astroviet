@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { createContentRegistry, contentRegistry } from "./contentFiles";
+import { contentRegistry, createContentRegistry } from "./contentFiles";
 import { checkContentParity } from "./contentIntegrity";
 import { KNOWLEDGE_MANIFEST } from "./manifest";
 
@@ -17,6 +17,35 @@ describe("Content Files & Registry (KB-U27, KB-AC-33)", () => {
         "content/fundamentals/intro.md",
         "content/planets/sun.md",
       ]);
+    });
+
+    it("should preserve raw keys and allow parity check to catch malformed files", () => {
+      const mockGlobWithRogueFiles = {
+        "../content/README.md": () => Promise.resolve("# Readme"),
+        "../content/Planets/Sun.md": () => Promise.resolve("# Sun"),
+        "../content/fundamentals/Bad_Name.md": () => Promise.resolve("# Bad"),
+        "../content/fundamentals/intro.md": () => Promise.resolve("# Intro"),
+      };
+
+      const registry = createContentRegistry(mockGlobWithRogueFiles);
+      expect(registry.listRawKeys()).toEqual([
+        "../content/Planets/Sun.md",
+        "../content/README.md",
+        "../content/fundamentals/Bad_Name.md",
+        "../content/fundamentals/intro.md",
+      ]);
+      // listKeys only holds valid normalized keys
+      expect(registry.listKeys()).toEqual(["content/fundamentals/intro.md"]);
+
+      // checkContentParity with raw keys catches all 3 malformed files
+      const parity = checkContentParity([], registry.listRawKeys());
+      expect(parity.malformedKeys).toEqual([
+        "../content/Planets/Sun.md",
+        "../content/README.md",
+        "../content/fundamentals/Bad_Name.md",
+      ]);
+      expect(parity.orphanFiles).toHaveLength(1);
+      expect(parity.orphanFiles[0]?.key).toBe("content/fundamentals/intro.md");
     });
 
     it("should load content and normalize CRLF to LF", async () => {
@@ -63,9 +92,9 @@ describe("Content Files & Registry (KB-U27, KB-AC-33)", () => {
       expect(keys).toContain("content/fundamentals/what-is-astrology.md");
     });
 
-    it("should satisfy two-way content parity against production KNOWLEDGE_MANIFEST", () => {
-      const keys = contentRegistry.listKeys();
-      const parity = checkContentParity(KNOWLEDGE_MANIFEST, keys);
+    it("should satisfy two-way content parity using listRawKeys against production KNOWLEDGE_MANIFEST", () => {
+      const rawKeys = contentRegistry.listRawKeys();
+      const parity = checkContentParity(KNOWLEDGE_MANIFEST, rawKeys);
 
       expect(parity.missingFiles).toHaveLength(0);
       expect(parity.orphanFiles).toHaveLength(0);

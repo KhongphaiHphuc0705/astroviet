@@ -1,4 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter, useLocation } from "react-router-dom";
+import { describe, expect, it, vi } from "vitest";
 import { axe } from "vitest-axe";
 
 import { renderWithProviders, screen } from "../../../test/render";
@@ -114,11 +117,23 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
       expect(anchor?.textContent).toBe("AstroViet Trang chủ");
     });
 
-    it("should render internal SPA link with <Link> for valid known slug", () => {
+    it("should render internal SPA link with <Link> for valid known slug and navigate without reload", async () => {
+      const user = userEvent.setup();
+      let currentLocation = "";
+
+      function LocationObserver() {
+        const location = useLocation();
+        currentLocation = location.pathname;
+        return <div data-testid="location">{location.pathname}</div>;
+      }
+
       const md = `[Đọc bài chiêm tinh học](/knowledge/what-is-astrology)`;
 
-      const { container } = renderWithProviders(
-        <MarkdownRenderer markdown={md} isKnownSlug={isKnownSlug} />,
+      const { container } = render(
+        <MemoryRouter initialEntries={["/knowledge"]}>
+          <MarkdownRenderer markdown={md} isKnownSlug={isKnownSlug} />
+          <LocationObserver />
+        </MemoryRouter>,
       );
 
       const anchor = container.querySelector("a");
@@ -126,6 +141,13 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
       expect(anchor?.getAttribute("href")).toBe("/knowledge/what-is-astrology");
       expect(anchor?.getAttribute("target")).toBeNull();
       expect(anchor?.getAttribute("rel")).toBeNull();
+      expect(currentLocation).toBe("/knowledge");
+
+      if (anchor) {
+        await user.click(anchor);
+      }
+
+      expect(currentLocation).toBe("/knowledge/what-is-astrology");
     });
 
     it("should render internal SPA link for /knowledge list root", () => {
@@ -251,7 +273,7 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
   });
 
   describe("Code formatting (D-F6.2-06)", () => {
-    it("should render inline code with font-mono and muted background", () => {
+    it("should render inline code with font-data and surface-raised background", () => {
       const md = "Sử dụng biến `const x = 1;` trong bài.";
 
       const { container } = renderWithProviders(
@@ -261,10 +283,11 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
       const code = container.querySelector("code");
       expect(code).toBeInTheDocument();
       expect(code?.textContent).toBe("const x = 1;");
-      expect(code?.className).toContain("font-mono");
+      expect(code?.className).toContain("font-data");
+      expect(code?.className).toContain("bg-surface-raised");
     });
 
-    it("should render code blocks within pre without language highlight styling", () => {
+    it("should render code blocks within pre without language highlight styling or language-* class", () => {
       const md = "```ts\nconst value = 42;\n```";
 
       const { container } = renderWithProviders(
@@ -276,6 +299,69 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
       const code = pre?.querySelector("code");
       expect(code).toBeInTheDocument();
       expect(code?.textContent?.trim()).toBe("const value = 42;");
+      expect(code?.className).not.toMatch(/language-/);
+    });
+  });
+
+  describe("DOM Integrity & Optimization", () => {
+    it("should not leak hast node attribute to DOM elements", () => {
+      const md = [
+        "## Tiêu đề cấp 2",
+        "### Tiêu đề cấp 3",
+        "Đoạn văn có mã `inline` và liên kết.",
+        "- Danh sách không thứ tự",
+        "1. Danh sách có thứ tự",
+        "> Khối trích dẫn",
+        "---",
+        "```ts",
+        "const test = true;",
+        "```",
+        "[Liên kết](/knowledge/what-is-astrology)",
+        "![Biểu đồ](/knowledge/images/sample.png)",
+      ].join("\n\n");
+
+      const { container } = renderWithProviders(
+        <MarkdownRenderer markdown={md} isKnownSlug={isKnownSlug} />,
+      );
+
+      const elementsWithNodeAttr = container.querySelectorAll("[node]");
+      expect(elementsWithNodeAttr).toHaveLength(0);
+    });
+
+    it("should not remount DOM elements on parent rerender with same props", () => {
+      const md = `## Tiêu đề ổn định\n\nĐoạn văn không đổi.\n\n![Ảnh](/knowledge/images/sample.png)`;
+
+      const { container, rerender } = renderWithProviders(
+        <MarkdownRenderer
+          markdown={md}
+          isKnownSlug={isKnownSlug}
+          className="class-a"
+        />,
+      );
+
+      const initialH2 = container.querySelector("h2");
+      const initialP = container.querySelector("p");
+      const initialImg = container.querySelector("img");
+
+      expect(initialH2).toBeInTheDocument();
+      expect(initialP).toBeInTheDocument();
+      expect(initialImg).toBeInTheDocument();
+
+      rerender(
+        <MarkdownRenderer
+          markdown={md}
+          isKnownSlug={isKnownSlug}
+          className="class-b"
+        />,
+      );
+
+      const rerenderedH2 = container.querySelector("h2");
+      const rerenderedP = container.querySelector("p");
+      const rerenderedImg = container.querySelector("img");
+
+      expect(rerenderedH2).toBe(initialH2);
+      expect(rerenderedP).toBe(initialP);
+      expect(rerenderedImg).toBe(initialImg);
     });
   });
 

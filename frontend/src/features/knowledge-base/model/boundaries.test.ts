@@ -145,5 +145,13 @@ describe("Knowledge Base Architectural Boundaries & Regex Gates", () => {
       expect(content).not.toMatch(/export\s+\*\s+from/);
       expect(content).toMatch(/export\s+\{/);
     });
+
+    it("should verify index.ts does not export MarkdownRenderer to protect service consumers from bundling react-markdown", () => {
+      const indexFile = join(KB_ROOT, "index.ts");
+      const content = readFileSync(indexFile, "utf-8");
+
+      expect(content).not.toMatch(/MarkdownRenderer/);
+      expect(content).not.toMatch(/from\s+["']\.\/ui\//);
+    });
   });
 });

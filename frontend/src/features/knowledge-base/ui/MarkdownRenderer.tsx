@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { useMemo, type JSX } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link } from "react-router-dom";
 
@@ -17,148 +17,121 @@ export interface MarkdownRendererProps {
   readonly className?: string;
 }
 
-export function MarkdownRenderer({
-  markdown,
-  isKnownSlug,
-  className,
-}: MarkdownRendererProps): JSX.Element {
-  const components: Components = {
-    h1({ children, ...props }) {
+function createMarkdownComponents(
+  isKnownSlug: (slug: string) => boolean,
+): Components {
+  return {
+    h1({ children }) {
       const norm = normalizeHeadingLevel(1);
       return (
         <h2
           data-heading-normalized-from={norm.originalLevel}
-          className="text-2xl mb-4 mt-8 font-bold tracking-tight text-primary first:mt-0"
-          {...props}
+          className="mb-4 mt-8 text-heading-lg font-bold text-primary first:mt-0"
         >
           {children}
         </h2>
       );
     },
 
-    h2({ children, ...props }) {
+    h2({ children }) {
       return (
-        <h2
-          className="text-2xl mb-4 mt-8 font-bold tracking-tight text-primary first:mt-0"
-          {...props}
-        >
+        <h2 className="mb-4 mt-8 text-heading-lg font-bold text-primary first:mt-0">
           {children}
         </h2>
       );
     },
 
-    h3({ children, ...props }) {
+    h3({ children }) {
       return (
-        <h3
-          className="text-xl mb-3 mt-6 font-semibold tracking-tight text-primary"
-          {...props}
-        >
+        <h3 className="mb-3 mt-6 text-heading-md font-semibold text-primary">
           {children}
         </h3>
       );
     },
 
-    h4({ children, ...props }) {
+    h4({ children }) {
       return (
-        <h4 className="text-lg mb-2 mt-4 font-medium text-primary" {...props}>
+        <h4 className="mb-2 mt-4 text-heading-sm font-medium text-primary">
           {children}
         </h4>
       );
     },
 
-    h5({ children, ...props }) {
+    h5({ children }) {
       const norm = normalizeHeadingLevel(5);
       return (
         <h4
           data-heading-normalized-from={norm.originalLevel}
-          className="text-lg mb-2 mt-4 font-medium text-primary"
-          {...props}
+          className="mb-2 mt-4 text-heading-sm font-medium text-primary"
         >
           {children}
         </h4>
       );
     },
 
-    h6({ children, ...props }) {
+    h6({ children }) {
       const norm = normalizeHeadingLevel(6);
       return (
         <h4
           data-heading-normalized-from={norm.originalLevel}
-          className="text-lg mb-2 mt-4 font-medium text-primary"
-          {...props}
+          className="mb-2 mt-4 text-heading-sm font-medium text-primary"
         >
           {children}
         </h4>
       );
     },
 
-    p({ children, ...props }) {
+    p({ children }) {
       return (
-        <p className="mb-4 leading-relaxed text-secondary" {...props}>
+        <p className="mb-4 text-body-md leading-relaxed text-secondary">
           {children}
         </p>
       );
     },
 
-    ul({ children, ...props }) {
+    ul({ children }) {
       return (
-        <ul className="mb-4 list-disc space-y-1 pl-6 text-secondary" {...props}>
+        <ul className="my-4 list-disc space-y-1 pl-6 text-body-md text-secondary">
           {children}
         </ul>
       );
     },
 
-    ol({ children, ...props }) {
+    ol({ children }) {
       return (
-        <ol
-          className="mb-4 list-decimal space-y-1 pl-6 text-secondary"
-          {...props}
-        >
+        <ol className="my-4 list-decimal space-y-1 pl-6 text-body-md text-secondary">
           {children}
         </ol>
       );
     },
 
-    li({ children, ...props }) {
-      return (
-        <li className="leading-relaxed" {...props}>
-          {children}
-        </li>
-      );
+    li({ children }) {
+      return <li className="text-body-md leading-relaxed">{children}</li>;
     },
 
-    blockquote({ children, ...props }) {
+    blockquote({ children }) {
       return (
-        <blockquote
-          className="border-primary/40 my-4 border-l-4 pl-4 italic text-muted"
-          {...props}
-        >
+        <blockquote className="my-4 border-l-4 border-subtle pl-4 italic text-secondary">
           {children}
         </blockquote>
       );
     },
 
-    hr({ ...props }) {
-      return <hr className="border-border my-6" {...props} />;
+    hr() {
+      return <hr className="my-6 border-subtle" />;
     },
 
-    pre({ children, ...props }) {
+    pre({ children }) {
       return (
-        <pre
-          className="border-border bg-surface-muted font-mono text-sm my-4 overflow-x-auto rounded-lg border p-4 [&>code]:bg-transparent [&>code]:p-0"
-          {...props}
-        >
+        <pre className="my-4 overflow-x-auto rounded-md border border-subtle bg-surface-raised p-4 [&>code]:bg-transparent [&>code]:p-0">
           {children}
         </pre>
       );
     },
 
-    code({ children, ...props }) {
+    code({ children }) {
       return (
-        <code
-          className="rounded bg-surface-muted py-0.5 font-mono text-sm px-1.5 text-primary"
-          {...props}
-        >
+        <code className="rounded-sm bg-surface-raised px-1.5 py-1 font-data text-data-sm text-primary">
           {children}
         </code>
       );
@@ -174,7 +147,7 @@ export function MarkdownRenderer({
         return (
           <Link
             to={classified.to}
-            className="hover:text-primary-hover font-medium text-primary underline underline-offset-4"
+            className="font-medium text-accent-primary underline underline-offset-4 hover:text-accent-secondary"
           >
             {children}
           </Link>
@@ -187,7 +160,7 @@ export function MarkdownRenderer({
             href={classified.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-primary-hover font-medium text-primary underline underline-offset-4"
+            className="font-medium text-accent-primary underline underline-offset-4 hover:text-accent-secondary"
           >
             {children}
           </a>
@@ -210,7 +183,7 @@ export function MarkdownRenderer({
             alt={alt}
             loading="lazy"
             decoding="async"
-            className="rounded my-4 h-auto max-w-full"
+            className="my-4 h-auto max-w-full rounded-md"
           />
         );
       }
@@ -221,9 +194,20 @@ export function MarkdownRenderer({
       return <span hidden data-kb-fallback={`image:${reason}`} />;
     },
   };
+}
+
+export function MarkdownRenderer({
+  markdown,
+  isKnownSlug,
+  className,
+}: MarkdownRendererProps): JSX.Element {
+  const components = useMemo(
+    () => createMarkdownComponents(isKnownSlug),
+    [isKnownSlug],
+  );
 
   return (
-    <div className={cn("prose-container", className)}>
+    <div className={cn(className)}>
       <Markdown skipHtml urlTransform={(url) => url} components={components}>
         {markdown}
       </Markdown>

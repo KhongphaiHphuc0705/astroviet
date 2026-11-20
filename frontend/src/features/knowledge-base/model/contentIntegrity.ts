@@ -1,5 +1,7 @@
 import {
   isKnowledgeCategory,
+  KNOWLEDGE_CATEGORIES,
+  SLUG_PATTERN,
   type KnowledgeArticleMetadata,
   type KnowledgeCategory,
 } from "./types";
@@ -17,6 +19,16 @@ export interface ContentParityResult {
   readonly malformedKeys: readonly string[];
 }
 
+export class KnowledgeContentIntegrityError extends Error {
+  readonly code: string;
+
+  constructor(message: string, code = "CONTENT_PARITY_FAILED") {
+    super(message);
+    this.name = "KnowledgeContentIntegrityError";
+    this.code = code;
+  }
+}
+
 export function contentKeyFor(entry: {
   category: KnowledgeCategory;
   slug: string;
@@ -24,8 +36,15 @@ export function contentKeyFor(entry: {
   return `content/${entry.category}/${entry.slug}.md`;
 }
 
-const VALID_KEY_REGEX =
-  /^content\/(fundamentals|planets|signs|houses|aspects)\/[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
+function compareStringsAscii(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+const slugPatternBody = SLUG_PATTERN.source.replace(/^\^|\$$/g, "");
+
+const VALID_KEY_REGEX = new RegExp(
+  `^content/(${KNOWLEDGE_CATEGORIES.join("|")})/(${slugPatternBody})\\.md$`,
+);
 
 export function normalizeGlobKey(rawKey: string): string | undefined {
   let normalized = rawKey.replace(/\\/g, "/");
@@ -97,8 +116,12 @@ export function checkContentParity(
   }
 
   return {
-    missingFiles: [...missingFiles].sort((a, b) => a.key.localeCompare(b.key)),
-    orphanFiles: [...orphanFiles].sort((a, b) => a.key.localeCompare(b.key)),
-    malformedKeys: [...malformedKeys].sort(),
+    missingFiles: [...missingFiles].sort((a, b) =>
+      compareStringsAscii(a.key, b.key),
+    ),
+    orphanFiles: [...orphanFiles].sort((a, b) =>
+      compareStringsAscii(a.key, b.key),
+    ),
+    malformedKeys: [...malformedKeys].sort(compareStringsAscii),
   };
 }

@@ -17,6 +17,20 @@ export type {
   ValidateManifestResult,
 } from "./model/validateManifest";
 
+// Content Parity & Integrity (for F6.5 prerender and verification)
+export {
+  checkContentParity,
+  contentKeyFor,
+  KnowledgeContentIntegrityError,
+  normalizeGlobKey,
+} from "./model/contentIntegrity";
+export type {
+  ContentParityResult,
+  ParityIssue,
+} from "./model/contentIntegrity";
+export { contentRegistry, createContentRegistry } from "./model/contentFiles";
+export type { ContentLoadResult, ContentRegistry } from "./model/contentFiles";
+
 // Types & Constants
 export {
   isKnowledgeCategory,
@@ -53,7 +67,3 @@ export type {
   BuildKnowledgeListSeoInput,
   KnowledgeSeo,
 } from "./model/seo";
-
-// UI Renderer
-export { MarkdownRenderer } from "./ui/MarkdownRenderer";
-export type { MarkdownRendererProps } from "./ui/MarkdownRenderer";

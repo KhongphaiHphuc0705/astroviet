@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
@@ -5,6 +6,11 @@ import { describe, expect, it } from "vitest";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 
 describe("MarkdownRenderer SSR Safety (KB-U28)", () => {
+  it("should run in true Node.js environment without window or document globals", () => {
+    expect(typeof window).toBe("undefined");
+    expect(typeof document).toBe("undefined");
+  });
+
   it("should render to string on server without window or browser globals", () => {
     const md = `## Giới thiệu server render\n\nĐoạn văn được render từ server.\n\n[Liên kết](https://astroviet.com)\n\n![Ảnh đại diện](/knowledge/images/sample.png)`;
 
