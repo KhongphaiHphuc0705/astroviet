@@ -8,6 +8,7 @@ export interface EmptyStateProps {
   description?: ReactNode;
   action?: ReactNode;
   variant?: "default" | "danger";
+  headingLevel?: "h2" | "h3";
   className?: string;
 }
 
@@ -17,9 +18,11 @@ export function EmptyState({
   description,
   action,
   variant = "default",
+  headingLevel = "h3",
   className,
 }: EmptyStateProps) {
   const isDanger = variant === "danger";
+  const HeadingTag = headingLevel;
 
   return (
     <div
@@ -42,14 +45,14 @@ export function EmptyState({
           {icon}
         </div>
       )}
-      <h3
+      <HeadingTag
         className={cn(
           "mb-2 text-heading-sm font-semibold",
           isDanger ? "text-danger" : "text-default",
         )}
       >
         {title}
-      </h3>
+      </HeadingTag>
       {description && (
         <p className="text-body-base mb-6 max-w-md text-subtle">
           {description}
