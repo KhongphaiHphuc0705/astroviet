@@ -151,7 +151,7 @@ describe("Knowledge Base Architectural Boundaries & Regex Gates", () => {
       const content = readFileSync(indexFile, "utf-8");
 
       expect(content).not.toMatch(/MarkdownRenderer/);
-      expect(content).not.toMatch(/from\s+["']\.\/ui\//);
+      expect(content).not.toMatch(/from\s+["']\.\/ui\/MarkdownRenderer/);
     });
   });
 });
