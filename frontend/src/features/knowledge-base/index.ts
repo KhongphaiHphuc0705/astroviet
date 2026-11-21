@@ -67,3 +67,14 @@ export type {
   BuildKnowledgeListSeoInput,
   KnowledgeSeo,
 } from "./model/seo";
+
+// Listing UI & Filter Helpers (F6.3)
+export { KnowledgeListView } from "./ui/KnowledgeListView";
+export type { KnowledgeListViewProps } from "./ui/KnowledgeListView";
+export {
+  CATEGORY_FILTER_ALL,
+  filterArticlesByCategory,
+} from "./model/categoryFilter";
+export type { KnowledgeCategoryFilterValue } from "./model/categoryFilter";
+export { formatKnowledgeDate } from "./model/formatDate";
+export { KNOWLEDGE_LIST_PATH, knowledgeArticlePath } from "./model/routes";

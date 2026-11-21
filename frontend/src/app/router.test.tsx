@@ -280,4 +280,71 @@ describe("Router Integration Tests", () => {
       ),
     ).toBeInTheDocument();
   });
+
+  describe("Knowledge Base Route (/knowledge) (KB-U-route, KB-AC-01, KB-AC-03)", () => {
+    it("KB-U-route-1: unauthenticated guest renders MarketingLayout with nav, main#main-content, and h1 'Kiến thức chiêm tinh' without redirect to /login", async () => {
+      useAuthStore.setState({ status: "unauthenticated" });
+      renderRouter("/knowledge");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Kiến thức chiêm tinh" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Điều hướng chính" }),
+      ).toBeInTheDocument();
+      const main = document.getElementById("main-content");
+      expect(main).toBeInTheDocument();
+      expect(main).toHaveAttribute("tabIndex", "-1");
+      expect(
+        screen.queryByRole("heading", { name: /đăng nhập/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-2: authenticated user stays on /knowledge and is not redirected to /app", async () => {
+      useAuthStore.setState({ status: "authenticated" });
+      renderRouter("/knowledge");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Kiến thức chiêm tinh" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { name: "Bảng điều khiển" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-3: resolves lazy KnowledgeListPage within Suspense and renders article listing", async () => {
+      renderRouter("/knowledge");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Kiến thức chiêm tinh" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Đang tải trang...")).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-4: regression check: unknown sub-route /knowledge/abc falls back to NotFoundPage", async () => {
+      renderRouter("/knowledge/abc");
+
+      expect(
+        await screen.findByText(
+          "Không tìm thấy trang bạn yêu cầu.",
+          undefined,
+          {
+            timeout: 5000,
+          },
+        ),
+      ).toBeInTheDocument();
+    });
+  });
 });

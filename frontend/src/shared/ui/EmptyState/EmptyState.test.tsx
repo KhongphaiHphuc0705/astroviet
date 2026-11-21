@@ -49,4 +49,18 @@ describe("EmptyState", () => {
     expect(iconContainer).toHaveClass("text-danger");
     expect(screen.getByText("Error Occurred")).toHaveClass("text-danger");
   });
+
+  it("renders with default heading level h3", () => {
+    render(<EmptyState title="Default Heading" />);
+    const heading = screen.getByRole("heading", { level: 3 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("Default Heading");
+  });
+
+  it("renders with custom heading level h2 when specified (D-F6.3-06)", () => {
+    render(<EmptyState title="Level 2 Heading" headingLevel="h2" />);
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("Level 2 Heading");
+  });
 });
