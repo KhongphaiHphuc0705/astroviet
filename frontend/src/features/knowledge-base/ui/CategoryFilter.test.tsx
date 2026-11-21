@@ -128,7 +128,7 @@ describe("CategoryFilter (KB-U31, KB-AC-14, D-F6.3-03, D-F6.3-12)", () => {
   });
 
   it("binds allButtonRef to the 'Tất cả' button for focus restoration (D-F6.3-12)", () => {
-    const allButtonRef = createRef<HTMLButtonElement>();
+    const allButtonRef = createRef<HTMLElement>();
 
     render(
       <CategoryFilter

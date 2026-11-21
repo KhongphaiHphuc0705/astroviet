@@ -58,9 +58,9 @@ export function ArticleCard({
         {article.summary}
       </p>
 
-      <div className="mt-auto pt-2 text-body-sm text-muted">
-        <time dateTime={article.updatedAt}>Cập nhật {formattedDate}</time>
-      </div>
+      <p className="mt-auto pt-2 text-body-sm text-muted">
+        Cập nhật <time dateTime={article.updatedAt}>{formattedDate}</time>
+      </p>
     </Card>
   );
 }

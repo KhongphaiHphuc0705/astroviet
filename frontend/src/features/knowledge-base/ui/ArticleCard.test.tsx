@@ -40,11 +40,12 @@ describe("ArticleCard (KB-U31a, D-F6.3-02, D-F6.3-04)", () => {
       ),
     ).toBeInTheDocument();
 
-    // Formatted date and time element
+    // Formatted date and semantic time element (only wrapping the date, not "Cập nhật")
     const timeElement = container.querySelector("time");
     expect(timeElement).toBeInTheDocument();
     expect(timeElement).toHaveAttribute("dateTime", "2026-11-20");
-    expect(timeElement).toHaveTextContent("Cập nhật 20/11/2026");
+    expect(timeElement).toHaveTextContent("20/11/2026");
+    expect(timeElement?.parentElement).toHaveTextContent("Cập nhật 20/11/2026");
   });
 
   it("renders semantic article element and exactly one accessible link", () => {
@@ -122,7 +123,8 @@ describe("ArticleCard (KB-U31a, D-F6.3-02, D-F6.3-04)", () => {
     expect(summary).not.toHaveClass("truncate");
 
     const timeElement = container.querySelector("time");
-    expect(timeElement).toHaveTextContent("Cập nhật 01/05/2026");
+    expect(timeElement).toHaveTextContent("01/05/2026");
+    expect(timeElement?.parentElement).toHaveTextContent("Cập nhật 01/05/2026");
   });
 
   it("merges custom className prop correctly", () => {

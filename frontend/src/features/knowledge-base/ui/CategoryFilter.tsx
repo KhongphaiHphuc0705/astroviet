@@ -15,7 +15,7 @@ import {
 export interface CategoryFilterProps {
   readonly selected: KnowledgeCategoryFilterValue;
   readonly onSelect: (value: KnowledgeCategoryFilterValue) => void;
-  readonly allButtonRef?: React.Ref<HTMLButtonElement>;
+  readonly allButtonRef?: React.Ref<HTMLElement>;
   readonly className?: string;
 }
 
@@ -48,12 +48,12 @@ export function CategoryFilter({
 
       <div className="flex flex-wrap gap-2">
         <Button
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ref={allButtonRef as React.Ref<any>}
+          ref={allButtonRef}
           type="button"
           size="md"
           variant={selected === CATEGORY_FILTER_ALL ? "primary" : "secondary"}
           aria-pressed={selected === CATEGORY_FILTER_ALL}
+          className="min-h-[44px]"
           onClick={() => onSelect(CATEGORY_FILTER_ALL)}
         >
           Tất cả
@@ -68,6 +68,7 @@ export function CategoryFilter({
               size="md"
               variant={isPressed ? "primary" : "secondary"}
               aria-pressed={isPressed}
+              className="min-h-[44px]"
               onClick={() => onSelect(category)}
             >
               {KNOWLEDGE_CATEGORY_LABELS[category]}

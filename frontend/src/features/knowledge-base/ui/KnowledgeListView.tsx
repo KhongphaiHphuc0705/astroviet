@@ -35,7 +35,7 @@ export function KnowledgeListView({
 }: KnowledgeListViewProps): JSX.Element {
   const [selectedCategory, setSelectedCategory] =
     useState<KnowledgeCategoryFilterValue>(CATEGORY_FILTER_ALL);
-  const allButtonRef = useRef<HTMLButtonElement>(null);
+  const allButtonRef = useRef<HTMLElement>(null);
 
   const filteredArticles = useMemo(
     () => filterArticlesByCategory(articles, selectedCategory),

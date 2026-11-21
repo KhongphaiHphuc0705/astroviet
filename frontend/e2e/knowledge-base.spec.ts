@@ -47,12 +47,12 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
     // 6 filter buttons present in group
     const filterGroup = page.getByRole("group", { name: "Lọc theo chủ đề" });
     await expect(filterGroup).toBeVisible();
-    const allBtn = page.getByRole("button", { name: "Tất cả" });
+    const allBtn = page.getByRole("button", { name: "Tất cả", exact: true });
     await expect(allBtn).toBeVisible();
     await expect(allBtn).toHaveAttribute("aria-pressed", "true");
 
     for (const cat of CATEGORIES) {
-      const btn = page.getByRole("button", { name: cat.label });
+      const btn = page.getByRole("button", { name: cat.label, exact: true });
       await expect(btn).toBeVisible();
       await expect(btn).toHaveAttribute("aria-pressed", "false");
     }
@@ -92,7 +92,10 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
 
     // Iterate through all 5 categories
     for (const cat of CATEGORIES) {
-      const catButton = page.getByRole("button", { name: cat.label });
+      const catButton = page.getByRole("button", {
+        name: cat.label,
+        exact: true,
+      });
       await catButton.click();
 
       // Button should be pressed
@@ -108,12 +111,12 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
         // Articles count must match counter
         await expect(articles).toHaveCount(currentCount);
 
-        // Every displayed article card must display the category badge
-        const badgeCount = await page
-          .getByText(cat.label, { exact: true })
-          .count();
-        // Since button also has the label, total occurrences = 1 (button) + currentCount (badges)
-        expect(badgeCount).toBeGreaterThanOrEqual(currentCount + 1);
+        // Every individual displayed article card must carry the selected category badge
+        for (let i = 0; i < currentCount; i++) {
+          await expect(
+            articles.nth(i).getByText(cat.label, { exact: true }),
+          ).toBeVisible();
+        }
       } else {
         // Empty state is displayed
         await expect(articles).toHaveCount(0);
@@ -124,12 +127,16 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
         // Reset button restores to "Tất cả"
         const resetBtn = page.getByRole("button", {
           name: "Xem tất cả bài viết",
+          exact: true,
         });
         await expect(resetBtn).toBeVisible();
         await resetBtn.click();
 
         // "Tất cả" is pressed and focused
-        const allBtn = page.getByRole("button", { name: "Tất cả" });
+        const allBtn = page.getByRole("button", {
+          name: "Tất cả",
+          exact: true,
+        });
         await expect(allBtn).toHaveAttribute("aria-pressed", "true");
         await expect(allBtn).toBeFocused();
 
@@ -150,7 +157,10 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
     await page.goto("/knowledge");
 
     // Select a category first
-    const planetsBtn = page.getByRole("button", { name: "Hành tinh" });
+    const planetsBtn = page.getByRole("button", {
+      name: "Hành tinh",
+      exact: true,
+    });
     await planetsBtn.click();
     await expect(planetsBtn).toHaveAttribute("aria-pressed", "true");
 
@@ -163,7 +173,7 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
     ).toBeVisible();
 
     // "Tất cả" is pressed again (filter does not persist to URL per D-F6.3-09)
-    const allBtn = page.getByRole("button", { name: "Tất cả" });
+    const allBtn = page.getByRole("button", { name: "Tất cả", exact: true });
     await expect(allBtn).toHaveAttribute("aria-pressed", "true");
 
     // Articles visible
