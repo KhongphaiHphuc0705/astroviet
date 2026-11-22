@@ -303,4 +303,33 @@ describe("KnowledgeArticlePage (KB-U49, KB-U52, KB-A08, KB-A10, AC-F6.4-A04)", (
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
+
+  it("should report invalid updatedAt via shared KnowledgeArticleHeader even during loading state", () => {
+    const reportSpy = vi
+      .spyOn(reportErrorModule, "reportError")
+      .mockImplementation(() => {});
+
+    const invalidDateMeta = {
+      ...RICH_FIXTURE_ARTICLE,
+      updatedAt: "2026-02-30",
+    };
+
+    vi.spyOn(knowledgeContentService, "getArticleMetadata").mockReturnValue(
+      invalidDateMeta,
+    );
+    vi.spyOn(knowledgeContentService, "getArticle").mockReturnValue(
+      new Promise(() => {}),
+    );
+
+    const { container } = renderDetailRoute("/knowledge/what-is-astrology");
+
+    expect(
+      screen.getByRole("status", { name: "Đang tải nội dung bài viết" }),
+    ).toBeInTheDocument();
+    expect(container.querySelector("time")).toBeNull();
+    expect(reportSpy).toHaveBeenCalledWith(
+      expect.any(Error),
+      "knowledge-article:invalid-updated-at",
+    );
+  });
 });

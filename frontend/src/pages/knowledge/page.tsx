@@ -1,14 +1,12 @@
-import { useEffect, useMemo, useRef, type JSX } from "react";
+import { useMemo, type JSX } from "react";
 
 import {
-  buildKnowledgeListPageMeta,
+  buildKnowledgeListSeo,
   knowledgeContentService,
   KnowledgeListView,
-  resolveSiteUrlDetailed,
+  useKnowledgeSiteUrl,
 } from "@features/knowledge-base";
-import { env } from "@shared/config/env";
 import { usePageMeta } from "@shared/hooks/usePageMeta";
-import { reportError } from "@shared/lib/report-error";
 
 /**
  * KnowledgePage component (/knowledge)
@@ -21,27 +19,9 @@ import { reportError } from "@shared/lib/report-error";
  */
 export default function KnowledgePage(): JSX.Element {
   const articles = useMemo(() => knowledgeContentService.listArticles(), []);
+  const siteUrl = useKnowledgeSiteUrl();
 
-  const siteUrlResolution = useMemo(
-    () =>
-      resolveSiteUrlDetailed(env.VITE_SITE_URL, {
-        isDev: import.meta.env.DEV,
-      }),
-    [],
-  );
-
-  const reportedSiteUrlRef = useRef(false);
-  useEffect(() => {
-    if (siteUrlResolution.invalidError && !reportedSiteUrlRef.current) {
-      reportedSiteUrlRef.current = true;
-      reportError(siteUrlResolution.invalidError, "knowledge:invalid-site-url");
-    }
-  }, [siteUrlResolution.invalidError]);
-
-  const pageMeta = useMemo(
-    () => buildKnowledgeListPageMeta(siteUrlResolution.siteUrl),
-    [siteUrlResolution.siteUrl],
-  );
+  const pageMeta = useMemo(() => buildKnowledgeListSeo({ siteUrl }), [siteUrl]);
   usePageMeta(pageMeta);
 
   return (

@@ -1,26 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, type JSX } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {
   ArticleNotFound,
-  buildKnowledgeArticlePageMeta,
+  buildKnowledgeArticleSeo,
   buildKnowledgeNotFoundSeo,
   classifyArticleResult,
-  formatKnowledgeDate,
-  KNOWLEDGE_CATEGORY_LABELS,
-  KNOWLEDGE_LIST_PATH,
+  KnowledgeArticleHeader,
   knowledgeContentService,
-  resolveSiteUrlDetailed,
   useKnowledgeArticle,
+  useKnowledgeSiteUrl,
 } from "@features/knowledge-base";
 // Documented exception (D-F6.4-03): KnowledgeArticleView is deep-imported ONLY here
 // so `react-markdown` stays isolated in the lazy detail route chunk and never enters
 // the feature barrel or the `/knowledge` listing chunk.
 import { KnowledgeArticleView } from "@features/knowledge-base/ui/KnowledgeArticleView";
-import { env } from "@shared/config/env";
 import { usePageMeta } from "@shared/hooks/usePageMeta";
 import { reportError } from "@shared/lib/report-error";
-import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
 import { EmptyState } from "@shared/ui/EmptyState";
 import { Skeleton } from "@shared/ui/Skeleton";
@@ -53,28 +49,14 @@ export default function KnowledgeArticlePage(): JSX.Element {
     [data],
   );
 
-  const siteUrlResolution = useMemo(
-    () =>
-      resolveSiteUrlDetailed(env.VITE_SITE_URL, {
-        isDev: import.meta.env.DEV,
-      }),
-    [],
-  );
-
-  const reportedSiteUrlRef = useRef(false);
-  useEffect(() => {
-    if (siteUrlResolution.invalidError && !reportedSiteUrlRef.current) {
-      reportedSiteUrlRef.current = true;
-      reportError(siteUrlResolution.invalidError, "knowledge:invalid-site-url");
-    }
-  }, [siteUrlResolution.invalidError]);
+  const siteUrl = useKnowledgeSiteUrl();
 
   const pageMeta = useMemo(() => {
     if (!metadata || !slug || classified?.kind === "not-found") {
       return buildKnowledgeNotFoundSeo();
     }
-    return buildKnowledgeArticlePageMeta(metadata, siteUrlResolution.siteUrl);
-  }, [metadata, slug, classified?.kind, siteUrlResolution.siteUrl]);
+    return buildKnowledgeArticleSeo({ article: metadata, siteUrl });
+  }, [metadata, slug, classified?.kind, siteUrl]);
 
   usePageMeta(pageMeta);
 
@@ -128,36 +110,9 @@ export default function KnowledgeArticlePage(): JSX.Element {
     return <ArticleNotFound />;
   }
 
-  const categoryLabel = KNOWLEDGE_CATEGORY_LABELS[metadata.category];
-  const formattedDate = formatKnowledgeDate(metadata.updatedAt);
-
   return (
     <article className="mx-auto w-full max-w-[65ch] text-[16px] leading-relaxed [overflow-wrap:anywhere]">
-      <Link
-        to={KNOWLEDGE_LIST_PATH}
-        className="mb-6 inline-flex items-center gap-1.5 rounded-sm text-body-sm font-medium text-secondary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
-      >
-        <span aria-hidden="true">←</span>
-        <span>Tất cả bài viết</span>
-      </Link>
-
-      <header className="mb-8 flex flex-col gap-3">
-        <div>
-          <Badge variant="outline" size="sm">
-            {categoryLabel}
-          </Badge>
-        </div>
-
-        <h1 className="break-words text-heading-lg font-bold text-primary md:text-display-lg">
-          {metadata.title}
-        </h1>
-
-        {formattedDate && (
-          <p className="text-body-sm text-muted">
-            Cập nhật <time dateTime={metadata.updatedAt}>{formattedDate}</time>
-          </p>
-        )}
-      </header>
+      <KnowledgeArticleHeader article={metadata} />
 
       {isPending ? (
         <div

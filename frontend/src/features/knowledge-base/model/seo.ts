@@ -90,48 +90,52 @@ export function normalizeSiteUrl(raw: string): string {
 }
 
 export interface BuildKnowledgeListSeoInput {
-  readonly siteUrl: string;
+  readonly siteUrl?: string;
 }
 
 export function buildKnowledgeListSeo(
-  input: BuildKnowledgeListSeoInput,
+  input: BuildKnowledgeListSeoInput = {},
 ): KnowledgeSeo {
-  const origin = normalizeSiteUrl(input.siteUrl);
-  const canonicalUrl = `${origin}/knowledge`;
+  const canonicalUrl =
+    input.siteUrl !== undefined
+      ? `${normalizeSiteUrl(input.siteUrl)}/knowledge`
+      : undefined;
 
   return {
     title: KNOWLEDGE_LIST_TITLE,
     description: KNOWLEDGE_LIST_DESCRIPTION,
-    canonicalUrl,
+    ...(canonicalUrl !== undefined ? { canonicalUrl } : {}),
     openGraph: {
       type: "website",
       title: KNOWLEDGE_LIST_TITLE,
       description: KNOWLEDGE_LIST_DESCRIPTION,
-      url: canonicalUrl,
+      ...(canonicalUrl !== undefined ? { url: canonicalUrl } : {}),
     },
   };
 }
 
 export interface BuildKnowledgeArticleSeoInput {
-  readonly siteUrl: string;
+  readonly siteUrl?: string;
   readonly article: KnowledgeArticleMetadata;
 }
 
 export function buildKnowledgeArticleSeo(
   input: BuildKnowledgeArticleSeoInput,
 ): KnowledgeSeo {
-  const origin = normalizeSiteUrl(input.siteUrl);
-  const canonicalUrl = `${origin}/knowledge/${input.article.slug}`;
+  const canonicalUrl =
+    input.siteUrl !== undefined
+      ? `${normalizeSiteUrl(input.siteUrl)}/knowledge/${input.article.slug}`
+      : undefined;
 
   return {
     title: `${input.article.title} — ${SITE_NAME}`,
     description: input.article.summary,
-    canonicalUrl,
+    ...(canonicalUrl !== undefined ? { canonicalUrl } : {}),
     openGraph: {
       type: "article",
       title: input.article.title,
       description: input.article.summary,
-      url: canonicalUrl,
+      ...(canonicalUrl !== undefined ? { url: canonicalUrl } : {}),
     },
   };
 }

@@ -139,6 +139,10 @@ describe("KnowledgeArticleView (KB-U15, KB-U16, KB-U41, KB-U42, KB-U43, KB-U50)"
     );
     const filesToCheck = [
       {
+        name: "KnowledgeArticleHeader.tsx",
+        path: join(__dirname, "KnowledgeArticleHeader.tsx"),
+      },
+      {
         name: "KnowledgeArticleView.tsx",
         path: join(__dirname, "KnowledgeArticleView.tsx"),
       },

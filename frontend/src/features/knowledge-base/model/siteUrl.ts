@@ -1,13 +1,4 @@
-import {
-  buildKnowledgeArticleSeo,
-  buildKnowledgeListSeo,
-  KNOWLEDGE_LIST_DESCRIPTION,
-  KNOWLEDGE_LIST_TITLE,
-  normalizeSiteUrl,
-  SITE_NAME,
-  type KnowledgeSeo,
-} from "./seo";
-import type { KnowledgeArticleMetadata } from "./types";
+import { normalizeSiteUrl } from "./seo";
 
 export const DEFAULT_DEV_SITE_URL = "http://localhost:5173";
 
@@ -63,49 +54,4 @@ export function resolveSiteUrl(
   options: ResolveSiteUrlOptions,
 ): string | undefined {
   return resolveSiteUrlDetailed(raw, options).siteUrl;
-}
-
-/**
- * Builds Knowledge Base listing SEO metadata, omitting `canonicalUrl` and `openGraph.url`
- * when `siteUrl` is unavailable in production (D-F6.4-01, AC-F6.4-A06).
- */
-export function buildKnowledgeListPageMeta(
-  siteUrl: string | undefined,
-): KnowledgeSeo {
-  if (siteUrl !== undefined) {
-    return buildKnowledgeListSeo({ siteUrl });
-  }
-
-  return {
-    title: KNOWLEDGE_LIST_TITLE,
-    description: KNOWLEDGE_LIST_DESCRIPTION,
-    openGraph: {
-      type: "website",
-      title: KNOWLEDGE_LIST_TITLE,
-      description: KNOWLEDGE_LIST_DESCRIPTION,
-    },
-  };
-}
-
-/**
- * Builds Knowledge Base article SEO metadata, omitting `canonicalUrl` and `openGraph.url`
- * when `siteUrl` is unavailable in production (D-F6.4-01, AC-F6.4-A06).
- */
-export function buildKnowledgeArticlePageMeta(
-  article: KnowledgeArticleMetadata,
-  siteUrl: string | undefined,
-): KnowledgeSeo {
-  if (siteUrl !== undefined) {
-    return buildKnowledgeArticleSeo({ siteUrl, article });
-  }
-
-  return {
-    title: `${article.title} — ${SITE_NAME}`,
-    description: article.summary,
-    openGraph: {
-      type: "article",
-      title: article.title,
-      description: article.summary,
-    },
-  };
 }
