@@ -1,9 +1,14 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, type JSX } from "react";
 
 import {
+  buildKnowledgeListPageMeta,
   knowledgeContentService,
   KnowledgeListView,
+  resolveSiteUrlDetailed,
 } from "@features/knowledge-base";
+import { env } from "@shared/config/env";
+import { usePageMeta } from "@shared/hooks/usePageMeta";
+import { reportError } from "@shared/lib/report-error";
 
 /**
  * KnowledgePage component (/knowledge)
@@ -16,6 +21,28 @@ import {
  */
 export default function KnowledgePage(): JSX.Element {
   const articles = useMemo(() => knowledgeContentService.listArticles(), []);
+
+  const siteUrlResolution = useMemo(
+    () =>
+      resolveSiteUrlDetailed(env.VITE_SITE_URL, {
+        isDev: import.meta.env.DEV,
+      }),
+    [],
+  );
+
+  const reportedSiteUrlRef = useRef(false);
+  useEffect(() => {
+    if (siteUrlResolution.invalidError && !reportedSiteUrlRef.current) {
+      reportedSiteUrlRef.current = true;
+      reportError(siteUrlResolution.invalidError, "knowledge:invalid-site-url");
+    }
+  }, [siteUrlResolution.invalidError]);
+
+  const pageMeta = useMemo(
+    () => buildKnowledgeListPageMeta(siteUrlResolution.siteUrl),
+    [siteUrlResolution.siteUrl],
+  );
+  usePageMeta(pageMeta);
 
   return (
     <div className="flex flex-col gap-8">

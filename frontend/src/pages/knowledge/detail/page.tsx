@@ -3,17 +3,22 @@ import { Link, useParams } from "react-router-dom";
 
 import {
   ArticleNotFound,
+  buildKnowledgeArticlePageMeta,
+  buildKnowledgeNotFoundSeo,
   classifyArticleResult,
   formatKnowledgeDate,
   KNOWLEDGE_CATEGORY_LABELS,
   KNOWLEDGE_LIST_PATH,
   knowledgeContentService,
+  resolveSiteUrlDetailed,
   useKnowledgeArticle,
 } from "@features/knowledge-base";
 // Documented exception (D-F6.4-03): KnowledgeArticleView is deep-imported ONLY here
 // so `react-markdown` stays isolated in the lazy detail route chunk and never enters
 // the feature barrel or the `/knowledge` listing chunk.
 import { KnowledgeArticleView } from "@features/knowledge-base/ui/KnowledgeArticleView";
+import { env } from "@shared/config/env";
+import { usePageMeta } from "@shared/hooks/usePageMeta";
 import { reportError } from "@shared/lib/report-error";
 import { Badge } from "@shared/ui/Badge";
 import { Button } from "@shared/ui/Button";
@@ -28,6 +33,7 @@ import { Skeleton } from "@shared/ui/Skeleton";
  * - Unknown slugs render `ArticleNotFound` synchronously without async fetches.
  * - Valid slugs show header immediately while body markdown loads via `useKnowledgeArticle`.
  * - Classifies `found | not-found | content-error` explicitly via `classifyArticleResult`.
+ * - Updates `<head>` metadata via `usePageMeta` and scrolls to top on slug changes (D-F6.4-06).
  */
 export default function KnowledgeArticlePage(): JSX.Element {
   const { slug } = useParams<{ slug: string }>();
@@ -46,6 +52,41 @@ export default function KnowledgeArticlePage(): JSX.Element {
     () => (data ? classifyArticleResult(data) : null),
     [data],
   );
+
+  const siteUrlResolution = useMemo(
+    () =>
+      resolveSiteUrlDetailed(env.VITE_SITE_URL, {
+        isDev: import.meta.env.DEV,
+      }),
+    [],
+  );
+
+  const reportedSiteUrlRef = useRef(false);
+  useEffect(() => {
+    if (siteUrlResolution.invalidError && !reportedSiteUrlRef.current) {
+      reportedSiteUrlRef.current = true;
+      reportError(siteUrlResolution.invalidError, "knowledge:invalid-site-url");
+    }
+  }, [siteUrlResolution.invalidError]);
+
+  const pageMeta = useMemo(() => {
+    if (!metadata || !slug || classified?.kind === "not-found") {
+      return buildKnowledgeNotFoundSeo();
+    }
+    return buildKnowledgeArticlePageMeta(metadata, siteUrlResolution.siteUrl);
+  }, [metadata, slug, classified?.kind, siteUrlResolution.siteUrl]);
+
+  usePageMeta(pageMeta);
+
+  // Instant scroll to top on slug transition (respects prefers-reduced-motion, D-F6.4-06)
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      typeof window.scrollTo === "function"
+    ) {
+      window.scrollTo(0, 0);
+    }
+  }, [slug]);
 
   const reportedKeyRef = useRef<string | null>(null);
   const errorReport =

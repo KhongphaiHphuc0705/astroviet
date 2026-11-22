@@ -89,3 +89,11 @@ export { knowledgeKeys } from "./hooks/query-keys";
 export { useKnowledgeArticle } from "./hooks/useKnowledgeArticle";
 export { ArticleNotFound } from "./ui/ArticleNotFound";
 export type { ArticleNotFoundProps } from "./ui/ArticleNotFound";
+export {
+  buildKnowledgeArticlePageMeta,
+  buildKnowledgeListPageMeta,
+  DEFAULT_DEV_SITE_URL,
+  resolveSiteUrl,
+  resolveSiteUrlDetailed,
+} from "./model/siteUrl";
+export type { ResolveSiteUrlOptions, SiteUrlResolution } from "./model/siteUrl";

@@ -88,4 +88,40 @@ describe("KnowledgePage (KB-U36, KB-A01, D-F6.3-01, D-F6.3-05)", () => {
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
+
+  it("sets listing page metadata via usePageMeta and cleans up on unmount (AC-F6.4-A02, AC-F6.4-A06)", () => {
+    const originalTitle = document.title;
+    document.title = "AstroViet";
+
+    const { unmount } = renderWithProviders(<KnowledgePage />);
+
+    expect(document.title).toBe("Kiến thức chiêm tinh — AstroViet");
+    expect(
+      document.head
+        .querySelector('meta[name="description"]')
+        ?.getAttribute("content"),
+    ).toBe(
+      "Các bài viết giải thích khái niệm chiêm tinh phương Tây: hành tinh, cung, nhà và góc chiếu.",
+    );
+    expect(
+      document.head
+        .querySelector('meta[property="og:type"]')
+        ?.getAttribute("content"),
+    ).toBe("website");
+    expect(document.head.querySelector('meta[property="og:image"]')).toBeNull();
+
+    const canonicalHref = document.head
+      .querySelector('link[rel="canonical"]')
+      ?.getAttribute("href");
+    if (canonicalHref !== null && canonicalHref !== undefined) {
+      expect(canonicalHref).toMatch(/^https?:\/\/[^/]+\/knowledge$/);
+    }
+
+    unmount();
+
+    expect(document.title).toBe("AstroViet");
+    expect(document.head.querySelector('meta[name="description"]')).toBeNull();
+    expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
+    document.title = originalTitle;
+  });
 });
