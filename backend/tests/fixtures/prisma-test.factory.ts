@@ -10,9 +10,10 @@ export class PrismaTestFactory {
   constructor(private prisma: PrismaClient) {}
 
   async createUser(overrides?: Partial<User>): Promise<User> {
+    const id = generateUuid();
     const defaultUser = {
-      id: generateUuid(),
-      email: `test-${Date.now()}@example.com`,
+      id,
+      email: `test-${id}@example.com`,
       password_hash: 'hashed-password-123',
       display_name: 'Test User',
       role: 'user',
@@ -50,10 +51,11 @@ export class PrismaTestFactory {
     userId: string,
     overrides?: Partial<RefreshToken>,
   ): Promise<RefreshToken> {
+    const id = generateUuid();
     const defaultToken = {
-      id: generateUuid(),
+      id,
       user_id: userId,
-      token_hash: `token-hash-${Date.now()}`,
+      token_hash: `token-hash-${id}`,
       issued_at: new Date(),
       expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
       revoked_at: null,
@@ -118,10 +120,11 @@ export class PrismaTestFactory {
     userId: string,
     overrides?: Partial<any>, // using any here for simplicity in test factory, or we can just use Prisma type
   ): Promise<any> {
+    const id = generateUuid();
     const defaultProfile = {
-      id: generateUuid(),
+      id,
       user_id: userId,
-      label: `Profile ${Date.now()}`,
+      label: `Profile ${id.slice(0, 8)}`,
       full_name: 'Test Profile',
       birth_date: new Date('1990-01-01T00:00:00Z'),
       birth_time: new Date('1970-01-01T14:30:00Z'),
