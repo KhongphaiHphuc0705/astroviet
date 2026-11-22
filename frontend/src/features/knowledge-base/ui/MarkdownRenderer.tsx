@@ -82,16 +82,12 @@ function createMarkdownComponents(
     },
 
     p({ children }) {
-      return (
-        <p className="mb-4 text-body-md leading-relaxed text-secondary">
-          {children}
-        </p>
-      );
+      return <p className="mb-4 leading-relaxed text-secondary">{children}</p>;
     },
 
     ul({ children }) {
       return (
-        <ul className="my-4 list-disc space-y-1 pl-6 text-body-md text-secondary">
+        <ul className="my-4 list-disc space-y-1 pl-6 text-secondary">
           {children}
         </ul>
       );
@@ -99,14 +95,14 @@ function createMarkdownComponents(
 
     ol({ children }) {
       return (
-        <ol className="my-4 list-decimal space-y-1 pl-6 text-body-md text-secondary">
+        <ol className="my-4 list-decimal space-y-1 pl-6 text-secondary">
           {children}
         </ol>
       );
     },
 
     li({ children }) {
-      return <li className="text-body-md leading-relaxed">{children}</li>;
+      return <li className="leading-relaxed">{children}</li>;
     },
 
     blockquote({ children }) {

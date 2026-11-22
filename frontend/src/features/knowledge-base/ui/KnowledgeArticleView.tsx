@@ -1,7 +1,8 @@
-import type { JSX } from "react";
+import { useEffect, useRef, type JSX } from "react";
 import { Link } from "react-router-dom";
 
 import { cn } from "@shared/lib/cn";
+import { reportError } from "@shared/lib/report-error";
 import { Badge } from "@shared/ui/Badge";
 
 import { formatKnowledgeDate } from "../model/formatDate";
@@ -36,6 +37,24 @@ export function KnowledgeArticleView({
 }: KnowledgeArticleViewProps): JSX.Element {
   const categoryLabel = KNOWLEDGE_CATEGORY_LABELS[article.category];
   const formattedDate = formatKnowledgeDate(article.updatedAt);
+  const reportedInvalidDateRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (formattedDate !== "") {
+      return;
+    }
+    const reportKey = `${article.slug}:${article.updatedAt}`;
+    if (reportedInvalidDateRef.current === reportKey) {
+      return;
+    }
+    reportedInvalidDateRef.current = reportKey;
+    reportError(
+      new Error(
+        `Invalid updatedAt "${article.updatedAt}" on article "${article.slug}"`,
+      ),
+      "knowledge-article:invalid-updated-at",
+    );
+  }, [article.slug, article.updatedAt, formattedDate]);
 
   return (
     <article
