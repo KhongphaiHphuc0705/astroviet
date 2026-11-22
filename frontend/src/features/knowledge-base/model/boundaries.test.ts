@@ -146,12 +146,45 @@ describe("Knowledge Base Architectural Boundaries & Regex Gates", () => {
       expect(content).toMatch(/export\s+\{/);
     });
 
-    it("should verify index.ts does not export MarkdownRenderer to protect service consumers from bundling react-markdown", () => {
+    it("should verify index.ts does not export MarkdownRenderer or KnowledgeArticleView to protect service/listing consumers from bundling react-markdown", () => {
       const indexFile = join(KB_ROOT, "index.ts");
       const content = readFileSync(indexFile, "utf-8");
 
-      expect(content).not.toMatch(/MarkdownRenderer/);
+      expect(content).not.toMatch(/\bMarkdownRenderer\b/);
+      expect(content).not.toMatch(/\bKnowledgeArticleView\b/);
       expect(content).not.toMatch(/from\s+["']\.\/ui\/MarkdownRenderer/);
+      expect(content).not.toMatch(/from\s+["']\.\/ui\/KnowledgeArticleView/);
+    });
+
+    it("should restrict deep imports of KnowledgeArticleView/MarkdownRenderer solely to the lazy detail page (D-F6.4-03)", () => {
+      const pagesRoot = resolve(KB_ROOT, "../../pages");
+      const pageFiles = getAllFiles(pagesRoot).filter(
+        (file) =>
+          (file.endsWith(".ts") || file.endsWith(".tsx")) &&
+          !file.endsWith(".test.ts") &&
+          !file.endsWith(".test.tsx"),
+      );
+
+      const deepImportPattern =
+        /from\s+["']@features\/knowledge-base\/ui\/(KnowledgeArticleView|MarkdownRenderer)["']/;
+
+      for (const file of pageFiles) {
+        const rel = relative(pagesRoot, file).replace(/\\/g, "/");
+        const content = readFileSync(file, "utf-8");
+        const match = deepImportPattern.exec(content);
+
+        if (rel === "knowledge/detail/page.tsx") {
+          expect(
+            match?.[1],
+            "Detail page should deep-import KnowledgeArticleView directly",
+          ).toBe("KnowledgeArticleView");
+        } else {
+          expect(
+            match,
+            `Page ${rel} must not deep-import KnowledgeArticleView or MarkdownRenderer: ${match?.[0]}`,
+          ).toBeNull();
+        }
+      }
     });
   });
 });

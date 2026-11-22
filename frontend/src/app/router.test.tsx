@@ -333,8 +333,64 @@ describe("Router Integration Tests", () => {
       expect(screen.queryByText("Đang tải trang...")).not.toBeInTheDocument();
     });
 
-    it("KB-U-route-4: regression check: unknown sub-route /knowledge/abc falls back to NotFoundPage", async () => {
+    it("KB-U-route-4: unknown article slug /knowledge/abc renders ArticleNotFound inside MarketingLayout (KB-AC-05)", async () => {
+      useAuthStore.setState({ status: "unauthenticated" });
       renderRouter("/knowledge/abc");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Không tìm thấy bài viết" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Điều hướng chính" }),
+      ).toBeInTheDocument();
+      expect(document.getElementById("main-content")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Không tìm thấy trang bạn yêu cầu."),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5a: unauthenticated guest accesses /knowledge/what-is-astrology in MarketingLayout without redirect to /login (KB-AC-02, KB-AC-04)", async () => {
+      useAuthStore.setState({ status: "unauthenticated" });
+      renderRouter("/knowledge/what-is-astrology");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Chiêm tinh học là gì?" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Điều hướng chính" }),
+      ).toBeInTheDocument();
+      expect(document.getElementById("main-content")).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { name: /đăng nhập/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5b: authenticated user stays on /knowledge/what-is-astrology and is not redirected to /app (KB-AC-02)", async () => {
+      useAuthStore.setState({ status: "authenticated" });
+      renderRouter("/knowledge/what-is-astrology");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Chiêm tinh học là gì?" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { name: "Bảng điều khiển" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5c: deep two-segment unknown path /knowledge/a/b falls back to global NotFoundPage", async () => {
+      renderRouter("/knowledge/a/b");
 
       expect(
         await screen.findByText(

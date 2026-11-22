@@ -78,3 +78,14 @@ export {
 export type { KnowledgeCategoryFilterValue } from "./model/categoryFilter";
 export { formatKnowledgeDate } from "./model/formatDate";
 export { KNOWLEDGE_LIST_PATH, knowledgeArticlePath } from "./model/routes";
+
+// Article Detail State, Hooks & NotFound (F6.4 — detail reading view stays isolated in lazy route per D-F6.4-03)
+export { classifyArticleResult } from "./model/articleViewState";
+export type {
+  ArticleErrorReport,
+  ArticleViewClassification,
+} from "./model/articleViewState";
+export { knowledgeKeys } from "./hooks/query-keys";
+export { useKnowledgeArticle } from "./hooks/useKnowledgeArticle";
+export { ArticleNotFound } from "./ui/ArticleNotFound";
+export type { ArticleNotFoundProps } from "./ui/ArticleNotFound";
