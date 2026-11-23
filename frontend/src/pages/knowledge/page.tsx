@@ -1,9 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, type JSX } from "react";
 
 import {
+  buildKnowledgeListSeo,
   knowledgeContentService,
   KnowledgeListView,
+  useKnowledgeSiteUrl,
 } from "@features/knowledge-base";
+import { usePageMeta } from "@shared/hooks/usePageMeta";
 
 /**
  * KnowledgePage component (/knowledge)
@@ -16,6 +19,10 @@ import {
  */
 export default function KnowledgePage(): JSX.Element {
   const articles = useMemo(() => knowledgeContentService.listArticles(), []);
+  const siteUrl = useKnowledgeSiteUrl();
+
+  const pageMeta = useMemo(() => buildKnowledgeListSeo({ siteUrl }), [siteUrl]);
+  usePageMeta(pageMeta);
 
   return (
     <div className="flex flex-col gap-8">

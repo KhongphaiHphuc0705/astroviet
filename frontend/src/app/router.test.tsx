@@ -1,5 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { HttpResponse } from "msw";
 import { lazy, Suspense } from "react";
 import {
@@ -333,8 +334,64 @@ describe("Router Integration Tests", () => {
       expect(screen.queryByText("Đang tải trang...")).not.toBeInTheDocument();
     });
 
-    it("KB-U-route-4: regression check: unknown sub-route /knowledge/abc falls back to NotFoundPage", async () => {
+    it("KB-U-route-4: unknown article slug /knowledge/abc renders ArticleNotFound inside MarketingLayout (KB-AC-05)", async () => {
+      useAuthStore.setState({ status: "unauthenticated" });
       renderRouter("/knowledge/abc");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Không tìm thấy bài viết" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Điều hướng chính" }),
+      ).toBeInTheDocument();
+      expect(document.getElementById("main-content")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Không tìm thấy trang bạn yêu cầu."),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5a: unauthenticated guest accesses /knowledge/what-is-astrology in MarketingLayout without redirect to /login (KB-AC-02, KB-AC-04)", async () => {
+      useAuthStore.setState({ status: "unauthenticated" });
+      renderRouter("/knowledge/what-is-astrology");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Chiêm tinh học là gì?" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Điều hướng chính" }),
+      ).toBeInTheDocument();
+      expect(document.getElementById("main-content")).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { name: /đăng nhập/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5b: authenticated user stays on /knowledge/what-is-astrology and is not redirected to /app (KB-AC-02)", async () => {
+      useAuthStore.setState({ status: "authenticated" });
+      renderRouter("/knowledge/what-is-astrology");
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Chiêm tinh học là gì?" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("heading", { name: "Bảng điều khiển" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("KB-U-route-5c: deep two-segment unknown path /knowledge/a/b falls back to global NotFoundPage", async () => {
+      renderRouter("/knowledge/a/b");
 
       expect(
         await screen.findByText(
@@ -345,6 +402,112 @@ describe("Router Integration Tests", () => {
           },
         ),
       ).toBeInTheDocument();
+    });
+
+    it("KB-U-route-6: full real-router flow Listing -> Detail -> Listing -> Home updates and cleans up page metadata cleanly (AC-F6.4-A02, AC-F6.4-A03)", async () => {
+      const user = userEvent.setup();
+      const scrollSpy = vi
+        .spyOn(window, "scrollTo")
+        .mockImplementation(() => {});
+      document.title = "AstroViet";
+      useAuthStore.setState({ status: "unauthenticated" });
+
+      renderRouter("/knowledge");
+
+      // 1. Listing page loads with listing metadata
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Kiến thức chiêm tinh" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(document.title).toBe("Kiến thức chiêm tinh — AstroViet");
+      });
+      expect(
+        document.head
+          .querySelector('meta[property="og:type"]')
+          ?.getAttribute("content"),
+      ).toBe("website");
+
+      // 2. Navigate Listing -> Detail via card link
+      const articleLink = screen.getByRole("link", {
+        name: "Chiêm tinh học là gì?",
+      });
+      await user.click(articleLink);
+
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Chiêm tinh học là gì?" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 2, name: "Khái niệm nền tảng về chiêm tinh học" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(document.title).toBe("Chiêm tinh học là gì? — AstroViet");
+      });
+      expect(
+        document.head
+          .querySelector('meta[property="og:type"]')
+          ?.getAttribute("content"),
+      ).toBe("article");
+      expect(
+        document.head
+          .querySelector('link[rel="canonical"]')
+          ?.getAttribute("href"),
+      ).toMatch(/\/knowledge\/what-is-astrology$/);
+      expect(
+        document.head.querySelector('meta[property="og:image"]'),
+      ).toBeNull();
+
+      // 3. Navigate Detail -> Listing via back-link
+      await user.click(screen.getByRole("link", { name: "Tất cả bài viết" }));
+      expect(
+        await screen.findByRole(
+          "heading",
+          { level: 1, name: "Kiến thức chiêm tinh" },
+          { timeout: 5000 },
+        ),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(document.title).toBe("Kiến thức chiêm tinh — AstroViet");
+      });
+      expect(
+        document.head
+          .querySelector('meta[property="og:type"]')
+          ?.getAttribute("content"),
+      ).toBe("website");
+
+      // 4. Navigate Listing -> Home (non-KB route): metadata cleaned up & title restored
+      const brandLinks = screen.getAllByRole("link", { name: "AstroViet" });
+      expect(brandLinks.length).toBeGreaterThan(0);
+      await user.click(brandLinks[0]!);
+
+      expect(
+        await screen.findByText(/AstroViet — Coming soon/i, undefined, {
+          timeout: 5000,
+        }),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(document.title).toBe("AstroViet");
+      });
+      expect(
+        document.head.querySelector('meta[name="description"]'),
+      ).toBeNull();
+      expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
+      expect(
+        document.head.querySelector('meta[property="og:type"]'),
+      ).toBeNull();
+
+      scrollSpy.mockRestore();
     });
   });
 });

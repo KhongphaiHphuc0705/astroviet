@@ -78,3 +78,24 @@ export {
 export type { KnowledgeCategoryFilterValue } from "./model/categoryFilter";
 export { formatKnowledgeDate } from "./model/formatDate";
 export { KNOWLEDGE_LIST_PATH, knowledgeArticlePath } from "./model/routes";
+
+// Article Detail State, Hooks, Shared Header & NotFound (F6.4 — detail reading view stays isolated in lazy route per D-F6.4-03)
+export { classifyArticleResult } from "./model/articleViewState";
+export type {
+  ArticleErrorReport,
+  ArticleViewClassification,
+} from "./model/articleViewState";
+export { knowledgeKeys } from "./hooks/query-keys";
+export { useKnowledgeArticle } from "./hooks/useKnowledgeArticle";
+export { useKnowledgeSiteUrl } from "./hooks/useKnowledgeSiteUrl";
+export type { UseKnowledgeSiteUrlOptions } from "./hooks/useKnowledgeSiteUrl";
+export { ArticleNotFound } from "./ui/ArticleNotFound";
+export type { ArticleNotFoundProps } from "./ui/ArticleNotFound";
+export { KnowledgeArticleHeader } from "./ui/KnowledgeArticleHeader";
+export type { KnowledgeArticleHeaderProps } from "./ui/KnowledgeArticleHeader";
+export {
+  DEFAULT_DEV_SITE_URL,
+  resolveSiteUrl,
+  resolveSiteUrlDetailed,
+} from "./model/siteUrl";
+export type { ResolveSiteUrlOptions, SiteUrlResolution } from "./model/siteUrl";

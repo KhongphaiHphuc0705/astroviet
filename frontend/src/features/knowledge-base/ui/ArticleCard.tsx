@@ -58,7 +58,7 @@ export function ArticleCard({
         {article.summary}
       </p>
 
-      <p className="mt-auto pt-2 text-body-sm text-muted">
+      <p className="mt-auto pt-2 text-body-sm text-secondary">
         Cập nhật <time dateTime={article.updatedAt}>{formattedDate}</time>
       </p>
     </Card>

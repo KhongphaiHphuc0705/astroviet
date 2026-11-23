@@ -21,6 +21,7 @@ const NotFoundPage = lazy(() => import("@pages/errors/not-found-page"));
 const HomePage = lazy(() => import("@pages/home/page"));
 const VerifyPage = lazy(() => import("@pages/verify/page"));
 const KnowledgeListPage = lazy(() => import("@pages/knowledge/page"));
+const KnowledgeDetailPage = lazy(() => import("@pages/knowledge/detail/page"));
 
 // Auth Pages
 const LoginPage = lazy(() => import("@pages/auth/login/page"));
@@ -83,6 +84,10 @@ export const routesConfig = [
           {
             path: "knowledge",
             element: <KnowledgeListPage />,
+          },
+          {
+            path: "knowledge/:slug",
+            element: <KnowledgeDetailPage />,
           },
         ],
       },

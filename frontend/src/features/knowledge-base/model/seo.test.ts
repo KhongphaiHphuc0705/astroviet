@@ -136,6 +136,17 @@ describe("Knowledge Base SEO Helpers (KB-U18, KB-U19, KB-U28)", () => {
       expect("image" in seo).toBe(false);
       expect("image" in seo.openGraph).toBe(false);
     });
+
+    it("should omit canonicalUrl and openGraph.url when siteUrl is undefined", () => {
+      const seo = buildKnowledgeListSeo({ siteUrl: undefined });
+
+      expect(seo.title).toBe(`Kiến thức chiêm tinh — ${SITE_NAME}`);
+      expect(seo.description).toContain("chiêm tinh phương Tây");
+      expect(seo.canonicalUrl).toBeUndefined();
+      expect(seo.openGraph.url).toBeUndefined();
+      expect("canonicalUrl" in seo).toBe(false);
+      expect("url" in seo.openGraph).toBe(false);
+    });
   });
 
   describe("buildKnowledgeArticleSeo (KB-U18, KB-U19)", () => {
@@ -162,6 +173,33 @@ describe("Knowledge Base SEO Helpers (KB-U18, KB-U19, KB-U28)", () => {
       // Structural guarantee: no image field
       expect("image" in seo).toBe(false);
       expect("image" in seo.openGraph).toBe(false);
+    });
+
+    it("should omit canonicalUrl and openGraph.url when siteUrl is undefined", () => {
+      const seo = buildKnowledgeArticleSeo({
+        article: sampleArticle,
+        siteUrl: undefined,
+      });
+
+      expect(seo.title).toBe(`${sampleArticle.title} — ${SITE_NAME}`);
+      expect(seo.description).toBe(sampleArticle.summary);
+      expect(seo.canonicalUrl).toBeUndefined();
+      expect(seo.openGraph).toEqual({
+        type: "article",
+        title: sampleArticle.title,
+        description: sampleArticle.summary,
+      });
+      expect("canonicalUrl" in seo).toBe(false);
+      expect("url" in seo.openGraph).toBe(false);
+    });
+
+    it("should keep throwing KnowledgeSeoError when siteUrl is an empty or malformed string", () => {
+      expect(() =>
+        buildKnowledgeArticleSeo({ article: sampleArticle, siteUrl: "" }),
+      ).toThrow(KnowledgeSeoError);
+      expect(() => buildKnowledgeListSeo({ siteUrl: "not-a-url" })).toThrow(
+        KnowledgeSeoError,
+      );
     });
   });
 
