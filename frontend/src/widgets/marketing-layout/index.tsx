@@ -1,6 +1,6 @@
 import { Menu, X } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { useAuthStore } from "@shared/stores/authStore";
 import { useUiStore } from "@shared/stores/uiStore";
@@ -51,6 +51,18 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
           >
             Giới thiệu
           </Link>
+          <NavLink
+            to="/knowledge"
+            className={({ isActive }) =>
+              `text-[16px] transition-colors hover:text-accent-secondary ${
+                isActive
+                  ? "font-semibold text-accent-secondary"
+                  : "text-primary"
+              }`
+            }
+          >
+            Kiến thức
+          </NavLink>
 
           <div className="ml-2 flex items-center gap-3">
             {status === "authenticated" && (
@@ -139,6 +151,19 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
           >
             Giới thiệu
           </Link>
+          <NavLink
+            to="/knowledge"
+            onClick={() => setMobileDrawerOpen(false)}
+            className={({ isActive }) =>
+              `text-[16px] transition-colors hover:text-accent-secondary ${
+                isActive
+                  ? "font-semibold text-accent-secondary"
+                  : "text-primary"
+              }`
+            }
+          >
+            Kiến thức
+          </NavLink>
 
           <div className="my-2 border-t border-subtle pt-4">
             {status === "authenticated" && (
@@ -196,7 +221,16 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
         as="footer"
         className="mt-auto border-t border-subtle py-8"
         align="center"
+        gap="3"
       >
+        <nav aria-label="Chân trang">
+          <Link
+            to="/knowledge"
+            className="text-body-sm text-secondary transition-colors hover:text-primary"
+          >
+            Kiến thức
+          </Link>
+        </nav>
         <p className="text-body-sm text-muted">
           © 2026 AstroViet. All rights reserved.
         </p>

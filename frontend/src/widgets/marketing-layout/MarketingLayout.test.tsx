@@ -1,4 +1,4 @@
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, within } from "@testing-library/react";
 import { describe, it, expect, beforeEach } from "vitest";
 
 import { useAuthStore } from "@shared/stores/authStore";
@@ -109,5 +109,164 @@ describe("MarketingLayout", () => {
     expect(
       screen.queryByRole("link", { name: /vào (ứng dụng|app)/i }),
     ).not.toBeInTheDocument();
+  });
+
+  describe("Knowledge Base Navigation (KB-AC-06, D-F6-N1, D-F6.5-10)", () => {
+    it("KB-U-nav-1: renders exactly one 'Kiến thức' link to /knowledge in desktop nav", () => {
+      renderWithProviders(<MarketingLayout>Test</MarketingLayout>);
+
+      const desktopNav = screen.getByRole("navigation", {
+        name: "Điều hướng chính",
+        hidden: true,
+      });
+      const knowledgeLinks = within(desktopNav).getAllByRole("link", {
+        name: "Kiến thức",
+        hidden: true,
+      });
+      expect(knowledgeLinks).toHaveLength(1);
+      expect(knowledgeLinks[0]).toHaveAttribute("href", "/knowledge");
+    });
+
+    it("KB-U-nav-2: renders exactly one 'Kiến thức' link in mobile drawer and closes drawer on click", () => {
+      useUiStore.setState({ mobileDrawerOpen: true });
+      renderWithProviders(<MarketingLayout>Test</MarketingLayout>);
+
+      const mobileNav = screen.getByRole("navigation", {
+        name: "Điều hướng chính (Mobile)",
+        hidden: true,
+      });
+      const knowledgeLinks = within(mobileNav).getAllByRole("link", {
+        name: "Kiến thức",
+        hidden: true,
+      });
+      expect(knowledgeLinks).toHaveLength(1);
+      expect(knowledgeLinks[0]).toHaveAttribute("href", "/knowledge");
+
+      fireEvent.click(knowledgeLinks[0]!);
+      expect(useUiStore.getState().mobileDrawerOpen).toBe(false);
+    });
+
+    it("KB-U-nav-3: renders footer nav 'Chân trang' with exactly one 'Kiến thức' link and no heading inside", () => {
+      renderWithProviders(<MarketingLayout>Test</MarketingLayout>);
+
+      const footer = screen.getByRole("contentinfo");
+      const footerNav = within(footer).getByRole("navigation", {
+        name: "Chân trang",
+      });
+      const knowledgeLinks = within(footerNav).getAllByRole("link", {
+        name: "Kiến thức",
+      });
+      expect(knowledgeLinks).toHaveLength(1);
+      expect(knowledgeLinks[0]).toHaveAttribute("href", "/knowledge");
+      expect(within(footerNav).queryAllByRole("heading")).toHaveLength(0);
+    });
+
+    it("KB-U-nav-4: marks desktop and mobile NavLinks active on /knowledge and /knowledge/:slug, inactive on /", () => {
+      const { unmount: unmountList } = renderWithProviders(
+        <MarketingLayout>Listing</MarketingLayout>,
+        { initialEntries: ["/knowledge"] },
+      );
+      const desktopAtList = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      const mobileAtList = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính (Mobile)",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      expect(desktopAtList).toHaveAttribute("aria-current", "page");
+      expect(mobileAtList).toHaveAttribute("aria-current", "page");
+      unmountList();
+
+      const { unmount: unmountDetail } = renderWithProviders(
+        <MarketingLayout>Detail</MarketingLayout>,
+        { initialEntries: ["/knowledge/what-is-astrology"] },
+      );
+      const desktopAtDetail = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      const mobileAtDetail = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính (Mobile)",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      expect(desktopAtDetail).toHaveAttribute("aria-current", "page");
+      expect(mobileAtDetail).toHaveAttribute("aria-current", "page");
+      unmountDetail();
+
+      renderWithProviders(<MarketingLayout>Home</MarketingLayout>, {
+        initialEntries: ["/"],
+      });
+      const desktopAtHome = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      const mobileAtHome = within(
+        screen.getByRole("navigation", {
+          name: "Điều hướng chính (Mobile)",
+          hidden: true,
+        }),
+      ).getByRole("link", { name: "Kiến thức", hidden: true });
+      expect(desktopAtHome).not.toHaveAttribute("aria-current");
+      expect(mobileAtHome).not.toHaveAttribute("aria-current");
+    });
+
+    it("KB-U-nav-5: keeps 'Kiến thức' link present across authenticated, unauthenticated, and resolving states", () => {
+      for (const authState of [
+        "authenticated",
+        "unauthenticated",
+        "resolving",
+      ] as const) {
+        useAuthStore.setState({
+          status: authState,
+          accessToken: authState === "authenticated" ? "mock-token" : null,
+          user:
+            authState === "authenticated"
+              ? {
+                  id: "1",
+                  email: "test@example.com",
+                  displayName: "Tester",
+                  role: "user",
+                  createdAt: "2026-01-01",
+                }
+              : null,
+        });
+
+        const { unmount } = renderWithProviders(
+          <MarketingLayout>Content</MarketingLayout>,
+        );
+        const allKnowledgeLinks = screen.getAllByRole("link", {
+          name: "Kiến thức",
+          hidden: true,
+        });
+        expect(allKnowledgeLinks).toHaveLength(3);
+        unmount();
+      }
+    });
+
+    it("KB-U-nav-6: exposes exactly 3 navigation landmarks with unique accessible names", () => {
+      renderWithProviders(<MarketingLayout>Test</MarketingLayout>);
+
+      const navs = screen.getAllByRole("navigation", { hidden: true });
+      expect(navs).toHaveLength(3);
+
+      const labels = navs.map((nav) => nav.getAttribute("aria-label"));
+      expect(labels).toEqual([
+        "Điều hướng chính",
+        "Điều hướng chính (Mobile)",
+        "Chân trang",
+      ]);
+      expect(new Set(labels).size).toBe(3);
+    });
   });
 });
