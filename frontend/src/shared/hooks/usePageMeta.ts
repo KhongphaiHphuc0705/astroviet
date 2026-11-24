@@ -22,6 +22,9 @@ interface ManagedTagRecord {
   readonly previousValue: string | null;
 }
 
+const PRERENDERED_ATTR = "data-prerendered";
+const BASE_TITLE_ATTR = "data-base-title";
+
 function upsertHeadTag(
   tagName: "meta" | "link",
   matchAttr: "name" | "property" | "rel",
@@ -35,6 +38,21 @@ function upsertHeadTag(
   );
 
   if (existing) {
+    // Tags stamped with `data-prerendered` belong to a prerendered KB route (D-F6.5-06):
+    // adopt them as hook-owned so cleanup removes them instead of restoring stale KB metadata.
+    const isPrerendered = existing.hasAttribute(PRERENDERED_ATTR);
+    if (isPrerendered) {
+      existing.removeAttribute(PRERENDERED_ATTR);
+      existing.setAttribute(valueAttr, value);
+      records.push({
+        element: existing,
+        existed: false,
+        valueAttr,
+        previousValue: null,
+      });
+      return;
+    }
+
     records.push({
       element: existing,
       existed: true,
@@ -82,7 +100,16 @@ export function usePageMeta(meta: PageMeta | null): void {
       return;
     }
 
-    const previousTitle = document.title;
+    const titleEl = document.head.querySelector("title");
+    const baseTitle = titleEl?.getAttribute(BASE_TITLE_ATTR);
+    const previousTitle =
+      baseTitle !== null && baseTitle !== undefined
+        ? baseTitle
+        : document.title;
+    if (baseTitle !== null && baseTitle !== undefined) {
+      titleEl?.removeAttribute(BASE_TITLE_ATTR);
+    }
+
     const records: ManagedTagRecord[] = [];
 
     document.title = title;
@@ -135,6 +162,14 @@ export function usePageMeta(meta: PageMeta | null): void {
     if (ogUrl !== undefined) {
       upsertHeadTag("meta", "property", "og:url", "content", ogUrl, records);
     }
+
+    // Remove any unclaimed prerendered tags (e.g. canonical/og:url when transitioning
+    // to a state like NotFound or production without VITE_SITE_URL).
+    document.head
+      .querySelectorAll(
+        `meta[${PRERENDERED_ATTR}], link[rel="canonical"][${PRERENDERED_ATTR}]`,
+      )
+      .forEach((el) => el.remove());
 
     return () => {
       document.title = previousTitle;
