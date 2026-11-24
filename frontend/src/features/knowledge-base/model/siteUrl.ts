@@ -12,7 +12,7 @@ export interface SiteUrlResolution {
 }
 
 export type PrerenderSiteUrlErrorCode =
-  "MISSING" | "INVALID" | "NOT_HTTPS" | "LOCAL_HOST";
+  "MISSING" | "INVALID" | "NOT_HTTPS" | "LOCAL_HOST" | "RESERVED_HOST";
 
 export type PrerenderSiteUrlResolution =
   | {
@@ -123,6 +123,28 @@ function isLocalOrPrivateHost(hostname: string): boolean {
   return false;
 }
 
+const RESERVED_TLDS = ["example", "test", "invalid"] as const;
+const RESERVED_SLDS = ["example.com", "example.net", "example.org"] as const;
+
+/**
+ * Detects RFC 2606 / RFC 6761 reserved & placeholder domains
+ * (`.example`, `.test`, `.invalid`, `example.com/net/org` and their subdomains).
+ */
+export function isReservedPlaceholderHost(hostname: string): boolean {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+  for (const tld of RESERVED_TLDS) {
+    if (host === tld || host.endsWith(`.${tld}`)) {
+      return true;
+    }
+  }
+  for (const sld of RESERVED_SLDS) {
+    if (host === sld || host.endsWith(`.${sld}`)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Parses `PRERENDER_STRICT` flag (D-F6-P4b, D-F6.5-03).
  *
@@ -217,6 +239,14 @@ export function resolveSiteUrlForBuild(
         status: "error",
         code: "LOCAL_HOST",
         message: `Invalid VITE_SITE_URL "${normalized}" while PRERENDER_STRICT=true: localhost and private/loopback IP hosts are not allowed in production.`,
+      };
+    }
+
+    if (isReservedPlaceholderHost(parsed.hostname)) {
+      return {
+        status: "error",
+        code: "RESERVED_HOST",
+        message: `Invalid VITE_SITE_URL "${normalized}" while PRERENDER_STRICT=true: RFC 2606/6761 reserved/placeholder domains (.example, .test, .invalid, example.com/org/net) are not allowed in production.`,
       };
     }
   }

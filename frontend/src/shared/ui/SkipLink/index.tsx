@@ -1,11 +1,11 @@
-import React from "react";
+import type { ReactNode } from "react";
 
 import { cn } from "@shared/lib/cn";
 
 export interface SkipLinkProps {
   href?: string;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export function SkipLink({

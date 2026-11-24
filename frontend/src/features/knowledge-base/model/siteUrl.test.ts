@@ -93,19 +93,19 @@ describe("parseStrictFlag (KB-U24, D-F6-P4b, D-F6.5-03)", () => {
 describe("resolveSiteUrlForBuild (KB-U24, D-F6-P4/P4b, D-F6.5-02/03)", () => {
   it("should accept valid https origins and strip trailing slashes in both strict and non-strict modes", () => {
     expect(
-      resolveSiteUrlForBuild("https://example.org/", { strict: false }),
+      resolveSiteUrlForBuild("https://astroviet.vn/", { strict: false }),
     ).toEqual({
       status: "ok",
-      siteUrl: "https://example.org",
+      siteUrl: "https://astroviet.vn",
       source: "env",
       warnings: [],
     });
 
     expect(
-      resolveSiteUrlForBuild("  https://sub.example.org/  ", { strict: true }),
+      resolveSiteUrlForBuild("  https://app.astroviet.vn/  ", { strict: true }),
     ).toEqual({
       status: "ok",
-      siteUrl: "https://sub.example.org",
+      siteUrl: "https://app.astroviet.vn",
       source: "env",
       warnings: [],
     });
@@ -213,5 +213,32 @@ describe("resolveSiteUrlForBuild (KB-U24, D-F6-P4/P4b, D-F6.5-02/03)", () => {
     expect(
       resolveSiteUrlForBuild("https://172.32.0.1", { strict: true }).status,
     ).toBe("ok");
+  });
+
+  it("should reject RFC 2606 / RFC 6761 reserved & placeholder domains with RESERVED_HOST in strict mode", () => {
+    const reservedHosts = [
+      "https://astroviet.example",
+      "https://astroviet.test",
+      "https://astroviet.invalid",
+      "https://sub.domain.example",
+      "https://example.com",
+      "https://www.example.com",
+      "https://example.org",
+      "https://sub.example.org",
+      "https://example.net",
+      "https://sub.example.net",
+    ];
+
+    for (const raw of reservedHosts) {
+      const res = resolveSiteUrlForBuild(raw, { strict: true });
+      expect(res.status, `Expected ${raw} to fail in strict mode`).toBe(
+        "error",
+      );
+      if (res.status === "error") {
+        expect(res.code, `Expected RESERVED_HOST for ${raw}`).toBe(
+          "RESERVED_HOST",
+        );
+      }
+    }
   });
 });

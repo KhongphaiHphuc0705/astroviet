@@ -4,6 +4,7 @@ import {
   buildRobotsTxt,
   buildSitemapXml,
   escapeHtml,
+  isReservedPlaceholderHost,
   KNOWLEDGE_LIST_PATH,
   knowledgeArticlePath,
   normalizeSiteUrl,
@@ -206,11 +207,26 @@ function stripHtmlTags(html: string): string {
     .trim();
 }
 
+function hasReservedUrlHost(text: string): boolean {
+  const urlMatches = text.match(/https?:\/\/[^\s"'<>]+/gi) ?? [];
+  for (const rawUrl of urlMatches) {
+    try {
+      const parsed = new URL(rawUrl);
+      if (isReservedPlaceholderHost(parsed.hostname)) {
+        return true;
+      }
+    } catch {
+      // Ignore non-URL tokens
+    }
+  }
+  return false;
+}
+
 function hasPlaceholder(text: string): boolean {
   return (
     /<production-domain>/i.test(text) ||
-    /\bexample\.com\b/i.test(text) ||
-    /\bundefined\/knowledge\b/i.test(text)
+    /\bundefined\/knowledge\b/i.test(text) ||
+    hasReservedUrlHost(text)
   );
 }
 
@@ -621,27 +637,33 @@ export function validatePrerenderOutput(
     for (const [relPath, html] of Object.entries(htmlFiles)) {
       const canonicals = extractCanonicalHrefs(html);
       for (const href of canonicals) {
-        if (!href.startsWith("https://") || localLeakPattern.test(href)) {
+        if (
+          !href.startsWith("https://") ||
+          localLeakPattern.test(href) ||
+          hasReservedUrlHost(href)
+        ) {
           p11Issues.push(
-            `${relPath}: strict mode forbids non-https/local canonical "${href}"`,
+            `${relPath}: strict mode forbids non-https/local/reserved canonical "${href}"`,
           );
         }
       }
     }
     if (
       localLeakPattern.test(sitemapXml) ||
-      /<loc>http:\/\//i.test(sitemapXml)
+      /<loc>http:\/\//i.test(sitemapXml) ||
+      hasReservedUrlHost(sitemapXml)
     ) {
       p11Issues.push(
-        "sitemap.xml contains localhost or non-https URL in strict mode",
+        "sitemap.xml contains localhost, non-https, or RFC 2606/6761 reserved URL in strict mode",
       );
     }
     if (
       localLeakPattern.test(robotsTxt) ||
-      /Sitemap:\s*http:\/\//i.test(robotsTxt)
+      /Sitemap:\s*http:\/\//i.test(robotsTxt) ||
+      hasReservedUrlHost(robotsTxt)
     ) {
       p11Issues.push(
-        "robots.txt contains localhost or non-https Sitemap URL in strict mode",
+        "robots.txt contains localhost, non-https, or RFC 2606/6761 reserved Sitemap URL in strict mode",
       );
     }
   }

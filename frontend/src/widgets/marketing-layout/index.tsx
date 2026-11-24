@@ -1,5 +1,5 @@
 import { Menu, X } from "lucide-react";
-import React from "react";
+import type { ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import { useAuthStore } from "@shared/stores/authStore";
@@ -10,7 +10,7 @@ import { SkipLink } from "@shared/ui/SkipLink";
 import { Stack } from "@shared/ui/Stack";
 // Design System Spec: widgets được phép import shared, không import features.
 
-export function MarketingLayout({ children }: { children: React.ReactNode }) {
+export function MarketingLayout({ children }: { children: ReactNode }) {
   const status = useAuthStore((state) => state.status);
   const mobileDrawerOpen = useUiStore((state) => state.mobileDrawerOpen);
   const setMobileDrawerOpen = useUiStore((state) => state.setMobileDrawerOpen);
@@ -41,13 +41,13 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
         >
           <Link
             to="/"
-            className="text-body-md transition-colors hover:text-accent-secondary"
+            className="text-[16px] transition-colors hover:text-accent-secondary"
           >
             Trang chủ
           </Link>
           <Link
             to="/"
-            className="text-body-md transition-colors hover:text-accent-secondary"
+            className="text-[16px] transition-colors hover:text-accent-secondary"
           >
             Giới thiệu
           </Link>
@@ -139,14 +139,14 @@ export function MarketingLayout({ children }: { children: React.ReactNode }) {
         >
           <Link
             to="/"
-            className="text-body-md"
+            className="text-[16px]"
             onClick={() => setMobileDrawerOpen(false)}
           >
             Trang chủ
           </Link>
           <Link
             to="/"
-            className="text-body-md"
+            className="text-[16px]"
             onClick={() => setMobileDrawerOpen(false)}
           >
             Giới thiệu

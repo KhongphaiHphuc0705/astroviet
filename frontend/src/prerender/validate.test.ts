@@ -62,7 +62,7 @@ function buildValidFixture(options?: {
   strict?: boolean;
   articles?: readonly KnowledgeArticleMetadata[];
 }): PrerenderValidationInput {
-  const siteUrl = options?.siteUrl ?? "https://astroviet.example.org";
+  const siteUrl = options?.siteUrl ?? "https://astroviet.vn";
   const strict = options?.strict ?? true;
   const articles = options?.articles ?? SAMPLE_ARTICLES;
 
@@ -236,8 +236,8 @@ describe("validatePrerenderOutput (KB-P01..KB-P11)", () => {
       "knowledge/what-is-astrology.html": fixture.htmlFiles[
         "knowledge/what-is-astrology.html"
       ]!.replace(
-        'href="https://astroviet.example.org/knowledge/what-is-astrology"',
-        'href="https://astroviet.example.org/knowledge/what-is-astrology/"',
+        'href="https://astroviet.vn/knowledge/what-is-astrology"',
+        'href="https://astroviet.vn/knowledge/what-is-astrology/"',
       ),
     };
     const res = validatePrerenderOutput({ ...fixture, htmlFiles: brokenFiles });
@@ -252,7 +252,7 @@ describe("validatePrerenderOutput (KB-P01..KB-P11)", () => {
         "knowledge/what-is-astrology.html"
       ]!.replace(
         "</head>",
-        '<meta property="og:image" content="https://astroviet.example.org/fake.png" /></head>',
+        '<meta property="og:image" content="https://astroviet.vn/fake.png" /></head>',
       ),
     };
     const res = validatePrerenderOutput({ ...fixture, htmlFiles: brokenFiles });
@@ -263,7 +263,7 @@ describe("validatePrerenderOutput (KB-P01..KB-P11)", () => {
     const fixture = buildValidFixture();
     const withHome = fixture.sitemapXml.replace(
       "</urlset>",
-      "  <url><loc>https://astroviet.example.org/</loc></url>\n</urlset>",
+      "  <url><loc>https://astroviet.vn/</loc></url>\n</urlset>",
     );
     const resHome = validatePrerenderOutput({
       ...fixture,
@@ -373,7 +373,7 @@ describe("validatePrerenderOutput (KB-P01..KB-P11)", () => {
     expect(res.checks.find((c) => c.id === "KB-P10")?.status).toBe("fail");
   });
 
-  it("KB-P11: should fail in strict mode on localhost, http://, or empty manifest", () => {
+  it("KB-P11: should fail in strict mode on localhost, http://, RFC 2606/6761 reserved domains, or empty manifest", () => {
     const localStrict = buildValidFixture({
       siteUrl: "http://localhost:5173",
       strict: true,
@@ -381,8 +381,31 @@ describe("validatePrerenderOutput (KB-P01..KB-P11)", () => {
     const resLocal = validatePrerenderOutput(localStrict);
     expect(resLocal.checks.find((c) => c.id === "KB-P11")?.status).toBe("fail");
 
+    for (const reservedUrl of [
+      "https://astroviet.example",
+      "https://astroviet.test",
+      "https://astroviet.invalid",
+      "https://example.com",
+      "https://example.org",
+      "https://example.net",
+    ]) {
+      const reservedStrict = buildValidFixture({
+        siteUrl: reservedUrl,
+        strict: true,
+      });
+      const resReserved = validatePrerenderOutput(reservedStrict);
+      expect(
+        resReserved.checks.find((c) => c.id === "KB-P11")?.status,
+        `Expected KB-P11 fail for ${reservedUrl}`,
+      ).toBe("fail");
+      expect(
+        resReserved.checks.find((c) => c.id === "KB-P08")?.status,
+        `Expected KB-P08 fail for ${reservedUrl}`,
+      ).toBe("fail");
+    }
+
     const emptyStrict = buildValidFixture({
-      siteUrl: "https://astroviet.example.org",
+      siteUrl: "https://astroviet.vn",
       strict: true,
       articles: [],
     });

@@ -103,6 +103,7 @@ export { KnowledgeArticleHeader } from "./ui/KnowledgeArticleHeader";
 export type { KnowledgeArticleHeaderProps } from "./ui/KnowledgeArticleHeader";
 export {
   DEFAULT_DEV_SITE_URL,
+  isReservedPlaceholderHost,
   parseStrictFlag,
   resolveSiteUrl,
   resolveSiteUrlDetailed,
