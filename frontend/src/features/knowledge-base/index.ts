@@ -54,18 +54,26 @@ export {
   buildKnowledgeArticleSeo,
   buildKnowledgeListSeo,
   buildKnowledgeNotFoundSeo,
+  buildRobotsTxt,
+  buildSitemapXml,
+  escapeHtml,
+  escapeXml,
   KNOWLEDGE_LIST_DESCRIPTION,
   KNOWLEDGE_LIST_TITLE,
   KNOWLEDGE_NOT_FOUND_DESCRIPTION,
   KNOWLEDGE_NOT_FOUND_TITLE,
   KnowledgeSeoError,
   normalizeSiteUrl,
+  serializeHeadTags,
   SITE_NAME,
 } from "./model/seo";
 export type {
   BuildKnowledgeArticleSeoInput,
   BuildKnowledgeListSeoInput,
+  BuildRobotsTxtInput,
+  BuildSitemapXmlInput,
   KnowledgeSeo,
+  SerializeHeadTagsOptions,
 } from "./model/seo";
 
 // Listing UI & Filter Helpers (F6.3)
@@ -95,7 +103,17 @@ export { KnowledgeArticleHeader } from "./ui/KnowledgeArticleHeader";
 export type { KnowledgeArticleHeaderProps } from "./ui/KnowledgeArticleHeader";
 export {
   DEFAULT_DEV_SITE_URL,
+  isReservedPlaceholderHost,
+  parseStrictFlag,
   resolveSiteUrl,
   resolveSiteUrlDetailed,
+  resolveSiteUrlForBuild,
 } from "./model/siteUrl";
-export type { ResolveSiteUrlOptions, SiteUrlResolution } from "./model/siteUrl";
+export type {
+  ParseStrictFlagResult,
+  PrerenderSiteUrlErrorCode,
+  PrerenderSiteUrlResolution,
+  ResolveSiteUrlForBuildOptions,
+  ResolveSiteUrlOptions,
+  SiteUrlResolution,
+} from "./model/siteUrl";

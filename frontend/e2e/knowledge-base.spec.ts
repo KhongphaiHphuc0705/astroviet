@@ -603,3 +603,82 @@ test.describe("Knowledge Base Article Detail (/knowledge/:slug)", () => {
     expect(pageErrors).toHaveLength(0);
   });
 });
+
+test.describe("Knowledge Base Navigation (KB-E09, KB-AC-06, D-F6-N1)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route("**/api/v1/auth/refresh", async (route) => {
+      await route.fulfill({
+        status: 401,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Unauthorized" }),
+      });
+    });
+  });
+
+  test("KB-E09: Navigates to /knowledge from desktop navbar, mobile drawer, and footer", async ({
+    page,
+  }) => {
+    const pageErrors: Error[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err));
+
+    // 1. Desktop Navbar navigation (1280x800)
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/");
+
+    const desktopNav = page.locator('nav[aria-label="Điều hướng chính"]');
+    const desktopLink = desktopNav.getByRole("link", {
+      name: "Kiến thức",
+      exact: true,
+    });
+    await expect(desktopLink).toBeVisible();
+    await desktopLink.click();
+
+    await expect(page).toHaveURL(/\/knowledge$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Kiến thức chiêm tinh" }),
+    ).toBeVisible();
+    await expect(desktopLink).toHaveAttribute("aria-current", "page");
+
+    // 2. Footer navigation (1280x800)
+    await page.goto("/");
+    const footerNav = page.locator('footer nav[aria-label="Chân trang"]');
+    const footerLink = footerNav.getByRole("link", {
+      name: "Kiến thức",
+      exact: true,
+    });
+    await expect(footerLink).toBeVisible();
+    await footerLink.click();
+
+    await expect(page).toHaveURL(/\/knowledge$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Kiến thức chiêm tinh" }),
+    ).toBeVisible();
+
+    // 3. Mobile Drawer navigation (375x812)
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/");
+
+    const menuButton = page.getByRole("button", { name: "Menu", exact: true });
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
+
+    const mobileNav = page.locator(
+      'nav[aria-label="Điều hướng chính (Mobile)"]',
+    );
+    await expect(mobileNav).toBeVisible();
+    const mobileLink = mobileNav.getByRole("link", {
+      name: "Kiến thức",
+      exact: true,
+    });
+    await expect(mobileLink).toBeVisible();
+    await mobileLink.click();
+
+    await expect(page).toHaveURL(/\/knowledge$/);
+    await expect(mobileNav).toBeHidden();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Kiến thức chiêm tinh" }),
+    ).toBeVisible();
+
+    expect(pageErrors).toHaveLength(0);
+  });
+});

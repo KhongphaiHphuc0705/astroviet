@@ -1,0 +1,264 @@
+{
+  "timestamp": "2026-11-24T08:12:15.693Z",
+  "gitCommit": "90436e2286e21630e17bcce04fd3e9e0ac2772cd",
+  "gitShortSha": "90436e2",
+  "gitDirty": true,
+  "mode": "hydrate",
+  "nodeVersion": "v22.18.0",
+  "platform": "win32",
+  "articleCount": 1,
+  "clsThreshold": 0.1,
+  "jsDelayMs": 800,
+  "passed": true,
+  "summary": {
+    "KB_H01": true,
+    "KB_H02": true,
+    "KB_H03": true,
+    "KB_H04": true,
+    "KB_H05": true
+  },
+  "preJsResults": [
+    {
+      "route": "/knowledge",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Kiến thức chiêm tinh",
+      "firstParagraphLength": 0
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chiêm tinh học là gì?",
+      "firstParagraphLength": 310
+    },
+    {
+      "route": "/knowledge",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Kiến thức chiêm tinh",
+      "firstParagraphLength": 0
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chiêm tinh học là gì?",
+      "firstParagraphLength": 310
+    }
+  ],
+  "runtimeResults": [
+    {
+      "route": "/knowledge",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Kiến thức chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chiêm tinh học là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/khong-ton-tai-hydration-gate",
+      "viewport": "1280x800",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0021,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Không tìm thấy bài viết",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "1280x800",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0021,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Trang chủ",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Kiến thức chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chiêm tinh học là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/khong-ton-tai-hydration-gate",
+      "viewport": "375x667",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0032,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Không tìm thấy bài viết",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "375x667",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0032,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Trang chủ",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    }
+  ]
+}

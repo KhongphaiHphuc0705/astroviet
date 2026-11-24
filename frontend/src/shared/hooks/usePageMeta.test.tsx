@@ -289,4 +289,111 @@ describe("usePageMeta (KB-U45, KB-U46, KB-U47, KB-U48, D-F6.4-02)", () => {
     expect(document.head.querySelector('meta[property="og:type"]')).toBeNull();
     expect(document.head.querySelector('meta[property="og:url"]')).toBeNull();
   });
+
+  it("should adopt prerendered head tags and restore data-base-title cleanly on unmount (D-F6.5-06)", () => {
+    const titleEl =
+      document.head.querySelector("title") ??
+      document.head.appendChild(document.createElement("title"));
+    titleEl.textContent = "Chiêm tinh học là gì? — AstroViet";
+    titleEl.setAttribute("data-base-title", "AstroViet");
+
+    const descEl = document.createElement("meta");
+    descEl.setAttribute("name", "description");
+    descEl.setAttribute("content", "Prerendered summary");
+    descEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(descEl);
+
+    const canonicalEl = document.createElement("link");
+    canonicalEl.setAttribute("rel", "canonical");
+    canonicalEl.setAttribute(
+      "href",
+      "https://example.org/knowledge/what-is-astrology",
+    );
+    canonicalEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(canonicalEl);
+
+    const ogTypeEl = document.createElement("meta");
+    ogTypeEl.setAttribute("property", "og:type");
+    ogTypeEl.setAttribute("content", "article");
+    ogTypeEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(ogTypeEl);
+
+    const ogUrlEl = document.createElement("meta");
+    ogUrlEl.setAttribute("property", "og:url");
+    ogUrlEl.setAttribute(
+      "content",
+      "https://example.org/knowledge/what-is-astrology",
+    );
+    ogUrlEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(ogUrlEl);
+
+    const { unmount } = renderHook(() =>
+      usePageMeta({
+        title: "Chiêm tinh học là gì? — AstroViet",
+        description: "Prerendered summary",
+        canonicalUrl: "https://example.org/knowledge/what-is-astrology",
+        openGraph: {
+          type: "article",
+          title: "Chiêm tinh học là gì?",
+          description: "Prerendered summary",
+          url: "https://example.org/knowledge/what-is-astrology",
+        },
+      }),
+    );
+
+    // Adopted without duplicating tags
+    expect(
+      document.head.querySelectorAll('meta[name="description"]'),
+    ).toHaveLength(1);
+    expect(
+      document.head.querySelectorAll('link[rel="canonical"]'),
+    ).toHaveLength(1);
+
+    // Leaving the hydrated KB route restores base title and removes all prerendered tags
+    unmount();
+
+    expect(document.title).toBe("AstroViet");
+    expect(document.head.querySelector('meta[name="description"]')).toBeNull();
+    expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
+    expect(document.head.querySelector('meta[property="og:type"]')).toBeNull();
+    expect(document.head.querySelector('meta[property="og:url"]')).toBeNull();
+  });
+
+  it("should remove unclaimed prerendered canonical/og:url when mounting NotFound metadata (D-F6.5-06)", () => {
+    const canonicalEl = document.createElement("link");
+    canonicalEl.setAttribute("rel", "canonical");
+    canonicalEl.setAttribute("href", "https://example.org/knowledge/old");
+    canonicalEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(canonicalEl);
+
+    const ogUrlEl = document.createElement("meta");
+    ogUrlEl.setAttribute("property", "og:url");
+    ogUrlEl.setAttribute("content", "https://example.org/knowledge/old");
+    ogUrlEl.setAttribute("data-prerendered", "1");
+    document.head.appendChild(ogUrlEl);
+
+    const { unmount } = renderHook(() =>
+      usePageMeta({
+        title: "Không tìm thấy bài viết — AstroViet",
+        description: "Not found",
+        robots: "noindex",
+        openGraph: {
+          type: "website",
+          title: "Không tìm thấy bài viết — AstroViet",
+          description: "Not found",
+        },
+      }),
+    );
+
+    expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
+    expect(document.head.querySelector('meta[property="og:url"]')).toBeNull();
+    expect(
+      document.head
+        .querySelector('meta[name="robots"]')
+        ?.getAttribute("content"),
+    ).toBe("noindex");
+
+    unmount();
+    expect(document.head.querySelector('meta[name="robots"]')).toBeNull();
+  });
 });
