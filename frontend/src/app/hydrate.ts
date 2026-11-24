@@ -16,11 +16,12 @@ import {
 /**
  * Build-time feature flag controlling conditional Knowledge Base hydration (D-F6-P2, D-F6.5-04).
  *
- * Disabled by default until Owner passes the local hydration gate (`npm run verify:hydration`).
+ * Enabled by default after Owner PASS decision on the local hydration gate (F6.5.8,
+ * `KB-H01..KB-H05` PASS). Set `VITE_ENABLE_HYDRATION=false` to fall back to CSR `createRoot`.
  * Single read site for `VITE_ENABLE_HYDRATION`.
  */
 export const HYDRATION_ENABLED =
-  import.meta.env.VITE_ENABLE_HYDRATION === "true";
+  import.meta.env.VITE_ENABLE_HYDRATION !== "false";
 
 // Kept local to avoid statically importing `@features/knowledge-base` into the entry bundle.
 const KNOWLEDGE_LIST_ROUTE = "/knowledge";

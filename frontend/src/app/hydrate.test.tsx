@@ -40,9 +40,9 @@ describe("Conditional Hydration Gate & Integration (KB-U25, D-F6-P2, D-F6-A1, D-
     document.body.innerHTML = "";
   });
 
-  describe("HYDRATION_ENABLED default flag (D-F6.5-04)", () => {
-    it("should default to false when VITE_ENABLE_HYDRATION is unset", () => {
-      expect(HYDRATION_ENABLED).toBe(false);
+  describe("HYDRATION_ENABLED default flag (D-F6.5-04, F6.5.8 PASS)", () => {
+    it("should default to true when VITE_ENABLE_HYDRATION is unset (after Owner F6.5.8 PASS)", () => {
+      expect(HYDRATION_ENABLED).toBe(true);
     });
   });
 
