@@ -1,15 +1,18 @@
 {
-  "timestamp": "2026-11-24T01:11:33.496Z",
+  "timestamp": "2026-11-24T08:12:15.693Z",
+  "gitCommit": "90436e2286e21630e17bcce04fd3e9e0ac2772cd",
+  "gitShortSha": "90436e2",
+  "gitDirty": true,
   "mode": "hydrate",
   "nodeVersion": "v22.18.0",
   "platform": "win32",
   "articleCount": 1,
   "clsThreshold": 0.1,
   "jsDelayMs": 800,
-  "passed": false,
+  "passed": true,
   "summary": {
     "KB_H01": true,
-    "KB_H02": false,
+    "KB_H02": true,
     "KB_H03": true,
     "KB_H04": true,
     "KB_H05": true
@@ -241,23 +244,18 @@
         "cls": 0.0032,
         "h1Captured": false,
         "h1Removed": false,
-        "h1Text": "Đã có lỗi xảy ra",
+        "h1Text": "Trang chủ",
         "hasPrerenderMarker": false
       },
       "checks": {
-        "KB_H02": false,
+        "KB_H02": true,
         "KB_H03": true,
         "KB_H04": true,
         "KB_H05": true
       },
       "diagnostics": {
         "hydrationMessages": [],
-        "consoleErrors": [
-          "Router error: TypeError: Failed to fetch dynamically imported module: http://localhost:4185/assets/page-JVp8oGs9.js",
-          "Router error: TypeError: Failed to fetch dynamically imported module: http://localhost:4185/assets/page-JVp8oGs9.js",
-          "TypeError: Failed to fetch dynamically imported module: http://localhost:4185/assets/page-JVp8oGs9.js",
-          "React Router caught the following error during render TypeError: Failed to fetch dynamically imported module: http://localhost:4185/assets/page-JVp8oGs9.js"
-        ],
+        "consoleErrors": [],
         "pageErrors": [],
         "failedAssets": []
       }

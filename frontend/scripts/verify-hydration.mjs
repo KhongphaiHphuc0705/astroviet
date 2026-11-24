@@ -62,6 +62,30 @@ function runCommand(command, args, extraEnv = {}) {
   });
 }
 
+function readGitInfo() {
+  try {
+    const gitCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: FRONTEND_DIR,
+      encoding: "utf8",
+    }).trim();
+    const gitShortSha = execFileSync("git", ["rev-parse", "--short", "HEAD"], {
+      cwd: FRONTEND_DIR,
+      encoding: "utf8",
+    }).trim();
+    const statusOut = execFileSync("git", ["status", "--porcelain"], {
+      cwd: FRONTEND_DIR,
+      encoding: "utf8",
+    }).trim();
+    return {
+      gitCommit,
+      gitShortSha,
+      gitDirty: statusOut.length > 0,
+    };
+  } catch {
+    return { gitCommit: null, gitShortSha: null, gitDirty: null };
+  }
+}
+
 function killProcessTree(proc) {
   if (!proc || !proc.pid) {
     return;
@@ -117,8 +141,9 @@ async function verifyPreJsContent(browser, baseUrl, viewport, routePath) {
     viewport: { width: viewport.width, height: viewport.height },
     javaScriptEnabled: false,
   });
+  let page = null;
   try {
-    const page = await context.newPage();
+    page = await context.newPage();
     const response = await page.goto(`${baseUrl}${routePath}`, {
       waitUntil: "domcontentloaded",
     });
@@ -171,8 +196,9 @@ async function verifyRouteWithJs(
     viewport: { width: viewport.width, height: viewport.height },
   });
 
+  let page = null;
   try {
-    const page = await context.newPage();
+    page = await context.newPage();
     const consoleErrors = [];
     const hydrationMessages = [];
     const pageErrors = [];
@@ -221,10 +247,10 @@ async function verifyRouteWithJs(
       });
     });
 
-    // Delay main JS assets by 800ms per F6 plan §6.6
-    await page.route("**/assets/*.js", async (route) => {
+    // Delay main entry JS bundle by 800ms per F6 plan §6.6
+    await page.route("**/assets/index-*.js", async (route) => {
       await new Promise((resolve) => setTimeout(resolve, JS_DELAY_MS));
-      await route.continue();
+      await route.continue().catch(() => {});
     });
 
     // Install CLS + H1 MutationObserver BEFORE any app script runs
@@ -319,7 +345,9 @@ async function verifyRouteWithJs(
     // layout shift while lazy chunks mount; still record exact CLS in metrics without failing fallback check.
     const h04Pass = fallbackMode ? true : metrics.cls < CLS_THRESHOLD;
     const h05Pass =
-      metrics.bootMode === expectedBootMode && failedAssets.length === 0;
+      metrics.bootMode === expectedBootMode &&
+      failedAssets.length === 0 &&
+      metrics.h1Text !== "Đã có lỗi xảy ra";
 
     return {
       route: routeSpec.path,
@@ -340,6 +368,9 @@ async function verifyRouteWithJs(
       },
     };
   } finally {
+    if (page) {
+      await page.unrouteAll({ behavior: "ignoreErrors" }).catch(() => {});
+    }
     await context.close();
   }
 }
@@ -470,8 +501,10 @@ async function main() {
     };
     const passed = Object.values(summary).every(Boolean);
 
+    const gitInfo = readGitInfo();
     const report = {
       timestamp: new Date().toISOString(),
+      ...gitInfo,
       mode: fallback ? "fallback-csr" : "hydrate",
       nodeVersion: process.version,
       platform: process.platform,
