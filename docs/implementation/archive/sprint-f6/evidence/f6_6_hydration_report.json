@@ -1,0 +1,1244 @@
+{
+  "timestamp": "2026-11-25T15:21:18.020Z",
+  "gitCommit": "776fe0b5627534bafa978df7b8b299ffabe0f360",
+  "gitShortSha": "776fe0b",
+  "gitDirty": true,
+  "mode": "hydrate",
+  "nodeVersion": "v22.18.0",
+  "platform": "win32",
+  "articleCount": 15,
+  "clsThreshold": 0.1,
+  "jsDelayMs": 800,
+  "passed": true,
+  "summary": {
+    "KB_H01": true,
+    "KB_H02": true,
+    "KB_H03": true,
+    "KB_H04": true,
+    "KB_H05": true
+  },
+  "preJsResults": [
+    {
+      "route": "/knowledge",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Kiến thức chiêm tinh",
+      "firstParagraphLength": 0
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chiêm tinh học là gì?",
+      "firstParagraphLength": 421
+    },
+    {
+      "route": "/knowledge/how-to-read-a-natal-chart",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Cách đọc một bản đồ sao cá nhân",
+      "firstParagraphLength": 276
+    },
+    {
+      "route": "/knowledge/planets-signs-houses",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số",
+      "firstParagraphLength": 305
+    },
+    {
+      "route": "/knowledge/sun-moon-rising",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng",
+      "firstParagraphLength": 414
+    },
+    {
+      "route": "/knowledge/personal-planets",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân",
+      "firstParagraphLength": 380
+    },
+    {
+      "route": "/knowledge/social-and-outer-planets",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Sao Mộc, Sao Thổ và các hành tinh thế hệ",
+      "firstParagraphLength": 361
+    },
+    {
+      "route": "/knowledge/zodiac-signs-overview",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Tổng quan 12 cung hoàng đạo",
+      "firstParagraphLength": 338
+    },
+    {
+      "route": "/knowledge/elements-and-modalities",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Bốn nguyên tố và ba tính chất trong chiêm tinh",
+      "firstParagraphLength": 343
+    },
+    {
+      "route": "/knowledge/sign-rulerships",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chủ tinh của 12 cung hoàng đạo",
+      "firstParagraphLength": 308
+    },
+    {
+      "route": "/knowledge/astrological-houses-overview",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Tổng quan 12 nhà trong bản đồ sao",
+      "firstParagraphLength": 341
+    },
+    {
+      "route": "/knowledge/angular-succedent-cadent-houses",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Nhà Angular, Succedent và Cadent",
+      "firstParagraphLength": 497
+    },
+    {
+      "route": "/knowledge/house-rulers",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chủ tinh của nhà (House Ruler)",
+      "firstParagraphLength": 364
+    },
+    {
+      "route": "/knowledge/what-are-astrological-aspects",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Góc chiếu trong chiêm tinh là gì?",
+      "firstParagraphLength": 332
+    },
+    {
+      "route": "/knowledge/major-aspects",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Góc chiếu chính: Trùng tụ, Lục hợp, Vuông góc, Tam hợp và Đối đỉnh",
+      "firstParagraphLength": 539
+    },
+    {
+      "route": "/knowledge/orbs-and-applying-separating",
+      "viewport": "1280x800",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Orb, Applying và Separating Aspects",
+      "firstParagraphLength": 384
+    },
+    {
+      "route": "/knowledge",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Kiến thức chiêm tinh",
+      "firstParagraphLength": 0
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chiêm tinh học là gì?",
+      "firstParagraphLength": 421
+    },
+    {
+      "route": "/knowledge/how-to-read-a-natal-chart",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Cách đọc một bản đồ sao cá nhân",
+      "firstParagraphLength": 276
+    },
+    {
+      "route": "/knowledge/planets-signs-houses",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số",
+      "firstParagraphLength": 305
+    },
+    {
+      "route": "/knowledge/sun-moon-rising",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng",
+      "firstParagraphLength": 414
+    },
+    {
+      "route": "/knowledge/personal-planets",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân",
+      "firstParagraphLength": 380
+    },
+    {
+      "route": "/knowledge/social-and-outer-planets",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Sao Mộc, Sao Thổ và các hành tinh thế hệ",
+      "firstParagraphLength": 361
+    },
+    {
+      "route": "/knowledge/zodiac-signs-overview",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Tổng quan 12 cung hoàng đạo",
+      "firstParagraphLength": 338
+    },
+    {
+      "route": "/knowledge/elements-and-modalities",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Bốn nguyên tố và ba tính chất trong chiêm tinh",
+      "firstParagraphLength": 343
+    },
+    {
+      "route": "/knowledge/sign-rulerships",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chủ tinh của 12 cung hoàng đạo",
+      "firstParagraphLength": 308
+    },
+    {
+      "route": "/knowledge/astrological-houses-overview",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Tổng quan 12 nhà trong bản đồ sao",
+      "firstParagraphLength": 341
+    },
+    {
+      "route": "/knowledge/angular-succedent-cadent-houses",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Nhà Angular, Succedent và Cadent",
+      "firstParagraphLength": 497
+    },
+    {
+      "route": "/knowledge/house-rulers",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Chủ tinh của nhà (House Ruler)",
+      "firstParagraphLength": 364
+    },
+    {
+      "route": "/knowledge/what-are-astrological-aspects",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Góc chiếu trong chiêm tinh là gì?",
+      "firstParagraphLength": 332
+    },
+    {
+      "route": "/knowledge/major-aspects",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Góc chiếu chính: Trùng tụ, Lục hợp, Vuông góc, Tam hợp và Đối đỉnh",
+      "firstParagraphLength": 539
+    },
+    {
+      "route": "/knowledge/orbs-and-applying-separating",
+      "viewport": "375x667",
+      "ok": true,
+      "status": 200,
+      "hasMain": true,
+      "hasMarker": true,
+      "h1Text": "Orb, Applying và Separating Aspects",
+      "firstParagraphLength": 384
+    }
+  ],
+  "runtimeResults": [
+    {
+      "route": "/knowledge",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Kiến thức chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chiêm tinh học là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/how-to-read-a-natal-chart",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Cách đọc một bản đồ sao cá nhân",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/planets-signs-houses",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/sun-moon-rising",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/personal-planets",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/social-and-outer-planets",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Sao Mộc, Sao Thổ và các hành tinh thế hệ",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/zodiac-signs-overview",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Tổng quan 12 cung hoàng đạo",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/elements-and-modalities",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Bốn nguyên tố và ba tính chất trong chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/sign-rulerships",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chủ tinh của 12 cung hoàng đạo",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/astrological-houses-overview",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Tổng quan 12 nhà trong bản đồ sao",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/angular-succedent-cadent-houses",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Nhà Angular, Succedent và Cadent",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/house-rulers",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chủ tinh của nhà (House Ruler)",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-are-astrological-aspects",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Góc chiếu trong chiêm tinh là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/major-aspects",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Góc chiếu chính: Trùng tụ, Lục hợp, Vuông góc, Tam hợp và Đối đỉnh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/orbs-and-applying-separating",
+      "viewport": "1280x800",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0021,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Orb, Applying và Separating Aspects",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/khong-ton-tai-hydration-gate",
+      "viewport": "1280x800",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0021,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Không tìm thấy bài viết",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "1280x800",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0021,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Trang chủ",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Kiến thức chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-is-astrology",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chiêm tinh học là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/how-to-read-a-natal-chart",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Cách đọc một bản đồ sao cá nhân",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/planets-signs-houses",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/sun-moon-rising",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/personal-planets",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/social-and-outer-planets",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Sao Mộc, Sao Thổ và các hành tinh thế hệ",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/zodiac-signs-overview",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Tổng quan 12 cung hoàng đạo",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/elements-and-modalities",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Bốn nguyên tố và ba tính chất trong chiêm tinh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/sign-rulerships",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chủ tinh của 12 cung hoàng đạo",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/astrological-houses-overview",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Tổng quan 12 nhà trong bản đồ sao",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/angular-succedent-cadent-houses",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Nhà Angular, Succedent và Cadent",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/house-rulers",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Chủ tinh của nhà (House Ruler)",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/what-are-astrological-aspects",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Góc chiếu trong chiêm tinh là gì?",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/major-aspects",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Góc chiếu chính: Trùng tụ, Lục hợp, Vuông góc, Tam hợp và Đối đỉnh",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/orbs-and-applying-separating",
+      "viewport": "375x667",
+      "expectedBootMode": "hydrate",
+      "metrics": {
+        "bootMode": "hydrate",
+        "cls": 0.0032,
+        "h1Captured": true,
+        "h1Removed": false,
+        "h1Text": "Orb, Applying và Separating Aspects",
+        "hasPrerenderMarker": true
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/knowledge/khong-ton-tai-hydration-gate",
+      "viewport": "375x667",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0032,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Không tìm thấy bài viết",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "375x667",
+      "expectedBootMode": "csr",
+      "metrics": {
+        "bootMode": "csr",
+        "cls": 0.0032,
+        "h1Captured": false,
+        "h1Removed": false,
+        "h1Text": "Trang chủ",
+        "hasPrerenderMarker": false
+      },
+      "checks": {
+        "KB_H02": true,
+        "KB_H03": true,
+        "KB_H04": true,
+        "KB_H05": true
+      },
+      "diagnostics": {
+        "hydrationMessages": [],
+        "consoleErrors": [],
+        "pageErrors": [],
+        "failedAssets": []
+      }
+    }
+  ]
+}
