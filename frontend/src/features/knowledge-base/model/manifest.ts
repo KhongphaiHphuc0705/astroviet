@@ -55,4 +55,58 @@ export const KNOWLEDGE_MANIFEST: readonly KnowledgeArticleMetadata[] = [
     order: 3,
     updatedAt: "2026-11-25",
   },
+  {
+    slug: "zodiac-signs-overview",
+    title: "Tổng quan 12 cung hoàng đạo",
+    category: "signs",
+    summary:
+      "Tổng quan 12 cung hoàng đạo trong chiêm tinh phương Tây nhiệt đới, phân nhóm theo bốn nguyên tố và ba tính chất cùng vai trò của từng cung.",
+    order: 1,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "elements-and-modalities",
+    title: "Bốn nguyên tố và ba tính chất trong chiêm tinh",
+    category: "signs",
+    summary:
+      "Khám phá bốn nguyên tố Lửa, Đất, Khí, Nước và ba tính chất Tiên phong, Kiên định, Linh hoạt giúp phân biệt bản sắc của 12 cung hoàng đạo.",
+    order: 2,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "sign-rulerships",
+    title: "Chủ tinh của 12 cung hoàng đạo",
+    category: "signs",
+    summary:
+      "Giải thích khái niệm chủ tinh của cung (Sign Ruler), phân biệt hệ cổ điển và hiện đại cho 12 cung hoàng đạo cùng cách áp dụng khi đọc lá số.",
+    order: 3,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "astrological-houses-overview",
+    title: "Tổng quan 12 nhà trong bản đồ sao",
+    category: "houses",
+    summary:
+      "Tổng quan 12 nhà chiêm tinh đại diện cho các lĩnh vực đời sống, hai hệ nhà Placidus và Whole Sign trên AstroViet cùng lưu ý về giờ sinh.",
+    order: 1,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "angular-succedent-cadent-houses",
+    title: "Nhà Angular, Succedent và Cadent",
+    category: "houses",
+    summary:
+      "Phân biệt ba nhóm nhà Angular, Succedent và Cadent trong bản đồ sao, mối liên hệ với bốn điểm góc và ý nghĩa thực hành khi đọc lá số.",
+    order: 2,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "house-rulers",
+    title: "Chủ tinh của nhà (House Ruler)",
+    category: "houses",
+    summary:
+      "Cách xác định chủ tinh của nhà (House Ruler) từ cung trên đỉnh nhà và cách đọc sự liên kết giữa hai lĩnh vực đời sống trên bản đồ sao.",
+    order: 3,
+    updatedAt: "2026-11-25",
+  },
 ] as const;
