@@ -65,6 +65,5 @@ Ngoài ra, cần xem xét độ chính xác của góc chiếu, tình trạng h�
 
 ## Tìm hiểu thêm
 
-- So sánh trực tiếp với nhóm hành tinh chuyển động nhanh tại [Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân](/knowledge/personal-planets).
-- Ôn lại cách ghép hành tinh với cung và nhà trong [Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số](/knowledge/planets-signs-houses).
-- Xem lại trình tự đọc trọn vẹn cả lá số tại [Cách đọc một bản đồ sao cá nhân](/knowledge/how-to-read-a-natal-chart).
+- So sánh với nhóm hành tinh chuyển động nhanh tại [Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân](/knowledge/personal-planets).
+- Tìm hiểu cách hành tinh chậm tạo dấu ấn cá nhân thông qua [Góc chiếu trong chiêm tinh là gì?](/knowledge/what-are-astrological-aspects) và [Cách đọc một bản đồ sao cá nhân](/knowledge/how-to-read-a-natal-chart).

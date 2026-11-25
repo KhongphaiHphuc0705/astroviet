@@ -64,6 +64,5 @@ Sau đó, hãy xem xét sự tương tác giữa ba vị trí thay vì diễn gi
 
 ## Tìm hiểu thêm
 
-- Đặt bộ ba nền tảng vào trình tự đọc toàn lá số tại [Cách đọc một bản đồ sao cá nhân](/knowledge/how-to-read-a-natal-chart).
-- Ôn lại cách ghép hành tinh với cung và nhà trong [Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số](/knowledge/planets-signs-houses).
-- Khám phá tiếp nhóm hành tinh định hình giao tiếp, thẩm mỹ và hành động ở [Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân](/knowledge/personal-planets).
+- Khám phá nhóm hành tinh cá nhân tại [Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân](/knowledge/personal-planets).
+- Tìm hiểu sâu bối cảnh cung và nhà ở [Tổng quan 12 cung hoàng đạo](/knowledge/zodiac-signs-overview) và [Tổng quan 12 nhà trong bản đồ sao](/knowledge/astrological-houses-overview).

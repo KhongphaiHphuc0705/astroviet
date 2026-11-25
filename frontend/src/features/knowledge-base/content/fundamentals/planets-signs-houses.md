@@ -54,6 +54,5 @@ Kiến thức trong thư viện trình bày nguyên lý tổng quát của từn
 
 ## Tìm hiểu thêm
 
-- Áp dụng khung ba thành phần vào trình tự đọc thực tế tại [Cách đọc một bản đồ sao cá nhân](/knowledge/how-to-read-a-natal-chart).
-- Tìm hiểu kỹ ba điểm neo quan trọng nhất trên lá số ở [Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng](/knowledge/sun-moon-rising).
-- Khám phá sâu hơn các hành tinh gắn với đời sống hằng ngày tại [Sao Thủy, Sao Kim và Sao Hỏa: Các hành tinh cá nhân](/knowledge/personal-planets).
+- Áp dụng vào trình tự đọc thực tế tại [Cách đọc một bản đồ sao cá nhân](/knowledge/how-to-read-a-natal-chart) và [Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng](/knowledge/sun-moon-rising).
+- Tìm hiểu sâu từng lớp thông tin: [Tổng quan 12 cung hoàng đạo](/knowledge/zodiac-signs-overview), [Tổng quan 12 nhà trong bản đồ sao](/knowledge/astrological-houses-overview) và [Góc chiếu trong chiêm tinh là gì?](/knowledge/what-are-astrological-aspects).

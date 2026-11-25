@@ -109,4 +109,31 @@ export const KNOWLEDGE_MANIFEST: readonly KnowledgeArticleMetadata[] = [
     order: 3,
     updatedAt: "2026-11-25",
   },
+  {
+    slug: "what-are-astrological-aspects",
+    title: "Góc chiếu trong chiêm tinh là gì?",
+    category: "aspects",
+    summary:
+      "Tìm hiểu khái niệm góc chiếu trên bản đồ sao, năm góc chiếu chính AstroViet hỗ trợ và cách nhìn nhận trung tính về tính chất hài hòa hay căng thẳng.",
+    order: 1,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "major-aspects",
+    title: "Góc chiếu chính: Trùng tụ, Lục hợp, Vuông góc, Tam hợp và Đối đỉnh",
+    category: "aspects",
+    summary:
+      "Phân tích chi tiết năm góc chiếu chính trên bản đồ sao: Trùng tụ 0°, Lục hợp 60°, Vuông góc 90°, Tam hợp 120° và Đối đỉnh 180° cùng ví dụ đọc thực tế.",
+    order: 2,
+    updatedAt: "2026-11-25",
+  },
+  {
+    slug: "orbs-and-applying-separating",
+    title: "Orb, Applying và Separating Aspects",
+    category: "aspects",
+    summary:
+      "Giải thích Orb (độ lệch cho phép), Applying (góc chiếu hội tụ) và Separating (góc chiếu phân ly) cùng ví dụ số học và cách đọc độ chặt góc chiếu.",
+    order: 3,
+    updatedAt: "2026-11-25",
+  },
 ] as const;

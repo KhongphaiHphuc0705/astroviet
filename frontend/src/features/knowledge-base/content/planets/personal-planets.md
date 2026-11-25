@@ -50,6 +50,5 @@ Cũng cần nhớ rằng các hành tinh cá nhân không hoạt động tách b
 
 ## Tìm hiểu thêm
 
-- Kết nối ba hành tinh cá nhân với nền tảng lá số trong [Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng](/knowledge/sun-moon-rising).
-- Mở rộng sang các hành tinh chu kỳ dài gắn với xã hội và thế hệ tại [Sao Mộc, Sao Thổ và các hành tinh thế hệ](/knowledge/social-and-outer-planets).
-- Ôn lại khung ghép hành tinh, cung và nhà ở [Hành tinh, cung hoàng đạo và nhà: Ba thành phần của lá số](/knowledge/planets-signs-houses).
+- Kết nối với bộ ba nền tảng trong [Mặt Trời, Mặt Trăng và Cung Mọc (Ascendant): Bộ ba nền tảng](/knowledge/sun-moon-rising) và mở rộng sang [Sao Mộc, Sao Thổ và các hành tinh thế hệ](/knowledge/social-and-outer-planets).
+- Xem cách hành tinh biểu đạt qua từng cung tại [Tổng quan 12 cung hoàng đạo](/knowledge/zodiac-signs-overview).
