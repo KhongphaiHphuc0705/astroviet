@@ -6,6 +6,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
 
 import * as reportErrorModule from "@shared/lib/report-error";
 import {
@@ -14,6 +15,8 @@ import {
   XSS_FIXTURE_ARTICLE,
 } from "@test/fixtures/knowledge-base/articles";
 
+import { knowledgeContentService } from "../model/knowledgeContentService";
+import { KNOWLEDGE_MANIFEST } from "../model/manifest";
 import type { KnowledgeArticle } from "../model/types";
 
 import { KnowledgeArticleView } from "./KnowledgeArticleView";
@@ -304,5 +307,111 @@ describe("KnowledgeArticleView (KB-U15, KB-U16, KB-U41, KB-U42, KB-U43, KB-U50)"
     expect(reportSpy).toHaveBeenCalledTimes(1);
 
     reportSpy.mockRestore();
+  });
+});
+
+describe("Production 15-article data-driven a11y (vitest-axe), heading, and real Markdown rendering (F6.6.6 T6.1/T6.5, KB-AC-36)", () => {
+  const productionSlugs = new Set(KNOWLEDGE_MANIFEST.map((m) => m.slug));
+  const isProductionSlug = (slug: string) => productionSlugs.has(slug);
+
+  it.each(KNOWLEDGE_MANIFEST.map((m) => [m.slug, m.title] as const))(
+    "renders %s with single h1, valid headings, safe links, and zero axe violations",
+    async (slug, title) => {
+      const result = await knowledgeContentService.getArticle(slug);
+      expect(result.status).toBe("found");
+      if (result.status !== "found") {
+        return;
+      }
+
+      const { container } = render(
+        <MemoryRouter initialEntries={[`/knowledge/${slug}`]}>
+          <main id="main-content">
+            <KnowledgeArticleView
+              article={result.article}
+              isKnownSlug={isProductionSlug}
+            />
+          </main>
+        </MemoryRouter>,
+      );
+
+      // Single h1 matching manifest title
+      const h1s = screen.getAllByRole("heading", { level: 1 });
+      expect(h1s).toHaveLength(1);
+      expect(h1s[0]).toHaveTextContent(title);
+
+      // Strict heading hierarchy without skipped levels or forbidden normalized headings
+      expect(
+        container.querySelector("[data-heading-normalized-from]"),
+      ).toBeNull();
+      const headings = Array.from(
+        container.querySelectorAll("h1, h2, h3, h4, h5, h6"),
+      );
+      expect(headings.length).toBeGreaterThanOrEqual(2);
+      expect(headings[0]?.tagName).toBe("H1");
+      expect(headings[1]?.tagName).toBe("H2");
+      for (let i = 1; i < headings.length; i += 1) {
+        const prev = Number(headings[i - 1]?.tagName.slice(1));
+        const curr = Number(headings[i]?.tagName.slice(1));
+        expect(curr - prev).toBeLessThanOrEqual(1);
+      }
+
+      // Security & link policy on real rendered content
+      expect(container.querySelector("script")).toBeNull();
+      expect(container.querySelector("[data-kb-fallback]")).toBeNull();
+      const externalLinks = Array.from(
+        container.querySelectorAll('a[href^="https://"]'),
+      );
+      for (const link of externalLinks) {
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      }
+      const internalArticleLinks = container.querySelectorAll(
+        'article a[href^="/knowledge/"]',
+      );
+      expect(internalArticleLinks.length).toBeGreaterThanOrEqual(1);
+
+      // Zero vitest-axe accessibility violations
+      const axeResults = await axe(container);
+      expect(axeResults).toHaveNoViolations();
+    },
+  );
+
+  it("verifies real production articles exercise ul, ol, blockquote, and internal links (T6.5, KG-F6-16)", async () => {
+    let ulArticles = 0;
+    let olArticles = 0;
+    let blockquoteArticles = 0;
+    let totalInternalLinks = 0;
+
+    for (const meta of KNOWLEDGE_MANIFEST) {
+      const result = await knowledgeContentService.getArticle(meta.slug);
+      expect(result.status).toBe("found");
+      if (result.status !== "found") {
+        continue;
+      }
+
+      const { container, unmount } = render(
+        <MemoryRouter initialEntries={[`/knowledge/${meta.slug}`]}>
+          <KnowledgeArticleView
+            article={result.article}
+            isKnownSlug={isProductionSlug}
+          />
+        </MemoryRouter>,
+      );
+
+      if (container.querySelector("article ul")) ulArticles += 1;
+      if (container.querySelector("article ol")) olArticles += 1;
+      if (container.querySelector("article blockquote")) {
+        blockquoteArticles += 1;
+      }
+      totalInternalLinks += container.querySelectorAll(
+        'article a[href^="/knowledge/"]',
+      ).length;
+      unmount();
+    }
+
+    expect(ulArticles).toBeGreaterThanOrEqual(10);
+    expect(olArticles).toBeGreaterThanOrEqual(2);
+    expect(blockquoteArticles).toBeGreaterThanOrEqual(10);
+    expect(totalInternalLinks).toBeGreaterThanOrEqual(30);
   });
 });

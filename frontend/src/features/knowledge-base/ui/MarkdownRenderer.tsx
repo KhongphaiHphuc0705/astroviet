@@ -143,7 +143,7 @@ function createMarkdownComponents(
         return (
           <Link
             to={classified.to}
-            className="font-medium text-accent-primary underline underline-offset-4 hover:text-accent-secondary"
+            className="font-medium text-accent-secondary underline underline-offset-4 hover:text-primary"
           >
             {children}
           </Link>
@@ -156,7 +156,7 @@ function createMarkdownComponents(
             href={classified.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-accent-primary underline underline-offset-4 hover:text-accent-secondary"
+            className="font-medium text-accent-secondary underline underline-offset-4 hover:text-primary"
           >
             {children}
           </a>

@@ -1,12 +1,16 @@
 import { test, expect } from "@playwright/test";
 
-const CATEGORIES = [
-  { id: "fundamentals", label: "Khái niệm cơ bản" },
-  { id: "planets", label: "Hành tinh" },
-  { id: "signs", label: "Cung" },
-  { id: "houses", label: "Nhà" },
-  { id: "aspects", label: "Góc chiếu" },
-] as const;
+import { KNOWLEDGE_MANIFEST } from "../src/features/knowledge-base/model/manifest.js";
+import {
+  KNOWLEDGE_CATEGORIES,
+  KNOWLEDGE_CATEGORY_LABELS,
+  type KnowledgeArticleMetadata,
+} from "../src/features/knowledge-base/model/types.js";
+
+const CATEGORIES = KNOWLEDGE_CATEGORIES.map((id) => ({
+  id,
+  label: KNOWLEDGE_CATEGORY_LABELS[id],
+}));
 
 test.describe("Knowledge Base Listing (/knowledge)", () => {
   test.beforeEach(async ({ page }) => {
@@ -57,20 +61,32 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
       await expect(btn).toHaveAttribute("aria-pressed", "false");
     }
 
-    // Article cards presence: ≥1 article card with link href^="/knowledge/"
+    // Article cards presence: exact 15 cards matching KNOWLEDGE_MANIFEST (F6.6.6 Scenario 1)
     const articles = page.locator("article");
-    const articleCount = await articles.count();
-    expect(articleCount).toBeGreaterThanOrEqual(1);
+    await expect(articles).toHaveCount(KNOWLEDGE_MANIFEST.length);
+    expect(KNOWLEDGE_MANIFEST).toHaveLength(15);
 
-    const firstLink = articles.first().locator("a");
-    await expect(firstLink).toBeVisible();
-    const href = await firstLink.getAttribute("href");
-    expect(href).toMatch(/^\/knowledge\/[a-z0-9-]+$/);
+    for (let i = 0; i < KNOWLEDGE_MANIFEST.length; i += 1) {
+      const expected = KNOWLEDGE_MANIFEST[i]!;
+      const card = articles.nth(i);
+      const cardLink = card.locator("h2 a");
+      await expect(cardLink).toHaveText(expected.title);
+      await expect(cardLink).toHaveAttribute(
+        "href",
+        `/knowledge/${expected.slug}`,
+      );
+      await expect(card).toContainText(expected.summary);
+      await expect(
+        card.getByText(KNOWLEDGE_CATEGORY_LABELS[expected.category], {
+          exact: true,
+        }),
+      ).toBeVisible();
+    }
 
     expect(pageErrors).toHaveLength(0);
   });
 
-  test("KB-E04 & KB-E05: Category filtering, count invariant, and empty state reset", async ({
+  test("KB-E04 & KB-E05: Category filtering, count invariant (5 categories x 3), and reset to 15", async ({
     page,
   }) => {
     const pageErrors: Error[] = [];
@@ -78,20 +94,23 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
 
     await page.goto("/knowledge");
 
-    // Get total initial count from status text
+    // Get total initial count from status text (exact 15 articles)
     const statusText = page.locator('p[role="status"]');
     await expect(statusText).toBeVisible();
-    const initialText = await statusText.innerText();
-    const initialMatch = initialText.match(/Hiển thị\s+(\d+)\s+bài viết/);
-    expect(initialMatch).not.toBeNull();
-    const totalCount = parseInt(initialMatch![1], 10);
-    expect(totalCount).toBeGreaterThanOrEqual(1);
+    await expect(statusText).toHaveText(
+      `Hiển thị ${KNOWLEDGE_MANIFEST.length} bài viết`,
+    );
 
     const articles = page.locator("article");
-    await expect(articles).toHaveCount(totalCount);
+    await expect(articles).toHaveCount(KNOWLEDGE_MANIFEST.length);
 
-    // Iterate through all 5 categories
+    // Iterate through all 5 categories — each has exact 3 articles in production manifest
     for (const cat of CATEGORIES) {
+      const expectedInCat = KNOWLEDGE_MANIFEST.filter(
+        (m) => m.category === cat.id,
+      );
+      expect(expectedInCat).toHaveLength(3);
+
       const catButton = page.getByRole("button", {
         name: cat.label,
         exact: true,
@@ -101,49 +120,28 @@ test.describe("Knowledge Base Listing (/knowledge)", () => {
       // Button should be pressed
       await expect(catButton).toHaveAttribute("aria-pressed", "true");
 
-      // Verify status counter
-      const currentText = await statusText.innerText();
-      const currentMatch = currentText.match(/Hiển thị\s+(\d+)\s+bài viết/);
-      expect(currentMatch).not.toBeNull();
-      const currentCount = parseInt(currentMatch![1], 10);
+      // Verify status counter and card count = 3
+      await expect(statusText).toHaveText(
+        `Hiển thị ${expectedInCat.length} bài viết`,
+      );
+      await expect(articles).toHaveCount(expectedInCat.length);
 
-      if (currentCount > 0) {
-        // Articles count must match counter
-        await expect(articles).toHaveCount(currentCount);
-
-        // Every individual displayed article card must carry the selected category badge
-        for (let i = 0; i < currentCount; i++) {
-          await expect(
-            articles.nth(i).getByText(cat.label, { exact: true }),
-          ).toBeVisible();
-        }
-      } else {
-        // Empty state is displayed
-        await expect(articles).toHaveCount(0);
+      // Every individual displayed article card must carry the selected category badge
+      for (let i = 0; i < expectedInCat.length; i += 1) {
         await expect(
-          page.getByText("Chưa có bài viết trong chủ đề này"),
+          articles.nth(i).getByText(cat.label, { exact: true }),
         ).toBeVisible();
-
-        // Reset button restores to "Tất cả"
-        const resetBtn = page.getByRole("button", {
-          name: "Xem tất cả bài viết",
-          exact: true,
-        });
-        await expect(resetBtn).toBeVisible();
-        await resetBtn.click();
-
-        // "Tất cả" is pressed and focused
-        const allBtn = page.getByRole("button", {
-          name: "Tất cả",
-          exact: true,
-        });
-        await expect(allBtn).toHaveAttribute("aria-pressed", "true");
-        await expect(allBtn).toBeFocused();
-
-        // Restores full article count
-        await expect(articles).toHaveCount(totalCount);
       }
     }
+
+    // Reset back to "Tất cả" restores all 15 articles
+    const allBtn = page.getByRole("button", { name: "Tất cả", exact: true });
+    await allBtn.click();
+    await expect(allBtn).toHaveAttribute("aria-pressed", "true");
+    await expect(statusText).toHaveText(
+      `Hiển thị ${KNOWLEDGE_MANIFEST.length} bài viết`,
+    );
+    await expect(articles).toHaveCount(KNOWLEDGE_MANIFEST.length);
 
     expect(pageErrors).toHaveLength(0);
   });
@@ -599,6 +597,225 @@ test.describe("Knowledge Base Article Detail (/knowledge/:slug)", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Kiến thức chiêm tinh" }),
     ).toBeVisible();
+
+    expect(pageErrors).toHaveLength(0);
+  });
+
+  test("Scenario D (F6.6.6 T6.2, KB-AC-37): Data-driven detail check across all 15 manifest articles", async ({
+    page,
+  }) => {
+    const pageErrors: Error[] = [];
+    const consoleErrors: string[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err));
+    page.on("console", (msg) => {
+      if (msg.type() === "error") {
+        const text = msg.text();
+        if (
+          text.includes("/api/v1/auth/refresh") ||
+          text.includes("status of 401")
+        ) {
+          return;
+        }
+        consoleErrors.push(text);
+      }
+    });
+
+    for (const meta of KNOWLEDGE_MANIFEST) {
+      await page.goto(`/knowledge/${meta.slug}`);
+
+      await expect(page).toHaveURL(new RegExp(`/knowledge/${meta.slug}$`));
+
+      // Single h1 matching manifest title
+      const h1s = page.locator("h1");
+      await expect(h1s).toHaveCount(1);
+      await expect(h1s.first()).toHaveText(meta.title);
+
+      // Valid heading hierarchy (h1 -> h2 -> ..., no skipped levels, no normalized headings)
+      await expect(page.locator("article h2").first()).toBeVisible();
+      const headingAudit = await page.evaluate(() => {
+        const normalizedCount = document.querySelectorAll(
+          "[data-heading-normalized-from]",
+        ).length;
+        const headings = Array.from(
+          document.querySelectorAll(
+            "article h1, article h2, article h3, article h4, article h5, article h6",
+          ),
+        ).map((el) => Number(el.tagName.slice(1)));
+        let hasJump = false;
+        for (let i = 1; i < headings.length; i += 1) {
+          if ((headings[i] ?? 0) - (headings[i - 1] ?? 0) > 1) {
+            hasJump = true;
+          }
+        }
+        return {
+          normalizedCount,
+          firstTwo: headings.slice(0, 2),
+          hasJump,
+        };
+      });
+      expect(headingAudit.normalizedCount).toBe(0);
+      expect(headingAudit.firstTwo).toEqual([1, 2]);
+      expect(headingAudit.hasJump).toBe(false);
+
+      // Metadata & back-link
+      await expect(page).toHaveTitle(`${meta.title} — AstroViet`);
+      const canonical = await page
+        .locator('link[rel="canonical"]')
+        .getAttribute("href");
+      expect(canonical).not.toBeNull();
+      expect(canonical!).toMatch(new RegExp(`/knowledge/${meta.slug}$`));
+      const ogType = await page
+        .locator('meta[property="og:type"]')
+        .getAttribute("content");
+      expect(ogType).toBe("article");
+      await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+      await expect(
+        page.getByRole("link", { name: "Tất cả bài viết", exact: true }),
+      ).toBeVisible();
+    }
+
+    expect(consoleErrors).toEqual([]);
+    expect(pageErrors).toHaveLength(0);
+  });
+
+  test("Scenario E (F6.6.6 T6.2/T6.5, KB-E07, KG-F6-16): Deep check on 3 diverse articles and cross-article SPA navigation", async ({
+    page,
+  }) => {
+    const pageErrors: Error[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err));
+
+    const manifestBySlug = new Map<string, KnowledgeArticleMetadata>(
+      KNOWLEDGE_MANIFEST.map((m) => [m.slug, m]),
+    );
+    const representativeSlugs = [
+      KNOWLEDGE_MANIFEST[0]!.slug, // fundamentals: ol + ul + blockquote + internal links
+      KNOWLEDGE_MANIFEST.find((m) => m.category === "signs" && m.order === 2)!
+        .slug, // signs: 4x3 structured list + blockquote + internal links
+      KNOWLEDGE_MANIFEST.find((m) => m.category === "aspects" && m.order === 2)!
+        .slug, // aspects: longest article with 5 aspects + h3 + blockquote + internal links
+    ];
+
+    for (const slug of representativeSlugs) {
+      const meta = manifestBySlug.get(slug)!;
+      await page.goto(`/knowledge/${slug}`);
+
+      await expect(page.locator("h1")).toHaveText(meta.title);
+      await expect(
+        page.locator("article ul, article ol").first(),
+      ).toBeVisible();
+      await expect(page.locator("article blockquote").first()).toBeVisible();
+
+      // Plant SPA marker and navigate via an in-article internal link
+      await page.evaluate(() => {
+        (window as unknown as { __e2eSpaMarker?: string }).__e2eSpaMarker =
+          "alive";
+      });
+
+      const internalLink = page
+        .locator('article a[href^="/knowledge/"]')
+        .first();
+      await expect(internalLink).toBeVisible();
+      const targetHref = await internalLink.getAttribute("href");
+      expect(targetHref).toMatch(/^\/knowledge\/[a-z0-9-]+$/);
+      const targetSlug = targetHref!.replace("/knowledge/", "");
+      const targetMeta = manifestBySlug.get(targetSlug);
+      expect(targetMeta).toBeDefined();
+
+      await internalLink.click();
+      await expect(page).toHaveURL(new RegExp(`${targetHref}$`));
+      await expect(page.locator("h1")).toHaveText(targetMeta!.title);
+
+      // Confirm client-side SPA transition without full reload
+      const markerAfterNav = await page.evaluate(
+        () => (window as unknown as { __e2eSpaMarker?: string }).__e2eSpaMarker,
+      );
+      expect(markerAfterNav).toBe("alive");
+
+      // Back-link returns cleanly to listing
+      await page
+        .getByRole("link", { name: "Tất cả bài viết", exact: true })
+        .click();
+      await expect(page).toHaveURL(/\/knowledge$/);
+    }
+
+    expect(pageErrors).toHaveLength(0);
+  });
+
+  test("Scenario H (F6.6.6 Scenario 5): DOM Markdown security scan across all 5 categories", async ({
+    page,
+  }) => {
+    const pageErrors: Error[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err));
+
+    // Scan one real article from each of the 5 categories
+    const sampleArticles = KNOWLEDGE_CATEGORIES.map((cat) =>
+      KNOWLEDGE_MANIFEST.find((m) => m.category === cat)!,
+    );
+
+    for (const meta of sampleArticles) {
+      await page.goto(`/knowledge/${meta.slug}`);
+      await expect(page.locator("article h2").first()).toBeVisible();
+
+      const domSecurity = await page.evaluate(() => {
+        const article = document.querySelector("article");
+        if (!article) {
+          return {
+            hasArticle: false,
+            scriptCount: -1,
+            inlineHandlerCount: -1,
+            fallbackCount: -1,
+            remoteImageCount: -1,
+            unsafeExternalLinks: -1,
+          };
+        }
+
+        const scriptCount = article.querySelectorAll("script").length;
+        const fallbackCount =
+          article.querySelectorAll("[data-kb-fallback]").length;
+
+        let inlineHandlerCount = 0;
+        for (const el of Array.from(article.querySelectorAll("*"))) {
+          for (const attr of Array.from(el.attributes)) {
+            if (/^on[a-z]+$/i.test(attr.name)) {
+              inlineHandlerCount += 1;
+            }
+          }
+        }
+
+        const remoteImageCount = Array.from(
+          article.querySelectorAll("img"),
+        ).filter((img) =>
+          /^https?:\/\//i.test(img.getAttribute("src") ?? ""),
+        ).length;
+
+        const unsafeExternalLinks = Array.from(
+          article.querySelectorAll('a[href^="http://"], a[href^="https://"]'),
+        ).filter((a) => {
+          const rel = (a.getAttribute("rel") ?? "").split(/\s+/);
+          return (
+            a.getAttribute("target") !== "_blank" ||
+            !rel.includes("noopener") ||
+            !rel.includes("noreferrer")
+          );
+        }).length;
+
+        return {
+          hasArticle: true,
+          scriptCount,
+          inlineHandlerCount,
+          fallbackCount,
+          remoteImageCount,
+          unsafeExternalLinks,
+        };
+      });
+
+      expect(domSecurity.hasArticle).toBe(true);
+      expect(domSecurity.scriptCount).toBe(0);
+      expect(domSecurity.inlineHandlerCount).toBe(0);
+      expect(domSecurity.fallbackCount).toBe(0);
+      expect(domSecurity.remoteImageCount).toBe(0);
+      expect(domSecurity.unsafeExternalLinks).toBe(0);
+    }
 
     expect(pageErrors).toHaveLength(0);
   });

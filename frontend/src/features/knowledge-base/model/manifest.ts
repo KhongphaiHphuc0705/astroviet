@@ -1,4 +1,4 @@
-import type { KnowledgeArticleMetadata } from "./types";
+import type { KnowledgeArticleMetadata } from "./types.js";
 
 export const KNOWLEDGE_MANIFEST: readonly KnowledgeArticleMetadata[] = [
   {
