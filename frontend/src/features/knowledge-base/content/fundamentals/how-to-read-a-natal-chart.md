@@ -14,7 +14,7 @@ Trong đó, giờ sinh đặc biệt quan trọng nếu bạn muốn tìm hiểu
 
 Trên giao diện biểu đồ lá số AstroViet, năm nhóm yếu tố chính cùng phối hợp tạo nên cấu trúc tổng thể:
 
-- **Các hành tinh và điểm phụ:** Mười thiên thể chính (Mặt Trời, Mặt Trăng, Sao Thủy, Sao Kim, Sao Hỏa, Sao Mộc, Sao Thổ, Sao Thiên Vương, Sao Hải Vương và Sao Diêm Vương), cùng một số điểm bổ sung tùy cấu hình như Chiron, Lilith, La Hầu (North Node) và Kế Đô (South Node).
+- **Các hành tinh và điểm phụ:** Mười thiên thể chính (Mặt Trời, Mặt Trăng, Sao Thủy, Sao Kim, Sao Hỏa, Sao Mộc, Sao Thổ, Sao Thiên Vương, Sao Hải Vương và Sao Diêm Vương), cùng một số điểm bổ sung tùy cấu hình như Chiron, Lilith, Nút Bắc (North Node) và Nút Nam (South Node).
 - **Vòng mười hai cung hoàng đạo:** Nằm ở vành ngoài vòng tròn, chia Hoàng đạo thành mười hai cung, mỗi cung chiếm 30 độ, từ Bạch Dương đến Song Ngư.
 - **Mười hai nhà chiêm tinh:** Đánh số từ Nhà 1 đến Nhà 12, đại diện cho những lĩnh vực khác nhau trong đời sống. Vị trí các nhà được xác định theo hệ thống nhà được lựa chọn.
 - **Bốn điểm góc (Angles):** Gồm Cung Mọc (Ascendant — ASC), Thiên Đỉnh (Midheaven — MC), Cung Lặn (Descendant — DSC) và Thiên Để (Imum Coeli — IC).

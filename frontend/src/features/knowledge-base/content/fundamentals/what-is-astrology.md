@@ -25,7 +25,7 @@ Chiêm tinh học cũng không tuyên bố rằng các hành tinh phát ra lực
 Một bản đồ sao hoàn chỉnh được hình thành từ nhiều lớp thông tin có mối liên hệ với nhau:
 
 1. **Các hành tinh và điểm chiêm tinh:** Mười thiên thể chính được sử dụng trong chiêm tinh phương Tây hiện đại, từ Mặt Trời đến Sao Diêm Vương, đại diện cho những chức năng và động lực khác nhau. Ngoài ra, một số hệ thống còn xét đến các đối tượng bổ sung như Chiron, Lilith và Nút Bắc, Nút Nam.
-2. **Mười hai cung hoàng đạo:** Từ Bạch Dương đến Song Ngư, mô tả khí chất và phương thức biểu đạt của năng lượng hành tinh. Chẳng hạn, Mars ở Bạch Dương và Mars ở Thiên Bình vẫn đại diện cho động lực hành động, nhưng thể hiện theo những cách khác nhau.
+2. **Mười hai cung hoàng đạo:** Từ Bạch Dương đến Song Ngư, mô tả khí chất và phương thức biểu đạt của năng lượng hành tinh. Chẳng hạn, Sao Hỏa (Mars) ở Bạch Dương và Sao Hỏa ở Thiên Bình vẫn đại diện cho động lực hành động, nhưng thể hiện theo những cách khác nhau.
 3. **Mười hai nhà chiêm tinh:** Đại diện cho các lĩnh vực đời sống như bản thân, tài chính, giao tiếp, gia đình, công việc và các mối quan hệ. Vị trí các nhà phụ thuộc vào thời điểm và địa điểm sinh, vì vậy giờ sinh có vai trò đặc biệt quan trọng.
 4. **Các góc chiếu (Aspects):** Phản ánh mối tương tác hình học giữa các hành tinh và điểm chiêm tinh. Năm góc chính thường được sử dụng gồm Trùng tụ (0°), Lục hợp (60°), Vuông góc (90°), Tam hợp (120°) và Đối đỉnh (180°).
 
@@ -41,7 +41,7 @@ Trong đó, giờ sinh đặc biệt quan trọng đối với Cung Mọc (Ascen
 
 Khi bắt đầu tìm hiểu chiêm tinh học, không nên chỉ dựa vào cung Mặt Trời để đưa ra kết luận về toàn bộ tính cách. Một cách tiếp cận hữu ích là xem xét lần lượt các hành tinh, cung hoàng đạo, nhà và góc chiếu, sau đó tổng hợp chúng trong bối cảnh chung của lá số.
 
-Chẳng hạn, để tìm hiểu cách một người hành động và theo đuổi mục tiêu, có thể xem xét Sao Hỏa (Mars), cung hoàng đạo mà hành tinh này tọa lạc, nhà chứa nó và những góc chiếu liên quan. Mỗi yếu tố bổ sung một lớp thông tin, giúp cách diễn giải trở nên đầy đủ hơn thay vì phụ thuộc vào một vị trí đơn lẻ.
+Chẳng hạn, để tìm hiểu cách một người hành động và theo đuổi mục tiêu, có thể xem xét Sao Hỏa, cung hoàng đạo mà hành tinh này tọa lạc, nhà chứa nó và những góc chiếu liên quan. Mỗi yếu tố bổ sung một lớp thông tin, giúp cách diễn giải trở nên đầy đủ hơn thay vì phụ thuộc vào một vị trí đơn lẻ.
 
 ## Lịch sử phát triển và góc nhìn hiện đại
 

@@ -45,8 +45,86 @@ export interface TerminologyViolation {
   readonly code:
     | "LEGACY_LABEL_OUTSIDE_ALIAS"
     | "LEGACY_ALIAS_REPEATED"
-    | "MISSING_CANONICAL_CONTEXT";
+    | "MISSING_CANONICAL_CONTEXT"
+    | "NON_CANONICAL_NODE_LABEL"
+    | "NON_CANONICAL_ANGLE_ABBR"
+    | "BARE_ENGLISH_TERM";
   readonly message: string;
+}
+
+const FORBIDDEN_VEDIC_NODE_TERMS = ["La Hầu", "Kế Đô"] as const;
+
+const BARE_ENGLISH_PLANET_AND_ANGLE_TERMS = [
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto",
+  "North Node",
+  "South Node",
+  "Ascendant",
+  "Midheaven",
+  "Descendant",
+  "Imum Coeli",
+] as const;
+
+function stripMarkdownUrlsAndParens(text: string): string {
+  // Keep link label text, drop URL targets (which contain English slugs)
+  let cleaned = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  // Iteratively strip parenthetical expressions (...) where English glosses are permitted
+  let prev: string;
+  do {
+    prev = cleaned;
+    cleaned = cleaned.replace(/\([^()]*\)/g, "");
+  } while (cleaned !== prev);
+  return cleaned;
+}
+
+function findPlanetAndAngleTerminologyViolations(
+  rawText: string,
+): TerminologyViolation[] {
+  const violations: TerminologyViolation[] = [];
+  const textWithoutCode = stripCodeBlocks(rawText);
+
+  // 1. Disallow Vedic/sidereal lunar node names ("La Hầu", "Kế Đô") anywhere in prose
+  for (const term of FORBIDDEN_VEDIC_NODE_TERMS) {
+    const regex = new RegExp(escapeRegExp(term), "gi");
+    const matches = [...textWithoutCode.matchAll(regex)];
+    for (const m of matches) {
+      violations.push({
+        code: "NON_CANONICAL_NODE_LABEL",
+        message: `Non-canonical Vedic lunar node label "${m[0]}" detected; use canonical "Nút Bắc" / "Nút Nam" (labels.ts).`,
+      });
+    }
+  }
+
+  // 2. Disallow non-canonical angle abbreviations (AC) / (DC); canonical labels.ts uses ASC / DSC
+  for (const match of textWithoutCode.matchAll(/\((AC|DC)\)/g)) {
+    violations.push({
+      code: "NON_CANONICAL_ANGLE_ABBR",
+      message: `Non-canonical angle abbreviation "${match[0]}" detected; use canonical "ASC" / "DSC" (labels.ts).`,
+    });
+  }
+
+  // 3. Disallow bare English planet/node/angle names outside parenthetical glosses
+  const bareProse = stripMarkdownUrlsAndParens(textWithoutCode);
+  for (const term of BARE_ENGLISH_PLANET_AND_ANGLE_TERMS) {
+    const regex = new RegExp(`\\b${escapeRegExp(term)}\\b`, "g");
+    const matches = [...bareProse.matchAll(regex)];
+    for (const m of matches) {
+      violations.push({
+        code: "BARE_ENGLISH_TERM",
+        message: `Bare English term "${m[0]}" found outside parentheses; use canonical Vietnamese label from labels.ts with optional English gloss in parentheses.`,
+      });
+    }
+  }
+
+  return violations;
 }
 
 function escapeRegExp(value: string): string {
@@ -335,6 +413,50 @@ describe("Knowledge Base Aspect Terminology Verification (KB-U22, KB-U23)", () =
             allowFirstIntroAlias: true,
           }),
         ).toEqual([]);
+      }
+    });
+  });
+
+  describe("Canonical Planet, Node & Angle Terminology Guard (labels.ts parity)", () => {
+    it("allows canonical Vietnamese names with English glosses in parentheses and rejects Vedic nodes, bare English names, and (AC)/(DC)", () => {
+      const validFixture = [
+        "## Các hành tinh và điểm góc",
+        "Sao Thiên Vương (Uranus), Sao Hải Vương (Neptune), Sao Diêm Vương (Pluto), Nút Bắc (North Node) và Nút Nam (South Node).",
+        "Cung Mọc (Ascendant — ASC), Thiên Đỉnh (Midheaven — MC), Cung Lặn (Descendant — DSC) và Thiên Để (Imum Coeli — IC).",
+      ].join("\n");
+      expect(findPlanetAndAngleTerminologyViolations(validFixture)).toEqual([]);
+
+      const brokenFixture = [
+        "## Lệch thuật ngữ",
+        "La Hầu và Kế Đô, cùng Uranus và Mars tạo góc với Ascendant (AC) và Descendant (DC).",
+      ].join("\n");
+      const violations = findPlanetAndAngleTerminologyViolations(brokenFixture);
+      expect(
+        violations.some((v) => v.code === "NON_CANONICAL_NODE_LABEL"),
+      ).toBe(true);
+      expect(
+        violations.some((v) => v.code === "NON_CANONICAL_ANGLE_ABBR"),
+      ).toBe(true);
+      expect(violations.some((v) => v.code === "BARE_ENGLISH_TERM")).toBe(true);
+    });
+
+    it("verifies all 15 production articles use canonical Vietnamese planet, node, and angle labels with zero bare English leaks", async () => {
+      const articles = await knowledgeContentService.listArticles();
+      expect(articles).toHaveLength(15);
+
+      for (const meta of articles) {
+        const result = await knowledgeContentService.getArticle(meta.slug);
+        expect(result.status).toBe("found");
+
+        if (result.status === "found") {
+          const violations = findPlanetAndAngleTerminologyViolations(
+            result.article.markdown,
+          );
+          expect(
+            violations,
+            `Article "${meta.slug}" has planet/node/angle terminology violations`,
+          ).toEqual([]);
+        }
       }
     });
   });

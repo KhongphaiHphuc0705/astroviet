@@ -17,7 +17,7 @@ Vì vậy, hai người sinh cùng ngày nhưng khác giờ hoặc khác địa 
 
 Ba nhà đầu tiên tập trung vào sự hình thành bản sắc cá nhân, cách mỗi người tiếp cận môi trường và tiếp nhận thông tin từ thế giới xung quanh.
 
-- **Nhà 1 (House of Self):** Bản sắc, ngoại hình, phong thái và cách một người thể hiện bản thân, bắt đầu từ Ascendant (AC).
+- **Nhà 1 (House of Self):** Bản sắc, ngoại hình, phong thái và cách một người thể hiện bản thân, bắt đầu từ Cung Mọc (Ascendant — ASC).
 - **Nhà 2 (House of Value):** Tài chính cá nhân, tài sản, nguồn lực, năng lực và những giá trị mà một người coi trọng.
 - **Nhà 3 (House of Communication)**: Giao tiếp thường ngày, tư duy thực tiễn, học tập cơ bản, anh chị em và những chuyến đi ngắn.
 
@@ -25,7 +25,7 @@ Ba nhà đầu tiên tập trung vào sự hình thành bản sắc cá nhân, c
 
 Nếu góc phần tư thứ nhất nói về việc khám phá bản thân và môi trường xung quanh, ba nhà tiếp theo tập trung vào nền tảng đời sống riêng tư, cách một người thể hiện bản thân và tổ chức cuộc sống hằng ngày.
 
-- **Nhà 4 (House of Home):** Gia đình, nhà cửa, nguồn cội, tuổi thơ và nền tảng cảm xúc riêng tư, bắt đầu từ Imum Coeli (IC).
+- **Nhà 4 (House of Home):** Gia đình, nhà cửa, nguồn cội, tuổi thơ và nền tảng cảm xúc riêng tư, bắt đầu từ Thiên Để (Imum Coeli — IC).
 - **Nhà 5 (House of Creativity):** Sáng tạo, niềm vui, sở thích, tình yêu lãng mạn, con cái và những hoạt động mang lại sự hứng khởi.
 - **Nhà 6 (House of Daily Work):** Công việc thường nhật, thói quen, sức khỏe thực tiễn, trách nhiệm và những kỹ năng phục vụ đời sống hằng ngày.
 
@@ -33,7 +33,7 @@ Nếu góc phần tư thứ nhất nói về việc khám phá bản thân và m
 
 Từ nhà 7, trọng tâm chuyển dần từ bản thân sang những người và trải nghiệm bên ngoài. Góc phần tư này đề cập đến các mối quan hệ một-một, sự chia sẻ sâu sắc và quá trình mở rộng nhận thức.
 
-- **Nhà 7 (House of Partnerships):** Hôn nhân, quan hệ đối tác, hợp tác và những mối quan hệ một-một, bắt đầu từ Descendant (DC).
+- **Nhà 7 (House of Partnerships):** Hôn nhân, quan hệ đối tác, hợp tác và những mối quan hệ một-một, bắt đầu từ Cung Lặn (Descendant — DSC).
 - **Nhà 8 (House of Transformation):** Tài chính chung, tài sản của người khác, sự thân mật, những gắn kết tâm lý sâu sắc và quá trình chuyển hóa cá nhân.
 - **Nhà 9 (House of Philosophy):** Triết học, giáo dục bậc cao, niềm tin, thế giới quan, những chuyến đi xa và trải nghiệm mở rộng tầm nhìn.
 
@@ -41,7 +41,7 @@ Từ nhà 7, trọng tâm chuyển dần từ bản thân sang những người 
 
 Ba nhà cuối cùng hướng đến vai trò của một người trong xã hội, sự kết nối với cộng đồng và những khía cạnh nội tâm khó quan sát hơn. Đây cũng là khu vực chuyển tiếp giữa những mục tiêu bên ngoài và đời sống bên trong.
 
-- **Nhà 10 (House of Career):** Sự nghiệp, định hướng dài hạn, danh tiếng, hình ảnh công chúng và vị trí xã hội, bắt đầu từ Midheaven (MC).
+- **Nhà 10 (House of Career):** Sự nghiệp, định hướng dài hạn, danh tiếng, hình ảnh công chúng và vị trí xã hội, bắt đầu từ Thiên Đỉnh (Midheaven — MC).
 - **Nhà 11 (House of Community):** Bạn bè, cộng đồng, mạng lưới xã hội, các dự án tập thể và những mục tiêu, nguyện vọng trong tương lai.
 - **Nhà 12 (House of the Unconscious):** Đời sống nội tâm, sự tĩnh lặng, tiềm thức, những giới hạn khó nhận diện và quá trình nghỉ ngơi, phục hồi.
 
@@ -53,7 +53,7 @@ Chủ đề của mỗi nhà chỉ là điểm khởi đầu. Để hiểu một
 - Cung hoàng đạo trên đỉnh nhà: Mô tả phong cách hoặc cách tiếp cận lĩnh vực đó.
 - Chủ tinh của nhà: Cho biết hành tinh quản lý cung trên đỉnh nhà và vị trí của nó trong bản đồ sao, qua đó bổ sung thông tin về cách chủ đề của nhà được thể hiện.
 
-Ngoài ra, nếu có hành tinh nằm trong nhà, cần xem xét ý nghĩa của hành tinh đó kết hợp với cung hoàng đạo mà nó tọa lạc. Chẳng hạn, Mars ở Nhà 10 có thể nhấn mạnh tính chủ động, cạnh tranh và động lực hành động trong lĩnh vực sự nghiệp. Tuy nhiên, cách biểu hiện cụ thể còn phụ thuộc vào cung của Mars, các góc chiếu và những yếu tố khác trong lá số.
+Ngoài ra, nếu có hành tinh nằm trong nhà, cần xem xét ý nghĩa của hành tinh đó kết hợp với cung hoàng đạo mà nó tọa lạc. Chẳng hạn, Sao Hỏa ở Nhà 10 có thể nhấn mạnh tính chủ động, cạnh tranh và động lực hành động trong lĩnh vực sự nghiệp. Tuy nhiên, cách biểu hiện cụ thể còn phụ thuộc vào cung của Sao Hỏa, các góc chiếu và những yếu tố khác trong lá số.
 
 Đây cũng là lý do không nên diễn giải một nhà chỉ dựa trên tên gọi hoặc một yếu tố riêng lẻ.
 

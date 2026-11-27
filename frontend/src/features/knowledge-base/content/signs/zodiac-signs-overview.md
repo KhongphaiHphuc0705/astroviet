@@ -46,7 +46,7 @@ Mỗi nguyên tố xuất hiện trong cả ba tính chất, tạo nên mười 
 
 Trong Natal Chart, cung hoàng đạo cho biết một hành tinh biểu đạt chức năng của nó theo phong cách nào. Vì vậy, không nên chỉ nhìn vào cung Mặt Trời để kết luận toàn bộ tính cách của một người.
 
-Chẳng hạn, Sun ở Bạch Dương có thể biểu thị cách thể hiện bản sắc chủ động và trực diện; Moon ở Cự Giải gợi ý nhu cầu cảm xúc gắn với sự an toàn và thân thuộc; trong khi Mars ở Ma Kết thường được diễn giải qua cách hành động có kế hoạch, kỷ luật và định hướng mục tiêu.
+Chẳng hạn, Mặt Trời ở Bạch Dương có thể biểu thị cách thể hiện bản sắc chủ động và trực diện; Mặt Trăng ở Cự Giải gợi ý nhu cầu cảm xúc gắn với sự an toàn và thân thuộc; trong khi Sao Hỏa ở Ma Kết thường được diễn giải qua cách hành động có kế hoạch, kỷ luật và định hướng mục tiêu.
 
 Cùng một cung cũng có thể mang ý nghĩa khác nhau tùy hành tinh nằm trong đó. Ngược lại, cùng một hành tinh ở những cung khác nhau sẽ có phong cách biểu đạt khác nhau. Để hiểu đầy đủ hơn, cần kết hợp cung hoàng đạo với hành tinh, nhà và các góc chiếu liên quan.
 

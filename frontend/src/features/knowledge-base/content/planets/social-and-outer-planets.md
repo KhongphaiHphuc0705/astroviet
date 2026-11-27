@@ -22,33 +22,33 @@ Nếu Sao Mộc khuyến khích chúng ta nhìn thấy điều có thể đạt 
 
 ## Nhóm hành tinh thế hệ: Dòng chảy của cả thời đại
 
-Ba hành tinh vòng ngoài — Uranus, Neptune và Pluto — di chuyển rất chậm so với các hành tinh cá nhân. Vì vậy, hàng triệu người sinh trong cùng một khoảng thời gian có thể chia sẻ vị trí của chúng trong cùng một cung hoàng đạo. Đây là lý do chúng thường được gọi là hành tinh thế hệ.
+Ba hành tinh vòng ngoài — Sao Thiên Vương (Uranus), Sao Hải Vương (Neptune) và Sao Diêm Vương (Pluto) — di chuyển rất chậm so với các hành tinh cá nhân. Vì vậy, hàng triệu người sinh trong cùng một khoảng thời gian có thể chia sẻ vị trí của chúng trong cùng một cung hoàng đạo. Đây là lý do chúng thường được gọi là hành tinh thế hệ.
 
 ### Sao Thiên Vương (Uranus): Đổi mới và phá vỡ lối mòn
 
-Với chu kỳ khoảng 84 năm, Uranus lưu lại trung bình khoảng 7 năm mỗi cung. Hành tinh này tượng trưng cho sự đổi mới, tính độc đáo, tư duy đột phá, khát vọng tự do và những thay đổi bất ngờ.
+Với chu kỳ khoảng 84 năm, Sao Thiên Vương lưu lại trung bình khoảng 7 năm mỗi cung. Hành tinh này tượng trưng cho sự đổi mới, tính độc đáo, tư duy đột phá, khát vọng tự do và những thay đổi bất ngờ.
 
-Ở mặt tích cực, Uranus gợi ý khả năng nhìn nhận vấn đề theo cách khác biệt, sẵn sàng thử nghiệm và vượt khỏi những khuôn mẫu lỗi thời. Mặt thách thức có thể là sự bốc đồng, khó thích nghi với giới hạn hoặc xu hướng thay đổi chỉ vì muốn thoát khỏi những điều quen thuộc.
+Ở mặt tích cực, Sao Thiên Vương gợi ý khả năng nhìn nhận vấn đề theo cách khác biệt, sẵn sàng thử nghiệm và vượt khỏi những khuôn mẫu lỗi thời. Mặt thách thức có thể là sự bốc đồng, khó thích nghi với giới hạn hoặc xu hướng thay đổi chỉ vì muốn thoát khỏi những điều quen thuộc.
 
 ### Sao Hải Vương (Neptune): Trí tưởng tượng và lý tưởng
 
-Neptune có chu kỳ khoảng 165 năm, lưu lại trung bình khoảng 14 năm mỗi cung. Hành tinh này gắn với trí tưởng tượng, nghệ thuật, trực giác, lòng trắc ẩn và những lý tưởng tinh thần.
+Sao Hải Vương có chu kỳ khoảng 165 năm, lưu lại trung bình khoảng 14 năm mỗi cung. Hành tinh này gắn với trí tưởng tượng, nghệ thuật, trực giác, lòng trắc ẩn và những lý tưởng tinh thần.
 
-Neptune có thể thúc đẩy khả năng sáng tạo, sự đồng cảm và khát vọng hướng đến những giá trị vượt ra ngoài lợi ích cá nhân. Tuy nhiên, mặt thách thức là sự mơ hồ, lý tưởng hóa thực tế, thiếu ranh giới hoặc khó phân biệt giữa điều mình mong muốn và điều thực sự đang diễn ra.
+Sao Hải Vương có thể thúc đẩy khả năng sáng tạo, sự đồng cảm và khát vọng hướng đến những giá trị vượt ra ngoài lợi ích cá nhân. Tuy nhiên, mặt thách thức là sự mơ hồ, lý tưởng hóa thực tế, thiếu ranh giới hoặc khó phân biệt giữa điều mình mong muốn và điều thực sự đang diễn ra.
 
 ### Sao Diêm Vương (Pluto): Chuyển hóa sâu và tái sinh
 
-Pluto có chu kỳ quỹ đạo khoảng 248 năm. Do quỹ đạo lệch tâm, thời gian lưu lại ở mỗi cung không đồng đều, có thể dao động khoảng 12–30 năm.
+Sao Diêm Vương có chu kỳ quỹ đạo khoảng 248 năm. Do quỹ đạo lệch tâm, thời gian lưu lại ở mỗi cung không đồng đều, có thể dao động khoảng 12–30 năm.
 
-Trong chiêm tinh, Pluto biểu trưng cho sự chuyển hóa sâu sắc, quyền lực, những vấn đề bị che giấu và quá trình khép lại cấu trúc cũ để tái tạo từ gốc rễ. Hành tinh này gợi ý những biến đổi mạnh mẽ trong cách con người đối diện với nỗi sợ, sự kiểm soát và những điều khó buông bỏ.
+Trong chiêm tinh, Sao Diêm Vương biểu trưng cho sự chuyển hóa sâu sắc, quyền lực, những vấn đề bị che giấu và quá trình khép lại cấu trúc cũ để tái tạo từ gốc rễ. Hành tinh này gợi ý những biến đổi mạnh mẽ trong cách con người đối diện với nỗi sợ, sự kiểm soát và những điều khó buông bỏ.
 
-Ở cấp độ thế hệ, Pluto thường được dùng để diễn giải những thay đổi sâu rộng trong các hệ thống và cấu trúc xã hội.
+Ở cấp độ thế hệ, Sao Diêm Vương thường được dùng để diễn giải những thay đổi sâu rộng trong các hệ thống và cấu trúc xã hội.
 
 ## Các điểm và thiên thể phụ trên bản đồ sao AstroViet
 
-Ngoài mười thiên thể được sử dụng trong phạm vi diễn giải chính từ Mặt Trời đến Sao Diêm Vương, AstroViet còn hỗ trợ hiển thị bốn điểm và thiên thể phụ tùy chọn: **Chiron**, **Lilith**, **La Hầu** và **Kế Đô**.
+Ngoài mười thiên thể được sử dụng trong phạm vi diễn giải chính từ Mặt Trời đến Sao Diêm Vương, AstroViet còn hỗ trợ hiển thị bốn điểm và thiên thể phụ tùy chọn: **Chiron**, **Lilith**, **Nút Bắc** (North Node) và **Nút Nam** (South Node).
 
-Chúng không thuộc cùng một nhóm thiên thể về mặt thiên văn. Chiron là một thiên thể thuộc nhóm centaur; Lilith trong ngữ cảnh này thường chỉ Black Moon Lilith, một điểm toán học liên quan đến quỹ đạo Mặt Trăng; còn La Hầu và Kế Đô là hai giao điểm của quỹ đạo Mặt Trăng với mặt phẳng hoàng đạo.
+Chúng không thuộc cùng một nhóm thiên thể về mặt thiên văn. Chiron là một thiên thể thuộc nhóm centaur; Lilith (Black Moon Lilith) trong ngữ cảnh này là một điểm toán học liên quan đến quỹ đạo Mặt Trăng; còn Nút Bắc và Nút Nam là hai giao điểm của quỹ đạo Mặt Trăng với mặt phẳng hoàng đạo.
 
 Trong diễn giải chiêm tinh, các yếu tố này được dùng như những tham chiếu bổ sung về tổn thương và quá trình chữa lành (Chiron), những chủ đề bản năng và phần khó bộc lộ (Lilith), cũng như định hướng phát triển và các khuynh hướng quen thuộc (hai Nút Mặt Trăng).
 
@@ -56,8 +56,8 @@ Trong diễn giải chiêm tinh, các yếu tố này được dùng như nhữn
 
 Vì nhiều người cùng thế hệ chia sẻ vị trí cung của các hành tinh vòng ngoài, chỉ nhìn vào cung hoàng đạo thường chưa đủ để xác định ý nghĩa riêng của chúng đối với một cá nhân. Hai yếu tố quan trọng cần xem xét thêm là:
 
-- **Vị trí nhà chiêm tinh:** Khi có giờ sinh đủ chính xác, nhà chứa hành tinh cho biết lĩnh vực đời sống mà chủ đề của hành tinh có thể biểu hiện rõ hơn. Chẳng hạn, Uranus ở nhà 10 có thể gợi ý nhu cầu đổi mới trong sự nghiệp hoặc con đường xây dựng vị thế xã hội.
-- **Các góc chiếu với hành tinh cá nhân và bốn điểm góc:** Khi hành tinh chậm tạo góc chiếu với Mặt Trời, Mặt Trăng, Ascendant, Mercury, Venus hoặc Mars, những chủ đề mang tính thế hệ có thể gắn kết rõ hơn với trải nghiệm cá nhân.
+- **Vị trí nhà chiêm tinh:** Khi có giờ sinh đủ chính xác, nhà chứa hành tinh cho biết lĩnh vực đời sống mà chủ đề của hành tinh có thể biểu hiện rõ hơn. Chẳng hạn, Sao Thiên Vương ở nhà 10 có thể gợi ý nhu cầu đổi mới trong sự nghiệp hoặc con đường xây dựng vị thế xã hội.
+- **Các góc chiếu với hành tinh cá nhân và bốn điểm góc:** Khi hành tinh chậm tạo góc chiếu với Mặt Trời, Mặt Trăng, Cung Mọc (Ascendant), Sao Thủy, Sao Kim hoặc Sao Hỏa, những chủ đề mang tính thế hệ có thể gắn kết rõ hơn với trải nghiệm cá nhân.
 
 Ngoài ra, cần xem xét độ chính xác của góc chiếu, tình trạng hành tinh và toàn bộ cấu trúc bản đồ sao trước khi đưa ra kết luận. Một vị trí đơn lẻ không đủ để xác định tính cách hay dự đoán một sự kiện cụ thể.
 

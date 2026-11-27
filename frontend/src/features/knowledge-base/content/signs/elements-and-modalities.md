@@ -38,7 +38,7 @@ Tương tự, Kim Ngưu và Xử Nữ đều thuộc nguyên tố Đất, nhưng
 
 Khi đọc Natal Chart, việc quan sát sự phân bố hành tinh trong bốn nguyên tố và ba tính chất mang lại góc nhìn tổng quan về cách một người tiếp cận cuộc sống.
 
-Bạn có thể bắt đầu bằng cách thống kê vị trí của Mặt Trời, Mặt Trăng, Mercury, Venus và Mars, sau đó mở rộng sang các hành tinh còn lại. Một số nhà chiêm tinh còn tính đến Ascendant và các điểm quan trọng khác, nhưng phương pháp thống kê cần được xác định nhất quán trước khi đưa ra kết luận.
+Bạn có thể bắt đầu bằng cách thống kê vị trí của Mặt Trời, Mặt Trăng, Sao Thủy, Sao Kim và Sao Hỏa, sau đó mở rộng sang các hành tinh còn lại. Một số nhà chiêm tinh còn tính đến Cung Mọc (Ascendant) và các điểm quan trọng khác, nhưng phương pháp thống kê cần được xác định nhất quán trước khi đưa ra kết luận.
 
 Chẳng hạn, một lá số có nhiều vị trí thuộc nhóm Lửa và Tiên phong có thể gợi ý xu hướng hành động nhanh, chủ động và thích khởi đầu. Ngược lại, sự tập trung vào Đất và Kiên định có thể nhấn mạnh nhu cầu ổn định, tính thực tế và khả năng theo đuổi mục tiêu lâu dài.
 

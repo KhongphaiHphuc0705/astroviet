@@ -20,7 +20,7 @@ Mặt Trăng chuyển động nhanh trên hoàng đạo, hoàn thành một vòn
 
 Khác với Mặt Trời và Mặt Trăng là hai thiên thể thực, Cung Mọc (Ascendant — viết tắt ASC) là một điểm hình học: cung hoàng đạo đang mọc lên tại đường chân trời phía Đông vào thời điểm và địa điểm bạn chào đời.
 
-Cung Mọc là một trong bốn điểm góc chính của bản đồ sao, cùng với Thiên Đỉnh (Midheaven — MC), Cung Lặn (Descendant — DSC) và Thiên Để (Imum Coeli — IC). Đồng thời, Ascendant đánh dấu điểm bắt đầu của Nhà 1 trong hệ thống nhà của lá số.
+Cung Mọc là một trong bốn điểm góc chính của bản đồ sao, cùng với Thiên Đỉnh (Midheaven — MC), Cung Lặn (Descendant — DSC) và Thiên Để (Imum Coeli — IC). Đồng thời, Cung Mọc đánh dấu điểm bắt đầu của Nhà 1 trong hệ thống nhà của lá số.
 
 Về mặt biểu tượng, Cung Mọc đóng vai trò như "cánh cửa" bạn bước qua khi tiếp xúc với thế giới:
 
@@ -28,11 +28,11 @@ Về mặt biểu tượng, Cung Mọc đóng vai trò như "cánh cửa" bạn 
 - **Cách tiếp cận cái mới:** Phản ứng tự nhiên khi bước vào môi trường lạ hoặc bắt đầu một trải nghiệm mới.
 - **Khung chia mười hai nhà:** Vị trí Cung Mọc là cơ sở quan trọng để xác định cách mười hai nhà được phân bổ trên bản đồ sao.
 
-Một khái niệm liên quan đáng chú ý là **Chart Ruler (chủ tinh lá số)** — hành tinh cai quản cung hoàng đạo chứa Cung Mọc. Chẳng hạn, nếu bạn có Ascendant Xử Nữ, Mercury (Sao Thủy) sẽ là chủ tinh lá số. Vị trí của Mercury theo cung, nhà và các góc chiếu có thể cung cấp thêm manh mối về cách bạn định hướng và trải nghiệm cuộc sống. Đây cũng là lý do Cung Mọc không chỉ có ý nghĩa về ấn tượng bên ngoài mà còn đóng vai trò quan trọng trong việc đọc toàn bộ lá số.
+Một khái niệm liên quan đáng chú ý là **Chủ tinh lá số (Chart Ruler)** — hành tinh cai quản cung hoàng đạo chứa Cung Mọc. Chẳng hạn, nếu bạn có Cung Mọc Xử Nữ, Sao Thủy (Mercury) sẽ là chủ tinh lá số. Vị trí của Sao Thủy theo cung, nhà và các góc chiếu có thể cung cấp thêm manh mối về cách bạn định hướng và trải nghiệm cuộc sống. Đây cũng là lý do Cung Mọc không chỉ có ý nghĩa về ấn tượng bên ngoài mà còn đóng vai trò quan trọng trong việc đọc toàn bộ lá số.
 
 ### Vì sao Cung Mọc cần giờ sinh và nơi sinh chính xác?
 
-Do Trái Đất tự quay, đường chân trời phía Đông liên tục thay đổi vị trí tương ứng với hoàng đạo. Trung bình, Ascendant dịch chuyển khoảng 1 độ trong 4 phút và thường chuyển sang cung tiếp theo sau khoảng hai giờ. Tuy nhiên, tốc độ thực tế không hoàn toàn đồng đều và phụ thuộc vào vĩ độ địa lý.
+Do Trái Đất tự quay, đường chân trời phía Đông liên tục thay đổi vị trí tương ứng với hoàng đạo. Trung bình, Cung Mọc dịch chuyển khoảng 1 độ trong 4 phút và thường chuyển sang cung tiếp theo sau khoảng hai giờ. Tuy nhiên, tốc độ thực tế không hoàn toàn đồng đều và phụ thuộc vào vĩ độ địa lý.
 
 Vì vậy, chỉ cần sai lệch giờ sinh hoặc địa điểm sinh, Cung Mọc có thể thay đổi đáng kể, kéo theo sự thay đổi của các điểm góc và hệ thống nhà.
 
