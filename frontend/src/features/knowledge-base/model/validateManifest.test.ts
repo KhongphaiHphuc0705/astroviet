@@ -13,7 +13,9 @@ import {
   INVALID_UPDATED_AT_MANIFEST,
 } from "../../../test/fixtures/knowledge-base/manifests";
 
+import { knowledgeContentService } from "./knowledgeContentService";
 import { KNOWLEDGE_MANIFEST } from "./manifest";
+import { KNOWLEDGE_CATEGORIES } from "./types";
 import { validateManifest } from "./validateManifest";
 
 describe("validateManifest (KB-U01, KB-U02, KB-U06)", () => {
@@ -208,6 +210,98 @@ describe("validateManifest (KB-U01, KB-U02, KB-U06)", () => {
       if (res.status === "valid") {
         expect(res.entries[0]?.slug).toBe("alpha-article");
         expect(res.entries[1]?.slug).toBe("zebra-article");
+      }
+    });
+  });
+
+  describe("KB-U03b: Production 15-Article Scope Contract & Integrity Gates (F6.6.5)", () => {
+    // Hard-coded MVP scope contract (15 slugs across 5 categories x 3 articles per F6.6 plan §6 & §9)
+    const CONTRACT_SLUGS = [
+      "what-is-astrology",
+      "how-to-read-a-natal-chart",
+      "planets-signs-houses",
+      "sun-moon-rising",
+      "personal-planets",
+      "social-and-outer-planets",
+      "zodiac-signs-overview",
+      "elements-and-modalities",
+      "sign-rulerships",
+      "astrological-houses-overview",
+      "angular-succedent-cadent-houses",
+      "house-rulers",
+      "what-are-astrological-aspects",
+      "major-aspects",
+      "orbs-and-applying-separating",
+    ] as const;
+
+    // Fixed upper-bound calendar date to prevent clock-based CI flake (F6.6 plan §9 KB-U03b-4)
+    const MAX_ALLOWED_UPDATED_AT = "2026-12-31";
+
+    // Regex gate for obvious authoring placeholders (KB-U03b-6).
+    // Known limitation: regex checks obvious markers only; semantic completeness is verified via manual checklist §7.5.
+    const PLACEHOLDER_REGEX =
+      /\b(?:TODO|FIXME|Lorem(?:\s+ipsum)?|Draft)\b|\[placeholder\]|\.\.\./i;
+
+    it("KB-U03b-1: should contain exactly 15 production entries matching the approved scope contract slugs", () => {
+      expect(KNOWLEDGE_MANIFEST).toHaveLength(15);
+
+      const actualSlugs = KNOWLEDGE_MANIFEST.map((entry) => entry.slug);
+      expect(actualSlugs).toEqual([...CONTRACT_SLUGS]);
+    });
+
+    it("KB-U03b-2 & KB-U03b-3: should have exactly 3 articles per category with order values {1, 2, 3}", () => {
+      expect(KNOWLEDGE_CATEGORIES).toHaveLength(5);
+
+      for (const category of KNOWLEDGE_CATEGORIES) {
+        const categoryEntries = KNOWLEDGE_MANIFEST.filter(
+          (entry) => entry.category === category,
+        );
+        expect(
+          categoryEntries,
+          `Category "${category}" must contain exactly 3 articles`,
+        ).toHaveLength(3);
+
+        const sortedOrders = categoryEntries
+          .map((entry) => entry.order)
+          .sort((a, b) => a - b);
+        expect(sortedOrders).toEqual([1, 2, 3]);
+      }
+    });
+
+    it("KB-U03b-4: should have realistic non-future updatedAt dates within deterministic upper bound", () => {
+      for (const entry of KNOWLEDGE_MANIFEST) {
+        expect(entry.updatedAt >= "2026-01-01").toBe(true);
+        expect(entry.updatedAt <= MAX_ALLOWED_UPDATED_AT).toBe(true);
+      }
+    });
+
+    it("KB-U03b-5: should enforce unique titles and unique summaries across all 15 articles", () => {
+      const titles = KNOWLEDGE_MANIFEST.map((entry) => entry.title.trim());
+      const summaries = KNOWLEDGE_MANIFEST.map((entry) => entry.summary.trim());
+
+      expect(new Set(titles).size).toBe(KNOWLEDGE_MANIFEST.length);
+      expect(new Set(summaries).size).toBe(KNOWLEDGE_MANIFEST.length);
+    });
+
+    it("KB-U03b-6: should contain zero placeholder tokens in title, summary, or article markdown body", async () => {
+      for (const entry of KNOWLEDGE_MANIFEST) {
+        expect(
+          PLACEHOLDER_REGEX.test(entry.title),
+          `Title for "${entry.slug}" contains placeholder token`,
+        ).toBe(false);
+        expect(
+          PLACEHOLDER_REGEX.test(entry.summary),
+          `Summary for "${entry.slug}" contains placeholder token`,
+        ).toBe(false);
+
+        const result = await knowledgeContentService.getArticle(entry.slug);
+        expect(result.status).toBe("found");
+        if (result.status === "found") {
+          expect(
+            PLACEHOLDER_REGEX.test(result.article.markdown),
+            `Markdown body for "${entry.slug}" contains placeholder token`,
+          ).toBe(false);
+        }
       }
     });
   });

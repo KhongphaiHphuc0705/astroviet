@@ -162,6 +162,25 @@ describe("MarkdownRenderer (KB-U10, KB-U11, KB-U12, KB-U16, KB-U17, KB-AC-12, KB
       expect(anchor?.getAttribute("href")).toBe("/knowledge");
     });
 
+    it("locks WCAG AA high-contrast link color class (text-accent-secondary, not text-accent-primary) across internal and external links (F6.6.6)", () => {
+      const md = [
+        "[Bài nội bộ](/knowledge/what-is-astrology)",
+        "[Danh sách](/knowledge)",
+        "[Ngoài trang](https://astroviet.vn)",
+      ].join(" · ");
+
+      const { container } = renderWithProviders(
+        <MarkdownRenderer markdown={md} isKnownSlug={isKnownSlug} />,
+      );
+
+      const anchors = Array.from(container.querySelectorAll("a"));
+      expect(anchors).toHaveLength(3);
+      for (const anchor of anchors) {
+        expect(anchor.className).toContain("text-accent-secondary");
+        expect(anchor.className).not.toContain("text-accent-primary");
+      }
+    });
+
     it("should render fallback text for internal link with unknown slug", () => {
       const md = `[Bài chưa xuất bản](/knowledge/unpublished-slug)`;
 

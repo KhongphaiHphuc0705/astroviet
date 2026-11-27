@@ -6,7 +6,12 @@ import { axe } from "vitest-axe";
 
 import { VALID_FIXTURE_MANIFEST } from "@test/fixtures/knowledge-base/manifests";
 
-import type { KnowledgeArticleMetadata } from "../model/types";
+import { KNOWLEDGE_MANIFEST } from "../model/manifest";
+import {
+  KNOWLEDGE_CATEGORIES,
+  KNOWLEDGE_CATEGORY_LABELS,
+  type KnowledgeArticleMetadata,
+} from "../model/types";
 
 import { KnowledgeListView } from "./KnowledgeListView";
 
@@ -176,5 +181,40 @@ describe("KnowledgeListView (KB-U13, KB-U14, KB-U35, KB-AC-13, 15, 16, 17)", () 
 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it("renders all 15 production manifest articles, filters 3 per category, and passes axe (F6.6.6 T6.1, KB-AC-36)", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <MemoryRouter>
+        <KnowledgeListView articles={KNOWLEDGE_MANIFEST} />
+      </MemoryRouter>,
+    );
+
+    expect(KNOWLEDGE_MANIFEST).toHaveLength(15);
+    expect(container.querySelectorAll('ul[role="list"] > li')).toHaveLength(15);
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Hiển thị 15 bài viết",
+    );
+
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+
+    for (const category of KNOWLEDGE_CATEGORIES) {
+      const label = KNOWLEDGE_CATEGORY_LABELS[category];
+      await user.click(screen.getByRole("button", { name: label }));
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "Hiển thị 3 bài viết",
+      );
+      expect(container.querySelectorAll('ul[role="list"] > li')).toHaveLength(
+        3,
+      );
+    }
+
+    await user.click(screen.getByRole("button", { name: "Tất cả" }));
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Hiển thị 15 bài viết",
+    );
+    expect(container.querySelectorAll('ul[role="list"] > li')).toHaveLength(15);
   });
 });
